@@ -2436,6 +2436,35 @@ body.site-loaded .page-shell {
   background-size: cover;
 }
 
+.mosaic-item[data-mosaic-layout="group-safe"]::before {
+  background:
+    radial-gradient(circle at 72% 16%, rgba(255, 255, 255, 0.12), transparent 22%),
+    linear-gradient(180deg, rgba(6, 16, 29, 0.14) 0%, rgba(6, 16, 29, 0.16) 26%, rgba(6, 16, 29, 0.54) 72%, rgba(6, 16, 29, 0.9) 100%);
+}
+
+.mosaic-item[data-mosaic-layout="group-safe"] .mosaic-shell {
+  gap: 0.8rem;
+}
+
+.mosaic-item[data-mosaic-layout="group-safe"] .mosaic-topline {
+  margin-bottom: auto;
+}
+
+.mosaic-item.main[data-mosaic-layout="group-safe"] .mosaic-copy {
+  max-width: min(28rem, 42%);
+  padding: 0.72rem 0.9rem 0.82rem;
+  background: linear-gradient(180deg, rgba(6, 16, 29, 0.56), rgba(6, 16, 29, 0.86));
+}
+
+.mosaic-item.main[data-mosaic-layout="portrait-safe"] .mosaic-copy {
+  max-width: min(32rem, 44%);
+  background: linear-gradient(180deg, rgba(6, 16, 29, 0.6), rgba(6, 16, 29, 0.88));
+}
+
+.mosaic-item.side[data-mosaic-layout="group-safe"] .mosaic-copy.compact {
+  max-width: min(15rem, 78%);
+}
+
 .mosaic-item a {
   display: flex;
   height: 100%;
@@ -18665,6 +18694,8 @@ a {
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
+  content-visibility: auto;
+  contain-intrinsic-size: 1200px;
 }
 
 .site-footer.footer-tech.footer-mega .footer-mega-stage::before,
@@ -18958,6 +18989,48 @@ a {
   color: rgba(255, 226, 182, 0.86);
 }
 
+body.fx-lite .site-footer.footer-tech.footer-mega .footer-mega-stage,
+body.fx-lite .insiders-command-stage,
+body.fx-lite .insiders-command-stage .insiders-logo-squad,
+body.fx-lite .robot-card-assembly-scene {
+  contain: layout paint style;
+}
+
+body.fx-lite .insiders-command-stage {
+  min-height: 720px;
+  grid-template-rows: auto auto auto auto minmax(360px, 1fr) auto !important;
+}
+
+body.fx-lite .insiders-command-stage .insiders-logo-squad {
+  min-height: 400px !important;
+}
+
+body.fx-lite .insiders-chant-track,
+body.fx-lite .site-footer.footer-tech .footer-brand::before,
+body.fx-lite .robot-card-assembly-scene::after,
+body.fx-lite .assembly-card,
+body.fx-lite .assembly-bot,
+body.fx-lite .assembly-crane,
+body.fx-lite .assembly-sparks,
+body.fx-lite .insiders-command-stage .insider-robot,
+body.fx-lite .insiders-command-stage .arm-left,
+body.fx-lite .insiders-command-stage .arm-right,
+body.fx-lite .insiders-command-stage .leg-left,
+body.fx-lite .insiders-command-stage .leg-right,
+body.fx-lite .insiders-command-stage .robot-shadow {
+  animation: none !important;
+}
+
+body.fx-lite .insiders-command-copy,
+body.fx-lite .insiders-truth-banner,
+body.fx-lite .insiders-chant-rail,
+body.fx-lite .insiders-command-stage .insiders-logo-caption,
+body.fx-lite .site-footer.footer-tech .footer-tech-panel,
+body.fx-lite .site-footer.footer-tech .footer-local-strip,
+body.fx-lite .site-footer.footer-tech .footer-bottom {
+  backdrop-filter: none !important;
+}
+
 @keyframes insidersArmyBob {
   0%,
   100% {
@@ -19070,6 +19143,35 @@ a {
   .insiders-command-stage .robot-shadow {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+/* 2026-04-16: rodape com exercito mais leve para nao travar */
+.insiders-command-stage {
+  grid-template-rows: auto auto auto auto minmax(420px, 1fr) auto !important;
+  min-height: 860px;
+}
+
+.insiders-command-stage .insiders-logo-squad {
+  min-height: clamp(360px, 44vw, 520px) !important;
+}
+
+body.fx-lite .insiders-command-stage {
+  min-height: 700px;
+  grid-template-rows: auto auto auto auto minmax(300px, 1fr) auto !important;
+}
+
+body.fx-lite .insiders-command-stage .insiders-logo-squad {
+  min-height: 320px !important;
+}
+
+@media (max-width: 760px) {
+  .insiders-command-stage {
+    min-height: 980px;
+  }
+
+  .insiders-command-stage .insiders-logo-squad {
+    min-height: 520px !important;
   }
 }
 

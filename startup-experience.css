@@ -53,7 +53,7 @@ body.catalogo-lock-scroll {
 }
 
 .catalogo-welcome.is-compact {
-  place-items: center;
+  place-items: start center;
   padding: 12px;
   backdrop-filter: none;
   background: rgba(7, 19, 34, 0.88);
@@ -63,10 +63,7 @@ body.catalogo-lock-scroll {
   width: min(560px, 100%);
   grid-template-columns: minmax(0, 1fr);
   border-radius: 18px;
-}
-
-.catalogo-welcome.is-compact .catalogo-welcome-visual {
-  display: none;
+  overflow: hidden;
 }
 
 .catalogo-welcome.is-compact .catalogo-welcome-copy {
@@ -88,6 +85,256 @@ body.catalogo-lock-scroll {
 .catalogo-welcome.is-compact .catalogo-btn {
   width: 100%;
   justify-content: center;
+}
+
+.catalogo-welcome.is-compact .catalogo-welcome-visual {
+  display: block;
+  min-height: 220px;
+  padding: 0.85rem 0.85rem 0.7rem;
+  border-bottom: 1px solid rgba(214, 226, 240, 0.44);
+}
+
+.catalogo-welcome.is-compact .catalogo-welcome-visual::before {
+  opacity: 0.56;
+}
+
+.catalogo-welcome.is-compact .catalogo-stage-chip {
+  min-height: 28px;
+  padding: 0.24rem 0.62rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+}
+
+.catalogo-welcome.is-compact .catalogo-chaos-mural {
+  inset: 3rem 0.35rem 3.2rem;
+  opacity: 0.38;
+}
+
+.catalogo-welcome.is-compact .catalogo-night-landscape {
+  left: 0.45rem;
+  right: 0.45rem;
+  bottom: 2.8rem;
+  height: 118px;
+}
+
+.catalogo-welcome.is-compact .catalogo-horizon-glow {
+  left: 18%;
+  right: 16%;
+  bottom: 34px;
+  height: 38px;
+}
+
+.catalogo-welcome.is-compact .catalogo-land-ridge.ridge-back {
+  bottom: 54px;
+  height: 40px;
+}
+
+.catalogo-welcome.is-compact .catalogo-land-ridge.ridge-mid {
+  bottom: 24px;
+  height: 58px;
+}
+
+.catalogo-welcome.is-compact .catalogo-land-ridge.ridge-front {
+  height: 54px;
+}
+
+.catalogo-welcome.is-compact .catalogo-land-trail {
+  left: 47%;
+  bottom: 8px;
+  width: 68px;
+  height: 8px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-tableau {
+  inset: auto 0.4rem 2.9rem;
+  bottom: 2.9rem;
+  height: 90px;
+  opacity: 0.76;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-smoke {
+  width: 68px;
+  height: 68px;
+  filter: blur(8px);
+}
+
+.catalogo-welcome.is-compact .catalogo-war-smoke.smoke-right {
+  width: 84px;
+  height: 84px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-flash {
+  width: 50px;
+  height: 50px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-tracer.tracer-left {
+  left: 30%;
+  width: 62px;
+  bottom: 58px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-tracer.tracer-right {
+  right: 12%;
+  width: 52px;
+  bottom: 60px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-searchlight {
+  width: 78px;
+  height: 60px;
+  bottom: 18px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-vehicle {
+  width: 62px;
+  height: 30px;
+  bottom: 10px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-vehicle::after {
+  top: 10px;
+  width: 34px;
+  height: 4px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-vehicle.vehicle-right {
+  width: 52px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-tower {
+  bottom: 18px;
+  width: 14px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-tower.tower-left {
+  left: 20%;
+  height: 40px;
+}
+
+.catalogo-welcome.is-compact .catalogo-war-tower.tower-right {
+  right: 16%;
+  height: 54px;
+}
+
+.catalogo-welcome.is-compact .catalogo-sky-glow.glow-a {
+  top: 2.2rem;
+  left: 0.35rem;
+  width: 108px;
+  height: 108px;
+}
+
+.catalogo-welcome.is-compact .catalogo-sky-glow.glow-b {
+  top: 2.4rem;
+  right: 0.3rem;
+  width: 96px;
+  height: 96px;
+}
+
+.catalogo-welcome.is-compact .catalogo-sky-glow.glow-c {
+  top: 5.1rem;
+  width: 84px;
+  height: 48px;
+}
+
+.catalogo-welcome.is-compact .catalogo-sky-ribbon.ribbon-a {
+  top: 3.1rem;
+  left: 1.2rem;
+  width: 96px;
+  height: 20px;
+}
+
+.catalogo-welcome.is-compact .catalogo-sky-ribbon.ribbon-b {
+  top: 4.9rem;
+  left: 2.8rem;
+  width: 88px;
+  height: 18px;
+}
+
+.catalogo-welcome.is-compact .catalogo-orbital-satellite.satellite-a {
+  top: 2.9rem;
+  right: 0.7rem;
+  transform: rotate(-12deg) scale(0.52);
+}
+
+.catalogo-welcome.is-compact .catalogo-ufo.ufo-a {
+  top: 5rem;
+  left: 0.3rem;
+  transform: rotate(-5deg) scale(0.54);
+}
+
+.catalogo-welcome.is-compact .catalogo-cruzeiro-sul {
+  top: 2.8rem;
+  left: calc(50% - 58px);
+  width: 138px;
+  height: 132px;
+  transform: scale(0.76) rotate(-6deg);
+  transform-origin: top left;
+}
+
+.catalogo-welcome.is-compact .catalogo-shooting-star {
+  top: 3.4rem;
+  right: 0.8rem;
+  width: 74px;
+}
+
+.catalogo-welcome.is-compact .catalogo-director-stage {
+  left: -0.55rem;
+  bottom: 2px;
+  width: 148px;
+  height: 156px;
+  transform: translateY(0) scale(0.52);
+}
+
+.catalogo-welcome.is-compact .catalogo-director-stage .catalogo-pixel-director {
+  --catalogo-beam-length: 152px;
+  --catalogo-laser-length: 70px;
+}
+
+.catalogo-welcome.is-compact .catalogo-skywatcher {
+  bottom: 18px;
+  width: 42px;
+  height: 62px;
+}
+
+.catalogo-welcome.is-compact .catalogo-skywatcher::before {
+  left: 14px;
+  width: 12px;
+  height: 12px;
+}
+
+.catalogo-welcome.is-compact .catalogo-skywatcher::after {
+  left: 5px;
+  top: 16px;
+  width: 30px;
+  height: 46px;
+}
+
+.catalogo-welcome.is-compact .catalogo-skywatcher.watcher-one {
+  left: 4.5rem;
+  --watcher-scale: 0.54;
+}
+
+.catalogo-welcome.is-compact .catalogo-visual-copy {
+  right: 0.5rem;
+  bottom: 0.45rem;
+  width: min(184px, calc(100% - 1rem));
+  padding: 0.56rem 0.64rem;
+}
+
+.catalogo-welcome.is-compact .catalogo-visual-copy strong {
+  font-size: 0.66rem;
+}
+
+.catalogo-welcome.is-compact .catalogo-visual-copy span {
+  font-size: 0.7rem;
+}
+
+.catalogo-welcome.is-compact .catalogo-sky-ribbon.ribbon-b,
+.catalogo-welcome.is-compact .catalogo-orbital-satellite.satellite-b,
+.catalogo-welcome.is-compact .catalogo-ufo.ufo-b,
+.catalogo-welcome.is-compact .catalogo-skywatcher.watcher-two {
+  display: none;
 }
 
 .catalogo-compact-banner {
@@ -2605,7 +2852,457 @@ body.catalogo-lock-scroll {
     font-size: 0.68rem;
   }
 
-  .catalogo-visual-copy span {
-    font-size: 0.72rem;
+.catalogo-visual-copy span {
+  font-size: 0.72rem;
+}
+}
+
+/* 2026-04-16: ceninha de guerra adicional no fundo do popup */
+.catalogo-war-tableau {
+  position: absolute;
+  inset: auto 1rem 5.1rem;
+  bottom: 5.1rem;
+  height: 210px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.96;
+}
+
+.catalogo-war-tableau::before,
+.catalogo-war-tableau::after,
+.catalogo-war-smoke,
+.catalogo-war-flash,
+.catalogo-war-tracer,
+.catalogo-war-searchlight,
+.catalogo-war-vehicle,
+.catalogo-war-tower {
+  position: absolute;
+  display: block;
+}
+
+.catalogo-war-tableau::before {
+  content: "";
+  inset: 34px 4% 34px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 22% 54%, rgba(255, 122, 88, 0.16), transparent 18%),
+    radial-gradient(circle at 74% 46%, rgba(255, 173, 107, 0.14), transparent 16%),
+    linear-gradient(180deg, rgba(255, 140, 92, 0.08), rgba(17, 35, 56, 0));
+  filter: blur(18px);
+  opacity: 0.92;
+}
+
+.catalogo-war-tableau::after {
+  content: "";
+  left: 8%;
+  right: 8%;
+  bottom: 18px;
+  height: 40px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 136, 90, 0.2), rgba(255, 136, 90, 0.02) 58%, transparent 74%);
+  filter: blur(14px);
+  opacity: 0.68;
+}
+
+.catalogo-war-smoke {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 60%, rgba(27, 44, 62, 0.84), rgba(10, 20, 33, 0.14) 64%, transparent 76%);
+  filter: blur(10px);
+  mix-blend-mode: screen;
+  animation: catalogoWarSmoke 9.8s ease-in-out infinite alternate;
+}
+
+.catalogo-war-smoke.smoke-left {
+  left: 8%;
+  bottom: 42px;
+}
+
+.catalogo-war-smoke.smoke-right {
+  right: 10%;
+  bottom: 56px;
+  width: 156px;
+  height: 156px;
+  animation-delay: -4.2s;
+}
+
+.catalogo-war-flash {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 229, 177, 0.94) 0 8%, rgba(255, 140, 92, 0.58) 22%, rgba(255, 140, 92, 0.08) 52%, transparent 74%);
+  filter: blur(4px);
+  animation: catalogoWarFlash 4.6s ease-in-out infinite;
+}
+
+.catalogo-war-flash.flash-left {
+  left: 18%;
+  bottom: 48px;
+}
+
+.catalogo-war-flash.flash-right {
+  right: 18%;
+  bottom: 64px;
+  width: 90px;
+  height: 90px;
+  animation-delay: -1.8s;
+}
+
+.catalogo-war-tracer {
+  height: 3px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(255, 244, 214, 0), rgba(255, 244, 214, 0.94) 30%, rgba(255, 159, 98, 0.16) 86%, transparent);
+  filter: drop-shadow(0 0 6px rgba(255, 192, 132, 0.52));
+  opacity: 0.84;
+  animation: catalogoWarTracer 3.8s linear infinite;
+}
+
+.catalogo-war-tracer.tracer-left {
+  left: 24%;
+  bottom: 116px;
+  width: 152px;
+  transform: rotate(-8deg);
+}
+
+.catalogo-war-tracer.tracer-right {
+  right: 24%;
+  bottom: 122px;
+  width: 128px;
+  transform: rotate(12deg);
+  animation-delay: -1.6s;
+}
+
+.catalogo-war-searchlight {
+  bottom: 40px;
+  width: 160px;
+  height: 118px;
+  clip-path: polygon(0 100%, 46% 0, 100% 100%);
+  background:
+    linear-gradient(180deg, rgba(166, 228, 255, 0.26), rgba(166, 228, 255, 0));
+  filter: blur(2px);
+  opacity: 0.42;
+  transform-origin: center bottom;
+  animation: catalogoWarLight 7.4s ease-in-out infinite alternate;
+}
+
+.catalogo-war-searchlight.light-left {
+  left: 4%;
+}
+
+.catalogo-war-searchlight.light-right {
+  right: 2%;
+  width: 148px;
+  transform: scaleX(-1);
+  animation-delay: -2.7s;
+}
+
+.catalogo-war-vehicle {
+  bottom: 26px;
+  width: 138px;
+  height: 62px;
+  opacity: 0.88;
+}
+
+.catalogo-war-vehicle::before,
+.catalogo-war-vehicle::after {
+  content: "";
+  position: absolute;
+  display: block;
+}
+
+.catalogo-war-vehicle::before {
+  inset: 18px 0 0;
+  clip-path: polygon(0 100%, 8% 46%, 18% 30%, 30% 20%, 58% 16%, 70% 0, 88% 8%, 100% 42%, 100% 100%);
+  background:
+    linear-gradient(180deg, rgba(30, 44, 60, 0.96), rgba(5, 11, 18, 0.98));
+}
+
+.catalogo-war-vehicle::after {
+  left: 48%;
+  top: 16px;
+  width: 74px;
+  height: 6px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(17, 26, 37, 0.96), rgba(59, 76, 97, 0.96) 66%, rgba(255, 224, 180, 0.54) 100%);
+  transform-origin: left center;
+}
+
+.catalogo-war-vehicle.vehicle-left {
+  left: 2%;
+}
+
+.catalogo-war-vehicle.vehicle-left::after {
+  transform: rotate(-10deg);
+}
+
+.catalogo-war-vehicle.vehicle-right {
+  right: 4%;
+  width: 122px;
+  transform: scaleX(-1);
+  opacity: 0.74;
+}
+
+.catalogo-war-vehicle.vehicle-right::after {
+  transform: rotate(-6deg);
+}
+
+.catalogo-war-tower {
+  bottom: 44px;
+  width: 26px;
+  background:
+    linear-gradient(180deg, rgba(28, 42, 59, 0.86), rgba(4, 10, 18, 0.98));
+  clip-path: polygon(32% 0, 68% 0, 100% 100%, 0 100%);
+  opacity: 0.72;
+}
+
+.catalogo-war-tower::before,
+.catalogo-war-tower::after {
+  content: "";
+  position: absolute;
+  display: block;
+}
+
+.catalogo-war-tower::before {
+  left: 50%;
+  top: -28px;
+  width: 4px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(162, 224, 255, 0.92), rgba(162, 224, 255, 0.08));
+  transform: translateX(-50%);
+}
+
+.catalogo-war-tower::after {
+  left: 50%;
+  top: -14px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(206, 239, 255, 0.94) 0 22%, rgba(126, 247, 255, 0.22) 44%, transparent 76%);
+  box-shadow: 0 0 18px rgba(126, 247, 255, 0.18);
+  transform: translateX(-50%);
+}
+
+.catalogo-war-tower.tower-left {
+  left: 28%;
+  height: 96px;
+}
+
+.catalogo-war-tower.tower-right {
+  right: 30%;
+  height: 122px;
+}
+
+@keyframes catalogoWarSmoke {
+  from {
+    transform: translate3d(-4px, 6px, 0) scale(0.92);
+    opacity: 0.52;
+  }
+
+  to {
+    transform: translate3d(8px, -12px, 0) scale(1.08);
+    opacity: 0.82;
+  }
+}
+
+@keyframes catalogoWarFlash {
+  0%,
+  62%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.82);
+  }
+
+  20% {
+    opacity: 0.94;
+    transform: scale(1.08);
+  }
+
+  28% {
+    opacity: 0.38;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes catalogoWarTracer {
+  0% {
+    opacity: 0;
+    transform: translate3d(-18px, 4px, 0) scaleX(0.82);
+  }
+
+  28%,
+  100% {
+    opacity: 0.86;
+    transform: translate3d(8px, -4px, 0) scaleX(1);
+  }
+}
+
+@keyframes catalogoWarLight {
+  from {
+    opacity: 0.2;
+    transform: rotate(-7deg);
+  }
+
+  to {
+    opacity: 0.46;
+    transform: rotate(7deg);
+  }
+}
+
+.catalogo-night-landscape {
+  z-index: 3;
+}
+
+.catalogo-visual-copy {
+  z-index: 4;
+}
+
+@media (max-width: 920px) {
+  .catalogo-war-tableau {
+    inset: auto 0.75rem 4.85rem;
+    bottom: 4.85rem;
+    height: 182px;
+  }
+
+  .catalogo-war-tracer.tracer-left {
+    width: 122px;
+    bottom: 104px;
+  }
+
+  .catalogo-war-tracer.tracer-right {
+    width: 104px;
+    bottom: 108px;
+  }
+
+  .catalogo-war-vehicle {
+    width: 114px;
+    height: 52px;
+  }
+
+  .catalogo-war-vehicle.vehicle-right {
+    width: 102px;
+  }
+
+  .catalogo-war-tower.tower-left {
+    left: 24%;
+    height: 86px;
+  }
+
+  .catalogo-war-tower.tower-right {
+    right: 26%;
+    height: 104px;
+  }
+}
+
+@media (max-width: 760px) {
+  .catalogo-war-tableau {
+    inset: auto 0.55rem 4.5rem;
+    bottom: 4.5rem;
+    height: 150px;
+  }
+
+  .catalogo-war-smoke {
+    width: 96px;
+    height: 96px;
+  }
+
+  .catalogo-war-smoke.smoke-right {
+    width: 118px;
+    height: 118px;
+  }
+
+  .catalogo-war-flash {
+    width: 72px;
+    height: 72px;
+  }
+
+  .catalogo-war-tracer.tracer-left {
+    width: 88px;
+    bottom: 90px;
+  }
+
+  .catalogo-war-tracer.tracer-right {
+    width: 72px;
+    bottom: 94px;
+  }
+
+  .catalogo-war-searchlight {
+    width: 108px;
+    height: 88px;
+    bottom: 26px;
+  }
+
+  .catalogo-war-vehicle {
+    width: 88px;
+    height: 44px;
+    bottom: 18px;
+  }
+
+  .catalogo-war-vehicle::after {
+    top: 14px;
+    width: 52px;
+  }
+
+  .catalogo-war-vehicle.vehicle-right {
+    width: 76px;
+  }
+
+  .catalogo-war-tower {
+    bottom: 28px;
+    width: 20px;
+  }
+
+  .catalogo-war-tower.tower-left {
+    left: 22%;
+    height: 64px;
+  }
+
+  .catalogo-war-tower.tower-right {
+    right: 20%;
+    height: 84px;
+  }
+}
+
+@media (max-width: 520px) {
+  .catalogo-war-tableau {
+    inset: auto 0.3rem 4.2rem;
+    bottom: 4.2rem;
+    height: 126px;
+    opacity: 0.82;
+  }
+
+  .catalogo-war-searchlight,
+  .catalogo-war-tower.tower-right,
+  .catalogo-war-smoke.smoke-right {
+    display: none;
+  }
+
+  .catalogo-war-tracer.tracer-left {
+    left: 30%;
+    width: 70px;
+    bottom: 82px;
+  }
+
+  .catalogo-war-tracer.tracer-right {
+    right: 14%;
+    width: 56px;
+    bottom: 84px;
+  }
+
+  .catalogo-war-vehicle {
+    width: 74px;
+    height: 38px;
+  }
+
+  .catalogo-war-tower.tower-left {
+    left: 16%;
+    height: 56px;
   }
 }

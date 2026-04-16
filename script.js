@@ -788,7 +788,7 @@ const paintMosaicImageElement = (panelNode, url, position = "center 35%") => {
 const mosaicImageFocusOverridesBySlug = {
   "ciclista-acreano-chega-no-panama-para-disputa-do-sul-americano-da-juventude": "center 10%",
   "governadora-mailza-assis-empossa-novo-delegado-geral-e-anuncia-concurso-publico-da-policia-civil":
-    "center 18%",
+    "40% 18%",
   "bolsa-interrompe-sequencia-de-11-altas-e-cai-0-46": "center 46%"
 };
 
@@ -798,6 +798,26 @@ const mosaicGroupScenePattern =
   /\b(posse|cerimonia|solenidade|evento|auditorio|reuniao|encontro|coletiva|equipe|time|selecao|colegio|grupo|plateia)\b/;
 const mosaicLandscapePattern =
   /\b(bolsa|mercado|dolar|cidade|rio|ponte|bairro|rodovia|estrada|enchente|cheia|alag|obra|calcadao|orcamento|salario|superavit|petroleo|economia|feira|fachada|predio)\b/;
+
+const getMosaicStorySignals = (article = {}) => {
+  const text = normalizeText(
+    [
+      article.title,
+      article.sourceLabel,
+      article.lede,
+      article.summary,
+      article.category,
+      article.sourceName
+    ].join(" ")
+  );
+
+  return {
+    text,
+    prefersFace: mosaicPersonFocusPattern.test(text),
+    isGroupScene: mosaicGroupScenePattern.test(text),
+    isLandscape: mosaicLandscapePattern.test(text)
+  };
+};
 
 const inferMosaicImageFocus = (article = {}, panelNode) => {
   const manualFocus = String(article.imageFocus || "").trim();
@@ -811,23 +831,10 @@ const inferMosaicImageFocus = (article = {}, panelNode) => {
   }
 
   const isSideCard = Boolean(panelNode?.classList?.contains("side"));
-  const text = normalizeText(
-    [
-      article.title,
-      article.sourceLabel,
-      article.lede,
-      article.summary,
-      article.category,
-      article.sourceName
-    ].join(" ")
-  );
-
-  const prefersFace = mosaicPersonFocusPattern.test(text);
-  const isGroupScene = mosaicGroupScenePattern.test(text);
-  const isLandscape = mosaicLandscapePattern.test(text);
+  const { prefersFace, isGroupScene, isLandscape } = getMosaicStorySignals(article);
 
   if (prefersFace && isGroupScene) {
-    return isSideCard ? "center 16%" : "center 20%";
+    return isSideCard ? "42% 16%" : "40% 20%";
   }
 
   if (prefersFace) {
@@ -839,6 +846,26 @@ const inferMosaicImageFocus = (article = {}, panelNode) => {
   }
 
   return isSideCard ? "center 28%" : "center 30%";
+};
+
+const inferMosaicLayoutMode = (article = {}, panelNode) => {
+  const manualLayout = String(article.imageLayout || article.mosaicLayout || "").trim();
+  if (manualLayout) {
+    return manualLayout;
+  }
+
+  const isMainCard = Boolean(panelNode?.classList?.contains("main"));
+  const { prefersFace, isGroupScene, isLandscape } = getMosaicStorySignals(article);
+
+  if (prefersFace && isGroupScene) {
+    return "group-safe";
+  }
+
+  if (isMainCard && prefersFace && !isLandscape) {
+    return "portrait-safe";
+  }
+
+  return "default";
 };
 
 let thumbImageRequestSequence = 0;
@@ -3095,6 +3122,37 @@ const buildInsidersArmyChant = () => {
   });
 };
 
+const getInsidersLiteMode = () => {
+  if (performanceLiteMode || splashMotionQuery.matches) {
+    return true;
+  }
+
+  const connection =
+    navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+  if (connection && (connection.saveData || /(?:^|slow-)?2g$/i.test(String(connection.effectiveType || "")))) {
+    return true;
+  }
+
+  const deviceMemory = Number(navigator.deviceMemory || 0);
+  if (deviceMemory > 0 && deviceMemory <= 4) {
+    return true;
+  }
+
+  const hardwareThreads = Number(navigator.hardwareConcurrency || 0);
+  return hardwareThreads > 0 && hardwareThreads <= 4;
+};
+
+const getInsidersArmyCount = (requestedCount = 20) => {
+  const safeRequestedCount = Math.max(8, Number.parseInt(requestedCount, 10) || 20);
+  const isCompactViewport = window.matchMedia("(max-width: 960px)").matches;
+
+  if (getInsidersLiteMode()) {
+    return Math.min(safeRequestedCount, isCompactViewport ? 10 : 14);
+  }
+
+  return Math.min(safeRequestedCount, isCompactViewport ? 12 : 20);
+};
+
 const createInsidersArmyRobot = (rowIndex, columnIndex, rowCount, columnCount) => {
   const robot = document.createElement("article");
   const fragment = document.createDocumentFragment();
@@ -3144,37 +3202,68 @@ const createInsidersArmyRobot = (rowIndex, columnIndex, rowCount, columnCount) =
 };
 
 const initializeInsidersArmy = () => {
-  buildInsidersArmyChant();
-
   if (!insidersArmyScene || insidersArmyScene.dataset.armyReady === "true") {
     return;
   }
 
-  const totalCount = Math.max(
-    24,
-    Number.parseInt(insidersArmyScene.dataset.armyCount || "100", 10) || 100
-  );
-  const columnCount = Math.max(6, Math.round(Math.sqrt(totalCount)));
-  const rowCount = Math.ceil(totalCount / columnCount);
-  const fragment = document.createDocumentFragment();
-  let robotIndex = 0;
-
-  for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
-    for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
-      if (robotIndex >= totalCount) {
-        break;
-      }
-
-      fragment.appendChild(
-        createInsidersArmyRobot(rowIndex, columnIndex, rowCount, columnCount)
-      );
-      robotIndex += 1;
+  const renderArmy = () => {
+    if (!insidersArmyScene || insidersArmyScene.dataset.armyReady === "true") {
+      return;
     }
+
+    buildInsidersArmyChant();
+
+    const totalCount = getInsidersArmyCount(insidersArmyScene.dataset.armyCount || "20");
+    const isLiteMode = getInsidersLiteMode();
+    const columnCount = Math.max(isLiteMode ? 4 : 5, Math.round(Math.sqrt(totalCount * 1.15)));
+    const rowCount = Math.ceil(totalCount / columnCount);
+    const fragment = document.createDocumentFragment();
+    let robotIndex = 0;
+
+    insidersArmyScene.dataset.armyMode = isLiteMode ? "lite" : "full";
+    insidersArmyScene.style.setProperty("--insiders-army-count", String(totalCount));
+
+    for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+      for (let columnIndex = 0; columnIndex < columnCount; columnIndex += 1) {
+        if (robotIndex >= totalCount) {
+          break;
+        }
+
+        fragment.appendChild(
+          createInsidersArmyRobot(rowIndex, columnIndex, rowCount, columnCount)
+        );
+        robotIndex += 1;
+      }
+    }
+
+    insidersArmyScene.textContent = "";
+    insidersArmyScene.appendChild(fragment);
+    insidersArmyScene.dataset.armyReady = "true";
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    window.setTimeout(renderArmy, 180);
+    return;
   }
 
-  insidersArmyScene.textContent = "";
-  insidersArmyScene.appendChild(fragment);
-  insidersArmyScene.dataset.armyReady = "true";
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        observer.disconnect();
+        renderArmy();
+      });
+    },
+    {
+      rootMargin: "320px 0px",
+      threshold: 0.05
+    }
+  );
+
+  observer.observe(insidersArmyScene);
 };
 
 const escapeHtml = (value) =>
@@ -3651,6 +3740,7 @@ const hydrateMosaicHero = (items = []) => {
       .filter((className) => className.startsWith("thumb-"))
       .forEach((className) => card.classList.remove(className));
     card.classList.add(article.previewClass);
+    card.dataset.mosaicLayout = inferMosaicLayoutMode(article, card);
 
     if (tag) {
       tag.textContent = index === 0 ? "Destaque do radar" : truncateCopy(article.category, 22);

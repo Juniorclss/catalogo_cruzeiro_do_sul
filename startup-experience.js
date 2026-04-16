@@ -147,6 +147,103 @@
     `;
   }
 
+  function buildWelcomeVisualMarkup(options = {}) {
+    const compact = options.compact === true;
+    const visualClass = compact
+      ? "catalogo-welcome-visual catalogo-welcome-visual-compact"
+      : "catalogo-welcome-visual";
+
+    return `
+      <div class="${visualClass}" aria-hidden="true">
+        <div class="catalogo-stage-chip">Cookies, rastreio e dados</div>
+
+        <div class="catalogo-cosmos">
+          <span class="catalogo-sky-glow glow-a"></span>
+          <span class="catalogo-sky-glow glow-b"></span>
+          <span class="catalogo-sky-glow glow-c"></span>
+          <span class="catalogo-sky-ribbon ribbon-a"></span>
+          <span class="catalogo-sky-ribbon ribbon-b"></span>
+          <span class="catalogo-orbital-satellite satellite-a"></span>
+          <span class="catalogo-orbital-satellite satellite-b"></span>
+          <span class="catalogo-ufo ufo-a"></span>
+          <span class="catalogo-ufo ufo-b"></span>
+          <div class="catalogo-cruzeiro-sul">
+            <span class="catalogo-cruzeiro-trace trace-top"></span>
+            <span class="catalogo-cruzeiro-trace trace-left"></span>
+            <span class="catalogo-cruzeiro-trace trace-right"></span>
+            <span class="catalogo-cruzeiro-trace trace-bottom"></span>
+            <span class="catalogo-cruzeiro-star star-top"></span>
+            <span class="catalogo-cruzeiro-star star-left"></span>
+            <span class="catalogo-cruzeiro-star star-core"></span>
+            <span class="catalogo-cruzeiro-star star-right"></span>
+            <span class="catalogo-cruzeiro-star star-bottom"></span>
+          </div>
+          <span class="catalogo-shooting-star"></span>
+        </div>
+
+        <div class="catalogo-chaos-mural" aria-hidden="true">
+          <img
+            src="./assets/startup-chaos-mural.svg"
+            alt=""
+            decoding="async"
+          />
+        </div>
+
+        <div class="catalogo-war-tableau" aria-hidden="true">
+          <span class="catalogo-war-smoke smoke-left"></span>
+          <span class="catalogo-war-smoke smoke-right"></span>
+          <span class="catalogo-war-flash flash-left"></span>
+          <span class="catalogo-war-flash flash-right"></span>
+          <span class="catalogo-war-tracer tracer-left"></span>
+          <span class="catalogo-war-tracer tracer-right"></span>
+          <span class="catalogo-war-searchlight light-left"></span>
+          <span class="catalogo-war-searchlight light-right"></span>
+          <span class="catalogo-war-vehicle vehicle-left"></span>
+          <span class="catalogo-war-vehicle vehicle-right"></span>
+          <span class="catalogo-war-tower tower-left"></span>
+          <span class="catalogo-war-tower tower-right"></span>
+        </div>
+
+        <div class="catalogo-night-landscape" aria-hidden="true">
+          <span class="catalogo-horizon-glow"></span>
+          <span class="catalogo-land-ridge ridge-back"></span>
+          <span class="catalogo-land-ridge ridge-mid"></span>
+          <span class="catalogo-land-ridge ridge-front"></span>
+          <span class="catalogo-land-trail"></span>
+
+          <div class="catalogo-director-stage">
+            <div class="catalogo-pixel-director">
+              <i class="catalogo-director-shadow"></i>
+              <i class="catalogo-director-hair"></i>
+              <i class="catalogo-director-head"></i>
+              <i class="catalogo-director-glasses"></i>
+              <i class="catalogo-director-body"></i>
+              <i class="catalogo-director-arm arm-left">
+                <span class="catalogo-director-hand left-hand"></span>
+              </i>
+              <i class="catalogo-director-arm arm-right">
+                <span class="catalogo-director-hand right-hand"></span>
+                <span class="catalogo-director-laser-burst">
+                  <span class="catalogo-pointer-beam"></span>
+                </span>
+              </i>
+              <i class="catalogo-director-leg leg-left"></i>
+              <i class="catalogo-director-leg leg-right"></i>
+            </div>
+          </div>
+
+          <div class="catalogo-skywatcher watcher-one"></div>
+          <div class="catalogo-skywatcher watcher-two"></div>
+        </div>
+
+        <div class="catalogo-visual-copy">
+          <strong>Monitoramento ativo</strong>
+          <span>O aceite libera cookies, cliques e tempo de uso para metricas, testes e ajustes do portal.</span>
+        </div>
+      </div>
+    `;
+  }
+
   function createWelcomeModal(options = {}) {
     const compact = options.compact === true;
     const modal = document.createElement("section");
@@ -161,6 +258,7 @@
           aria-modal="true"
           aria-labelledby="catalogoWelcomeTitle"
         >
+          ${buildWelcomeVisualMarkup({ compact: true })}
           <div class="catalogo-welcome-copy">
             <div class="catalogo-compact-banner" aria-hidden="true">
               <span class="catalogo-compact-dot"></span>
@@ -177,78 +275,7 @@
           aria-modal="true"
           aria-labelledby="catalogoWelcomeTitle"
         >
-          <div class="catalogo-welcome-visual" aria-hidden="true">
-            <div class="catalogo-stage-chip">Cookies, rastreio e dados</div>
-
-            <div class="catalogo-cosmos">
-              <span class="catalogo-sky-glow glow-a"></span>
-              <span class="catalogo-sky-glow glow-b"></span>
-              <span class="catalogo-sky-glow glow-c"></span>
-              <span class="catalogo-sky-ribbon ribbon-a"></span>
-              <span class="catalogo-sky-ribbon ribbon-b"></span>
-              <span class="catalogo-orbital-satellite satellite-a"></span>
-              <span class="catalogo-orbital-satellite satellite-b"></span>
-              <span class="catalogo-ufo ufo-a"></span>
-              <span class="catalogo-ufo ufo-b"></span>
-              <div class="catalogo-cruzeiro-sul">
-                <span class="catalogo-cruzeiro-trace trace-top"></span>
-                <span class="catalogo-cruzeiro-trace trace-left"></span>
-                <span class="catalogo-cruzeiro-trace trace-right"></span>
-                <span class="catalogo-cruzeiro-trace trace-bottom"></span>
-                <span class="catalogo-cruzeiro-star star-top"></span>
-                <span class="catalogo-cruzeiro-star star-left"></span>
-                <span class="catalogo-cruzeiro-star star-core"></span>
-                <span class="catalogo-cruzeiro-star star-right"></span>
-                <span class="catalogo-cruzeiro-star star-bottom"></span>
-              </div>
-              <span class="catalogo-shooting-star"></span>
-            </div>
-
-            <div class="catalogo-chaos-mural" aria-hidden="true">
-              <img
-                src="./assets/startup-chaos-mural.svg"
-                alt=""
-                decoding="async"
-              />
-            </div>
-
-            <div class="catalogo-night-landscape" aria-hidden="true">
-              <span class="catalogo-horizon-glow"></span>
-              <span class="catalogo-land-ridge ridge-back"></span>
-              <span class="catalogo-land-ridge ridge-mid"></span>
-              <span class="catalogo-land-ridge ridge-front"></span>
-              <span class="catalogo-land-trail"></span>
-
-              <div class="catalogo-director-stage">
-                <div class="catalogo-pixel-director">
-                  <i class="catalogo-director-shadow"></i>
-                  <i class="catalogo-director-hair"></i>
-                  <i class="catalogo-director-head"></i>
-                  <i class="catalogo-director-glasses"></i>
-                  <i class="catalogo-director-body"></i>
-                  <i class="catalogo-director-arm arm-left">
-                    <span class="catalogo-director-hand left-hand"></span>
-                  </i>
-                  <i class="catalogo-director-arm arm-right">
-                    <span class="catalogo-director-hand right-hand"></span>
-                    <span class="catalogo-director-laser-burst">
-                      <span class="catalogo-pointer-beam"></span>
-                    </span>
-                  </i>
-                  <i class="catalogo-director-leg leg-left"></i>
-                  <i class="catalogo-director-leg leg-right"></i>
-                </div>
-              </div>
-
-              <div class="catalogo-skywatcher watcher-one"></div>
-              <div class="catalogo-skywatcher watcher-two"></div>
-            </div>
-
-            <div class="catalogo-visual-copy">
-              <strong>Monitoramento ativo</strong>
-              <span>O aceite libera cookies, cliques e tempo de uso para metricas, testes e ajustes do portal.</span>
-            </div>
-          </div>
+          ${buildWelcomeVisualMarkup()}
 
           <div class="catalogo-welcome-copy">
             ${buildWelcomeCopyMarkup()}

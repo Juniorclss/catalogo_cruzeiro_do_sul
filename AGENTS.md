@@ -101,3 +101,10 @@ Se precisar criar mais agentes personalizados:
 ---
 
 **Última atualização**: 11 de abril de 2026
+
+---
+
+## Memória operacional do Codex
+
+- Se existir um arquivo `CODEX_MEMORY.md` na raiz do projeto, leia esse arquivo antes de continuar trabalhos já iniciados neste repositório.
+- Quando houver mudanças grandes, validações visuais, deploys ou pendências importantes, atualize `CODEX_MEMORY.md` com um resumo curto do estado atual.
