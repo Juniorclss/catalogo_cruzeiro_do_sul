@@ -107,7 +107,7 @@ Leitura atual dessas validacoes:
 
 ## Pendencia principal agora
 
-- Fazer o commit/push do pacote desta rodada para `origin/main` e acompanhar o deploy.
+- Acompanhar o deploy da subida mais recente em `origin/main` e conferir o comportamento no servidor.
 - Se o servidor ou DNS reagirem mal depois da subida, registrar o erro exato para a proxima passada.
 
 ## Observacoes importantes
@@ -115,4 +115,5 @@ Leitura atual dessas validacoes:
 - O workspace continua com outras alteracoes ja existentes do usuario em `news-data.js`, `server.js` e arquivos de `data/`; nao reverter.
 - Arquivos de `data/` mudam durante validacoes locais; evitar incluir ruido desnecessario em commit.
 - O backend local criou JSONs vazios em `backend/data/` ao subir o servidor; isso e ruido operacional e nao precisa entrar no commit.
+- O pacote desta rodada subiu para `origin/main` no commit `96b887c` (`Atualizar home final e renovar noticias`).
 - O commit anterior que ja foi para `origin/main` foi `5cd6811` (`Ajustar popup inicial e aliviar exercito do rodape`).
