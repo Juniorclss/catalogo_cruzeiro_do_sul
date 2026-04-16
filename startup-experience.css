@@ -4315,6 +4315,46 @@ body.catalogo-lock-scroll {
   --catalogo-laser-length: 72px;
 }
 
+/* 2026-04-16f: ancorar o laser na mao do editor */
+.catalogo-director-arm.arm-right {
+  overflow: visible;
+}
+
+.catalogo-director-hand.right-hand {
+  z-index: 7;
+  overflow: visible;
+}
+
+.catalogo-director-hand.right-hand::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: block;
+  background: rgba(160, 255, 213, 0.98);
+  box-shadow:
+    0 0 12px rgba(124, 255, 192, 0.86),
+    0 0 22px rgba(124, 255, 192, 0.38);
+}
+
+.catalogo-director-laser-burst {
+  left: 14px;
+  top: 50px;
+  z-index: 4;
+  transform-origin: left center;
+}
+
+.catalogo-director-laser-burst::before {
+  transform: translateX(-2px);
+}
+
+.catalogo-pointer-beam {
+  left: calc(var(--catalogo-laser-length) - 10px);
+}
+
 /* 2026-04-16e: letreiro de previsao no centro do popup e aliens observando */
 .catalogo-prophecy-panel {
   position: absolute;

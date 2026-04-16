@@ -1,6 +1,6 @@
 # CODEX Memory
 
-Ultima atualizacao: 2026-04-16 12:33 -05:00 (America/Rio_Branco)
+Ultima atualizacao: 2026-04-16 12:40 -05:00 (America/Rio_Branco)
 
 ## Preferencia do usuario
 
@@ -25,6 +25,7 @@ Reformular a home com tres focos visuais:
 - [startup-experience.css](C:/Users/junio/projeto codex/startup-experience.css) foi reforcado para puxar o pop-up para uma leitura mais de batalha: fundo escurecido, explosoes maiores, combate mais visivel e ajuste compacto no mobile.
 - O mural pixelado (`startup-chaos-mural.svg`) foi removido do popup porque estava trazendo um personagem e feixes indevidos; o diretor da caneta voltou para a cena via `.catalogo-director-stage`.
 - O popup agora tambem tem um letreiro central de "previsao do futuro", com animacao em etapas (`binario > ascii > programacao > noticia`) e os observadores alienigenas voltaram ao markup.
+- O laser do editor foi reancorado para sair visualmente da mao direita, com brilho de origem na propria mao para deixar a leitura clara.
 - [styles.css](C:/Users/junio/projeto codex/styles.css) tambem reforca a animacao de `.southern-cross-orbit` para girar no proprio eixo (`rotateZ`) sem ficar parecendo orbita lateral.
 
 ## Validacoes ja feitas
@@ -39,12 +40,14 @@ Capturas mais recentes em `.codex-temp/visual-verify/`:
 - `turn14-popup-mobile.png`
 - `turn15-popup-desktop.png`
 - `turn15-popup-mobile.png`
+- `turn18-popup-desktop-tall.png`
 
 Leitura atual dessas validacoes:
 
 - popup mobile: melhorou bem, a leitura de guerra ficou clara e mais pesada
 - popup mobile mais recente: ok com o diretor da caneta de volta e sem o personagem estranho do mural
 - popup com letreiro de previsao: ok no desktop e mobile, com painel central animado e aliens observando de novo
+- popup com laser do editor: ok, agora o feixe nasce da mao direita com ponto de origem luminoso
 - popup desktop: melhorou, mas ainda vale revisar se quiser mais caos visual acima da linha media do card
 - rodape: o bloco foi reduzido para 5 robos e o codigo agora posiciona o esquadrao muito mais alto; as capturas do rodape ficaram inconsistentes por causa do enquadramento do iframe de validacao
 - sintaxe: `node --check script.js` e `node --check startup-experience.js` passaram
