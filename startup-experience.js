@@ -181,14 +181,6 @@
           <span class="catalogo-shooting-star"></span>
         </div>
 
-        <div class="catalogo-chaos-mural" aria-hidden="true">
-          <img
-            src="./assets/startup-chaos-mural.svg"
-            alt=""
-            decoding="async"
-          />
-        </div>
-
         <div class="catalogo-war-tableau" aria-hidden="true">
           <span class="catalogo-war-smoke smoke-left"></span>
           <span class="catalogo-war-smoke smoke-mid"></span>
@@ -216,12 +208,46 @@
           <span class="catalogo-war-tower tower-right"></span>
         </div>
 
+        <div class="catalogo-prophecy-panel" aria-hidden="true">
+          <span class="catalogo-prophecy-kicker">Previsao do futuro</span>
+          <strong class="catalogo-prophecy-title">Calculando probabilidades com I.A.</strong>
+          <div class="catalogo-prophecy-stream">
+            <span class="catalogo-prophecy-phase phase-binary">01010000 01110010 01100101 01110110 01101001 01110011 01100001 01101111</span>
+            <span class="catalogo-prophecy-phase phase-ascii">50 72 65 76 69 73 61 6F 20 3E 20 6E 6F 74 69 63 69 61</span>
+            <span class="catalogo-prophecy-phase phase-code">parse(binario).toASCII().toPrograma().toNoticia(ia);</span>
+            <span class="catalogo-prophecy-phase phase-news">Meme + guerra + aliens olhando = noticia em formacao</span>
+          </div>
+          <small>binario > ascii > programacao > noticia</small>
+        </div>
+
         <div class="catalogo-night-landscape" aria-hidden="true">
           <span class="catalogo-horizon-glow"></span>
           <span class="catalogo-land-ridge ridge-back"></span>
           <span class="catalogo-land-ridge ridge-mid"></span>
           <span class="catalogo-land-ridge ridge-front"></span>
           <span class="catalogo-land-trail"></span>
+          <div class="catalogo-director-stage">
+            <div class="catalogo-pixel-director">
+              <i class="catalogo-director-shadow"></i>
+              <i class="catalogo-director-hair"></i>
+              <i class="catalogo-director-head"></i>
+              <i class="catalogo-director-glasses"></i>
+              <i class="catalogo-director-body"></i>
+              <i class="catalogo-director-arm arm-left">
+                <span class="catalogo-director-hand left-hand"></span>
+              </i>
+              <i class="catalogo-director-arm arm-right">
+                <span class="catalogo-director-hand right-hand"></span>
+                <span class="catalogo-director-laser-burst">
+                  <span class="catalogo-pointer-beam"></span>
+                </span>
+              </i>
+              <i class="catalogo-director-leg leg-left"></i>
+              <i class="catalogo-director-leg leg-right"></i>
+            </div>
+          </div>
+          <div class="catalogo-skywatcher watcher-one"></div>
+          <div class="catalogo-skywatcher watcher-two"></div>
           <div class="catalogo-battle-line">
             <span class="catalogo-war-crater crater-a"></span>
             <span class="catalogo-war-crater crater-b"></span>
