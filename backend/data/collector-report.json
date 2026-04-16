@@ -1,0 +1,23 @@
+{
+  "startedAt": "2026-04-16T11:19:06.679Z",
+  "runs": [
+    {
+      "time": "2026-04-16T11:19:41.424Z",
+      "news": {
+        "previous": 0,
+        "collected": 106,
+        "total": 3
+      },
+      "business": {
+        "previous": 0,
+        "collected": 17,
+        "total": 16
+      }
+    }
+  ],
+  "totals": {
+    "news": 3,
+    "businesses": 16
+  },
+  "lastUpdate": "2026-04-16T11:19:41.424Z"
+}
