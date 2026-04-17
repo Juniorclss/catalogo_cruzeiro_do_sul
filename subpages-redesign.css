@@ -6517,7 +6517,189 @@ body.games-vr-rental-open {
 .infantil-child-page .kids-signal-grid,
 .infantil-child-page #perfis,
 .infantil-child-page #agenda-pop,
-.infantil-child-page .kids-scene-card,
+.infantil-child-page .kids-scene-card {
+  display: none !important;
+}
+
+.infantil-child-page {
+  --kids-panel: rgba(255, 255, 255, 0.88);
+  --kids-cyan: #2f86d8;
+  --kids-text: #24344a;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(255, 209, 102, 0.48), transparent 22%),
+    radial-gradient(circle at 86% 12%, rgba(118, 205, 255, 0.4), transparent 22%),
+    radial-gradient(circle at 18% 78%, rgba(255, 163, 196, 0.28), transparent 24%),
+    linear-gradient(180deg, #fff7e9 0%, #f4fbff 44%, #eef8ef 100%);
+  color: #24344a;
+}
+
+.infantil-child-page .students-topbar {
+  border-color: rgba(255, 186, 82, 0.26);
+  background:
+    radial-gradient(circle at 84% 12%, rgba(118, 205, 255, 0.22), transparent 18rem),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 245, 221, 0.96)) !important;
+  box-shadow: 0 18px 40px rgba(96, 130, 167, 0.16);
+}
+
+.infantil-child-page .students-brand span,
+.infantil-child-page .students-mini-nav a,
+.infantil-child-page .eyebrow,
+.infantil-child-page .students-source-strip span,
+.infantil-child-page .kids-character-card span,
+.infantil-child-page .kids-trending-column span {
+  color: #5c7797;
+}
+
+.infantil-child-page .students-brand strong,
+.infantil-child-page .students-section-head h2,
+.infantil-child-page .students-card h2,
+.infantil-child-page .students-card h3,
+.infantil-child-page .students-hero h1,
+.infantil-child-page .students-source-strip strong {
+  color: #1f3450;
+  font-family: "Baloo 2", "Lexend", sans-serif;
+  letter-spacing: 0;
+}
+
+.infantil-child-page .students-mini-nav a,
+.infantil-child-page .students-brand img {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(118, 205, 255, 0.22);
+  color: #24415f;
+}
+
+.infantil-child-page .students-mini-nav a.featured,
+.infantil-child-page .solid-button {
+  background: linear-gradient(135deg, #ffb347, #ff7aa2) !important;
+  color: #fffdfa !important;
+  box-shadow: 0 14px 26px rgba(255, 146, 109, 0.28);
+}
+
+.infantil-child-page .outline-button,
+.infantil-child-page .students-actions .tech-button {
+  border-color: rgba(92, 168, 227, 0.28);
+  background: rgba(255, 255, 255, 0.84);
+  color: #275074;
+  box-shadow: 0 10px 20px rgba(96, 130, 167, 0.1);
+}
+
+.infantil-child-page .section-block,
+.infantil-child-page .students-card,
+.infantil-child-page .students-source-strip,
+.infantil-child-page .infantil-shell {
+  border-color: rgba(255, 195, 101, 0.2) !important;
+  background:
+    radial-gradient(circle at top right, rgba(118, 205, 255, 0.16), transparent 18rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 249, 239, 0.94)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 20px 44px rgba(96, 130, 167, 0.14) !important;
+}
+
+.infantil-child-page .section-block::before,
+.infantil-child-page .students-card::before,
+.infantil-child-page .students-source-strip::before,
+.infantil-child-page .infantil-shell::before {
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.52), transparent 22%),
+    repeating-linear-gradient(0deg, rgba(255, 197, 112, 0.06) 0 1px, transparent 1px 10px);
+  opacity: 0.58;
+}
+
+.infantil-child-page .students-hero p,
+.infantil-child-page .students-card p,
+.infantil-child-page .students-section-head > p,
+.infantil-child-page .students-source-strip p,
+.infantil-child-page .students-checklist label,
+.infantil-child-page li {
+  color: rgba(42, 62, 90, 0.82);
+}
+
+.infantil-child-page .kids-cosmos-hero {
+  background:
+    radial-gradient(circle at 16% 16%, rgba(255, 196, 92, 0.34), transparent 22%),
+    radial-gradient(circle at 84% 14%, rgba(118, 205, 255, 0.32), transparent 24%),
+    radial-gradient(circle at 54% 104%, rgba(145, 227, 171, 0.24), transparent 26%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(250, 244, 255, 0.96)) !important;
+}
+
+.infantil-child-page .kids-hero-stats article,
+.infantil-child-page .kids-real-brand-card,
+.infantil-child-page .kids-character-card,
+.infantil-child-page .infantil-card,
+.infantil-child-page .infantil-mini-card,
+.infantil-child-page .kids-real-show-card,
+.infantil-child-page .kids-creator-card,
+.infantil-child-page .kids-news-card,
+.infantil-child-page .kids-tip-card,
+.infantil-child-page .topic-wire-card,
+.infantil-child-page .topic-wire-empty,
+.infantil-child-page .kids-game-card {
+  border-color: rgba(118, 205, 255, 0.22);
+  box-shadow: 0 16px 32px rgba(96, 130, 167, 0.12);
+}
+
+.infantil-child-page .kids-hero-stats article {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 246, 232, 0.88)),
+    radial-gradient(circle at top right, rgba(255, 183, 77, 0.18), transparent 30%);
+}
+
+.infantil-child-page .kids-hero-stats strong,
+.infantil-child-page .kids-real-brand-copy strong,
+.infantil-child-page .topic-wire-copy h3 {
+  color: #225081;
+}
+
+.infantil-child-page .kids-wire-shell .topic-wire-status,
+.infantil-child-page .topic-wire-meta,
+.infantil-child-page .kids-news-card span,
+.infantil-child-page .kids-creator-card span,
+.infantil-child-page .kids-real-show-card span {
+  color: #5d7695;
+}
+
+.infantil-child-page .kids-wire-shell .topic-wire-card,
+.infantil-child-page .kids-wire-shell .topic-wire-empty {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(247, 252, 255, 0.92)),
+    radial-gradient(circle at top right, rgba(255, 196, 92, 0.16), transparent 28%);
+}
+
+.infantil-child-page .kids-wire-shell .topic-wire-media {
+  border-color: rgba(118, 205, 255, 0.16);
+}
+
+.infantil-child-page .kids-news-card.lead {
+  background:
+    radial-gradient(circle at top right, rgba(255, 180, 87, 0.26), transparent 32%),
+    linear-gradient(135deg, #4ca1d8, #5f73d1);
+}
+
+.infantil-child-page .kids-creator-card a,
+.infantil-child-page .kids-news-card a {
+  background: rgba(35, 68, 101, 0.88);
+}
+
+.infantil-child-page .kids-puzzle-tile,
+.infantil-child-page .kids-wordsearch-cell,
+.infantil-child-page .kids-wordsearch-list li {
+  border-color: rgba(92, 168, 227, 0.26);
+  background: rgba(255, 255, 255, 0.9);
+  color: #21425f;
+  box-shadow: 0 10px 20px rgba(96, 130, 167, 0.1);
+}
+
+.infantil-child-page .kids-puzzle-tile.is-empty {
+  background:
+    linear-gradient(145deg, rgba(246, 251, 255, 0.96), rgba(255, 245, 229, 0.8)),
+    radial-gradient(circle at center, rgba(118, 205, 255, 0.12), transparent 56%);
+}
+
+.infantil-child-page .kids-wordsearch-cell.is-found,
+.infantil-child-page .kids-wordsearch-list li.is-found {
+  color: #f6fff1;
+}
 .infantil-child-page .kids-game-world {
   display: none !important;
 }

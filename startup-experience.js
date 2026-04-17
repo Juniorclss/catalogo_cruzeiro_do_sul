@@ -5,7 +5,10 @@
   const CONSENT_BANNER_ID = "catalogo-cookie-consent";
   const READY_FALLBACK_MS = 6800;
   const OPEN_DELAY_MS = 260;
+  const THANKS_SCREEN_MS = 3600;
   const SESSION_ACCEPT_KEY = "catalogo_terms_session_accept_v1";
+  const FOUNDERS_VIDEO_SRC = "./assets/founders-cafe-pack-anim.mp4";
+  const FOUNDERS_LOGO_SRC = "./assets/founders-geane-logo.png";
 
   function ready(callback) {
     if (document.readyState === "loading") {
@@ -162,6 +165,58 @@
           </i>
           <i class="catalogo-director-leg leg-left"></i>
           <i class="catalogo-director-leg leg-right"></i>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildFounderThanksMarkup() {
+    return `
+      <div class="catalogo-founder-thanks" aria-hidden="true">
+        <div class="catalogo-founder-thanks-overlay"></div>
+        <div class="catalogo-founder-thanks-atmosphere">
+          <span class="catalogo-founder-orb orb-a"></span>
+          <span class="catalogo-founder-orb orb-b"></span>
+          <span class="catalogo-founder-orb orb-c"></span>
+          <span class="catalogo-founder-beam beam-a"></span>
+          <span class="catalogo-founder-beam beam-b"></span>
+          <span class="catalogo-founder-spark spark-a"></span>
+          <span class="catalogo-founder-spark spark-b"></span>
+          <span class="catalogo-founder-spark spark-c"></span>
+          <span class="catalogo-founder-spark spark-d"></span>
+          <span class="catalogo-founder-spark spark-e"></span>
+          <span class="catalogo-founder-spark spark-f"></span>
+        </div>
+
+        <div class="catalogo-founder-thanks-layout">
+          <div class="catalogo-founder-thanks-media catalogo-founder-reveal reveal-2">
+            <video
+              class="catalogo-founder-thanks-video"
+              muted
+              playsinline
+              preload="metadata"
+              autoplay
+              loop
+            >
+              <source src="${FOUNDERS_VIDEO_SRC}" type="video/mp4" />
+            </video>
+          </div>
+
+          <div class="catalogo-founder-thanks-copy">
+            <p class="catalogo-founder-thanks-kicker catalogo-founder-reveal reveal-1">Socios fundadores</p>
+            <span class="catalogo-founder-thanks-seal catalogo-founder-reveal reveal-2">Agradecimento especial</span>
+            <div class="catalogo-founder-thanks-logo-wrap catalogo-founder-reveal reveal-3">
+              <img
+                class="catalogo-founder-thanks-logo"
+                src="${FOUNDERS_LOGO_SRC}"
+                alt="Logo da Dra. Geane Campo"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+            <strong class="catalogo-founder-reveal reveal-4">Nossos agradecimentos em destaque.</strong>
+            <span class="catalogo-founder-reveal reveal-5">Obrigado.</span>
+          </div>
         </div>
       </div>
     `;
@@ -402,6 +457,7 @@
             ${buildWelcomeCopyMarkup()}
           </div>
         </article>
+        ${buildFounderThanksMarkup()}
       `
       : `
         <div class="catalogo-welcome-shell">
@@ -419,6 +475,7 @@
           </article>
           ${buildDirectorMarkup()}
         </div>
+        ${buildFounderThanksMarkup()}
       `;
 
     return modal;
@@ -431,6 +488,38 @@
   }
 
   function closeWelcomeModal(modal) {
+    if (!modal || modal.classList.contains("is-thanking") || modal.classList.contains("is-leaving")) {
+      return;
+    }
+
+    const thanksVideo = modal.querySelector(".catalogo-founder-thanks-video");
+    modal.classList.add("is-thanking");
+    modal.setAttribute("aria-hidden", "true");
+
+    if (thanksVideo) {
+      try {
+        thanksVideo.currentTime = 0;
+        const playAttempt = thanksVideo.play();
+        if (playAttempt && typeof playAttempt.catch === "function") {
+          playAttempt.catch(() => {});
+        }
+      } catch (_error) {
+        // ignore media playback failures
+      }
+    }
+
+    window.setTimeout(() => {
+      modal.classList.add("is-leaving");
+      document.body.classList.remove("catalogo-lock-scroll");
+      window.setTimeout(() => {
+        modal.remove();
+        dispatchIntroFinished();
+      }, 320);
+    }, THANKS_SCREEN_MS);
+  }
+
+  function closeWelcomeModalImmediately(modal) {
+    if (!modal) return;
     modal.classList.add("is-leaving");
     modal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("catalogo-lock-scroll");
@@ -507,7 +596,7 @@
         const acceptButton = modal.querySelector("#catalogoAcceptButton");
 
         if (!checkbox || !acceptButton) {
-          dispatchIntroFinished();
+          closeWelcomeModalImmediately(modal);
           return;
         }
 

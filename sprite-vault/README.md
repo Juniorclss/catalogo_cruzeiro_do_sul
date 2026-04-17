@@ -23,6 +23,7 @@ Este cofre é para:
 - `references/`: links, notas e material de estudo
 - `sprites/`: sprites prontos para uso futuro
 - `generated/`: material original ou derivado internamente
+- `sources/`: pacotes brutos baixados e extraidos com proveniencia preservada
 - `licenses/`: comprovantes, notas de atribuição e observações de uso
 - `manifest.json`: índice central do cofre
 
@@ -33,3 +34,15 @@ Este cofre é para:
 3. Se for asset liberado para uso, catalogar em `manifest.json`.
 4. Se a equipe redesenhar ou criar algo próprio, salvar em `generated/`.
 5. Se houver dúvida de origem, não usar.
+
+## Lote inicial
+
+Primeiro intake concluido com packs oficiais do Kenney em `CC0 1.0`:
+
+- `New Platformer Pack`
+- `Pixel UI Pack`
+- `Pixel Shmup`
+
+As fontes brutas ficaram em `sources/kenney/raw/`, os pacotes extraidos em `sources/kenney/`
+e os conjuntos prontos para reuso foram separados em `sprites/characters`, `sprites/enemies`,
+`sprites/tilesets`, `sprites/props`, `sprites/ui` e `sprites/fx`.

@@ -60,7 +60,7 @@ const ninjaSquads = [
         x: 150,
         y: 150,
         lines: [
-          "Coleta com método deixa o cofre mais claro, mais rápido e mais útil.",
+          "Com coleta organizada, o cofre fica mais claro, mais útil e muito mais fácil de reaproveitar.",
           "Minha função é transformar volume em coleção útil.",
           "Cada lote já entra pensando em reutilização futura."
         ]
@@ -114,6 +114,24 @@ const ninjaSquads = [
           "Se não acha em 15 segundos, o cofre não está bem organizado.",
           "Meu trabalho é dar memória longa para o acervo.",
           "Nome limpo e manifesto claro poupam horas depois."
+        ]
+      },
+      {
+        id: "ninja-dns",
+        name: "Dora DNS",
+        title: "Infra, DNS e publicação do portal",
+        specialty: "domínio, Cloudflare, Render, SSL, apontamento e estabilidade pública",
+        description:
+          "Cuida da frente de domínio e servidor, acompanha DNS, hostname, SSL e só recebe missão direta do Codex CEO para abrir ou mover a infraestrutura pública.",
+        task: "auditando domínio, servidor e apontamento público sob ordem direta do CEO",
+        skills: ["dns", "render", "cloudflare", "ssl"],
+        x: 246,
+        y: 182,
+        speed: 8,
+        lines: [
+          "Eu só respondo ao Codex CEO quando a missão é botar domínio e servidor no ar.",
+          "Antes de publicar, eu confiro DNS, SSL, origem e rota final.",
+          "Domínio em NXDOMAIN não é bug de site; é apontamento faltando."
         ]
       }
     ]
@@ -770,7 +788,8 @@ window.__OFFICE_CONFIG__ = {
       { x: 150, y: 150, task: "reordenando a fila dos ninjas por categoria de sprite", pauseMs: 1600 },
       { x: 120, y: 182, task: "mapeando faltas do acervo para personagens, UI e cenários", pauseMs: 1700 },
       { x: 182, y: 182, task: "revisando licença e origem de um pacote recém-chegado", pauseMs: 1500 },
-      { x: 214, y: 150, task: "arrumando o manifesto e a espinha dorsal do cofre", pauseMs: 1600 }
+      { x: 214, y: 150, task: "arrumando o manifesto e a espinha dorsal do cofre", pauseMs: 1600 },
+      { x: 246, y: 182, task: "checando DNS, SSL e rota publica sob chamada direta do CEO", pauseMs: 1700 }
     ],
     news: [
       { x: 282, y: 132, task: "garimpando personagens com silhueta forte", pauseMs: 1400 },

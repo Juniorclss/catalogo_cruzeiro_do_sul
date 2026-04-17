@@ -1,50 +1,155 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-17T00:00:00Z",
-  "notes": "Cofre inicial do Escritório de Ninjas. Preencher com lotes curados, origem e status de uso.",
+  "updatedAt": "2026-04-17T20:15:00Z",
+  "notes": "Cofre do Escritório de Ninjas com intake rastreável por lote, origem, licença e coleções de uso.",
   "collections": [
     {
       "id": "characters",
       "label": "Characters",
       "path": "sprites/characters",
-      "status": "ready_for_intake",
+      "status": "seeded",
       "allowedSources": ["licensed", "public_domain", "cc_compatible", "original"]
     },
     {
       "id": "enemies",
       "label": "Enemies",
       "path": "sprites/enemies",
-      "status": "ready_for_intake",
+      "status": "seeded",
       "allowedSources": ["licensed", "public_domain", "cc_compatible", "original"]
     },
     {
       "id": "tilesets",
       "label": "Tilesets",
       "path": "sprites/tilesets",
-      "status": "ready_for_intake",
+      "status": "seeded",
       "allowedSources": ["licensed", "public_domain", "cc_compatible", "original"]
     },
     {
       "id": "props",
       "label": "Props",
       "path": "sprites/props",
-      "status": "ready_for_intake",
+      "status": "seeded",
       "allowedSources": ["licensed", "public_domain", "cc_compatible", "original"]
     },
     {
       "id": "ui",
       "label": "UI and HUD",
       "path": "sprites/ui",
-      "status": "ready_for_intake",
+      "status": "seeded",
       "allowedSources": ["licensed", "public_domain", "cc_compatible", "original"]
     },
     {
       "id": "fx",
       "label": "Effects",
       "path": "sprites/fx",
-      "status": "ready_for_intake",
+      "status": "seeded",
       "allowedSources": ["licensed", "public_domain", "cc_compatible", "original"]
     }
   ],
-  "entries": []
+  "entries": [
+    {
+      "id": "kenney-new-platformer-characters",
+      "label": "Kenney New Platformer Pack - Characters",
+      "sourceName": "Kenney",
+      "sourceType": "cc_compatible",
+      "sourceUrl": "https://kenney.nl/assets/new-platformer-pack",
+      "license": "CC0 1.0",
+      "status": "ready_to_use",
+      "collections": ["characters"],
+      "localPaths": [
+        "sprites/characters/kenney-new-platformer-pack"
+      ],
+      "rawArchivePath": "sources/kenney/raw/kenney_new-platformer-pack-1.1.zip",
+      "extractedPath": "sources/kenney/new-platformer-pack",
+      "licensePath": "licenses/kenney-new-platformer-pack-license.txt",
+      "notes": "Sprites de personagem em resolucao default e double, mais spritesheet PNG/XML para prototipos rapidos."
+    },
+    {
+      "id": "kenney-new-platformer-enemies",
+      "label": "Kenney New Platformer Pack - Enemies",
+      "sourceName": "Kenney",
+      "sourceType": "cc_compatible",
+      "sourceUrl": "https://kenney.nl/assets/new-platformer-pack",
+      "license": "CC0 1.0",
+      "status": "ready_to_use",
+      "collections": ["enemies"],
+      "localPaths": [
+        "sprites/enemies/kenney-new-platformer-pack"
+      ],
+      "rawArchivePath": "sources/kenney/raw/kenney_new-platformer-pack-1.1.zip",
+      "extractedPath": "sources/kenney/new-platformer-pack",
+      "licensePath": "licenses/kenney-new-platformer-pack-license.txt",
+      "notes": "Inimigos de plataforma com sprites individuais e spritesheet PNG/XML."
+    },
+    {
+      "id": "kenney-new-platformer-tiles",
+      "label": "Kenney New Platformer Pack - Tiles and Backgrounds",
+      "sourceName": "Kenney",
+      "sourceType": "cc_compatible",
+      "sourceUrl": "https://kenney.nl/assets/new-platformer-pack",
+      "license": "CC0 1.0",
+      "status": "ready_to_use",
+      "collections": ["tilesets", "props"],
+      "localPaths": [
+        "sprites/tilesets/kenney-new-platformer-pack",
+        "sprites/props/kenney-new-platformer-pack-backgrounds"
+      ],
+      "rawArchivePath": "sources/kenney/raw/kenney_new-platformer-pack-1.1.zip",
+      "extractedPath": "sources/kenney/new-platformer-pack",
+      "licensePath": "licenses/kenney-new-platformer-pack-license.txt",
+      "notes": "Tiles de plataforma, folhas PNG/XML e fundos em duas escalas."
+    },
+    {
+      "id": "kenney-pixel-ui-pack",
+      "label": "Kenney Pixel UI Pack",
+      "sourceName": "Kenney",
+      "sourceType": "cc_compatible",
+      "sourceUrl": "https://kenney.nl/assets/pixel-ui-pack",
+      "license": "CC0 1.0",
+      "status": "ready_to_use",
+      "collections": ["ui"],
+      "localPaths": [
+        "sprites/ui/kenney-pixel-ui-pack"
+      ],
+      "rawArchivePath": "sources/kenney/raw/kenney_pixel-ui-pack.zip",
+      "extractedPath": "sources/kenney/pixel-ui-pack",
+      "licensePath": "licenses/kenney-pixel-ui-pack-license.txt",
+      "notes": "UI pixel com 9-slice e spritesheet para HUD, botoes, paines e janelas."
+    },
+    {
+      "id": "kenney-pixel-shmup-ships",
+      "label": "Kenney Pixel Shmup - Ships",
+      "sourceName": "Kenney",
+      "sourceType": "cc_compatible",
+      "sourceUrl": "https://kenney.nl/assets/pixel-shmup",
+      "license": "CC0 1.0",
+      "status": "ready_to_use",
+      "collections": ["enemies"],
+      "localPaths": [
+        "sprites/enemies/kenney-pixel-shmup"
+      ],
+      "rawArchivePath": "sources/kenney/raw/kenney_pixel-shmup.zip",
+      "extractedPath": "sources/kenney/pixel-shmup",
+      "licensePath": "licenses/kenney-pixel-shmup-license.txt",
+      "notes": "Naves e variantes shmup para inimigos, bosses e frota hostil."
+    },
+    {
+      "id": "kenney-pixel-shmup-tiles-and-fx",
+      "label": "Kenney Pixel Shmup - Tiles and FX",
+      "sourceName": "Kenney",
+      "sourceType": "cc_compatible",
+      "sourceUrl": "https://kenney.nl/assets/pixel-shmup",
+      "license": "CC0 1.0",
+      "status": "needs_curation",
+      "collections": ["tilesets", "fx"],
+      "localPaths": [
+        "sprites/tilesets/kenney-pixel-shmup",
+        "sprites/fx/kenney-pixel-shmup"
+      ],
+      "rawArchivePath": "sources/kenney/raw/kenney_pixel-shmup.zip",
+      "extractedPath": "sources/kenney/pixel-shmup",
+      "licensePath": "licenses/kenney-pixel-shmup-license.txt",
+      "notes": "Peças espaciais e tiles em lote amplo; vale uma segunda passada dos ninjas para separar o que vira FX, prop ou mapa."
+    }
+  ]
 }
