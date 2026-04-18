@@ -3417,29 +3417,24 @@ body[data-office-theme="editorial-hq"] .office-map {
 body[data-office-theme="editorial-space"] .office-map,
 body[data-office-theme="nerd-starship"] .office-map {
   background:
-    linear-gradient(180deg, rgba(5, 17, 36, 0.34), rgba(4, 9, 20, 0.12)),
-    radial-gradient(circle at 16% 14%, rgba(116, 241, 255, 0.18), transparent 18%),
-    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.14), transparent 22%),
-    linear-gradient(135deg, #0b1730 0%, #101f3b 46%, #08101f 100%);
-  background-size: 100% 100%;
+    linear-gradient(180deg, rgba(5, 17, 36, 0.18), rgba(4, 9, 20, 0.08)),
+    url("./assets/escritorio-floor-art-space-v1.png");
+  background-size: 100% 100%, cover;
 }
 
 body[data-office-theme="editorial-west"] .office-map,
 body[data-office-theme="nerd-frontier"] .office-map {
   background:
-    linear-gradient(180deg, rgba(70, 37, 14, 0.28), rgba(34, 20, 8, 0.16)),
-    radial-gradient(circle at 18% 22%, rgba(255, 209, 102, 0.2), transparent 20%),
-    linear-gradient(180deg, #4d2c16 0%, #2d190d 54%, #1a110c 100%);
-  background-size: 100% 100%;
+    linear-gradient(180deg, rgba(70, 37, 14, 0.16), rgba(34, 20, 8, 0.08)),
+    url("./assets/escritorio-floor-art-west-v1.png");
+  background-size: 100% 100%, cover;
 }
 
 body[data-office-theme="nerd-arcade"] .office-map {
   background:
-    linear-gradient(180deg, rgba(22, 10, 42, 0.24), rgba(8, 12, 24, 0.08)),
-    radial-gradient(circle at 18% 14%, rgba(104, 244, 255, 0.18), transparent 18%),
-    radial-gradient(circle at 78% 18%, rgba(255, 125, 200, 0.18), transparent 22%),
-    linear-gradient(135deg, #1a1032 0%, #141d38 48%, #0a0c17 100%);
-  background-size: 100% 100%;
+    linear-gradient(180deg, rgba(22, 10, 42, 0.14), rgba(8, 12, 24, 0.06)),
+    url("./assets/escritorio-floor-art-arcade-v2.png");
+  background-size: 100% 100%, cover;
 }
 
 body[data-office-theme="editorial-space"] .office-vscode-frame,

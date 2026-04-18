@@ -39,7 +39,7 @@
       href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./pubpaid.css?v=20260417g" />
+    <link rel="stylesheet" href="./pubpaid.css?v=20260418waiter" />
   </head>
   <body class="pubpaid-page">
     <div class="pubpaid-shell">
@@ -301,14 +301,29 @@
 
             <div class="pubpaid-venue-list" aria-label="Clima do salão">
               <article data-venue-card="pool">
+                <div class="pubpaid-venue-icon pubpaid-venue-pool" aria-hidden="true">
+                  <span class="pool-table"></span>
+                  <span class="pool-cue"></span>
+                  <span class="pool-rack"></span>
+                </div>
                 <strong>Sinuca Real</strong>
                 <span>A mesa para quem quer ficar e dominar a noite no detalhe.</span>
               </article>
               <article data-venue-card="checkers">
+                <div class="pubpaid-venue-icon pubpaid-venue-checkers" aria-hidden="true">
+                  <span class="checkers-board"></span>
+                  <span class="checkers-piece piece-a"></span>
+                  <span class="checkers-piece piece-b"></span>
+                </div>
                 <strong>Damas Pixel</strong>
                 <span>Uma disputa mais calma, mas nem por isso menos afiada.</span>
               </article>
               <article data-venue-card="cards21">
+                <div class="pubpaid-venue-icon pubpaid-venue-21" aria-hidden="true">
+                  <span class="card card-a">A</span>
+                  <span class="card card-b">K</span>
+                  <span class="chip"></span>
+                </div>
                 <strong>21 do Bar</strong>
                 <span>Cartas, risco e aquela decisão de pedir mais uma ou parar.</span>
               </article>
@@ -322,10 +337,20 @@
                 <span>Segure cartas, troque uma vez e feche a melhor mão da rodada.</span>
               </article>
               <article data-venue-card="dicecups">
+                <div class="pubpaid-venue-icon pubpaid-venue-dicecups" aria-hidden="true">
+                  <span class="cup cup-a"></span>
+                  <span class="cup cup-b"></span>
+                  <span class="die"></span>
+                </div>
                 <strong>Copos e Dados</strong>
                 <span>Blefe, leitura de mesa e um pouco de coragem para bancar o palpite.</span>
               </article>
               <article data-venue-card="slots">
+                <div class="pubpaid-venue-icon pubpaid-venue-slots" aria-hidden="true">
+                  <span class="slot-body"></span>
+                  <span class="slot-screen"></span>
+                  <span class="slot-lever"></span>
+                </div>
                 <strong>Caça-Níqueis Neon</strong>
                 <span>Máquina solo com alavanca, três rolos e prêmio rápido no brilho certo.</span>
               </article>
@@ -339,6 +364,11 @@
                 <span>Roleta em série curta: gira, sai o número e vence quem fechar mais alto mais vezes.</span>
               </article>
               <article data-venue-card="shop">
+                <div class="pubpaid-venue-icon pubpaid-venue-shop" aria-hidden="true">
+                  <span class="bottle"></span>
+                  <span class="glass"></span>
+                  <span class="spark"></span>
+                </div>
                 <strong>Loja premium</strong>
                 <span>O garçom vende bebidas com sorte leve e upgrades visuais compráveis.</span>
               </article>
@@ -453,6 +483,63 @@
         </div>
 
         <div class="pubpaid-game-host" data-shop-host></div>
+      </div>
+    </section>
+
+    <section class="pubpaid-modal" data-waiter-modal hidden>
+      <div class="pubpaid-modal-backdrop" data-close-modal="waiter"></div>
+      <div class="pubpaid-modal-card pubpaid-waiter-card">
+        <div class="pubpaid-modal-head">
+          <div>
+            <p class="pubpaid-eyebrow">garçom do balcão</p>
+            <h2>Garçom</h2>
+            <p class="pubpaid-modal-copy">
+              Ele fica perto da cadeira do balcão, vende bebidas, libera upgrades visuais e abre mesas rápidas.
+            </p>
+          </div>
+          <button class="pubpaid-close" type="button" data-close-modal="waiter">
+            Fechar
+          </button>
+        </div>
+        <div class="pubpaid-waiter-dialog">
+          <div class="pubpaid-waiter-avatar" aria-hidden="true">
+            <span class="pubpaid-waiter-hair"></span>
+            <span class="pubpaid-waiter-face"></span>
+            <span class="pubpaid-waiter-body"></span>
+            <span class="pubpaid-waiter-tray"></span>
+          </div>
+          <div class="pubpaid-waiter-speech">
+            <strong>“Fala comigo no balcão.”</strong>
+            <p>
+              Eu sirvo bebidas com chance pequena de sorte ou azar, guardo seus upgrades e posso te levar direto para uma mesa.
+            </p>
+            <div class="pubpaid-waiter-actions">
+              <button class="pubpaid-card-button" type="button" data-waiter-open-shop>Abrir bebidas e upgrades</button>
+              <button class="pubpaid-card-button" type="button" data-open-table="dicecups">Mesa de copos</button>
+              <button class="pubpaid-card-button" type="button" data-open-table="roulette">Roleta alta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pubpaid-modal" data-jukebox-modal hidden>
+      <div class="pubpaid-modal-backdrop" data-close-modal="jukebox"></div>
+      <div class="pubpaid-modal-card">
+        <div class="pubpaid-modal-head">
+          <div>
+            <p class="pubpaid-eyebrow">jukebox do salão</p>
+            <h2>Escolha a música da noite.</h2>
+            <p class="pubpaid-modal-copy">
+              Troque a faixa direto na jukebox e deixe o clima do pub mais rápido, mais pesado ou mais calmo.
+            </p>
+          </div>
+          <button class="pubpaid-close" type="button" data-close-modal="jukebox">
+            Fechar
+          </button>
+        </div>
+
+        <div class="pubpaid-game-host" data-jukebox-host></div>
       </div>
     </section>
 
@@ -599,6 +686,6 @@
 
     <script defer src="./runtime-config.js?v=20260415d"></script>
     <script defer src="./analytics-client.js?v=20260415c"></script>
-    <script defer src="./pubpaid.js?v=20260417g"></script>
+    <script defer src="./pubpaid.js?v=20260417y"></script>
   </body>
 </html>

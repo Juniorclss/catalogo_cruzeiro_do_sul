@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-17T08:14:08.916Z",
+  "lastUpdatedAt": "2026-04-18T01:41:31.889Z",
   "assets": [
     {
       "id": "recovered-chat-assets",
@@ -120,6 +120,77 @@
       "note": "Background bitmap maior do Escritorio, com corredores mais abertos, desk executivo no alto esquerdo e mais folga para circulação dos agentes",
       "linkedOrderIds": [],
       "createdAt": "2026-04-17T08:14:08.916Z"
+    },
+    {
+      "id": "manifest-json",
+      "kind": "data",
+      "path": "sprite-vault/manifest.json",
+      "source": "workspace",
+      "note": "Manifesto inicial do cofre de sprites com o primeiro lote Kenney em CC0",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-17T19:49:00.451Z"
+    },
+    {
+      "id": "dns-runbook-catalogo-md",
+      "kind": "doc",
+      "path": "DNS_RUNBOOK_CATALOGO.md",
+      "source": "workspace",
+      "note": "Runbook concreto para ativacao de DNS e dominio publico do portal",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-17T19:52:37.553Z"
+    },
+    {
+      "id": "pubpaid-roulette-bar-backdrop-v2",
+      "kind": "image",
+      "path": "assets/pubpaid-roulette-bar-backdrop-v2.png",
+      "source": "workspace",
+      "note": "Bitmap novo do canto de bar usado atras da roleta compacta da PubPaid",
+      "linkedOrderIds": [
+        "2026-04-17-restaurar-a-roleta-da-pubpaid-para-um-visual-mais-compacto-com-garcom-fixo-no-balcao-e-jukebox-mais-lenta"
+      ],
+      "createdAt": "2026-04-17T23:30:00.000Z"
+    },
+    {
+      "id": "pubpaid-roulette-dealer-v2",
+      "kind": "image",
+      "path": "assets/pubpaid-roulette-dealer-v2.png",
+      "source": "workspace",
+      "note": "Bitmap novo da operadora estatica da roleta compacta da PubPaid",
+      "linkedOrderIds": [
+        "2026-04-17-restaurar-a-roleta-da-pubpaid-para-um-visual-mais-compacto-com-garcom-fixo-no-balcao-e-jukebox-mais-lenta"
+      ],
+      "createdAt": "2026-04-17T23:30:00.000Z"
+    },
+    {
+      "id": "escritorio-floor-art-west-v1-png",
+      "kind": "image",
+      "path": "assets/escritorio-floor-art-west-v1.png",
+      "source": "workspace",
+      "note": "Bitmap tematico do Velho Oeste para o escritorio, preservando a leitura de colisao da planta",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-18T00:40:54.337Z"
+    },
+    {
+      "id": "escritorio-floor-art-arcade-v1-png",
+      "kind": "image",
+      "path": "assets/escritorio-floor-art-arcade-v1.png",
+      "source": "workspace",
+      "note": "Bitmap tematico neon para o escritorio nerd arcade, no mesmo enquadramento top-down do mapa original",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-18T00:40:54.376Z"
+    },
+    {
+      "id": "founders-recommencer-logo-svg",
+      "kind": "image",
+      "path": "assets/founders-recommencer-logo.svg",
+      "source": "workspace",
+      "note": "Logo Recommencer aplicado aos fundadores no splash e banners",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-18T01:41:31.889Z"
+    }
+  ]
+}
+41:31.889Z"
     }
   ]
 }

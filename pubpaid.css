@@ -846,6 +846,133 @@ canvas {
   font-size: 14px;
 }
 
+.pubpaid-venue-icon {
+  position: relative;
+  width: 72px;
+  height: 58px;
+  margin: 0 0 10px;
+  image-rendering: pixelated;
+}
+
+.pubpaid-venue-pool .pool-table {
+  position: absolute;
+  inset: 10px 4px 4px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, #1d8a55 0 58%, #0e5131 59% 100%);
+  box-shadow:
+    inset 0 0 0 5px #8b4f1f,
+    inset 0 0 0 8px #4a2a17,
+    0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+.pubpaid-venue-pool .pool-cue {
+  position: absolute;
+  left: 18px;
+  top: 8px;
+  width: 52px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f5d083, #7c4a1f);
+  transform: rotate(-26deg);
+  transform-origin: left center;
+  box-shadow: 0 0 8px rgba(255, 214, 107, 0.28);
+}
+
+.pubpaid-venue-pool .pool-rack,
+.pubpaid-venue-pool .pool-rack::before,
+.pubpaid-venue-pool .pool-rack::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pubpaid-venue-pool .pool-rack {
+  left: 26px;
+  top: 30px;
+  background: #ffd66b;
+  box-shadow:
+    10px 0 0 #70ebff,
+    20px 0 0 #ff6259,
+    5px 9px 0 #fff4d2,
+    15px 9px 0 #80e092;
+}
+
+.pubpaid-venue-checkers .checkers-board {
+  position: absolute;
+  inset: 5px 6px 2px;
+  border-radius: 10px;
+  border: 4px solid #4a2a17;
+  background:
+    conic-gradient(#fff4d2 25%, #16121e 0 50%, #fff4d2 0 75%, #16121e 0) 0 0 / 18px 18px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  transform: perspective(80px) rotateX(18deg);
+}
+
+.pubpaid-venue-checkers .checkers-piece {
+  position: absolute;
+  z-index: 2;
+  width: 12px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.24);
+}
+
+.pubpaid-venue-checkers .piece-a {
+  left: 22px;
+  top: 26px;
+  background: #ff6259;
+}
+
+.pubpaid-venue-checkers .piece-b {
+  right: 20px;
+  top: 19px;
+  background: #70ebff;
+}
+
+.pubpaid-venue-21 .card,
+.pubpaid-venue-21 .chip {
+  position: absolute;
+}
+
+.pubpaid-venue-21 .card {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 38px;
+  border-radius: 5px;
+  color: #7a1221;
+  font-weight: 900;
+  background: linear-gradient(180deg, #fffef9, #eadfca);
+  box-shadow: 0 0 0 1px rgba(34, 18, 8, 0.18);
+}
+
+.pubpaid-venue-21 .card-a {
+  left: 14px;
+  top: 12px;
+  transform: rotate(-10deg);
+}
+
+.pubpaid-venue-21 .card-b {
+  left: 34px;
+  top: 10px;
+  color: #17131f;
+  transform: rotate(9deg);
+}
+
+.pubpaid-venue-21 .chip {
+  right: 7px;
+  bottom: 7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ff6259;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 255, 255, 0.28),
+    0 0 12px rgba(255, 98, 89, 0.32);
+}
+
 .pubpaid-venue-poker {
   position: relative;
   width: 72px;
@@ -996,6 +1123,131 @@ canvas {
   filter: drop-shadow(0 0 8px rgba(121, 242, 255, 0.46));
 }
 
+.pubpaid-venue-dicecups .cup {
+  position: absolute;
+  top: 14px;
+  width: 24px;
+  height: 32px;
+  border-radius: 6px 6px 12px 12px;
+  border: 2px solid rgba(246, 242, 255, 0.52);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(112, 235, 255, 0.08)),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.pubpaid-venue-dicecups .cup-a {
+  left: 12px;
+  transform: rotate(-8deg);
+}
+
+.pubpaid-venue-dicecups .cup-b {
+  left: 36px;
+  transform: rotate(7deg);
+}
+
+.pubpaid-venue-dicecups .die {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 30% 30%, #3d2a21 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 70%, #3d2a21 0 2px, transparent 3px),
+    linear-gradient(180deg, #fff9ec, #d9d2c2);
+  box-shadow: 0 7px 12px rgba(0, 0, 0, 0.24);
+}
+
+.pubpaid-venue-slots .slot-body {
+  position: absolute;
+  left: 16px;
+  top: 6px;
+  width: 40px;
+  height: 48px;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, #30314e, #151528);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 98, 189, 0.36),
+    0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.pubpaid-venue-slots .slot-screen {
+  position: absolute;
+  left: 22px;
+  top: 14px;
+  width: 28px;
+  height: 16px;
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, #ffca6b 0 30%, #70ebff 30% 64%, #80e092 64% 100%);
+  box-shadow: 0 0 10px rgba(112, 235, 255, 0.3);
+}
+
+.pubpaid-venue-slots .slot-lever {
+  position: absolute;
+  right: 8px;
+  top: 18px;
+  width: 4px;
+  height: 24px;
+  border-radius: 999px;
+  background: #d8d0c3;
+  transform: rotate(-12deg);
+}
+
+.pubpaid-venue-slots .slot-lever::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: -8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff6259;
+}
+
+.pubpaid-venue-shop .bottle,
+.pubpaid-venue-shop .glass,
+.pubpaid-venue-shop .spark {
+  position: absolute;
+}
+
+.pubpaid-venue-shop .bottle {
+  left: 18px;
+  top: 9px;
+  width: 14px;
+  height: 38px;
+  border-radius: 5px 5px 3px 3px;
+  background:
+    linear-gradient(180deg, #7de4b8 0 18%, #145b48 18% 100%);
+  box-shadow:
+    0 -8px 0 -4px #d6f8ef,
+    inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+.pubpaid-venue-shop .glass {
+  right: 18px;
+  top: 20px;
+  width: 20px;
+  height: 28px;
+  border-radius: 4px 4px 8px 8px;
+  border: 2px solid rgba(220, 248, 255, 0.62);
+  background:
+    linear-gradient(180deg, rgba(255, 202, 107, 0.16), rgba(255, 98, 189, 0.2));
+}
+
+.pubpaid-venue-shop .spark {
+  right: 8px;
+  top: 8px;
+  width: 11px;
+  height: 11px;
+  background: #ffca6b;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  filter: drop-shadow(0 0 8px rgba(255, 202, 107, 0.6));
+}
+
 .pubpaid-history-list {
   display: grid;
   gap: 10px;
@@ -1080,7 +1332,7 @@ canvas {
 }
 
 .pubpaid-modal-card-wide {
-  width: min(1180px, calc(100vw - 24px));
+  width: min(1320px, calc(100vw - 24px));
 }
 
 .pubpaid-door-card {
@@ -1093,6 +1345,10 @@ canvas {
 
 .pubpaid-tutorial-card {
   width: min(1080px, calc(100vw - 24px));
+}
+
+.pubpaid-waiter-card {
+  width: min(820px, calc(100vw - 24px));
 }
 
 .pubpaid-door-actions {
@@ -1212,6 +1468,108 @@ canvas {
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
 }
 
+.pubpaid-waiter-dialog {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.pubpaid-waiter-avatar,
+.pubpaid-waiter-speech {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at 50% 12%, rgba(128, 224, 146, 0.18), transparent 42%),
+    rgba(10, 8, 18, 0.9);
+}
+
+.pubpaid-waiter-avatar {
+  min-height: 190px;
+  image-rendering: pixelated;
+}
+
+.pubpaid-waiter-hair,
+.pubpaid-waiter-face,
+.pubpaid-waiter-body,
+.pubpaid-waiter-tray {
+  position: absolute;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.pubpaid-waiter-hair {
+  left: 54px;
+  top: 34px;
+  width: 52px;
+  height: 22px;
+  background: #261813;
+  box-shadow:
+    6px -8px 0 #1a1110,
+    -6px 4px 0 #1a1110;
+}
+
+.pubpaid-waiter-face {
+  left: 58px;
+  top: 54px;
+  width: 44px;
+  height: 42px;
+  background: #f4c59f;
+  box-shadow:
+    10px 16px 0 -7px #2b1716,
+    28px 16px 0 -7px #2b1716,
+    18px 28px 0 -8px #8f5143;
+}
+
+.pubpaid-waiter-body {
+  left: 46px;
+  top: 98px;
+  width: 68px;
+  height: 62px;
+  background:
+    linear-gradient(90deg, #263f36 0 18px, #fff2e0 18px 50px, #263f36 50px 100%);
+  box-shadow:
+    inset 32px 0 0 -30px #cfa85a,
+    0 18px 0 #3b241c;
+}
+
+.pubpaid-waiter-tray {
+  left: 86px;
+  top: 118px;
+  width: 44px;
+  height: 8px;
+  background: #c98f4f;
+  box-shadow:
+    8px -12px 0 -2px #f0dfc1,
+    8px -18px 0 -4px #7de4b8;
+}
+
+.pubpaid-waiter-speech {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.pubpaid-waiter-speech strong {
+  color: #fff2ce;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+
+.pubpaid-waiter-speech p {
+  margin: 0;
+  color: var(--pub-muted);
+  line-height: 1.6;
+}
+
+.pubpaid-waiter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .pubpaid-modal-head {
   display: flex;
   align-items: flex-start;
@@ -1233,6 +1591,14 @@ canvas {
 
   .pubpaid-tutorial-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pubpaid-waiter-dialog {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pubpaid-waiter-avatar {
+    min-height: 168px;
   }
 }
 
@@ -1351,6 +1717,16 @@ canvas {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--pub-radius);
   background: rgba(255, 255, 255, 0.04);
+}
+
+.pubpaid-shop-card.is-active {
+  border-color: rgba(112, 235, 255, 0.34);
+  background:
+    linear-gradient(180deg, rgba(112, 235, 255, 0.1), transparent 30%),
+    rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 0 0 1px rgba(112, 235, 255, 0.08),
+    0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
 .pubpaid-shop-line {
@@ -1772,21 +2148,21 @@ canvas {
 }
 
 .pubpaid-dice-cups {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 14px;
 }
 
 .pubpaid-dice-cup {
   position: relative;
-  flex: 1 1 120px;
-  min-height: 138px;
+  min-height: 188px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--pub-radius);
+  border-radius: 18px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.02)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
     rgba(24, 18, 39, 0.96);
+  overflow: hidden;
 }
 
 .pubpaid-dice-cup span {
@@ -1799,17 +2175,154 @@ canvas {
   text-transform: uppercase;
 }
 
-.pubpaid-dice-cup::before {
-  content: "";
+.pubpaid-dice-cup-shadow {
   position: absolute;
-  left: 18%;
-  right: 18%;
+  left: 20%;
+  right: 20%;
+  bottom: 22px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(5, 4, 12, 0.34);
+  filter: blur(4px);
+}
+
+.pubpaid-dice-cup-glass {
+  position: absolute;
+  left: 50%;
   top: 18px;
-  bottom: 18px;
-  border-radius: 0 0 26px 26px;
+  width: 108px;
+  height: 126px;
+  transform: translateX(-50%);
+  transition: transform 700ms cubic-bezier(0.22, 0.82, 0.2, 1);
+}
+
+.pubpaid-dice-cup-rim {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 0;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(246, 242, 255, 0.72);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04));
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+.pubpaid-dice-cup-body {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 10px;
+  bottom: 0;
+  border-radius: 0 0 30px 30px;
+  border: 2px solid rgba(241, 235, 255, 0.3);
   background:
-    linear-gradient(180deg, rgba(255, 98, 189, 0.25), rgba(112, 235, 255, 0.15)),
-    rgba(255, 255, 255, 0.06);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(112, 235, 255, 0.06) 48%, rgba(255, 98, 189, 0.1)),
+    rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(3px);
+}
+
+.pubpaid-dice-felt {
+  position: absolute;
+  inset: auto 18px 24px 18px;
+  height: 70px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.06), transparent 40%),
+    linear-gradient(180deg, rgba(30, 82, 54, 0.92), rgba(18, 44, 31, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.pubpaid-dice-drop {
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  transform: translateX(-50%) rotate(-8deg);
+}
+
+.pubpaid-dice-drop.is-rolling {
+  animation: pubpaid-dice-drop 1280ms cubic-bezier(0.18, 0.78, 0.22, 1) both;
+  animation-delay: var(--drop-delay, 0s);
+}
+
+.pubpaid-dice-hidden-note {
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  color: rgba(255, 242, 206, 0.62);
+  font-family: "Press Start 2P", monospace;
+  font-size: 14px;
+  background: rgba(10, 8, 18, 0.42);
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+}
+
+.pubpaid-mini-die {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 34px;
+  height: 34px;
+  padding: 5px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff9ec, #d9d2c2);
+  box-shadow:
+    0 8px 14px rgba(0, 0, 0, 0.24),
+    inset 0 0 0 1px rgba(67, 50, 39, 0.12);
+}
+
+.pubpaid-mini-die i {
+  border-radius: 50%;
+  background: rgba(38, 26, 24, 0.12);
+}
+
+.pubpaid-mini-die i.is-on {
+  background: #3d2a21;
+}
+
+.pubpaid-dice-total-readout {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 34px;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  border-radius: 16px;
+  background: rgba(10, 8, 18, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pubpaid-dice-total-readout small {
+  color: var(--pub-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pubpaid-dice-total-readout strong {
+  font-family: "Press Start 2P", monospace;
+  font-size: 26px;
+  color: #fff2ce;
+}
+
+.pubpaid-dice-cup.is-rolling .pubpaid-dice-cup-glass {
+  animation: pubpaid-dice-cup-shake 760ms ease-in-out 2;
+}
+
+.pubpaid-dice-cup.is-open .pubpaid-dice-cup-glass {
+  transform: translateX(-50%) translateY(-54px);
+}
+
+.pubpaid-dice-total.is-open .pubpaid-dice-cup-glass {
+  transform: translateX(-50%) translateY(-38px);
 }
 
 .pubpaid-dice-reveal {
@@ -1817,6 +2330,42 @@ canvas {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 14px;
+}
+
+.pubpaid-dice-sum-card {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  min-width: 112px;
+  padding: 12px;
+  border-radius: var(--pub-radius);
+  border: 1px solid rgba(255, 202, 107, 0.24);
+  background:
+    radial-gradient(circle at top, rgba(255, 202, 107, 0.18), transparent 46%),
+    rgba(9, 7, 16, 0.92);
+}
+
+.pubpaid-dice-sum-card small {
+  color: var(--pub-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.pubpaid-dice-sum-card strong {
+  color: #fff2ce;
+  font-family: "Press Start 2P", monospace;
+  font-size: 26px;
+}
+
+.pubpaid-dice-stage-note {
+  margin: 0;
+  color: var(--pub-muted);
+  line-height: 1.6;
+}
+
+.pubpaid-dice-stage-note.is-live {
+  color: #ffe2a6;
 }
 
 .pubpaid-die {
@@ -1870,6 +2419,45 @@ canvas {
 .pubpaid-dice-button.is-active {
   border-color: rgba(112, 235, 255, 0.45);
   background: rgba(112, 235, 255, 0.12);
+}
+
+@keyframes pubpaid-dice-cup-shake {
+  0% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-50%) translateY(-2px) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(-50%) translateY(1px) rotate(4deg);
+  }
+  75% {
+    transform: translateX(-50%) translateY(-3px) rotate(-4deg);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes pubpaid-dice-drop {
+  0% {
+    transform: translateX(-50%) translateY(-56px) rotate(var(--drop-rotate, -8deg)) scale(0.86);
+    opacity: 0;
+  }
+  38% {
+    transform: translateX(-50%) translateY(10px) rotate(calc(var(--drop-rotate, -8deg) * -1.4)) scale(1.02);
+    opacity: 1;
+  }
+  62% {
+    transform: translateX(-50%) translateY(-8px) rotate(calc(var(--drop-rotate, -8deg) * 1.2)) scale(0.96);
+  }
+  82% {
+    transform: translateX(-50%) translateY(5px) rotate(calc(var(--drop-rotate, -8deg) * -0.4)) scale(1);
+  }
+  100% {
+    transform: translateX(-50%) translateY(4px) rotate(0deg) scale(1);
+    opacity: 1;
+  }
 }
 
 .pubpaid-slots-layout {
@@ -2041,12 +2629,13 @@ canvas {
 
 .pubpaid-roulette-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  grid-template-columns: minmax(0, 1.02fr) minmax(300px, 0.98fr);
   gap: 16px;
 }
 
 .pubpaid-roulette-stage,
 .pubpaid-roulette-side article {
+  min-width: 0;
   padding: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--pub-radius);
@@ -2064,118 +2653,434 @@ canvas {
   line-height: 1.6;
 }
 
-.pubpaid-roulette-table {
+.pubpaid-roulette-instructions {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--pub-muted);
+  line-height: 1.55;
+}
+
+.pubpaid-roulette-instructions li + li {
+  margin-top: 6px;
+}
+
+.pubpaid-roulette-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pubpaid-roulette-rule {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 214, 132, 0.18);
+  background: rgba(255, 202, 107, 0.08);
+  color: #ffe7b8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pubpaid-roulette-scene {
+  position: relative;
+  min-height: 332px;
+  margin-top: 14px;
+  overflow: hidden;
   display: grid;
-  gap: 16px;
-  justify-items: center;
+  place-items: center;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(circle at top, rgba(255, 202, 107, 0.08), transparent 28%),
+    rgba(10, 8, 18, 0.92);
+}
+
+.pubpaid-roulette-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  opacity: 0.58;
+  filter: saturate(0.94) contrast(1) brightness(0.95);
+}
+
+.pubpaid-roulette-dealer-wrap {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  width: 98px;
+  height: 110px;
+  z-index: 1;
+}
+
+.pubpaid-roulette-dealer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 84px;
+  image-rendering: pixelated;
+  opacity: 1;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.34));
+}
+
+.pubpaid-roulette-dealer-arm {
+  position: absolute;
+  right: 56px;
+  bottom: 34px;
+  width: 56px;
+  height: 14px;
+  border-radius: 999px;
+  transform-origin: right center;
+  transform: rotate(-22deg) scaleX(0.88);
+  background:
+    linear-gradient(90deg, rgba(77, 48, 35, 0.96) 0 22%, rgba(221, 173, 133, 0.98) 22% 100%);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 235, 212, 0.08);
+}
+
+.pubpaid-roulette-dealer-arm::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background:
+    radial-gradient(circle at 36% 36%, #ffe4c7, #d59b6d 70%, #8e5f43);
+  box-shadow: 0 0 0 2px rgba(34, 23, 17, 0.45);
+}
+
+.pubpaid-roulette-dealer-wrap.is-spinning .pubpaid-roulette-dealer-arm {
+  animation: pubpaid-roulette-croupier-spin 620ms ease-in-out 5;
+}
+
+.pubpaid-roulette-scene-center {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 292px);
+  margin: 0 auto;
+  padding: 18px 0 10px;
+}
+
+.pubpaid-roulette-wheel-shell {
+  width: 100%;
 }
 
 .pubpaid-roulette-wheel {
   position: relative;
-  width: min(100%, 380px);
+  width: min(100%, 292px);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
 }
 
+.pubpaid-roulette-score {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  z-index: 4;
+  min-width: 94px;
+  padding: 8px 10px 7px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 234, 196, 0.16);
+  transform: translate(-50%, -100%);
+  background: rgba(12, 9, 23, 0.9);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+  text-align: center;
+}
+
+.pubpaid-roulette-score span {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pub-muted);
+}
+
+.pubpaid-roulette-score strong {
+  display: block;
+  margin-top: 5px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 18px;
+  color: #fff2cc;
+}
+
+.pubpaid-roulette-score.is-red strong {
+  color: #ff8d96;
+}
+
+.pubpaid-roulette-score.is-black strong {
+  color: #f1eee6;
+}
+
+.pubpaid-roulette-score.is-green strong {
+  color: #7df1bb;
+}
+
 .pubpaid-roulette-ring {
   position: absolute;
-  inset: 0;
+  inset: 9%;
   border-radius: 50%;
-  border: 10px solid rgba(255, 202, 107, 0.2);
+  border: 10px solid rgba(255, 202, 107, 0.24);
   background:
-    conic-gradient(
-      from 0deg,
-      rgba(255, 98, 189, 0.9) 0deg 20deg,
-      rgba(112, 235, 255, 0.8) 20deg 40deg,
-      rgba(255, 202, 107, 0.92) 40deg 60deg,
-      rgba(128, 224, 146, 0.86) 60deg 80deg,
-      rgba(255, 98, 189, 0.9) 80deg 100deg,
-      rgba(112, 235, 255, 0.8) 100deg 120deg,
-      rgba(255, 202, 107, 0.92) 120deg 140deg,
-      rgba(128, 224, 146, 0.86) 140deg 160deg,
-      rgba(255, 98, 189, 0.9) 160deg 180deg,
-      rgba(112, 235, 255, 0.8) 180deg 200deg,
-      rgba(255, 202, 107, 0.92) 200deg 220deg,
-      rgba(128, 224, 146, 0.86) 220deg 240deg,
-      rgba(255, 98, 189, 0.9) 240deg 260deg,
-      rgba(112, 235, 255, 0.8) 260deg 280deg,
-      rgba(255, 202, 107, 0.92) 280deg 300deg,
-      rgba(128, 224, 146, 0.86) 300deg 320deg,
-      rgba(255, 98, 189, 0.9) 320deg 340deg,
-      rgba(112, 235, 255, 0.8) 340deg 360deg
-    );
-  box-shadow: inset 0 0 0 12px rgba(9, 7, 16, 0.75);
+    radial-gradient(circle, rgba(39, 27, 15, 0.38), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(9, 7, 16, 0.2)),
+    #1a1527;
+  box-shadow:
+    inset 0 0 0 10px rgba(9, 7, 16, 0.72),
+    0 18px 32px rgba(0, 0, 0, 0.28);
+  transition: transform 7.4s cubic-bezier(0.08, 0.82, 0.14, 1);
 }
 
-.pubpaid-roulette-wheel.is-spinning .pubpaid-roulette-ring {
-  animation: pubpaid-roulette-spin 1s linear infinite;
+.pubpaid-roulette-ring.is-spinning {
+  filter: drop-shadow(0 0 18px rgba(255, 202, 107, 0.22));
 }
 
-.pubpaid-roulette-pointer {
+.pubpaid-roulette-slot {
   position: absolute;
-  width: 10px;
-  height: 44%;
-  border-radius: 999px;
-  transform-origin: center 88%;
-  background: linear-gradient(180deg, var(--pub-gold), #fff0c4);
-  box-shadow: 0 0 20px rgba(255, 202, 107, 0.18);
+  inset: 0;
 }
 
-.pubpaid-roulette-pointer::after {
+.pubpaid-roulette-slot::before {
   content: "";
   position: absolute;
-  top: -10px;
   left: 50%;
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
   transform: translateX(-50%);
-  background: var(--pub-pink);
+  top: 2%;
+  width: 13%;
+  height: 41%;
+  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+  border-left: 1px solid rgba(255, 239, 211, 0.18);
+  border-right: 1px solid rgba(255, 239, 211, 0.18);
 }
 
-.pubpaid-roulette-center {
+.pubpaid-roulette-slot.is-red::before {
+  background: #8a2431;
+}
+
+.pubpaid-roulette-slot.is-black::before {
+  background: #16131e;
+}
+
+.pubpaid-roulette-slot.is-green::before {
+  background: #1d694a;
+}
+
+.pubpaid-roulette-slot span {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  font-weight: 800;
+  color: #fff6d7;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.pubpaid-roulette-ball-track {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  transition: transform 7.1s cubic-bezier(0.06, 0.82, 0.18, 1);
+}
+
+.pubpaid-roulette-ball {
+  position: absolute;
+  left: 50%;
+  top: 3%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 32%, #ffffff, #d9d5d0 68%, #8a8987);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.44),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.pubpaid-roulette-top-pointer {
+  position: absolute;
+  left: 50%;
+  top: 2%;
+  z-index: 3;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 18px solid var(--pub-gold);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.52));
+}
+
+.pubpaid-roulette-hub {
   position: relative;
-  z-index: 1;
-  width: 104px;
-  height: 104px;
+  z-index: 2;
+  width: 34%;
+  aspect-ratio: 1;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  background: rgba(9, 7, 16, 0.92);
-  font-family: "Press Start 2P", monospace;
-  font-size: 24px;
-  color: #f7f2d5;
+  border: 2px solid rgba(255, 237, 197, 0.12);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.2), transparent 24%),
+    linear-gradient(180deg, rgba(255, 215, 134, 0.18), rgba(9, 7, 16, 0.96));
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.04);
 }
 
-.pubpaid-roulette-track {
+.pubpaid-roulette-hub span {
+  display: block;
+  margin-top: 0;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--pub-gold);
+}
+
+.pubpaid-roulette-betting-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.pubpaid-roulette-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pubpaid-roulette-board {
+  margin-top: 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.pubpaid-roulette-grid {
   width: 100%;
+  min-width: 620px;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: 38px repeat(12, minmax(34px, 1fr)) 44px;
+  gap: 0;
+  border: 1px solid rgba(255, 216, 133, 0.16);
+  overflow: hidden;
+  border-radius: 16px;
 }
 
-.pubpaid-roulette-track span {
+.pubpaid-roulette-bet {
+  position: relative;
+  min-height: 42px;
+  border: 1px solid rgba(255, 216, 133, 0.16);
+  background: rgba(15, 12, 25, 0.94);
+  color: #fff3d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px;
+  transition: transform 140ms ease, filter 140ms ease, background 140ms ease;
+}
+
+.pubpaid-roulette-bet:hover,
+.pubpaid-roulette-bet:focus-visible {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  z-index: 2;
+}
+
+.pubpaid-roulette-bet span {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pubpaid-roulette-bet small {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  min-width: 18px;
+  min-height: 18px;
+  padding: 2px 4px;
+  border-radius: 999px;
+  background: rgba(255, 202, 107, 0.18);
+  color: #fff4db;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pubpaid-roulette-bet-zero {
+  grid-row: span 3;
+  background: #1d694a;
+}
+
+.pubpaid-roulette-bet-wide {
+  grid-column: span 4;
+}
+
+.pubpaid-roulette-bet.is-red,
+.pubpaid-roulette-bet-wide.is-red {
+  background: #8a2431;
+}
+
+.pubpaid-roulette-bet.is-black,
+.pubpaid-roulette-bet-wide.is-black {
+  background: #16131e;
+}
+
+.pubpaid-roulette-bet-spacer {
+  min-height: 42px;
+  background: rgba(11, 9, 19, 0.86);
+}
+
+.pubpaid-roulette-bets-list,
+.pubpaid-roulette-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pubpaid-roulette-history-ball {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(9, 7, 16, 0.82);
-  color: var(--pub-gold);
-  font-family: "Press Start 2P", monospace;
-  font-size: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #fff7e1;
+  font-weight: 800;
+  font-size: 12px;
 }
 
-@keyframes pubpaid-roulette-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.pubpaid-roulette-history-ball.is-red {
+  background: #8a2431;
+}
+
+.pubpaid-roulette-history-ball.is-black {
+  background: #15131d;
+}
+
+.pubpaid-roulette-history-ball.is-green {
+  background: #1d694a;
+}
+
+.pubpaid-roulette-history-empty,
+.pubpaid-roulette-empty {
+  margin: 0;
+  color: var(--pub-muted);
+  font-size: 14px;
 }
 
 .pubpaid-result-banner {
@@ -2257,6 +3162,25 @@ canvas {
   .pubpaid-roulette-layout {
     grid-template-columns: 1fr;
   }
+
+  .pubpaid-roulette-scene-center {
+    width: min(100%, 280px);
+  }
+
+  .pubpaid-roulette-dealer {
+    width: 94px;
+  }
+
+  .pubpaid-roulette-dealer-wrap {
+    right: 12px;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 1600px) {
+  .pubpaid-roulette-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 840px) {
@@ -2321,6 +3245,18 @@ canvas {
   .pubpaid-dice-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+
+  .pubpaid-roulette-scene {
+    min-height: 360px;
+  }
+
+  .pubpaid-roulette-grid {
+    grid-template-columns: 36px repeat(12, minmax(28px, 1fr)) 42px;
+  }
+
+  .pubpaid-roulette-bet span {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -2370,5 +3306,52 @@ canvas {
 
   .pubpaid-card-chip {
     min-width: 0;
+  }
+
+  .pubpaid-roulette-scene {
+    min-height: 286px;
+  }
+
+  .pubpaid-roulette-scene-center {
+    width: min(100%, 246px);
+  }
+
+  .pubpaid-roulette-grid {
+    min-width: 660px;
+  }
+
+  .pubpaid-roulette-dealer {
+    width: 78px;
+  }
+
+  .pubpaid-roulette-dealer-wrap {
+    right: 8px;
+    bottom: 8px;
+    width: 92px;
+    height: 102px;
+  }
+
+  .pubpaid-roulette-dealer-arm {
+    right: 50px;
+    bottom: 34px;
+    width: 46px;
+  }
+}
+
+@keyframes pubpaid-roulette-croupier-spin {
+  0% {
+    transform: rotate(-22deg) scaleX(0.88);
+  }
+  25% {
+    transform: rotate(-6deg) scaleX(1);
+  }
+  50% {
+    transform: rotate(12deg) scaleX(1.04);
+  }
+  75% {
+    transform: rotate(-10deg) scaleX(0.96);
+  }
+  100% {
+    transform: rotate(-22deg) scaleX(0.88);
   }
 }

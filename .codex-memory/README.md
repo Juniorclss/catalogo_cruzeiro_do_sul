@@ -18,14 +18,16 @@ Evitar perder contexto quando:
 - `handoff.md`: resumo curto para retomada rapida por outra sessao.
 - `orders.json`: historico estruturado das ordens do usuario.
 - `assets.json`: referencias locais para fotos, capturas, anexos e textos relevantes.
+- `credit-end-protocol.md`: protocolo obrigatorio para fim de credito, retomada e leitura das instrucoes antes de agir.
 
 ## Regras de uso
 
 1. Ler este diretorio junto com `CODEX_MEMORY.md` antes de continuar um trabalho em andamento.
-2. Registrar cada nova ordem relevante do usuario em `orders.json`.
-3. Vincular imagens, capturas, pastas recuperadas e arquivos importantes em `assets.json`.
-4. Atualizar `current-state.md` e `handoff.md` ao final de mudancas grandes, validacoes visuais ou pausas de sessao.
-5. Preferir guardar caminhos locais e referencias concretas, nao lembrancas vagas.
+2. Ler `credit-end-protocol.md` quando a sessao estiver perto de acabar ou quando houver retomada.
+3. Registrar cada nova ordem relevante do usuario em `orders.json`.
+4. Vincular imagens, capturas, pastas recuperadas e arquivos importantes em `assets.json`.
+5. Atualizar `current-state.md` e `handoff.md` ao final de mudancas grandes, validacoes visuais ou pausas de sessao.
+6. Preferir guardar caminhos locais e referencias concretas, nao lembrancas vagas.
 
 ## Comandos
 

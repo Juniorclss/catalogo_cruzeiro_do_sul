@@ -1383,7 +1383,7 @@ registerInteractivePanels();
 const radarGuideThemes = {
   todos: {
     label: "Tudo",
-    text: "Curadoria local com a lanterna aberta para cima, chamando o panorama e trocando os dois grandes destaques do radar."
+    text: "Uma leitura rápida do que mais importa no momento em Cruzeiro do Sul e na região, reunindo os assuntos que estão puxando o dia."
   },
   cotidiano: {
     label: "Cotidiano",
@@ -1606,7 +1606,7 @@ const updateRadarGuide = (filter = "todos", spotlightArticles = []) => {
 
   const theme = radarGuideThemes[filter] || radarGuideThemes.todos;
   const leadTitle = spotlightArticles[0]?.title
-    ? ` Agora em foco: ${spotlightArticles[0].title}.`
+    ? ` Em destaque agora: ${spotlightArticles[0].title}.`
     : "";
 
   radarGuide.dataset.theme = filter;

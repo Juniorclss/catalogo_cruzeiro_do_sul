@@ -632,6 +632,36 @@
         </div>
       </section>
 
+      <section class="row grid-2">
+        <article class="card">
+          <h2>Pesquisa Acre 2026 • voto declarado</h2>
+          <div id="acrePollVoteBoard" class="stack"></div>
+          <h2 style="margin-top:18px">Pesquisa Acre 2026 • prioridades</h2>
+          <div id="acrePollPriorityBoard" class="stack"></div>
+        </article>
+
+        <article class="card">
+          <h2>Respostas recentes da pesquisa Acre 2026</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Quando</th>
+                  <th>Origem / perfil</th>
+                  <th>2026</th>
+                  <th>Rejeição</th>
+                  <th>Prioridade</th>
+                  <th>Satisfação</th>
+                  <th>Comentário</th>
+                  <th>IP</th>
+                </tr>
+              </thead>
+              <tbody id="recentAcrePollBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
       <section class="row grid-3">
         <article class="card">
           <h2>Pedidos Ninjas recentes</h2>
@@ -707,10 +737,12 @@
         <a class="btn" id="csvVotesLink" href="/api/admin/reports/votes.csv" target="_blank">CSV de votações</a>
         <a class="btn" id="csvCommentsLink" href="/api/admin/reports/comments.csv" target="_blank">CSV de opiniões</a>
         <a class="btn" id="csvSubscriptionsLink" href="/api/admin/reports/subscriptions.csv" target="_blank">CSV de assinaturas</a>
+        <a class="btn" id="csvAcrePollLink" href="/api/admin/reports/acre-2026-poll.csv" target="_blank">CSV pesquisa Acre 2026</a>
         <a class="btn" id="rawVisitsLink" href="/api/admin/raw/visits?limit=100" target="_blank">Raw visitas (JSON)</a>
         <a class="btn" id="rawCommentsLink" href="/api/admin/raw/comments?limit=100" target="_blank">Raw opiniões (JSON)</a>
         <a class="btn" id="rawVotesLink" href="/api/admin/raw/votes?limit=100" target="_blank">Raw votos (JSON)</a>
         <a class="btn" id="rawSubscriptionsLink" href="/api/admin/raw/subscriptions?limit=100" target="_blank">Raw assinaturas (JSON)</a>
+        <a class="btn" id="rawAcrePollLink" href="/api/admin/raw/acre2026Poll?limit=100" target="_blank">Raw pesquisa Acre 2026</a>
         <a class="btn" id="rawNinjasRequestsLink" href="/api/admin/raw/ninjasRequests?limit=100" target="_blank">Raw pedidos Ninjas</a>
         <a class="btn" id="rawNinjasProfilesLink" href="/api/admin/raw/ninjasProfiles?limit=100" target="_blank">Raw currículos Ninjas</a>
         <a class="btn" id="rawSalesLink" href="/api/admin/raw/salesListings?limit=100" target="_blank">Raw vendas</a>
@@ -916,10 +948,12 @@
           ["csvVotesLink", "/api/admin/reports/votes.csv"],
           ["csvCommentsLink", "/api/admin/reports/comments.csv"],
           ["csvSubscriptionsLink", "/api/admin/reports/subscriptions.csv"],
+          ["csvAcrePollLink", "/api/admin/reports/acre-2026-poll.csv"],
           ["rawVisitsLink", "/api/admin/raw/visits?limit=100"],
           ["rawCommentsLink", "/api/admin/raw/comments?limit=100"],
           ["rawVotesLink", "/api/admin/raw/votes?limit=100"],
           ["rawSubscriptionsLink", "/api/admin/raw/subscriptions?limit=100"],
+          ["rawAcrePollLink", "/api/admin/raw/acre2026Poll?limit=100"],
           ["rawNinjasRequestsLink", "/api/admin/raw/ninjasRequests?limit=100"],
           ["rawNinjasProfilesLink", "/api/admin/raw/ninjasProfiles?limit=100"],
           ["rawSalesLink", "/api/admin/raw/salesListings?limit=100"],
@@ -977,6 +1011,7 @@
             ["IPs únicos", ipTotal],
             ["Comentários / opiniões", totals.comments || 0],
             ["Assinaturas", totals.subscriptions || 0],
+            ["Pesquisa Acre 2026", totals.acre2026PollResponses || 0],
             ["Apoiadores confirmados", totals.supporters || 0],
             ["Ninjas pedidos", totals.ninjasRequests || 0],
             ["Ninjas currículos", totals.ninjasProfiles || 0],
@@ -1154,6 +1189,37 @@
             `,
             7,
             "Sem assinaturas recentes."
+          );
+
+          const pollSummary = data.acre2026PollSummary || {};
+          renderBars(
+            document.getElementById("acrePollVoteBoard"),
+            Object.fromEntries((pollSummary.vote2026 || []).map((item) => [item.label, item.total]))
+          );
+          renderBars(
+            document.getElementById("acrePollPriorityBoard"),
+            Object.fromEntries((pollSummary.priorities || []).map((item) => [item.label, item.total]))
+          );
+          renderRecentRows(
+            document.getElementById("recentAcrePollBody"),
+            data.recentAcre2026Poll || [],
+            (row) => `
+              <tr>
+                <td>${formatDateTime(row.createdAt)}</td>
+                <td class="truncate">
+                  <strong>${escapeHtml(row.localizacao || row.city || "-")}</strong><br />
+                  <span class="muted">${escapeHtml(row.profissao || "-")}${row.faixaEtaria ? ` / ${escapeHtml(row.faixaEtaria)}` : ""}</span>
+                </td>
+                <td>${escapeHtml(row.voto2026 || "-")}</td>
+                <td>${escapeHtml(row.rejeicao || "-")}</td>
+                <td>${escapeHtml(row.prioridade || "-")}</td>
+                <td>${escapeHtml(`${row.satisfacao || 0}/5`)}</td>
+                <td class="truncate">${escapeHtml(row.comentario || "-")}</td>
+                <td class="mono">${escapeHtml(row.ip || "-")}</td>
+              </tr>
+            `,
+            8,
+            "Sem respostas na pesquisa Acre 2026."
           );
 
           renderRecentRows(

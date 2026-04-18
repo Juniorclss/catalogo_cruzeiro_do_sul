@@ -1,16 +1,15 @@
 # Current State
 
-Updated: 2026-04-17T19:28:12.683Z
+Updated: 2026-04-18T02:26:06.708Z
 
 ## Active Goal
 
-- Escritorio de Ninjas e cofre de sprites 2D
+- Deploy Render via GitHub
 
 ## Summary
 
-Foi criado um novo escritorio publico com 50 agentes focados em sprites 2D, curadoria, licencas, limpeza, criacao propria e pipeline de reuso. Tambem nasceu o repositório local sprite-vault/ para guardar e catalogar o acervo futuro de forma segura.
+Projeto validado localmente para deploy no Render: checks JS/CSS passaram, review team zerou e /health respondeu 200. Usaremos o domínio .onrender.com por enquanto, sem mexer no DNS próprio.
 
 ## Next
 
-- Abrir escritorio-ninjas.html no navegador
-- validar se os 50 agentes ficam legiveis no mapa e ajustar densidade visual se o escritorio ficar carregado demais.
+- Fazer commit/push para origin/main e acompanhar o serviço catalogo-cruzeiro-web no Render.

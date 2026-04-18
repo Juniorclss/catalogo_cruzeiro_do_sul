@@ -142,6 +142,7 @@ body::after {
 .poll-form-intro p,
 .poll-summary-head p,
 .poll-section-title p,
+.poll-method-grid p,
 .poll-disclaimer,
 .poll-feedback,
 .poll-empty {
@@ -173,6 +174,43 @@ body::after {
   background: rgba(255, 255, 255, 0.88);
   color: #21354a;
   font-size: 0.82rem;
+}
+
+.poll-insight-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.poll-insight-card {
+  display: grid;
+  gap: 0.42rem;
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(84, 127, 165, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.poll-insight-card strong {
+  font-size: 1rem;
+  color: #20344a;
+}
+
+.poll-insight-card span {
+  color: #5f7792;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.poll-insight-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.poll-insight-card b {
+  color: var(--text);
 }
 
 .poll-hero-scene {
@@ -688,6 +726,38 @@ body::after {
   gap: 12px;
 }
 
+.poll-method-card {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(84, 127, 165, 0.12);
+}
+
+.poll-method-card h3 {
+  margin: 0;
+  font-family: "Fraunces", serif;
+  font-size: 1.4rem;
+}
+
+.poll-method-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 1rem;
+}
+
+.poll-method-grid article {
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(84, 127, 165, 0.1);
+  background: rgba(248, 251, 254, 0.9);
+}
+
+.poll-method-grid strong {
+  display: block;
+  margin-bottom: 0.42rem;
+  color: #22384f;
+}
+
 .poll-submit,
 .poll-admin-submit,
 .poll-admin-export,
@@ -807,6 +877,21 @@ body::after {
   margin-top: 18px;
 }
 
+.poll-shell--admin {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+.poll-form-card--admin {
+  max-width: none;
+}
+
+.poll-admin-auth-form {
+  display: grid;
+  gap: 16px;
+}
+
 .poll-stat-grid--admin {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-top: 0;
@@ -857,6 +942,11 @@ body::after {
 
   .poll-stage {
     position: static;
+  }
+
+  .poll-method-grid,
+  .poll-insight-grid {
+    grid-template-columns: 1fr;
   }
 }
 

@@ -8,7 +8,8 @@
   const THANKS_SCREEN_MS = 3600;
   const SESSION_ACCEPT_KEY = "catalogo_terms_session_accept_v1";
   const FOUNDERS_VIDEO_SRC = "./assets/founders-cafe-pack-anim.mp4";
-  const FOUNDERS_LOGO_SRC = "./assets/founders-geane-logo.png";
+  const FOUNDERS_GEANE_LOGO_SRC = "./assets/founders-geane-logo.png";
+  const FOUNDERS_RECOMMENCER_LOGO_SRC = "./assets/founders-recommencer-logo.svg";
 
   function ready(callback) {
     if (document.readyState === "loading") {
@@ -205,14 +206,31 @@
           <div class="catalogo-founder-thanks-copy">
             <p class="catalogo-founder-thanks-kicker catalogo-founder-reveal reveal-1">Socios fundadores</p>
             <span class="catalogo-founder-thanks-seal catalogo-founder-reveal reveal-2">Agradecimento especial</span>
-            <div class="catalogo-founder-thanks-logo-wrap catalogo-founder-reveal reveal-3">
-              <img
-                class="catalogo-founder-thanks-logo"
-                src="${FOUNDERS_LOGO_SRC}"
-                alt="Logo da Dra. Geane Campo"
-                loading="eager"
-                decoding="async"
-              />
+            <div class="catalogo-founder-banner-rail catalogo-founder-reveal reveal-3">
+              <article class="catalogo-founder-banner-card">
+                <span>Fundadora em destaque</span>
+                <div class="catalogo-founder-thanks-logo-wrap">
+                  <img
+                    class="catalogo-founder-thanks-logo"
+                    src="${FOUNDERS_GEANE_LOGO_SRC}"
+                    alt="Logo da Dra. Geane Campo"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              </article>
+              <article class="catalogo-founder-banner-card catalogo-founder-banner-card-dark">
+                <span>Marca fundadora</span>
+                <div class="catalogo-founder-thanks-logo-wrap">
+                  <img
+                    class="catalogo-founder-thanks-logo"
+                    src="${FOUNDERS_RECOMMENCER_LOGO_SRC}"
+                    alt="Logo da Recommencer"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              </article>
             </div>
             <strong class="catalogo-founder-reveal reveal-4">Nossos agradecimentos em destaque.</strong>
             <span class="catalogo-founder-reveal reveal-5">Obrigado.</span>

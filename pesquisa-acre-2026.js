@@ -10,18 +10,12 @@
   const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
   const voteBars = document.getElementById("voteBars");
   const priorityBars = document.getElementById("priorityBars");
+  const stateDirectionBars = document.getElementById("stateDirectionBars");
+  const desiredCycleBars = document.getElementById("desiredCycleBars");
   const rejectionBars = document.getElementById("rejectionBars");
+  const voteCertaintyBars = document.getElementById("voteCertaintyBars");
   const locationCloud = document.getElementById("locationCloud");
-  const adminToggle = document.getElementById("adminToggle");
-  const adminPanel = document.getElementById("adminPanel");
-  const adminClose = document.getElementById("adminClose");
-  const adminAccessForm = document.getElementById("adminAccessForm");
-  const adminPassword = document.getElementById("adminPassword");
-  const adminFeedback = document.getElementById("adminFeedback");
-  const adminDashboard = document.getElementById("adminDashboard");
-  const adminKpis = document.getElementById("adminKpis");
-  const adminTableBody = document.getElementById("adminTableBody");
-  const adminExport = document.getElementById("adminExport");
+  const candidateProfiles = document.getElementById("candidateProfiles");
   const numberFormatter = new Intl.NumberFormat("pt-BR");
   const decimalFormatter = new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 1,
@@ -31,7 +25,6 @@
     dateStyle: "short",
     timeStyle: "short"
   });
-  let lastAdminPayload = null;
 
   function escapeHtml(value) {
     return String(value || "")
@@ -122,6 +115,30 @@
       .join("");
   }
 
+  function renderCandidateProfiles(items) {
+    if (!candidateProfiles) return;
+
+    if (!Array.isArray(items) || !items.length) {
+      candidateProfiles.innerHTML = `<p class="poll-empty">Os perfis aparecem quando houver massa de respostas.</p>`;
+      return;
+    }
+
+    candidateProfiles.innerHTML = items
+      .map(
+        (item) => `
+          <article class="poll-insight-card">
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${numberFormatter.format(item.total || 0)} respostas • ${decimalFormatter.format(item.percent || 0)}%</span>
+            <p>Prioridade mais comum: <b>${escapeHtml(item.topPriority || "Sem leitura")}</b></p>
+            <p>Desejo dominante: <b>${escapeHtml(item.desiredCycle || "Sem leitura")}</b></p>
+            <p>Firmeza do voto: <b>${escapeHtml(item.voteCertainty || "Sem leitura")}</b></p>
+            <p>Satisfação média do grupo: <b>${decimalFormatter.format(item.avgSatisfaction || 0)}</b></p>
+          </article>
+        `
+      )
+      .join("");
+  }
+
   function renderPublicSummary(payload = {}) {
     const summary = payload.summary || {};
     const totalResponses = Number(summary.totalResponses || 0);
@@ -154,12 +171,31 @@
       "Sem prioridades registradas ainda."
     );
     renderBarList(
+      stateDirectionBars,
+      summary.stateDirection,
+      "priority",
+      "Sem leitura suficiente ainda."
+    );
+    renderBarList(
+      desiredCycleBars,
+      summary.desiredCycle,
+      "vote",
+      "Aguardando mais respostas."
+    );
+    renderBarList(
       rejectionBars,
       summary.rejection,
       "rejection",
       "Sem dados suficientes até o momento."
     );
+    renderBarList(
+      voteCertaintyBars,
+      summary.voteCertainty,
+      "vote",
+      "Aguardando respostas."
+    );
     renderLocationCloud(summary.locations);
+    renderCandidateProfiles(summary.candidateProfiles);
   }
 
   async function loadPublicSummary() {
@@ -227,171 +263,6 @@
     }
   }
 
-  function toggleAdminPanel(forceOpen) {
-    if (!adminPanel) return;
-    const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : adminPanel.hidden;
-    adminPanel.hidden = !shouldOpen;
-    if (!shouldOpen) {
-      setFeedback(adminFeedback, "");
-    }
-    if (shouldOpen) {
-      window.setTimeout(() => adminPassword?.focus(), 60);
-    }
-  }
-
-  function renderAdminDashboard(payload = {}) {
-    const summary = payload.summary || {};
-    const voteLeader = Array.isArray(summary.vote2026) && summary.vote2026.length ? summary.vote2026[0] : null;
-    const priorityLeader =
-      Array.isArray(summary.priorities) && summary.priorities.length ? summary.priorities[0] : null;
-
-    if (adminKpis) {
-      adminKpis.innerHTML = `
-        <article>
-          <strong>${numberFormatter.format(summary.totalResponses || 0)}</strong>
-          <span>respostas armazenadas</span>
-        </article>
-        <article>
-          <strong>${decimalFormatter.format(summary.satisfactionAverage || 0)}</strong>
-          <span>satisfação média</span>
-        </article>
-        <article>
-          <strong>${escapeHtml(voteLeader?.label || "Sem líder")}</strong>
-          <span>${voteLeader ? `${decimalFormatter.format(voteLeader.percent || 0)}% da amostra` : "sem amostra"}</span>
-        </article>
-        <article>
-          <strong>${escapeHtml(priorityLeader?.label || "Sem prioridade")}</strong>
-          <span>${priorityLeader ? `${numberFormatter.format(priorityLeader.total || 0)} menções` : "sem amostra"}</span>
-        </article>
-      `;
-    }
-
-    const records = Array.isArray(payload.records) ? payload.records : [];
-    if (!records.length) {
-      adminTableBody.innerHTML = `<tr><td colspan="8">Nenhum registro armazenado ainda.</td></tr>`;
-      return;
-    }
-
-    adminTableBody.innerHTML = records
-      .map(
-        (record) => `
-          <tr>
-            <td>${escapeHtml(formatDateTime(record.createdAt))}</td>
-            <td>${escapeHtml(record.localizacao || record.city || "Nao informado")}</td>
-            <td>${escapeHtml(record.profissao || "Nao informado")}<br /><small>${escapeHtml(record.faixaEtaria || "")}</small></td>
-            <td>${escapeHtml(record.votoAnterior || "-")}<br /><small>Satisfacao ${escapeHtml(record.satisfacao || "-")}/5</small></td>
-            <td>${escapeHtml(record.voto2026 || "-")}</td>
-            <td>${escapeHtml(record.rejeicao || "-")}</td>
-            <td>${escapeHtml(record.prioridade || "-")}</td>
-            <td>${escapeHtml(record.comentario || "Sem comentario")}</td>
-          </tr>
-        `
-      )
-      .join("");
-  }
-
-  async function handleAdminAccess(event) {
-    event.preventDefault();
-    const password = String(adminPassword?.value || "")
-      .trim()
-      .replace(/\s+/g, "");
-
-    if (!password) {
-      setFeedback(adminFeedback, "Digite a senha administrativa.", "error");
-      return;
-    }
-
-    setFeedback(adminFeedback, "Liberando painel...");
-
-    try {
-      const response = await fetch("/api/pesquisa-acre-2026/admin", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "x-poll-admin-password": password
-        },
-        body: "{}"
-      });
-      const payload = await readJson(response);
-
-      if (!response.ok) {
-        throw new Error(
-          payload.error || "Senha invalida. Confira a senha cadastrada no servidor e tente de novo."
-        );
-      }
-
-      lastAdminPayload = payload;
-      adminDashboard.hidden = false;
-      renderAdminDashboard(payload);
-      setFeedback(
-        adminFeedback,
-        `Painel liberado. Atualizado em ${formatDateTime(payload.updatedAt || payload.summary?.updatedAt)}.`,
-        "success"
-      );
-    } catch (error) {
-      adminDashboard.hidden = true;
-      setFeedback(adminFeedback, error.message || "Falha ao abrir o painel.", "error");
-    }
-  }
-
-  function serializeCsvRows(rows = []) {
-    if (!Array.isArray(rows) || !rows.length) return "";
-    const headers = [
-      "createdAt",
-      "localizacao",
-      "profissao",
-      "faixaEtaria",
-      "votoAnterior",
-      "satisfacao",
-      "voto2026",
-      "rejeicao",
-      "prioridade",
-      "comentario",
-      "city",
-      "country",
-      "browser",
-      "deviceType",
-      "visitorId",
-      "sessionId",
-      "ip"
-    ];
-
-    const escapeCsv = (value) => {
-      const text = String(value ?? "");
-      if (/[",\n\r]/.test(text)) {
-        return `"${text.replace(/"/g, '""')}"`;
-      }
-      return text;
-    };
-
-    return [headers.join(",")]
-      .concat(rows.map((row) => headers.map((header) => escapeCsv(row[header])).join(",")))
-      .join("\n");
-  }
-
-  function handleAdminExport() {
-    const records = lastAdminPayload?.records;
-    if (!Array.isArray(records) || !records.length) {
-      setFeedback(adminFeedback, "Nenhum dado carregado para exportar.", "error");
-      return;
-    }
-
-    const csv = serializeCsvRows(records);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "pesquisa-acre-2026.csv";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(link.href), 500);
-  }
-
   form?.addEventListener("submit", handleFormSubmit);
-  adminToggle?.addEventListener("click", () => toggleAdminPanel());
-  adminClose?.addEventListener("click", () => toggleAdminPanel(false));
-  adminAccessForm?.addEventListener("submit", handleAdminAccess);
-  adminExport?.addEventListener("click", handleAdminExport);
   loadPublicSummary().catch(() => {});
 })();

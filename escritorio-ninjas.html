@@ -39,7 +39,7 @@
       href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./escritorio.css?v=20260417n" />
+    <link rel="stylesheet" href="./escritorio.css?v=20260418arcade" />
   </head>
   <body class="office-page office-page-ninjas">
     <div class="office-shell">
@@ -130,8 +130,74 @@
                   <button type="button" data-office-tab="gossip">bastidores</button>
                 </div>
 
-                <div class="office-map-wrap">
-                  <div class="office-map" data-office-map role="img" aria-label="Planta do Escritório de Ninjas com 50 agentes"></div>
+                <div
+                  class="office-map"
+                  id="office-map"
+                  data-office-world
+                  tabindex="0"
+                  aria-label="Planta do Escritório de Ninjas com 50 agentes"
+                >
+                  <div class="office-grid" aria-hidden="true"></div>
+                  <div class="office-map-ambient office-window-cluster" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-wall-clock" aria-hidden="true"></div>
+                  <div class="office-map-ambient office-notes-board" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-employee-board" aria-hidden="true">
+                    <span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-status-board" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-floor-runner" aria-hidden="true"></div>
+                  <div class="office-map-ambient office-code-cable" aria-hidden="true"></div>
+
+                  <article class="office-room room-ceo">
+                    <span>Direção</span>
+                    <strong>Comando</strong>
+                  </article>
+                  <article class="office-room room-news">
+                    <span>Caça</span>
+                    <strong>Scouts</strong>
+                  </article>
+                  <article class="office-room room-subpages">
+                    <span>Curadoria</span>
+                    <strong>Cenário • UI • FX</strong>
+                  </article>
+                  <article class="office-room room-design">
+                    <span>Criação</span>
+                    <strong>Original</strong>
+                  </article>
+                  <article class="office-room room-review">
+                    <span>Licença</span>
+                    <strong>Revisão</strong>
+                  </article>
+                  <article class="office-room room-cafe">
+                    <span>Lounge</span>
+                    <strong>Pausa tática</strong>
+                  </article>
+                  <article class="office-room room-dev">
+                    <span>Integração</span>
+                    <strong>Cofre e build</strong>
+                  </article>
+
+                  <div class="office-prop office-bookshelf shelf-left" aria-hidden="true"></div>
+                  <div class="office-prop office-bookshelf shelf-right" aria-hidden="true"></div>
+                  <div class="office-prop office-watercooler" aria-hidden="true"></div>
+                  <div class="office-prop office-side-desk" aria-hidden="true"></div>
+                  <div class="office-prop office-printer" aria-hidden="true"></div>
+                  <div class="office-prop office-plant plant-center" aria-hidden="true"></div>
+                  <div class="office-prop office-plant plant-bottom" aria-hidden="true"></div>
+                  <div class="office-prop office-server" aria-hidden="true"></div>
+                  <div class="office-prop office-lounge-table" aria-hidden="true"></div>
+                  <div class="office-prop office-lounge-seat seat-left" aria-hidden="true"></div>
+                  <div class="office-prop office-lounge-seat seat-right" aria-hidden="true"></div>
+                  <div class="office-prop office-console-strip" aria-hidden="true"></div>
+
+                  <div class="office-agent-layer" data-agent-layer></div>
+                  <div class="office-dialogue-layer" data-dialogue-layer aria-hidden="true"></div>
                 </div>
               </div>
 

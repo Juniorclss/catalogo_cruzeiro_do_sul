@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta Administrativa | Pesquisa Acre 2026</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260418b" />
+  </head>
+  <body class="poll-admin-page">
+    <div class="poll-backdrop" aria-hidden="true"></div>
+
+    <main class="poll-shell poll-shell--admin">
+      <section class="poll-card poll-form-card poll-form-card--admin">
+        <div class="poll-form-intro">
+          <p class="poll-kicker poll-kicker--soft">Consulta administrativa</p>
+          <h1>Painel da pesquisa Acre 2026</h1>
+          <p>
+            Login separado para leitura completa dos registros. Use o usuário <strong>admin</strong> e a senha administrativa
+            cadastrada no servidor.
+          </p>
+        </div>
+
+        <form class="poll-admin-auth-form" id="pollAdminAccessForm">
+          <div class="poll-field-grid">
+            <label class="poll-field">
+              <span>API base</span>
+              <input id="pollAdminApiBase" type="url" placeholder="http://localhost:3000" />
+            </label>
+            <label class="poll-field">
+              <span>Usuário</span>
+              <input id="pollAdminUser" type="text" autocomplete="username" placeholder="admin" />
+            </label>
+            <label class="poll-field">
+              <span>Senha</span>
+              <input
+                id="pollAdminPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Digite a senha administrativa"
+              />
+            </label>
+          </div>
+          <div class="poll-admin-actions">
+            <button class="poll-admin-submit" type="submit">Entrar</button>
+            <a class="poll-admin-close" href="./pesquisa-acre-2026.html">Voltar para a pesquisa</a>
+          </div>
+          <p class="poll-feedback poll-feedback--inline" id="pollAdminFeedback"></p>
+        </form>
+
+        <div class="poll-admin-dashboard" id="pollAdminDashboard" hidden>
+          <div class="poll-stat-grid poll-stat-grid--admin" id="pollAdminKpis"></div>
+
+          <div class="poll-admin-actions">
+            <button class="poll-admin-export" id="pollAdminExport" type="button">Baixar CSV</button>
+            <a class="poll-admin-link" href="./admin/admin-dashboard.html" target="_blank" rel="noreferrer">
+              Dashboard completa do site
+            </a>
+          </div>
+
+          <div class="poll-admin-table-wrap">
+            <table class="poll-admin-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Origem</th>
+                  <th>Perfil</th>
+                  <th>2022</th>
+                  <th>2026</th>
+                  <th>Rejeição</th>
+                  <th>Prioridade</th>
+                  <th>Comentário</th>
+                </tr>
+              </thead>
+              <tbody id="pollAdminTableBody">
+                <tr>
+                  <td colspan="8">Faça login para abrir os registros da pesquisa.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./pesquisa-acre-2026-admin.js?v=20260418b" defer></script>
+  </body>
+</html>

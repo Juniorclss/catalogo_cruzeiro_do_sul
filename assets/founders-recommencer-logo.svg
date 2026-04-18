@@ -1,0 +1,49 @@
+<svg width="900" height="900" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Recommencer</title>
+  <desc id="desc">Marca geométrica com triângulo preto metálico e moldura dourada sobre fundo preto.</desc>
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7d7"/>
+      <stop offset="28%" stop-color="#f4deb0"/>
+      <stop offset="58%" stop-color="#cda063"/>
+      <stop offset="100%" stop-color="#fff2c7"/>
+    </linearGradient>
+    <linearGradient id="darkMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d5e6f4"/>
+      <stop offset="18%" stop-color="#8796a9"/>
+      <stop offset="42%" stop-color="#1f2630"/>
+      <stop offset="74%" stop-color="#0b0d12"/>
+      <stop offset="100%" stop-color="#303740"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffce9"/>
+      <stop offset="45%" stop-color="#f7dfa0"/>
+      <stop offset="100%" stop-color="#b98b3f"/>
+    </radialGradient>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="900" height="900" fill="#030304"/>
+
+  <g opacity="0.98">
+    <polygon points="148,138 370,176 286,304 254,256" fill="url(#gold)"/>
+    <polygon points="754,138 530,176 614,304 646,256" fill="url(#gold)"/>
+    <polygon points="152,548 372,452 426,626 202,704" fill="url(#gold)"/>
+    <polygon points="748,548 528,452 474,626 698,704" fill="url(#gold)"/>
+  </g>
+
+  <g filter="url(#softGlow)">
+    <polygon points="450,104 706,574 194,574" fill="url(#darkMetal)"/>
+    <polygon points="450,184 628,514 272,514" fill="#0d1016"/>
+    <polygon points="450,254 550,438 350,438" fill="#040507"/>
+    <circle cx="450" cy="383" r="44" fill="url(#orb)"/>
+  </g>
+
+  <text x="450" y="820" fill="url(#gold)" font-size="88" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" letter-spacing="4">RECOMMENCER</text>
+</svg>

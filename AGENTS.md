@@ -136,10 +136,12 @@ Se precisar criar mais agentes personalizados:
 
 - Se existir um arquivo `CODEX_MEMORY.md` na raiz do projeto, leia esse arquivo antes de continuar trabalhos já iniciados neste repositório.
 - Se existir o diretório `.codex-memory/`, leia `README.md`, `current-state.md`, `handoff.md`, `orders.json` e `assets.json` antes de continuar trabalhos já iniciados neste repositório.
+- Se existir `.codex-memory/credit-end-protocol.md`, leia esse arquivo em toda retomada e sempre que a sessão estiver perto do fim dos créditos.
 - Se existir o diretório `.codex-review-team/`, leia `README.md` e use `npm run review:team` antes de rodadas grandes de revisão visual/editorial/funcional.
 - Quando houver mudanças grandes, validações visuais, deploys ou pendências importantes, atualize `CODEX_MEMORY.md` com um resumo curto do estado atual.
 - Registre cada ordem relevante do usuário na memória local estruturada (`.codex-memory/orders.json`) e vincule capturas, fotos, anexos ou textos úteis em `.codex-memory/assets.json`.
 - Ao encerrar uma rodada importante, atualize `.codex-memory/current-state.md` e `.codex-memory/handoff.md` para facilitar retomada mesmo após troca de conta ou fim de créditos.
+- Antes de aplicar qualquer referência visual enviada pelo usuário, confira na memória local qual página ou módulo estava em foco na ordem aberta mais recente.
 
 ## Equipe local de revisão
 

@@ -160,13 +160,28 @@ const ACRE_2026_POLL_OPTIONS = {
     "Branco/Nulo",
     "Nao lembro/Nao votei"
   ],
-  vote2026: ["Alan Rick", "Mailza Assis", "Marcus Alexandre"],
+  vote2026: [
+    "Alan Rick",
+    "Mailza Assis",
+    "Marcus Alexandre",
+    "Ainda nao decidi",
+    "Branco/Nulo"
+  ],
+  secondChoice: [
+    "Alan Rick",
+    "Mailza Assis",
+    "Marcus Alexandre",
+    "Ainda nao decidi",
+    "Branco/Nulo",
+    "Nenhuma segunda opcao"
+  ],
   rejection: [
     "Nao rejeito nenhum",
     "Alan Rick",
     "Mailza Assis",
     "Marcus Alexandre",
-    "Tiao Bocalom"
+    "Tiao Bocalom",
+    "Rejeito todos"
   ],
   priorities: [
     "Emprego e renda",
@@ -174,7 +189,20 @@ const ACRE_2026_POLL_OPTIONS = {
     "Seguranca",
     "Educacao",
     "Infraestrutura e mobilidade",
-    "Combate a corrupcao"
+    "Combate a corrupcao",
+    "Custo de vida e precos"
+  ],
+  governmentEvaluation: ["Otimo", "Bom", "Regular", "Ruim", "Pessimo", "Nao sabe"],
+  stateDirection: ["No rumo certo", "No rumo errado", "Nem certo nem errado", "Nao sabe"],
+  desiredCycle: ["Mudanca", "Continuidade", "Equilibrio", "Nao sabe"],
+  voteCertainty: ["Ja esta decidido", "Pode mudar", "Muito indefinido"],
+  politicalAttention: ["Acompanho sempre", "Acompanho as vezes", "Quase nao acompanho"],
+  decisionDriver: [
+    "Resultados concretos",
+    "Postura e lideranca",
+    "Combate a corrupcao",
+    "Alinhamento politico",
+    "Propostas para minha regiao"
   ]
 };
 const STATIC_PAGE_SEO = {
@@ -3834,6 +3862,35 @@ function buildPollBreakdown(items = [], key, limit = 10) {
     .slice(0, limit);
 }
 
+function getPollLeaderLabel(items = [], key, fallback = "Sem leitura") {
+  return buildPollBreakdown(items, key, 1)[0]?.label || fallback;
+}
+
+function buildPollCandidateProfiles(items = [], limit = 4) {
+  return buildPollBreakdown(items, "voto2026", limit)
+    .filter((entry) => entry.label !== "Ainda nao decidi" && entry.label !== "Branco/Nulo")
+    .map((entry) => {
+      const subset = items.filter((item) => item?.voto2026 === entry.label);
+      const avgSatisfaction = Number(
+        average(
+          subset
+            .map((item) => Number(item?.satisfacao || 0))
+            .filter((value) => Number.isFinite(value) && value > 0)
+        ).toFixed(1)
+      );
+
+      return {
+        label: entry.label,
+        total: entry.total,
+        percent: entry.percent,
+        topPriority: getPollLeaderLabel(subset, "prioridade"),
+        desiredCycle: getPollLeaderLabel(subset, "desejoCiclo"),
+        voteCertainty: getPollLeaderLabel(subset, "certezaVoto"),
+        avgSatisfaction
+      };
+    });
+}
+
 function buildAcre2026PollSummary(records = getAcre2026PollResponses()) {
   const items = Array.isArray(records) ? records : [];
   const totalResponses = items.length;
@@ -3851,9 +3908,16 @@ function buildAcre2026PollSummary(records = getAcre2026PollResponses()) {
     vote2026: buildPollBreakdown(items, "voto2026", 6),
     rejection: buildPollBreakdown(items, "rejeicao", 6),
     priorities: buildPollBreakdown(items, "prioridade", 6),
+    stateDirection: buildPollBreakdown(items, "direcaoEstado", 6),
+    desiredCycle: buildPollBreakdown(items, "desejoCiclo", 6),
+    voteCertainty: buildPollBreakdown(items, "certezaVoto", 6),
+    governmentEvaluation: buildPollBreakdown(items, "avaliacaoGoverno", 6),
+    politicalAttention: buildPollBreakdown(items, "atencaoPolitica", 6),
+    decisionDriver: buildPollBreakdown(items, "fatorDecisivo", 6),
     previousVote: buildPollBreakdown(items, "votoAnterior", 6),
     ageRanges: buildPollBreakdown(items, "faixaEtaria", 6),
     locations: buildPollBreakdown(items, "localizacao", 8),
+    candidateProfiles: buildPollCandidateProfiles(items, 4),
     updatedAt: items[0]?.createdAt || ""
   };
 }
@@ -4019,6 +4083,8 @@ function buildAdminDashboardPayload() {
   const heartbeats = getJsonArray(HEARTBEATS_FILE);
   const comments = getJsonArray(path.join(DATA_DIR, "comments.json"));
   const subs = getJsonArray(path.join(DATA_DIR, "subscriptions.json"));
+  const acre2026Poll = getAcre2026PollResponses();
+  const acre2026PollSummary = buildAcre2026PollSummary(sortByDateDesc(acre2026Poll, "createdAt", 5000));
   const ninjasRequests = getJsonArray(NINJAS_REQUESTS_FILE);
   const ninjasProfiles = getJsonArray(NINJAS_PROFILES_FILE);
   const salesListings = getJsonArray(SALES_LISTINGS_FILE);
@@ -4096,6 +4162,7 @@ function buildAdminDashboardPayload() {
       uniqueSessions: uniqueSessions.size,
       comments: comments.length,
       subscriptions: subs.length,
+      acre2026PollResponses: acre2026Poll.length,
       supporters: founderItems.length,
       pendingSupporters: pendingFounderItems.length,
       votes: voteRecords.length || voteBoard.reduce((sum, item) => sum + Number(item.total || 0), 0),
@@ -4165,6 +4232,22 @@ function buildAdminDashboardPayload() {
       whatsapp: item.whatsapp || item.phone || "",
       sourcePage: item.sourcePage || item.pagePath || "",
       city: item.city || "",
+      ip: item.ip || ""
+    })),
+    acre2026PollSummary,
+    recentAcre2026Poll: sortByDateDesc(acre2026Poll, "createdAt", 18).map((item) => ({
+      createdAt: item.createdAt,
+      profissao: item.profissao || "",
+      localizacao: item.localizacao || "",
+      faixaEtaria: item.faixaEtaria || "",
+      votoAnterior: item.votoAnterior || "",
+      satisfacao: item.satisfacao || 0,
+      voto2026: item.voto2026 || "",
+      rejeicao: item.rejeicao || "",
+      prioridade: item.prioridade || "",
+      comentario: item.comentario || "",
+      city: item.city || "",
+      country: item.country || "",
       ip: item.ip || ""
     })),
     recentNinjasRequests: sortByDateDesc(ninjasRequests, "createdAt", 12).map((item) => ({
@@ -4705,9 +4788,34 @@ async function handleApi(req, res, pathname, searchParams) {
       ACRE_2026_POLL_OPTIONS.previousVotes,
       ""
     );
+    const avaliacaoGoverno = normalizePollChoice(
+      body.avaliacaoGoverno || body.avaliacao_governo || body.governmentEvaluation,
+      ACRE_2026_POLL_OPTIONS.governmentEvaluation,
+      ""
+    );
+    const direcaoEstado = normalizePollChoice(
+      body.direcaoEstado || body.direcao_estado || body.stateDirection,
+      ACRE_2026_POLL_OPTIONS.stateDirection,
+      ""
+    );
+    const desejoCiclo = normalizePollChoice(
+      body.desejoCiclo || body.desejo_ciclo || body.desiredCycle,
+      ACRE_2026_POLL_OPTIONS.desiredCycle,
+      ""
+    );
     const voto2026 = normalizePollChoice(
       body.voto2026 || body.voto_2026 || body.vote2026,
       ACRE_2026_POLL_OPTIONS.vote2026,
+      ""
+    );
+    const segundaOpcao = normalizePollChoice(
+      body.segundaOpcao || body.segunda_opcao || body.secondChoice,
+      ACRE_2026_POLL_OPTIONS.secondChoice,
+      ""
+    );
+    const certezaVoto = normalizePollChoice(
+      body.certezaVoto || body.certeza_voto || body.voteCertainty,
+      ACRE_2026_POLL_OPTIONS.voteCertainty,
       ""
     );
     const rejeicao = normalizePollChoice(
@@ -4720,6 +4828,16 @@ async function handleApi(req, res, pathname, searchParams) {
       ACRE_2026_POLL_OPTIONS.priorities,
       ""
     );
+    const atencaoPolitica = normalizePollChoice(
+      body.atencaoPolitica || body.atencao_politica || body.politicalAttention,
+      ACRE_2026_POLL_OPTIONS.politicalAttention,
+      ""
+    );
+    const fatorDecisivo = normalizePollChoice(
+      body.fatorDecisivo || body.fator_decisivo || body.decisionDriver,
+      ACRE_2026_POLL_OPTIONS.decisionDriver,
+      ""
+    );
     const satisfacao = Math.max(0, Math.min(5, Number(body.satisfacao || body.satisfaction || 0)));
     const comentario = safeString(body.comentario || body.comment || "", 1200);
 
@@ -4728,10 +4846,17 @@ async function handleApi(req, res, pathname, searchParams) {
       !localizacao ||
       !faixaEtaria ||
       !votoAnterior ||
+      !avaliacaoGoverno ||
+      !direcaoEstado ||
+      !desejoCiclo ||
       !satisfacao ||
       !voto2026 ||
+      !segundaOpcao ||
+      !certezaVoto ||
       !rejeicao ||
       !prioridade ||
+      !atencaoPolitica ||
+      !fatorDecisivo ||
       comentario.length < 10
     ) {
       return sendJson(res, 400, {
@@ -4748,9 +4873,16 @@ async function handleApi(req, res, pathname, searchParams) {
       faixaEtaria,
       votoAnterior,
       satisfacao,
+      avaliacaoGoverno,
+      direcaoEstado,
+      desejoCiclo,
       voto2026,
+      segundaOpcao,
+      certezaVoto,
       rejeicao,
       prioridade,
+      atencaoPolitica,
+      fatorDecisivo,
       comentario,
       sourcePage: cleanShortText(body.sourcePage || tracking.pagePath || "/pesquisa-acre-2026.html", 260),
       pageTitle: cleanShortText(body.pageTitle || tracking.pageTitle || "Pesquisa de Opiniao Acre 2026", 160),
@@ -5020,6 +5152,44 @@ async function handleApi(req, res, pathname, searchParams) {
     );
   }
 
+  if (req.method === "GET" && pathname === "/api/admin/reports/acre-2026-poll.csv") {
+    if (!requireAdmin(req)) return sendAdminUnauthorized(res);
+    const rows = getAcre2026PollResponses().map((item) => ({
+      createdAt: item.createdAt,
+      profissao: item.profissao,
+      localizacao: item.localizacao,
+      faixaEtaria: item.faixaEtaria,
+      votoAnterior: item.votoAnterior,
+      satisfacao: item.satisfacao,
+      avaliacaoGoverno: item.avaliacaoGoverno,
+      direcaoEstado: item.direcaoEstado,
+      desejoCiclo: item.desejoCiclo,
+      voto2026: item.voto2026,
+      segundaOpcao: item.segundaOpcao,
+      certezaVoto: item.certezaVoto,
+      rejeicao: item.rejeicao,
+      prioridade: item.prioridade,
+      atencaoPolitica: item.atencaoPolitica,
+      fatorDecisivo: item.fatorDecisivo,
+      comentario: item.comentario,
+      sourcePage: item.sourcePage,
+      pageTitle: item.pageTitle,
+      visitorId: item.visitorId,
+      sessionId: item.sessionId,
+      city: item.city,
+      country: item.country,
+      ip: item.ip,
+      browser: item.browser,
+      deviceType: item.deviceType
+    }));
+    return sendCsv(
+      res,
+      200,
+      toCsv(rows) || "createdAt,profissao,localizacao,faixaEtaria,votoAnterior,satisfacao,voto2026,rejeicao,prioridade,comentario,sourcePage,pageTitle,visitorId,sessionId,city,country,ip,browser,deviceType\n",
+      "pesquisa_acre_2026.csv"
+    );
+  }
+
   if (req.method === "GET" && pathname.startsWith("/api/admin/raw/")) {
     if (!requireAdmin(req)) return sendAdminUnauthorized(res);
     const key = pathname.replace("/api/admin/raw/", "");
@@ -5029,6 +5199,7 @@ async function handleApi(req, res, pathname, searchParams) {
       heartbeats: () => getJsonArray(HEARTBEATS_FILE),
       comments: () => getJsonArray(path.join(DATA_DIR, "comments.json")),
       subscriptions: () => getJsonArray(path.join(DATA_DIR, "subscriptions.json")),
+      acre2026Poll: () => getAcre2026PollResponses(),
       votes: () => getElectionVoteRecords(),
       ninjasRequests: () => getJsonArray(NINJAS_REQUESTS_FILE),
       ninjasProfiles: () => getJsonArray(NINJAS_PROFILES_FILE),
@@ -5046,7 +5217,16 @@ async function handleApi(req, res, pathname, searchParams) {
         ? sortByDateDesc(items, "at", limit)
         : sortByDateDesc(
             items,
-            key === "votes" ? "at" : key === "comments" || key === "subscriptions" || key.startsWith("ninjas") || key === "salesListings" || key === "vrRentalLeads" ? "createdAt" : "at",
+            key === "votes"
+              ? "at"
+              : key === "comments" ||
+                  key === "subscriptions" ||
+                  key === "acre2026Poll" ||
+                  key.startsWith("ninjas") ||
+                  key === "salesListings" ||
+                  key === "vrRentalLeads"
+                ? "createdAt"
+                : "at",
             limit
           );
     return sendJson(res, 200, {

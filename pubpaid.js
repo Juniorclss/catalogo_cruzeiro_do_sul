@@ -57,8 +57,8 @@
     pool: {
       label: "Sinuca Real",
       shortLabel: "sinuca",
-      description: "A mesa clássica para quem gosta de precisão, calma e uma boa disputa.",
-      sceneCopy: "A mesa está livre. Mire com calma e veja se a noite começa bem por aqui.",
+      description: "Sinuca 9 bolas com luz de bar, carregamento de força e duelo seco valendo o pote da noite.",
+      sceneCopy: "O pano verde está aceso, o bar bate no fundo e a próxima tacada pode virar a mesa toda.",
       stakes: DEMO_STAKES
     },
     checkers: {
@@ -144,6 +144,35 @@
     }
   };
 
+  const POOL_BALL_ORDER = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const POOL_BALL_COLORS = {
+    cue: "#f5f5f5",
+    "1": "#ffd66b",
+    "2": "#6aa7ff",
+    "3": "#ff7268",
+    "4": "#9e7cff",
+    "5": "#ff9f52",
+    "6": "#5fe09a",
+    "7": "#7e4630",
+    "8": "#111111",
+    "9": "#ffe58a"
+  };
+
+  const ROULETTE_WHEEL_ORDER = [
+    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24,
+    16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+  ];
+
+  const ROULETTE_RED_NUMBERS = new Set([
+    1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36
+  ]);
+
+  const ROULETTE_NUMBERS_GRID = [
+    [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
+    [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
+    [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
+  ];
+
   const DRINK_CATALOG = [
     {
       id: "cafe-do-corredor",
@@ -220,6 +249,64 @@
     }
   ];
 
+  const JUKEBOX_TRACKS = [
+    {
+      id: "turbo-neon",
+      name: "Turbo Neon",
+      tempoMs: 228,
+      melody: [76, 79, 81, 83, 84, 83, 81, 79, 76, 79, 83, 86, 84, 83, 81, 79],
+      bass: [45, 45, 45, 45, 41, 41, 41, 41, 43, 43, 43, 43, 40, 40, 40, 40],
+      harmony: [64, 67, 69, 71, 72, 71, 69, 67, 64, 67, 71, 74, 72, 71, 69, 67],
+      leadType: "square",
+      harmonyType: "triangle",
+      bassType: "triangle"
+    },
+    {
+      id: "bar-jump",
+      name: "Bar Jump",
+      tempoMs: 244,
+      melody: [79, 83, 86, 88, 86, 83, 81, 79, 78, 81, 83, 86, 83, 81, 79, 76],
+      bass: [43, 43, 46, 46, 41, 41, 45, 45, 38, 38, 43, 43, 41, 41, 38, 38],
+      harmony: [67, null, 71, null, 69, null, 67, null, 66, null, 69, null, 67, null, 64, null],
+      leadType: "square",
+      harmonyType: "sawtooth",
+      bassType: "triangle"
+    },
+    {
+      id: "pixel-rush",
+      name: "Pixel Rush",
+      tempoMs: 258,
+      melody: [84, 81, 79, 76, 79, 81, 84, 88, 86, 84, 81, 79, 81, 84, 86, 88],
+      bass: [40, 40, 43, 43, 45, 45, 40, 40, 38, 38, 41, 41, 43, 43, 45, 45],
+      harmony: [72, 69, 67, 64, 67, 69, 72, 76, 74, 72, 69, 67, 69, 72, 74, 76],
+      leadType: "square",
+      harmonyType: "triangle",
+      bassType: "triangle"
+    },
+    {
+      id: "coin-combo",
+      name: "Coin Combo",
+      tempoMs: 236,
+      melody: [76, 76, 79, 83, 81, 79, 76, 74, 76, 79, 83, 86, 83, 79, 76, 74],
+      bass: [45, 45, 45, 45, 38, 38, 38, 38, 43, 43, 43, 43, 40, 40, 40, 40],
+      harmony: [64, null, 67, null, 69, null, 67, null, 64, null, 67, null, 71, null, 67, null],
+      leadType: "square",
+      harmonyType: "sine",
+      bassType: "triangle"
+    },
+    {
+      id: "final-boss-bar",
+      name: "Final Boss Bar",
+      tempoMs: 268,
+      melody: [71, 74, 78, 81, 79, 78, 76, 74, 73, 76, 79, 83, 81, 79, 78, 76],
+      bass: [36, 36, 41, 41, 43, 43, 38, 38, 35, 35, 40, 40, 41, 41, 38, 38],
+      harmony: [59, 62, 66, 69, 67, 66, 64, 62, 61, 64, 67, 71, 69, 67, 66, 64],
+      leadType: "sawtooth",
+      harmonyType: "triangle",
+      bassType: "square"
+    }
+  ];
+
   const INTERIOR_NPC_BLUEPRINTS = [
     {
       id: "bia-lounge",
@@ -289,18 +376,18 @@
     },
     {
       id: "garcom-vito",
-      name: "Vito Garcom",
+      name: "Garçom",
       archetype: "cowboy",
-      x: 706,
-      y: 186,
-      zone: { x: 700, y: 178, w: 16, h: 14 },
+      x: 302,
+      y: 139,
+      zone: { x: 292, y: 129, w: 24, h: 14 },
       behavior: "fixed",
       facing: "down",
       prop: "bottle",
       role: "bartender",
       lines: [
+        "Chegue no balcao. Eu recebo o pedido e deixo a proxima rodada pronta.",
         "Bebida da sorte existe, mas so muda detalhe.",
-        "Se equipar visual, o salao sente sua presenca.",
         "Quer lobby rapido? Eu abro qualquer mesa daqui."
       ]
     },
@@ -308,9 +395,9 @@
       id: "lito-copos",
       name: "Lito Copos",
       archetype: "lounge",
-      x: 764,
-      y: 186,
-      zone: { x: 756, y: 180, w: 14, h: 12 },
+      x: 770,
+      y: 148,
+      zone: { x: 752, y: 138, w: 34, h: 16 },
       behavior: "fixed",
       facing: "down",
       prop: "glasses",
@@ -364,17 +451,17 @@
   ];
 
   const INTERIOR_BLOCKS = [
-    { x: 24, y: 76, w: 196, h: 146 },
-    { x: 242, y: 72, w: 348, h: 132 },
-    { x: 624, y: 72, w: 194, h: 132 },
-    { x: 776, y: 74, w: 168, h: 152 },
-    { x: 22, y: 220, w: 228, h: 164 },
-    { x: 412, y: 190, w: 220, h: 178 },
-    { x: 736, y: 260, w: 208, h: 152 },
-    { x: 18, y: 398, w: 230, h: 166 },
+    { x: 24, y: 76, w: 196, h: 146, hard: true },
+    { x: 242, y: 72, w: 348, h: 132, hard: true },
+    { x: 624, y: 72, w: 194, h: 132, hard: true },
+    { x: 776, y: 74, w: 168, h: 152, hard: true },
+    { x: 22, y: 220, w: 228, h: 164, hard: true },
+    { x: 412, y: 190, w: 220, h: 178, hard: true },
+    { x: 736, y: 260, w: 208, h: 152, hard: true },
+    { x: 18, y: 398, w: 230, h: 166, hard: true },
     { x: 296, y: 418, w: 92, h: 154 },
     { x: 552, y: 418, w: 24, h: 154 },
-    { x: 680, y: 462, w: 170, h: 112 },
+    { x: 680, y: 462, w: 170, h: 112, hard: true },
     { x: 840, y: 420, w: 104, h: 170 }
   ];
 
@@ -407,7 +494,7 @@
         gameId: "checkers",
         label: TABLE_META.checkers.label,
         venueKey: "checkers",
-        x: 118,
+        x: 154,
         y: 292,
         radius: 82
       },
@@ -417,8 +504,8 @@
         gameId: "cards21",
         label: TABLE_META.cards21.label,
         venueKey: "cards21",
-        x: 424,
-        y: 495,
+        x: 306,
+        y: 494,
         radius: 86
       },
       {
@@ -427,8 +514,8 @@
         gameId: "poker",
         label: TABLE_META.poker.label,
         venueKey: "poker",
-        x: 306,
-        y: 494,
+        x: 424,
+        y: 495,
         radius: 82
       },
       {
@@ -447,8 +534,8 @@
         gameId: "slots",
         label: TABLE_META.slots.label,
         venueKey: "slots",
-        x: 648,
-        y: 330,
+        x: 640,
+        y: 148,
         radius: 80
       },
       {
@@ -457,9 +544,9 @@
         gameId: "roulette",
         label: TABLE_META.roulette.label,
         venueKey: "roulette",
-        x: 560,
-        y: 494,
-        radius: 82
+        x: 764,
+        y: 510,
+        radius: 84
       },
       {
         id: "stage",
@@ -473,19 +560,19 @@
       {
         id: "bartender-shop",
         type: "shop",
-        label: "Garcom do bar",
+        label: "Garçom",
         venueKey: "shop",
-        x: 708,
-        y: 186,
-        radius: 98
+        x: 302,
+        y: 139,
+        radius: 92
       },
       {
         id: "waiter-tips",
         type: "tips",
         label: "Garcom dos copos",
         venueKey: "waiter",
-        x: 764,
-        y: 186,
+        x: 772,
+        y: 148,
         radius: 84
       },
       {
@@ -557,7 +644,10 @@
     gameSubtitle: document.querySelector("[data-game-subtitle]"),
     gameHost: document.querySelector("[data-game-host]"),
     shopModal: document.querySelector("[data-shop-modal]"),
-    shopHost: document.querySelector("[data-shop-host]")
+    shopHost: document.querySelector("[data-shop-host]"),
+    waiterModal: document.querySelector("[data-waiter-modal]"),
+    jukeboxModal: document.querySelector("[data-jukebox-modal]"),
+    jukeboxHost: document.querySelector("[data-jukebox-host]")
   };
 
   const sceneCtx = refs.sceneCanvas?.getContext("2d");
@@ -569,7 +659,8 @@
 
   const images = {
     exterior: new Image(),
-    interior: new Image()
+    interior: new Image(),
+    bartenderTorso: new Image()
   };
 
   const runtime = {
@@ -616,7 +707,7 @@
     },
     player: {
       x: 480,
-      y: 596,
+      y: 548,
       facing: "up",
       walkFrame: 0,
       walkClock: 0,
@@ -625,10 +716,11 @@
       pendingInteraction: null
     },
     audio: {
-      enabled: false,
+      enabled: true,
       ctx: null,
       timer: null,
-      step: 0
+      step: 0,
+      currentTrackIndex: 0
     }
   };
 
@@ -707,6 +799,7 @@
       fillProfileForm();
       renderAll();
       bindEvents();
+      ensureMusicPlayback();
       runtime.lastFrame = performance.now();
       runtime.rafId = window.requestAnimationFrame(loop);
       scheduleTutorialIntro();
@@ -722,7 +815,8 @@
         refs.doorModal.hidden === false ||
         refs.badEndingModal.hidden === false ||
         refs.gameModal.hidden === false ||
-        refs.shopModal?.hidden === false
+        refs.shopModal?.hidden === false ||
+        refs.waiterModal?.hidden === false
       ) {
         return;
       }
@@ -749,7 +843,8 @@
   function preloadImages() {
     return Promise.all([
       loadImage(images.exterior, "./assets/pubpaid-exterior-v2.png"),
-      loadImage(images.interior, "./assets/pubpaid-interior-v2.png")
+      loadImage(images.interior, "./assets/pubpaid-interior-v2.png"),
+      loadImage(images.bartenderTorso, "./assets/pubpaid-bartender-counter-v1.png")
     ]);
   }
 
@@ -795,8 +890,14 @@
     refs.sceneCanvas?.addEventListener("click", handleSceneCanvasClick);
   }
 
+  function ensureMusicPlayback() {
+    if (!runtime.audio.enabled || runtime.audio.timer) return;
+    startMusic();
+  }
+
   function handleKeyDown(event) {
     if (event.repeat) return;
+    ensureMusicPlayback();
 
     if (refs.badEndingModal?.hidden === false) {
       if (handleBadEndingKey(event.key)) {
@@ -818,6 +919,10 @@
         closeGameModal();
       } else if (refs.shopModal?.hidden === false) {
         closeShopModal();
+      } else if (refs.waiterModal?.hidden === false) {
+        closeWaiterModal();
+      } else if (refs.jukeboxModal?.hidden === false) {
+        closeJukeboxModal();
       }
       return;
     }
@@ -828,7 +933,9 @@
       refs.doorModal.hidden === false ||
       refs.badEndingModal.hidden === false ||
       refs.gameModal.hidden === false ||
-      refs.shopModal?.hidden === false
+      refs.shopModal?.hidden === false ||
+      refs.waiterModal?.hidden === false ||
+      refs.jukeboxModal?.hidden === false
     ) {
       if (event.key === " " && activeGameNeedsSpace()) {
         event.preventDefault();
@@ -842,7 +949,9 @@
         !refs.doorModal.hidden ||
         !refs.badEndingModal.hidden ||
         !refs.gameModal.hidden ||
-        refs.shopModal?.hidden === false
+        refs.shopModal?.hidden === false ||
+        refs.waiterModal?.hidden === false ||
+        refs.jukeboxModal?.hidden === false
       ) return;
       event.preventDefault();
       triggerInteraction();
@@ -873,6 +982,8 @@
   }
 
   function handleClick(event) {
+    ensureMusicPlayback();
+
     const profileTrigger = event.target.closest("[data-open-profile]");
     if (profileTrigger) {
       openProfileModal();
@@ -906,6 +1017,15 @@
       if (name === "tutorial") closeModal("tutorial");
       if (name === "game") closeGameModal();
       if (name === "shop") closeShopModal();
+      if (name === "waiter") closeWaiterModal();
+      if (name === "jukebox") closeJukeboxModal();
+      return;
+    }
+
+    if (event.target.closest("[data-waiter-open-shop]")) {
+      closeWaiterModal();
+      openShopModal();
+      setWorldMessage("O garcom abriu o cardapio de bebidas e upgrades.", 2200);
       return;
     }
 
@@ -941,6 +1061,13 @@
     }
 
     if (event.target.closest("[data-start-game]")) {
+      if (runtime.activeGame) runtime.activeGame.isPractice = false;
+      startActiveGame();
+      return;
+    }
+
+    if (event.target.closest("[data-start-game-practice]")) {
+      if (runtime.activeGame) runtime.activeGame.isPractice = true;
       startActiveGame();
       return;
     }
@@ -960,6 +1087,12 @@
       return;
     }
 
+    const trackButton = event.target.closest("[data-jukebox-track]");
+    if (trackButton) {
+      selectJukeboxTrack(trackButton.dataset.jukeboxTrack);
+      return;
+    }
+
     const shopBuy = event.target.closest("[data-shop-buy]");
     if (shopBuy) {
       handleShopBuy(shopBuy.dataset.shopBuy, shopBuy.dataset.shopType || "");
@@ -974,6 +1107,7 @@
 
     const quickTable = event.target.closest("[data-open-table]");
     if (quickTable) {
+      closeWaiterModal();
       openTableFromShop(quickTable.dataset.openTable || "");
       return;
     }
@@ -1029,6 +1163,23 @@
       return;
     }
 
+    const rouletteChip = event.target.closest("[data-roulette-chip]");
+    if (rouletteChip) {
+      handleRouletteChipSelect(clampMoney(rouletteChip.dataset.rouletteChip));
+      return;
+    }
+
+    const rouletteBet = event.target.closest("[data-roulette-bet]");
+    if (rouletteBet) {
+      handleRouletteBetPlace(rouletteBet.dataset.rouletteBet || "");
+      return;
+    }
+
+    if (event.target.closest("[data-roulette-clear]")) {
+      clearRouletteBets();
+      return;
+    }
+
     if (event.target.closest("[data-roulette-spin]")) {
       handleRouletteSpin();
       return;
@@ -1073,7 +1224,9 @@
       refs.doorModal.hidden === false ||
       refs.badEndingModal.hidden === false ||
       refs.gameModal.hidden === false ||
-      refs.shopModal?.hidden === false
+      refs.shopModal?.hidden === false ||
+      refs.waiterModal?.hidden === false ||
+      refs.jukeboxModal?.hidden === false
     ) {
       return;
     }
@@ -1086,6 +1239,15 @@
     }
 
     if (runtime.scene === "interior") {
+      const distanceToInteraction = Math.hypot(runtime.player.x - interaction.x, runtime.player.y - interaction.y);
+      if (distanceToInteraction <= interaction.radius + 10) {
+        clearPlayerWalkPath();
+        runtime.prompt = interaction;
+        renderSceneHud();
+        triggerInteraction(interaction);
+        return;
+      }
+
       const standPoint = getInteractionStandPoint(interaction);
       if (!standPoint || !queuePlayerWalk(standPoint.x, standPoint.y, interaction)) {
         return;
@@ -1155,7 +1317,9 @@
       !refs.doorModal.hidden ||
       !refs.badEndingModal.hidden ||
       !refs.gameModal.hidden ||
-      refs.shopModal?.hidden === false
+      refs.shopModal?.hidden === false ||
+      refs.waiterModal?.hidden === false ||
+      refs.jukeboxModal?.hidden === false
     ) {
       runtime.player.moving = false;
       return;
@@ -1278,6 +1442,15 @@
   }
 
   function softenInteriorBlock(block) {
+    if (block.hard) {
+      return {
+        x: block.x,
+        y: block.y,
+        w: block.w,
+        h: block.h
+      };
+    }
+
     const insetX = Math.max(3, Math.min(14, Math.floor(block.w * 0.16)));
     const insetTop = Math.max(4, Math.min(12, Math.floor(block.h * 0.12)));
     const insetBottom = Math.max(3, Math.min(10, Math.floor(block.h * 0.08)));
@@ -1366,7 +1539,7 @@
 
   function buildWalkPath(targetX, targetY) {
     const target = findNearestWalkablePoint(targetX, targetY);
-    if (!target) return [];
+    if (!target) return null;
 
     const start = {
       x: runtime.player.x,
@@ -1384,7 +1557,7 @@
     const startNode = findNearestGridWalkablePoint(start.x, start.y, step);
     const targetNode = findNearestGridWalkablePoint(target.x, target.y, step);
     if (!startNode || !targetNode) {
-      return [target];
+      return null;
     }
 
     const open = [startNode];
@@ -1461,7 +1634,7 @@
       }
     }
 
-    return [target];
+    return null;
   }
 
   function smoothWalkPath(path, origin) {
@@ -1494,7 +1667,14 @@
 
   function queuePlayerWalk(targetX, targetY, pendingInteraction = null) {
     const path = buildWalkPath(targetX, targetY);
+    if (path === null) {
+      runtime.player.path = [];
+      runtime.player.pendingInteraction = null;
+      return false;
+    }
+
     if (!path.length) {
+      runtime.player.path = [];
       runtime.player.pendingInteraction = null;
       if (pendingInteraction) {
         runtime.prompt = pendingInteraction;
@@ -1556,15 +1736,15 @@
   function getInteractionStandPoint(interaction) {
     const offsets = {
       pool: { x: 0, y: 56 },
-      checkers: { x: 0, y: 58 },
+      checkers: { x: 18, y: 58 },
       cards21: { x: 0, y: 62 },
       poker: { x: 0, y: 62 },
       dicecups: { x: 0, y: 58 },
       slots: { x: 0, y: 58 },
-      roulette: { x: 0, y: 58 },
+      roulette: { x: 0, y: 66 },
       stage: { x: -54, y: 36 },
-      "bartender-shop": { x: -18, y: 46 },
-      "waiter-tips": { x: -22, y: 46 },
+      "bartender-shop": { x: 0, y: 66 },
+      "waiter-tips": { x: 0, y: 72 },
       jukebox: { x: -40, y: 34 },
       exit: { x: 0, y: 44 }
     };
@@ -1607,6 +1787,9 @@
 
   function getInteractionAtCanvasPoint(x, y) {
     const list = INTERACTIONS[runtime.scene] || [];
+    const directHit = list.find((interaction) => pointInsideInteractionClickArea(x, y, interaction));
+    if (directHit) return directHit;
+
     let nearest = null;
     let nearestDistance = Infinity;
 
@@ -1619,6 +1802,41 @@
     });
 
     return nearest;
+  }
+
+  function pointInsideInteractionClickArea(x, y, interaction) {
+    const area = getInteractionClickArea(interaction);
+    if (!area) return false;
+    return x >= area.x && x <= area.x + area.w && y >= area.y && y <= area.y + area.h;
+  }
+
+  function getInteractionClickArea(interaction) {
+    const explicitAreas = {
+      pool: { x: 36, y: 66, w: 182, h: 166 },
+      checkers: { x: 72, y: 202, w: 168, h: 152 },
+      cards21: { x: 218, y: 396, w: 176, h: 160 },
+      poker: { x: 354, y: 418, w: 146, h: 122 },
+      dicecups: { x: 690, y: 176, w: 242, h: 174 },
+      slots: { x: 520, y: 58, w: 280, h: 166 },
+      roulette: { x: 676, y: 438, w: 176, h: 132 },
+      stage: { x: 796, y: 74, w: 128, h: 136 },
+      "bartender-shop": { x: 266, y: 70, w: 82, h: 112 },
+      "waiter-tips": { x: 744, y: 78, w: 94, h: 116 },
+      jukebox: { x: 798, y: 436, w: 118, h: 126 },
+      "front-door": { x: 392, y: 338, w: 176, h: 154 },
+      "back-door": { x: 414, y: 536, w: 132, h: 84 }
+    };
+
+    if (explicitAreas[interaction.id]) {
+      return explicitAreas[interaction.id];
+    }
+
+    return {
+      x: interaction.x - 52,
+      y: interaction.y - 52,
+      w: 104,
+      h: 104
+    };
   }
 
   function renderScene(now) {
@@ -1643,6 +1861,7 @@
     drawSingerBursts();
     drawPlayerLabel();
     drawPlayerSprite(sceneCtx, runtime.player.x - 14, runtime.player.y - 42, 2, runtime.player.facing, runtime.player.walkFrame, getPlayerPalette(), true);
+    drawBarBartender(now);
   }
 
   function drawInteriorLights(now) {
@@ -1651,8 +1870,11 @@
     const pulseA = 0.18 + (Math.sin(now / 240) + 1) * 0.08;
     const pulseB = 0.14 + (Math.sin(now / 320 + 1.4) + 1) * 0.08;
     const pulseC = 0.12 + (Math.sin(now / 270 + 3.1) + 1) * 0.07;
+    const floorSweep = (Math.sin(now / 980) + 1) / 2;
+    const floorSweepAlt = (Math.cos(now / 1260 + 0.8) + 1) / 2;
 
     sceneCtx.save();
+    sceneCtx.globalCompositeOperation = "screen";
 
     sceneCtx.fillStyle = `rgba(255, 98, 189, ${pulseA.toFixed(3)})`;
     sceneCtx.beginPath();
@@ -1678,6 +1900,85 @@
     sceneCtx.closePath();
     sceneCtx.fill();
 
+    const rgbBeams = [
+      {
+        x: 138 + floorSweep * 58,
+        y: 86,
+        color: "rgba(255, 70, 160, 0.24)",
+        floor: { x: 78 + floorSweep * 92, y: 340, w: 210, h: 72, rotate: -0.14 }
+      },
+      {
+        x: 440 + floorSweepAlt * 80,
+        y: 84,
+        color: "rgba(90, 235, 255, 0.22)",
+        floor: { x: 340 + floorSweepAlt * 110, y: 350, w: 260, h: 76, rotate: 0.08 }
+      },
+      {
+        x: 776 + floorSweep * 70,
+        y: 92,
+        color: "rgba(124, 255, 162, 0.2)",
+        floor: { x: 650 + floorSweep * 110, y: 360, w: 236, h: 72, rotate: -0.05 }
+      },
+      {
+        x: 560 + floorSweepAlt * 70,
+        y: 128,
+        color: "rgba(255, 205, 92, 0.18)",
+        floor: { x: 478 + floorSweepAlt * 86, y: 234, w: 184, h: 48, rotate: 0.12 }
+      }
+    ];
+
+    rgbBeams.forEach((beam, index) => {
+      const alpha = 0.55 + (Math.sin(now / 360 + index * 1.8) + 1) * 0.18;
+      const beamGradient = sceneCtx.createLinearGradient(beam.x, beam.y, beam.floor.x + beam.floor.w / 2, beam.floor.y);
+      beamGradient.addColorStop(0, beam.color.replace(/0\.\d+\)/, `${(0.22 * alpha).toFixed(3)})`));
+      beamGradient.addColorStop(0.62, beam.color.replace(/0\.\d+\)/, `${(0.1 * alpha).toFixed(3)})`));
+      beamGradient.addColorStop(1, "rgba(255,255,255,0)");
+      sceneCtx.fillStyle = beamGradient;
+      sceneCtx.beginPath();
+      sceneCtx.moveTo(beam.x, beam.y);
+      sceneCtx.lineTo(beam.floor.x + beam.floor.w, beam.floor.y + beam.floor.h);
+      sceneCtx.lineTo(beam.floor.x, beam.floor.y + beam.floor.h);
+      sceneCtx.closePath();
+      sceneCtx.fill();
+
+      sceneCtx.save();
+      sceneCtx.translate(beam.floor.x + beam.floor.w / 2, beam.floor.y + beam.floor.h / 2);
+      sceneCtx.rotate(beam.floor.rotate + Math.sin(now / 720 + index) * 0.04);
+      const floorGradient = sceneCtx.createRadialGradient(0, 0, 4, 0, 0, beam.floor.w * 0.55);
+      floorGradient.addColorStop(0, beam.color.replace(/0\.\d+\)/, `${(0.28 * alpha).toFixed(3)})`));
+      floorGradient.addColorStop(0.55, beam.color.replace(/0\.\d+\)/, `${(0.13 * alpha).toFixed(3)})`));
+      floorGradient.addColorStop(1, "rgba(255,255,255,0)");
+      sceneCtx.fillStyle = floorGradient;
+      sceneCtx.beginPath();
+      sceneCtx.ellipse(0, 0, beam.floor.w / 2, beam.floor.h / 2, 0, 0, Math.PI * 2);
+      sceneCtx.fill();
+      sceneCtx.restore();
+    });
+
+    const sweepBars = [
+      { y: 286 + Math.sin(now / 680) * 18, color: "rgba(255, 98, 189, 0.18)", speed: 0 },
+      { y: 380 + Math.cos(now / 760) * 20, color: "rgba(112, 235, 255, 0.16)", speed: 1.7 },
+      { y: 470 + Math.sin(now / 840 + 1.8) * 24, color: "rgba(128, 224, 146, 0.14)", speed: 3.2 }
+    ];
+
+    sweepBars.forEach((bar) => {
+      const x = -180 + ((now / 18 + bar.speed * 130) % 1240);
+      const gradient = sceneCtx.createLinearGradient(x, bar.y, x + 220, bar.y + 22);
+      gradient.addColorStop(0, "rgba(255,255,255,0)");
+      gradient.addColorStop(0.45, bar.color);
+      gradient.addColorStop(1, "rgba(255,255,255,0)");
+      sceneCtx.fillStyle = gradient;
+      sceneCtx.beginPath();
+      sceneCtx.moveTo(x, bar.y);
+      sceneCtx.lineTo(x + 230, bar.y + 34);
+      sceneCtx.lineTo(x + 214, bar.y + 54);
+      sceneCtx.lineTo(x - 16, bar.y + 20);
+      sceneCtx.closePath();
+      sceneCtx.fill();
+    });
+
+    sceneCtx.globalCompositeOperation = "source-over";
+
     const leds = [
       { x: 650, y: 88, color: "#ff62bd", wave: 0 },
       { x: 690, y: 90, color: "#70ebff", wave: 0.8 },
@@ -1699,6 +2000,19 @@
     sceneCtx.globalAlpha = 0.12;
     sceneCtx.fillStyle = "#fff6d8";
     sceneCtx.fillRect(620, 84, 302, 10);
+
+    sceneCtx.globalAlpha = 0.55;
+    [
+      { x: 156, y: 92, color: "#ff62bd" },
+      { x: 454, y: 86, color: "#70ebff" },
+      { x: 802, y: 92, color: "#80e092" },
+      { x: 566, y: 128, color: "#ffca6b" }
+    ].forEach((lamp) => {
+      sceneCtx.fillStyle = lamp.color;
+      sceneCtx.fillRect(lamp.x - 8, lamp.y - 4, 16, 6);
+      sceneCtx.fillStyle = "rgba(255,255,255,0.38)";
+      sceneCtx.fillRect(lamp.x - 4, lamp.y - 7, 8, 3);
+    });
     sceneCtx.restore();
   }
 
@@ -1756,7 +2070,8 @@
     const list = INTERACTIONS[runtime.scene] || [];
 
     list.forEach((interaction) => {
-      const pulse = 1 + Math.sin(now / 180 + interaction.x * 0.01) * 0.12;
+      const marker = getInteractionMarkerPosition(interaction);
+      const pulse = 1 + Math.sin(now / 180 + marker.x * 0.01) * 0.12;
       const isFocus = runtime.prompt?.id === interaction.id;
       const color =
         interaction.type === "game"
@@ -1772,17 +2087,23 @@
                 : "#effcff";
 
       sceneCtx.save();
-      sceneCtx.translate(interaction.x, interaction.y - 34);
+      sceneCtx.translate(marker.x, marker.y);
       sceneCtx.scale(pulse, pulse);
       sceneCtx.strokeStyle = color;
       sceneCtx.fillStyle = isFocus ? color : "rgba(0,0,0,0.55)";
       sceneCtx.lineWidth = isFocus ? 3 : 2;
-      sceneCtx.beginPath();
-      sceneCtx.moveTo(0, -12);
-      sceneCtx.lineTo(11, 0);
-      sceneCtx.lineTo(0, 12);
-      sceneCtx.lineTo(-11, 0);
-      sceneCtx.closePath();
+      if (interaction.id === "bartender-shop") {
+        sceneCtx.beginPath();
+        sceneCtx.arc(0, 0, 9, 0, Math.PI * 2);
+        sceneCtx.closePath();
+      } else {
+        sceneCtx.beginPath();
+        sceneCtx.moveTo(0, -12);
+        sceneCtx.lineTo(11, 0);
+        sceneCtx.lineTo(0, 12);
+        sceneCtx.lineTo(-11, 0);
+        sceneCtx.closePath();
+      }
       sceneCtx.fill();
       sceneCtx.stroke();
       sceneCtx.restore();
@@ -1793,14 +2114,29 @@
         sceneCtx.font = "12px Chakra Petch";
         const width = Math.ceil(sceneCtx.measureText(label).width) + 18;
         sceneCtx.fillStyle = "rgba(12, 9, 23, 0.85)";
-        sceneCtx.fillRect(interaction.x - width / 2, interaction.y - 76, width, 24);
+        sceneCtx.fillRect(marker.x - width / 2, marker.y - 42, width, 24);
         sceneCtx.strokeStyle = color;
-        sceneCtx.strokeRect(interaction.x - width / 2, interaction.y - 76, width, 24);
+        sceneCtx.strokeRect(marker.x - width / 2, marker.y - 42, width, 24);
         sceneCtx.fillStyle = "#f7f2d5";
-        sceneCtx.fillText(label, interaction.x - width / 2 + 9, interaction.y - 59);
+        sceneCtx.fillText(label, marker.x - width / 2 + 9, marker.y - 25);
         sceneCtx.restore();
       }
     });
+  }
+
+  function getInteractionMarkerPosition(interaction) {
+    if (runtime.scene === "interior") {
+      if (interaction.id === "bartender-shop") {
+        const npc = findNpcById("garcom-vito");
+        if (npc) return { x: npc.x + 36, y: npc.y - 70 };
+      }
+      if (interaction.id === "waiter-tips") {
+        const npc = findNpcById("lito-copos");
+        if (npc) return { x: npc.x, y: npc.y - 48 };
+      }
+    }
+
+    return { x: interaction.x, y: interaction.y - 34 };
   }
 
   function drawStageNotes() {
@@ -2053,6 +2389,7 @@
       .slice()
       .sort((a, b) => a.y - b.y)
       .forEach((npc) => {
+        if (npc.id === "garcom-vito") return;
         drawPlayerSprite(
           sceneCtx,
           npc.x - 14,
@@ -2268,11 +2605,12 @@
     }
 
     if (focus.type === "jukebox") {
+      const currentTrack = getCurrentJukeboxTrack();
       return {
         title: "Jukebox",
-        copy: "A jukebox muda o clima da noite e deixa o salão mais vivo.",
+        copy: `A jukebox puxa o salao para um clima arcade mais rapido. Agora toca "${currentTrack.name}".`,
         meta: runtime.audio.enabled ? "desligar a música" : "ligar a música",
-        description: "Se preferir, você também pode controlar o som pelo topo da página.",
+        description: "Escolha uma das 5 faixas da playlist ou use o botão do topo para desligar se quiser silencio.",
         venueKey: "jukebox"
       };
     }
@@ -2298,6 +2636,16 @@
 
   function renderFocusStakes(focus) {
     if (!refs.focusStakes) return;
+
+    if (focus?.type === "jukebox") {
+      refs.focusStakes.innerHTML = JUKEBOX_TRACKS
+        .map((track, index) => {
+          const isActive = index === runtime.audio.currentTrackIndex;
+          return `<button class="pubpaid-stake-button ${isActive ? "is-active" : ""}" type="button" data-jukebox-track="${escapeHtml(track.id)}">${escapeHtml(track.name)}</button>`;
+        })
+        .join("");
+      return;
+    }
 
     if (!focus || focus.type !== "game") {
       refs.focusStakes.innerHTML = "";
@@ -2602,6 +2950,77 @@
     `;
   }
 
+  function renderJukeboxModal(feedback = "") {
+    if (!refs.jukeboxHost) return;
+
+    const currentTrack = getCurrentJukeboxTrack();
+    const tracksMarkup = JUKEBOX_TRACKS.map((track, index) => {
+      const isActive = index === runtime.audio.currentTrackIndex;
+      return `
+        <article class="pubpaid-shop-card ${isActive ? "is-active" : ""}">
+          <div class="pubpaid-shop-line">
+            <strong>${escapeHtml(track.name)}</strong>
+            <span>${escapeHtml(`${track.tempoMs} ms`)}</span>
+          </div>
+          <p>${escapeHtml(getJukeboxTrackDescription(track.id))}</p>
+          <div class="pubpaid-card-actions">
+            <button class="pubpaid-card-button" type="button" data-jukebox-track="${escapeHtml(track.id)}">
+              ${isActive ? "Tocando agora" : "Tocar essa"}
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    refs.jukeboxHost.innerHTML = `
+      <section class="pubpaid-shop-panel">
+        <article class="pubpaid-game-box">
+          <span class="pubpaid-game-chip">jukebox</span>
+          <h3>Playlist do PubPaid</h3>
+          <p>Escolha a trilha do salão e mude o ritmo da noite sem sair da jukebox.</p>
+          <ul>
+            <li>A faixa ativa muda na hora quando voce clica.</li>
+            <li>Se o som estiver desligado, a jukebox liga junto com a musica escolhida.</li>
+            <li>Voce pode silenciar o bar quando quiser.</li>
+          </ul>
+        </article>
+        <article class="pubpaid-game-box">
+          <div class="pubpaid-game-chip-row">
+            <span class="pubpaid-game-chip">${runtime.audio.enabled ? "som ligado" : "som desligado"}</span>
+            <span class="pubpaid-game-chip">faixa ${escapeHtml(currentTrack.name)}</span>
+          </div>
+          <p>${escapeHtml(getJukeboxTrackDescription(currentTrack.id))}</p>
+          <div class="pubpaid-card-actions">
+            <button class="pubpaid-card-button" type="button" data-audio-toggle>
+              ${runtime.audio.enabled ? "Desligar som" : "Ligar playlist"}
+            </button>
+            <button class="pubpaid-card-button" type="button" data-close-modal="jukebox">
+              Voltar ao salao
+            </button>
+          </div>
+          ${feedback ? `<p class="pubpaid-feedback">${escapeHtml(feedback)}</p>` : ""}
+        </article>
+      </section>
+
+      <section>
+        <p class="pubpaid-eyebrow">faixas da noite</p>
+        <div class="pubpaid-shop-grid">${tracksMarkup}</div>
+      </section>
+    `;
+  }
+
+  function getJukeboxTrackDescription(trackId) {
+    const descriptions = {
+      "turbo-neon": "Batida neon para deixar o pub mais aceso e mais arcade logo de cara.",
+      "bar-jump": "Faixa saltada de balcão para quando o salão pede mais movimento.",
+      "pixel-rush": "Corrida pixelada para noites mais rápidas e mesas com mais tensão.",
+      "coin-combo": "Clima de jackpot curto, bom para puxar a energia das máquinas.",
+      "final-boss-bar": "Peso de fase final para quando a noite pede um duelo mais dramático."
+    };
+
+    return descriptions[trackId] || "A jukebox empurra o clima da noite para outro ritmo.";
+  }
+
   function handleShopBuy(itemId, itemType) {
     if (itemType === "drink") {
       const drink = DRINK_CATALOG.find((entry) => entry.id === itemId);
@@ -2659,8 +3078,12 @@
   }
 
   function renderAudioButtons() {
+    const currentTrack = getCurrentJukeboxTrack();
     refs.audioButtons.forEach((button) => {
-      button.textContent = `${button.closest(".pubpaid-tutorial-stage-actions") ? "Musica dancante" : "Musica de bar"}: ${runtime.audio.enabled ? "on" : "off"}`;
+      const prefix = button.closest(".pubpaid-tutorial-stage-actions") ? "Jukebox" : "Musica";
+      button.textContent = runtime.audio.enabled
+        ? `${prefix}: desligar (${currentTrack.name})`
+        : `${prefix}: ligar playlist`;
     });
   }
 
@@ -2671,6 +3094,7 @@
     renderSceneHud();
     renderGameModal();
     if (refs.shopModal?.hidden === false) renderShopModal("");
+    if (refs.jukeboxModal?.hidden === false) renderJukeboxModal("");
   }
 
   function fillProfileForm() {
@@ -2722,6 +3146,11 @@
       runtime.badEndingGame.boost = 0;
       return;
     }
+
+    if (name === "jukebox") {
+      closeJukeboxModal();
+      return;
+    }
   }
 
   function openShopModal() {
@@ -2731,6 +3160,24 @@
 
   function closeShopModal() {
     if (refs.shopModal) refs.shopModal.hidden = true;
+  }
+
+  function openWaiterModal() {
+    if (refs.waiterModal) refs.waiterModal.hidden = false;
+    pushNpcBubble("garcom-vito", "Eu vendo bebidas, upgrades e abro mesa rapida.", 4.4);
+  }
+
+  function closeWaiterModal() {
+    if (refs.waiterModal) refs.waiterModal.hidden = true;
+  }
+
+  function openJukeboxModal(feedback = "") {
+    renderJukeboxModal(feedback);
+    if (refs.jukeboxModal) refs.jukeboxModal.hidden = false;
+  }
+
+  function closeJukeboxModal() {
+    if (refs.jukeboxModal) refs.jukeboxModal.hidden = true;
   }
 
   function handleProfileSubmit(event) {
@@ -2779,7 +3226,7 @@
   function resetScenePosition() {
     runtime.scene = "exterior";
     runtime.player.x = 480;
-    runtime.player.y = 596;
+    runtime.player.y = 548;
     runtime.player.facing = "up";
     clearPlayerWalkPath();
     runtime.prompt = null;
@@ -2801,7 +3248,7 @@
   function enterExterior() {
     runtime.scene = "exterior";
     runtime.player.x = 480;
-    runtime.player.y = 596;
+    runtime.player.y = 548;
     runtime.player.facing = "up";
     clearPlayerWalkPath();
     runtime.prompt = null;
@@ -2886,11 +3333,12 @@
 
     if (interaction.type === "shop") {
       if (!state.profile.registered) {
-        setWorldMessage("Monte seu personagem primeiro e depois fale com o garcom.", 2200);
+        openWaiterModal();
+        setWorldMessage("O garcom apareceu. Monte seu personagem para comprar e jogar.", 2400);
         return;
       }
-      openShopModal();
-      setWorldMessage("O garcom abriu a loja premium do salao.", 2200);
+      openWaiterModal();
+      setWorldMessage("O garcom explicou o cardapio do balcao.", 2200);
       return;
     }
 
@@ -2903,13 +3351,8 @@
     }
 
     if (interaction.type === "jukebox") {
-      toggleMusic();
-      setWorldMessage(
-        runtime.audio.enabled
-          ? "A jukebox ligou a trilha dancante do bar."
-          : "A jukebox deixou o salao em silencio.",
-        2200
-      );
+      openJukeboxModal();
+      setWorldMessage("A jukebox abriu a playlist do salão.", 2200);
       return;
     }
 
@@ -2970,8 +3413,8 @@
     }
 
     if (interaction.type === "shop") {
-      openShopModal();
-      setWorldMessage("Atalho rapido: o menu premium do garcom ja abriu.", 2200);
+      openWaiterModal();
+      setWorldMessage("Atalho rapido: o garcom apareceu no balcao.", 2200);
       return;
     }
 
@@ -2984,13 +3427,8 @@
     }
 
     if (interaction.type === "jukebox") {
-      toggleMusic();
-      setWorldMessage(
-        runtime.audio.enabled
-          ? "Atalho rápido: a música do bar entrou no ar."
-          : "Atalho rápido: a jukebox ficou em silêncio.",
-        2200
-      );
+      openJukeboxModal();
+      setWorldMessage("Atalho rapido: a playlist da jukebox ja abriu.", 2200);
     }
   }
 
@@ -3555,8 +3993,9 @@
     runtime.audio.enabled = true;
     runtime.audio.step = 0;
     if (runtime.audio.timer) window.clearInterval(runtime.audio.timer);
-    runtime.audio.timer = window.setInterval(scheduleMusicStep, 360);
+    runtime.audio.timer = window.setInterval(scheduleMusicStep, getCurrentJukeboxTrack().tempoMs);
     scheduleMusicStep();
+    renderAudioButtons();
   }
 
   function stopMusic() {
@@ -3565,6 +4004,7 @@
       window.clearInterval(runtime.audio.timer);
       runtime.audio.timer = null;
     }
+    renderAudioButtons();
   }
 
   function ensureAudioContext() {
@@ -3583,19 +4023,20 @@
     const ctx = runtime.audio.ctx;
     if (!ctx || !runtime.audio.enabled) return;
     if (ctx.state === "suspended") ctx.resume();
-
-    const melody = [64, 67, 69, 71, 69, 67, 64, 62];
-    const bass = [40, 40, 45, 45, 38, 38, 43, 43];
-    const harmony = [52, null, 55, null, 50, null, 52, null];
-    const twang = [76, null, 74, null, 72, null, 71, null];
+    const track = getCurrentJukeboxTrack();
+    const melody = track.melody;
+    const bass = track.bass;
+    const harmony = track.harmony;
 
     const when = ctx.currentTime + 0.03;
     const step = runtime.audio.step % melody.length;
 
-    playNote(midiToFreq(bass[step]), 0.34, "triangle", 0.03, when);
-    playNote(midiToFreq(melody[step]), 0.22, "sawtooth", 0.018, when + 0.02);
-    if (harmony[step]) playNote(midiToFreq(harmony[step]), 0.2, "triangle", 0.014, when + 0.06);
-    if (twang[step]) playNote(midiToFreq(twang[step]), 0.12, "sine", 0.01, when + 0.12);
+    playNote(midiToFreq(bass[step]), 0.28, track.bassType || "triangle", 0.04, when);
+    playNote(midiToFreq(melody[step]), 0.18, track.leadType || "square", 0.026, when + 0.015);
+    if (harmony[step]) playNote(midiToFreq(harmony[step]), 0.18, track.harmonyType || "triangle", 0.016, when + 0.05);
+    if (melody[(step + 2) % melody.length]) {
+      playNote(midiToFreq(melody[(step + 2) % melody.length] - 12), 0.12, "square", 0.01, when + 0.09);
+    }
 
     runtime.audio.step += 1;
   }
@@ -3633,6 +4074,7 @@
       payout: 0,
       houseFee: 0,
       opponent: { ...HOUSE_OPPONENTS[normalized] },
+      isPractice: false,
       feedback: "",
       summary: "",
       result: "",
@@ -3766,6 +4208,7 @@
 
     const isSolo = Boolean(TABLE_META[game.id].isSolo);
     const startLabel = isSolo ? "Sentar na maquina" : "Encontrar rival";
+    const practiceLabel = isSolo ? "Testar de graca" : "Mesa demo gratis";
     const flowLines = isSolo
       ? `
         <li>Voce joga sozinho contra a maquina e a aposta entra no instante em que a rodada começa.</li>
@@ -3796,8 +4239,10 @@
           <p>${escapeHtml(game.opponent.bio)}</p>
           ${game.activeDrink ? `<p class="pubpaid-feedback">A bebida pode dar boa sorte em ${Math.round(game.activeDrink.goodChance * 100)}% ou azar em ${Math.round(game.activeDrink.badChance * 100)}% da rodada.</p>` : ""}
           <div class="pubpaid-stake-row">${stakes}</div>
+          <p class="pubpaid-feedback">Entrada livre: abra uma rodada de aquecimento sem mexer no seu saldo.</p>
           <div class="pubpaid-card-actions">
             <button class="pubpaid-card-button" type="button" data-start-game>${escapeHtml(startLabel)}</button>
+            <button class="pubpaid-card-button" type="button" data-start-game-practice>${escapeHtml(practiceLabel)}</button>
             <button class="pubpaid-card-button" type="button" data-close-finished>Voltar ao salao</button>
           </div>
           ${game.feedback ? `<p class="pubpaid-feedback">${escapeHtml(game.feedback)}</p>` : ""}
@@ -3844,8 +4289,9 @@
   function startActiveGame() {
     const game = runtime.activeGame;
     if (!game || game.screen !== "lobby") return;
+    const isPractice = Boolean(game.isPractice);
 
-    if (state.wallet.coins < game.stake) {
+    if (!isPractice && state.wallet.coins < game.stake) {
       game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
       renderGameModal();
       return;
@@ -3853,11 +4299,13 @@
 
     game.feedback = "";
     game.startedAt = new Date().toISOString();
-    game.houseFee = getHouseFee(game.stake);
-    game.payout = game.stake * 2 - game.houseFee;
-    game.fortune = rollDrinkFortune(game.activeDrink, game.stake, getSecretLuckBoost());
+    game.houseFee = isPractice ? 0 : getHouseFee(game.stake);
+    game.payout = isPractice ? 0 : game.stake * 2 - game.houseFee;
+    game.fortune = isPractice ? null : rollDrinkFortune(game.activeDrink, game.stake, getSecretLuckBoost());
     game.screen = "playing";
-    state.wallet.coins -= game.stake;
+    if (!isPractice) {
+      state.wallet.coins -= game.stake;
+    }
     state.shop.activeDrinkId = "";
     if (state.secrets.singerCharm > 0) state.secrets.singerCharm -= 1;
 
@@ -3874,12 +4322,82 @@
     } else if (game.id === "slots") {
       game.tableState = createSlotsState();
     } else if (game.id === "roulette") {
-      game.tableState = createRouletteState();
+      game.tableState = createRouletteState(game.stake);
     }
 
     saveState();
     renderAll();
-    announceFortune(game.fortune);
+    if (game.fortune) announceFortune(game.fortune);
+  }
+
+  function drawBarBartender(now) {
+    if (runtime.scene !== "interior") return;
+    const npc = findNpcById("garcom-vito");
+    const anchorX = npc?.x || 302;
+    const anchorY = npc?.y || 139;
+    const sway = Math.sin(now / 340) * 1.1;
+    const topY = anchorY - 34 + sway;
+
+    sceneCtx.save();
+    sceneCtx.beginPath();
+    sceneCtx.rect(anchorX - 22, anchorY - 46, 44, 34);
+    sceneCtx.clip();
+
+    sceneCtx.fillStyle = "#261813";
+    sceneCtx.fillRect(anchorX - 10, topY - 4, 20, 8);
+    sceneCtx.fillRect(anchorX - 8, topY - 8, 16, 4);
+
+    sceneCtx.fillStyle = "#f4c59f";
+    sceneCtx.fillRect(anchorX - 8, topY, 16, 13);
+    sceneCtx.fillStyle = "#fff8ee";
+    sceneCtx.fillRect(anchorX - 4, topY + 5, 2, 2);
+    sceneCtx.fillRect(anchorX + 2, topY + 5, 2, 2);
+    sceneCtx.fillStyle = "#fff2e0";
+    sceneCtx.fillRect(anchorX - 10, topY + 13, 20, 12);
+    sceneCtx.fillStyle = "#2d473d";
+    sceneCtx.fillRect(anchorX - 14, topY + 13, 4, 14);
+    sceneCtx.fillRect(anchorX + 10, topY + 13, 4, 14);
+    sceneCtx.fillRect(anchorX - 5, topY + 15, 10, 10);
+    sceneCtx.fillStyle = "#cfa85a";
+    sceneCtx.fillRect(anchorX - 1, topY + 13, 2, 12);
+    sceneCtx.fillStyle = "#3b241c";
+    sceneCtx.fillRect(anchorX - 15, topY + 22, 30, 6);
+    sceneCtx.fillStyle = "#f4c59f";
+    sceneCtx.fillRect(anchorX - 18, topY + 16, 4, 11);
+    sceneCtx.fillRect(anchorX + 14, topY + 16, 4, 11);
+    sceneCtx.restore();
+
+    sceneCtx.save();
+    sceneCtx.fillStyle = "#c98f4f";
+    sceneCtx.fillRect(anchorX + 16, anchorY - 24, 3, 10);
+    sceneCtx.fillStyle = "#f0dfc1";
+    sceneCtx.fillRect(anchorX + 16, anchorY - 26, 3, 2);
+    sceneCtx.restore();
+
+    drawBartenderLabel(anchorX, anchorY, now);
+  }
+
+  function drawBartenderLabel(anchorX, anchorY, now) {
+    const pulse = 1 + Math.sin(now / 220) * 0.08;
+    sceneCtx.save();
+    sceneCtx.font = "bold 13px Chakra Petch";
+    const label = "GARÇOM";
+    const width = Math.ceil(sceneCtx.measureText(label).width) + 22;
+    const x = anchorX - width / 2;
+    const y = anchorY - 72;
+    sceneCtx.fillStyle = "rgba(8, 7, 18, 0.9)";
+    sceneCtx.fillRect(x, y, width, 22);
+    sceneCtx.strokeStyle = "rgba(128, 224, 146, 0.82)";
+    sceneCtx.strokeRect(x, y, width, 22);
+    sceneCtx.fillStyle = "#f7f2d5";
+    sceneCtx.fillText(label, x + 11, y + 15);
+    sceneCtx.translate(anchorX + width / 2 - 4, y + 11);
+    sceneCtx.scale(pulse, pulse);
+    sceneCtx.fillStyle = "#80e092";
+    sceneCtx.beginPath();
+    sceneCtx.arc(0, 0, 5, 0, Math.PI * 2);
+    sceneCtx.fill();
+    sceneCtx.restore();
   }
 
   function rematchCurrentGame() {
@@ -3902,17 +4420,27 @@
   function finalizeGame(result, summary) {
     const game = runtime.activeGame;
     if (!game || game.screen === "finished") return;
+    const isPractice = Boolean(game.isPractice);
 
     clearGameTimer();
     clearPoolRefs(false);
 
-    const resolved = resolveFortuneOutcome(game, result, summary);
+    const resolved = isPractice
+      ? {
+          result,
+          summary,
+          coinDelta: 0,
+          fortuneNote: "Rodada de aquecimento concluida: seu saldo ficou intacto nesta partida."
+        }
+      : resolveFortuneOutcome(game, result, summary);
     game.screen = "finished";
     game.result = resolved.result;
     game.summary = resolved.summary;
     game.fortuneNote = resolved.fortuneNote;
 
-    if (resolved.result === "win") {
+    if (isPractice) {
+      game.resultAmount = "demo gratis";
+    } else if (resolved.result === "win") {
       const finalPayout = Math.max(0, game.payout + resolved.coinDelta);
       state.wallet.coins += finalPayout;
       state.wallet.wins += 1;
@@ -3931,7 +4459,7 @@
 
     state.history.unshift({
       id: `history-${Date.now()}`,
-      title: TABLE_META[game.id].label,
+      title: `${TABLE_META[game.id].label}${isPractice ? " - demo" : ""}`,
       result: resolved.result,
       summary: resolved.summary,
       amount: game.resultAmount,
@@ -3944,36 +4472,91 @@
     renderAll();
   }
 
+  function getCurrentJukeboxTrack() {
+    return JUKEBOX_TRACKS[runtime.audio.currentTrackIndex] || JUKEBOX_TRACKS[0];
+  }
+
+  function selectJukeboxTrack(trackId) {
+    const nextIndex = JUKEBOX_TRACKS.findIndex((track) => track.id === trackId);
+    if (nextIndex < 0) return;
+    runtime.audio.currentTrackIndex = nextIndex;
+    runtime.audio.step = 0;
+    if (runtime.audio.enabled) {
+      startMusic();
+    } else {
+      renderAll();
+    }
+    if (refs.jukeboxModal?.hidden === false) {
+      renderJukeboxModal(`Agora toca ${getCurrentJukeboxTrack().name}.`);
+    }
+    setWorldMessage(`Jukebox: ${getCurrentJukeboxTrack().name} entrou na fila da noite.`, 2200);
+  }
+
   function renderPoolGame(game) {
     const pool = game.tableState;
+    const targetBall = getLowestPoolTarget(pool);
     return `
       <div class="pubpaid-pool-layout">
         <section class="pubpaid-pool-stage">
-          <canvas class="pubpaid-pool-canvas" data-pool-canvas width="760" height="430"></canvas>
-          <div class="pubpaid-meter">
-            <span data-pool-meter-fill></span>
+          <div class="pubpaid-minigame-head">
+            <div>
+              <strong>Sinuca 9 bolas</strong>
+              <span>Segure o clique, solte na força certa e mate a 9 para fechar o pote.</span>
+            </div>
+            <div class="pubpaid-game-chip-row">
+              <span class="pubpaid-turn-chip">entrada ${escapeHtml(formatCoins(game.stake))}</span>
+              <span class="pubpaid-turn-chip">pote ${escapeHtml(formatCoins(game.payout))}</span>
+            </div>
           </div>
-          <div class="pubpaid-meter-label">
-            <span data-pool-status>${escapeHtml(pool.message)}</span>
-            <span data-pool-turn>${escapeHtml(pool.turn === "player" ? "sua vez" : `${game.opponent.name} na tacada`)}</span>
+          <canvas class="pubpaid-pool-canvas" data-pool-canvas width="760" height="430"></canvas>
+          <div class="pubpaid-pool-bottom">
+            <div class="pubpaid-meter">
+              <span data-pool-meter-fill></span>
+            </div>
+            <div class="pubpaid-meter-label">
+              <span data-pool-status>${escapeHtml(pool.message)}</span>
+              <span data-pool-turn>${escapeHtml(pool.turn === "player" ? "sua vez" : `${game.opponent.name} na tacada`)}</span>
+            </div>
+          </div>
+          <div class="pubpaid-pool-helper">
+            <span>clique para mirar</span>
+            <span>segure para carregar</span>
+            <span>solte para bater</span>
           </div>
         </section>
 
         <section class="pubpaid-pool-side">
-          <article>
-            <span>pote</span>
-            <strong>${escapeHtml(formatCoins(game.payout))}</strong>
-            <p>Entrada ${escapeHtml(formatCoins(game.stake))} e casa ${escapeHtml(formatCoins(game.houseFee))}.</p>
+          <article class="pubpaid-pool-duel">
+            <div class="pubpaid-pool-player-card is-player">
+              <span>jogador</span>
+              <strong>${escapeHtml(state.profile.name || "Voce")}</strong>
+              <small data-pool-player-pocketed>${escapeHtml(String(pool.playerPocketed))} bolas derrubadas</small>
+            </div>
+            <div class="pubpaid-pool-player-card is-bot">
+              <span>rival</span>
+              <strong>${escapeHtml(game.opponent.name)}</strong>
+              <small data-pool-bot-pocketed>${escapeHtml(String(pool.botPocketed))} bolas derrubadas</small>
+            </div>
           </article>
           <article>
-            <span>mesa</span>
+            <span>bola alvo</span>
+            <strong data-pool-target>${escapeHtml(targetBall ? `bola ${targetBall.id}` : "bola 9")}</strong>
+            <p>A menor bola viva guia a rodada. A 9 fecha a mesa quando cai limpa.</p>
+          </article>
+          <article>
+            <span>mesa viva</span>
             <strong data-pool-remaining>${escapeHtml(String(countPoolColored(pool)))}</strong>
-            <p>Bolas coloridas restantes antes da bola 8.</p>
+            <p>Bolas numeradas ainda de pé antes da tacada final.</p>
           </article>
           <article>
-            <span>placar</span>
+            <span>força e ângulo</span>
+            <strong><span data-pool-power>${escapeHtml(String(Math.round(pool.charge * 100)))}</span>% / <span data-pool-angle>${escapeHtml(String(getPoolAimDegrees(pool)))}</span>°</strong>
+            <p>Use a carga para controlar a pancada e ajustar a leitura da mesa.</p>
+          </article>
+          <article>
+            <span>placar de bar</span>
             <strong data-pool-score>${escapeHtml(String(pool.playerPocketed))} x ${escapeHtml(String(pool.botPocketed))}</strong>
-            <p>Quem limpar mais a mesa chega vivo na preta.</p>
+            <p>Quem derruba melhor chega com moral na 9 e leva a mesa.</p>
           </article>
           <div class="pubpaid-card-actions">
             <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da mesa</button>
@@ -3984,54 +4567,51 @@
   }
 
   function createPoolState() {
-    const ballRadius = 11;
+    const ballRadius = 10;
     return {
       table: {
-        x: 48,
-        y: 34,
-        w: 664,
-        h: 352,
-        pocketRadius: 20,
+        x: 84,
+        y: 76,
+        w: 592,
+        h: 278,
+        pocketRadius: 21,
         ballRadius
       },
       turn: "player",
       phase: "aim",
-      message: "Mova o mouse pela mesa, segure o clique para carregar e solte para bater.",
+      message: "Mesa aberta. Mire com calma, carregue a tacada e procure a menor bola viva.",
       physics: {
-        cuePower: 320,
-        rollingFriction: 0.984,
-        railBounce: 0.92,
-        ballBounce: 0.985,
-        pocketPull: 56,
-        stopSpeed: 4.5,
-        substeps: 2
+        cuePower: 296,
+        rollingFriction: 0.986,
+        railBounce: 0.9,
+        ballBounce: 0.982,
+        pocketPull: 52,
+        stopSpeed: 4.2,
+        substeps: 3
       },
       charge: 0,
       charging: false,
       chargeStartedAt: 0,
-      aimX: 520,
-      aimY: 210,
+      aimX: 468,
+      aimY: 216,
       cuePocketed: false,
+      foul: false,
+      foulReason: "",
+      shotFirstHit: "",
+      targetBallId: "1",
       playerPocketed: 0,
       botPocketed: 0,
       shotPocketed: 0,
       shotOwner: "player",
       pockets: [
-        { x: 48, y: 34 },
-        { x: 380, y: 30 },
-        { x: 712, y: 34 },
-        { x: 48, y: 386 },
-        { x: 380, y: 390 },
-        { x: 712, y: 386 }
+        { x: 84, y: 76 },
+        { x: 380, y: 72 },
+        { x: 676, y: 76 },
+        { x: 84, y: 354 },
+        { x: 380, y: 358 },
+        { x: 676, y: 354 }
       ],
-      balls: [
-        createBall("cue", 176, 210, "#f5f5f5"),
-        createBall("1", 518, 210, "#ff6666"),
-        createBall("2", 540, 198, "#ffcf73"),
-        createBall("3", 540, 222, "#70ebff"),
-        createBall("4", 562, 186, "#7a7cff"),
-        createBall("8", 562, 210, "#111111")
-      ]
+      balls: createPoolRack(ballRadius)
     };
   }
 
@@ -4045,6 +4625,30 @@
       color,
       pocketed: false
     };
+  }
+
+  function createPoolRack(ballRadius) {
+    const cue = createBall("cue", 198, 216, POOL_BALL_COLORS.cue);
+    const rackOriginX = 536;
+    const rackOriginY = 216;
+    const rowSpacing = ballRadius * 1.86;
+    const columnSpacing = ballRadius * 2.12;
+    const rows = [1, 2, 3, 2, 1];
+    const rackBalls = [];
+    let index = 0;
+
+    rows.forEach((rowCount, rowIndex) => {
+      for (let slot = 0; slot < rowCount; slot += 1) {
+        const id = POOL_BALL_ORDER[index];
+        if (!id) continue;
+        const x = rackOriginX + rowIndex * rowSpacing;
+        const y = rackOriginY + (slot - (rowCount - 1) / 2) * columnSpacing;
+        rackBalls.push(createBall(id, x, y, POOL_BALL_COLORS[id]));
+        index += 1;
+      }
+    });
+
+    return [cue, ...rackBalls];
   }
 
   function syncPoolRefs() {
@@ -4146,6 +4750,10 @@
     pool.shotOwner = shooter;
     pool.shotPocketed = 0;
     pool.cuePocketed = false;
+    pool.foul = false;
+    pool.foulReason = "";
+    pool.shotFirstHit = "";
+    pool.targetBallId = getLowestPoolTarget(pool)?.id || "9";
     pool.phase = "rolling";
     pool.charge = 0;
     pool.charging = false;
@@ -4196,21 +4804,20 @@
       return;
     }
 
-    const biasX = target.x + randomBetween(-10, 10);
-    const biasY = target.y + randomBetween(-9, 9);
-    pool.aimX = biasX;
-    pool.aimY = biasY;
-    const distance = cue ? Math.hypot(biasX - cue.x, biasY - cue.y) : 120;
+    const bestPocket = getBestPoolPocket(pool, target);
+    const ghostPoint = getPoolGhostAimPoint(pool, target, bestPocket) || {
+      x: target.x + randomBetween(-10, 10),
+      y: target.y + randomBetween(-9, 9)
+    };
+    pool.aimX = ghostPoint.x;
+    pool.aimY = ghostPoint.y;
+    const distance = cue ? Math.hypot(ghostPoint.x - cue.x, ghostPoint.y - cue.y) : 120;
     pool.charge = Math.max(0.46, Math.min(0.84, 0.42 + distance / 320));
     shootPoolCue(pool, "bot");
   }
 
   function getBotPoolTarget(pool) {
-    const colored = pool.balls.filter((ball) => !ball.pocketed && ball.id !== "cue" && ball.id !== "8");
-    if (colored.length) {
-      return colored.sort((a, b) => distanceToCue(pool, a) - distanceToCue(pool, b))[0];
-    }
-    return pool.balls.find((ball) => ball.id === "8" && !ball.pocketed) || null;
+    return getLowestPoolTarget(pool);
   }
 
   function distanceToCue(pool, ball) {
@@ -4290,7 +4897,13 @@
         for (let inner = index + 1; inner < pool.balls.length; inner += 1) {
           const b = pool.balls[inner];
           if (b.pocketed) continue;
-          resolveBallCollision(a, b, ballRadius * 2, pool.physics.ballBounce);
+          const collided = resolveBallCollision(a, b, ballRadius * 2, pool.physics.ballBounce);
+          if (!collided || pool.shotFirstHit) continue;
+          if (a.id === "cue" && b.id !== "cue") {
+            pool.shotFirstHit = b.id;
+          } else if (b.id === "cue" && a.id !== "cue") {
+            pool.shotFirstHit = a.id;
+          }
         }
       }
     }
@@ -4300,7 +4913,7 @@
     const dx = b.x - a.x;
     const dy = b.y - a.y;
     const distance = Math.hypot(dx, dy);
-    if (!distance || distance >= minDistance) return;
+    if (!distance || distance >= minDistance) return false;
 
     const overlap = (minDistance - distance) / 2;
     const nx = dx / distance;
@@ -4311,14 +4924,19 @@
     b.x += nx * overlap;
     b.y += ny * overlap;
 
-    const relativeVelocity = (a.vx - b.vx) * nx + (a.vy - b.vy) * ny;
-    if (relativeVelocity > 0) return;
+    const relativeVelocityX = b.vx - a.vx;
+    const relativeVelocityY = b.vy - a.vy;
+    const velocityAlongNormal = relativeVelocityX * nx + relativeVelocityY * ny;
+    if (velocityAlongNormal > 0) return true;
 
-    const impulse = (-(1 + restitution) * relativeVelocity) / 2;
-    a.vx += impulse * nx;
-    a.vy += impulse * ny;
-    b.vx -= impulse * nx;
-    b.vy -= impulse * ny;
+    const impulse = (-(1 + restitution) * velocityAlongNormal) / 2;
+    const impulseX = impulse * nx;
+    const impulseY = impulse * ny;
+    a.vx -= impulseX;
+    a.vy -= impulseY;
+    b.vx += impulseX;
+    b.vy += impulseY;
+    return true;
   }
 
   function registerPocket(pool, ball) {
@@ -4328,22 +4946,22 @@
       return;
     }
 
-    if (ball.id === "8") {
-      const coloredRemaining = countPoolColored(pool);
+    if (ball.id === "9") {
       const shooterIsPlayer = pool.shotOwner === "player";
-      if (coloredRemaining === 0) {
+      const legalTarget = !pool.targetBallId || pool.targetBallId === "9";
+      if (legalTarget && pool.shotFirstHit === "9") {
         finalizeGame(
           shooterIsPlayer ? "win" : "loss",
           shooterIsPlayer
-            ? `${state.profile.name || "Voce"} limpou a mesa e matou a bola 8.`
-            : `${runtime.activeGame.opponent.name} limpou a mesa e matou a bola 8.`
+            ? `${state.profile.name || "Voce"} matou a 9 limpa e levou a mesa.`
+            : `${runtime.activeGame.opponent.name} acertou a 9 e fechou a mesa.`
         );
       } else {
         finalizeGame(
           shooterIsPlayer ? "loss" : "win",
           shooterIsPlayer
-            ? "A bola 8 caiu cedo demais e a mesa escapou da sua mao."
-            : `${runtime.activeGame.opponent.name} errou a bola 8 antes da hora.`
+            ? "A bola 9 caiu sem tacada legal e a mesa escapou da sua mao."
+            : `${runtime.activeGame.opponent.name} derrubou a 9 sem jogada valida.`
         );
       }
       return;
@@ -4366,7 +4984,7 @@
   }
 
   function countPoolColored(pool) {
-    return pool.balls.filter((ball) => !ball.pocketed && ball.id !== "cue" && ball.id !== "8").length;
+    return pool.balls.filter((ball) => !ball.pocketed && ball.id !== "cue" && ball.id !== "9").length;
   }
 
   function getCueBall(pool) {
@@ -4375,29 +4993,40 @@
 
   function resolvePoolStop(pool) {
     const cue = getCueBall(pool);
+    const shooterIsPlayer = pool.shotOwner === "player";
+    const targetBallId = pool.targetBallId || (getLowestPoolTarget(pool)?.id || "9");
+    const missedTarget = pool.shotFirstHit && pool.shotFirstHit !== targetBallId;
+    const noContact = !pool.shotFirstHit;
+    const foul = Boolean(pool.cuePocketed || missedTarget || noContact);
 
     if (cue && cue.pocketed) {
-      cue.pocketed = false;
-      cue.x = 176;
-      cue.y = 210;
-      cue.vx = 0;
-      cue.vy = 0;
-      pool.message = "A branca voltou para a marca e a mesa segue aberta.";
+      setCueBallPosition(pool, cue);
     }
 
-    const shooterIsPlayer = pool.shotOwner === "player";
-    const keepTurn = pool.shotPocketed > 0 && !pool.cuePocketed;
-    pool.turn = keepTurn ? pool.shotOwner : shooterIsPlayer ? "bot" : "player";
+    const keepTurn = pool.shotPocketed > 0 && !foul;
+    pool.turn = foul ? (shooterIsPlayer ? "bot" : "player") : keepTurn ? pool.shotOwner : shooterIsPlayer ? "bot" : "player";
     pool.phase = "aim";
     pool.charge = 0;
     pool.charging = false;
-    pool.message = keepTurn
+    pool.foul = foul;
+    pool.foulReason = foul
+      ? pool.cuePocketed
+        ? "A branca caiu e virou falta."
+        : noContact
+          ? "Nao houve contato valido com nenhuma bola."
+          : `A primeira bola tocada foi a ${pool.shotFirstHit}, mas a mesa pedia a ${targetBallId}.`
+      : "";
+    pool.message = foul
       ? shooterIsPlayer
-        ? "Mesa aberta. Como voce matou bola, a tacada continua sua."
-        : `${runtime.activeGame.opponent.name} matou bola e vai de novo.`
-      : shooterIsPlayer
-        ? `${runtime.activeGame.opponent.name} assumiu a tacada.`
-        : "A casa errou o ritmo. Agora a mesa volta para voce.";
+        ? `${pool.foulReason} ${runtime.activeGame.opponent.name} assume a mesa.`
+        : `${pool.foulReason} Agora a mesa volta para voce.`
+      : keepTurn
+        ? shooterIsPlayer
+          ? "Tacada limpa. Como voce matou bola, a vez continua sua."
+          : `${runtime.activeGame.opponent.name} matou bola e vai de novo.`
+        : shooterIsPlayer
+          ? `${runtime.activeGame.opponent.name} assumiu a tacada.`
+          : "A casa errou o ritmo. Agora a mesa volta para voce.";
 
     renderGameModal();
   }
@@ -4487,14 +5116,121 @@
     const turn = refs.gameHost.querySelector("[data-pool-turn]");
     const remaining = refs.gameHost.querySelector("[data-pool-remaining]");
     const score = refs.gameHost.querySelector("[data-pool-score]");
+    const target = refs.gameHost.querySelector("[data-pool-target]");
+    const power = refs.gameHost.querySelector("[data-pool-power]");
+    const angle = refs.gameHost.querySelector("[data-pool-angle]");
+    const playerPocketed = refs.gameHost.querySelector("[data-pool-player-pocketed]");
+    const botPocketed = refs.gameHost.querySelector("[data-pool-bot-pocketed]");
 
     if (status) status.textContent = pool.message;
     if (turn) turn.textContent = pool.turn === "player" ? "sua vez" : `${game.opponent.name} na tacada`;
     if (remaining) remaining.textContent = String(countPoolColored(pool));
     if (score) score.textContent = `${pool.playerPocketed} x ${pool.botPocketed}`;
+    if (target) {
+      const nextTarget = getLowestPoolTarget(pool);
+      target.textContent = nextTarget ? `bola ${nextTarget.id}` : "bola 9";
+    }
+    if (power) power.textContent = String(Math.round(pool.charge * 100));
+    if (angle) angle.textContent = String(getPoolAimDegrees(pool));
+    if (playerPocketed) playerPocketed.textContent = `${pool.playerPocketed} bolas derrubadas`;
+    if (botPocketed) botPocketed.textContent = `${pool.botPocketed} bolas derrubadas`;
     if (runtime.poolRefs.meter) {
       runtime.poolRefs.meter.style.width = `${Math.round(pool.charge * 100)}%`;
     }
+  }
+
+  function getLowestPoolTarget(pool) {
+    return pool.balls
+      .filter((ball) => !ball.pocketed && ball.id !== "cue")
+      .sort((a, b) => Number(a.id) - Number(b.id))[0] || null;
+  }
+
+  function getPoolAimDegrees(pool) {
+    const cue = getCueBall(pool);
+    if (!cue) return 0;
+    const angle = Math.atan2(pool.aimY - cue.y, pool.aimX - cue.x) * (180 / Math.PI);
+    return Math.round((angle + 360) % 360);
+  }
+
+  function getBestPoolPocket(pool, targetBall) {
+    if (!targetBall) return null;
+    const cue = getCueBall(pool);
+    if (!cue) return null;
+    const ballDiameter = pool.table.ballRadius * 2;
+    let bestPocket = null;
+    let bestScore = Infinity;
+
+    pool.pockets.forEach((pocket) => {
+      const ghostPoint = getPoolGhostAimPoint(pool, targetBall, pocket);
+      if (!ghostPoint || !isPointInsidePoolTable(pool, ghostPoint.x, ghostPoint.y, pool.table.ballRadius)) return;
+      const cueDistance = Math.hypot(cue.x - ghostPoint.x, cue.y - ghostPoint.y);
+      const pocketDistance = Math.hypot(targetBall.x - pocket.x, targetBall.y - pocket.y);
+      const linePenalty = Math.abs(
+        Math.atan2(pocket.y - targetBall.y, pocket.x - targetBall.x) -
+        Math.atan2(targetBall.y - cue.y, targetBall.x - cue.x)
+      );
+      const score = cueDistance + pocketDistance * 0.42 + linePenalty * 28 + ballDiameter;
+      if (score < bestScore) {
+        bestScore = score;
+        bestPocket = pocket;
+      }
+    });
+
+    return bestPocket;
+  }
+
+  function getPoolGhostAimPoint(pool, targetBall, pocket) {
+    if (!targetBall || !pocket) return null;
+    const dx = pocket.x - targetBall.x;
+    const dy = pocket.y - targetBall.y;
+    const distance = Math.hypot(dx, dy) || 1;
+    const contactDistance = pool.table.ballRadius * 2.02;
+    return {
+      x: targetBall.x - (dx / distance) * contactDistance,
+      y: targetBall.y - (dy / distance) * contactDistance
+    };
+  }
+
+  function isPointInsidePoolTable(pool, x, y, padding = 0) {
+    const { table } = pool;
+    return (
+      x >= table.x + padding &&
+      x <= table.x + table.w - padding &&
+      y >= table.y + padding &&
+      y <= table.y + table.h - padding
+    );
+  }
+
+  function setCueBallPosition(pool, cue) {
+    const spot = findPoolRespotPosition(pool);
+    cue.pocketed = false;
+    cue.x = spot.x;
+    cue.y = spot.y;
+    cue.vx = 0;
+    cue.vy = 0;
+  }
+
+  function findPoolRespotPosition(pool) {
+    const baseX = pool.table.x + pool.table.w * 0.19;
+    const baseY = pool.table.y + pool.table.h / 2;
+    const step = pool.table.ballRadius * 2.4;
+    const offsets = [0, -1, 1, -2, 2, -3, 3];
+
+    for (const offset of offsets) {
+      const candidate = { x: baseX, y: baseY + offset * step };
+      if (isPoolSpotClear(pool, candidate.x, candidate.y, "cue")) return candidate;
+    }
+
+    return { x: baseX, y: baseY };
+  }
+
+  function isPoolSpotClear(pool, x, y, ignoreId = "") {
+    const minimumDistance = pool.table.ballRadius * 2.25;
+    if (!isPointInsidePoolTable(pool, x, y, pool.table.ballRadius)) return false;
+    return pool.balls.every((ball) => {
+      if (ball.pocketed || ball.id === ignoreId) return true;
+      return Math.hypot(ball.x - x, ball.y - y) >= minimumDistance;
+    });
   }
 
   function createCheckersState() {
@@ -5212,12 +5948,19 @@
       botGuess: 0,
       dice: [0, 0],
       total: 0,
+      rollSeed: 0,
       message: "Escolha a soma escondida sob os copos."
     };
   }
 
   function renderDiceGame(game) {
     const dice = game.tableState;
+    const cupMarkup = [0, 1].map((index) => renderDiceCup(dice, index)).join("");
+    const sumMarkup = renderDiceSumCup(dice);
+    const rollingHint =
+      dice.phase === "rolling"
+        ? `<p class="pubpaid-dice-stage-note is-live">Os copos batem na mesa, os dados estao rolando e a casa ainda nao abriu o total.</p>`
+        : `<p class="pubpaid-dice-stage-note">Escolha uma soma, espere os copos sacudirem e veja quem leu melhor a mesa.</p>`;
     return `
       <div class="pubpaid-dice-layout">
         <section class="pubpaid-dice-stage pubpaid-minigame-frame">
@@ -5226,22 +5969,21 @@
             <span>Escolha a soma e veja quem ficou mais perto do total escondido.</span>
           </div>
           <div class="pubpaid-dice-cups">
-            <article class="pubpaid-dice-cup"><span>copo 1</span></article>
-            <article class="pubpaid-dice-cup"><span>copo 2</span></article>
-            <article class="pubpaid-dice-cup"><span>soma</span></article>
+            ${cupMarkup}
+            ${sumMarkup}
           </div>
+          ${rollingHint}
 
-          ${
-            dice.phase === "reveal"
-              ? `
-                <div class="pubpaid-dice-reveal">
-                  ${renderDieFace(dice.dice[0], "dado 1")}
-                  ${renderDieFace(dice.dice[1], "dado 2")}
-                  ${renderDieFace(dice.total > 6 ? 6 : dice.total, `soma ${dice.total}`)}
-                </div>
-              `
-              : ""
-          }
+          ${dice.phase === "reveal" ? `
+            <div class="pubpaid-dice-reveal">
+              ${renderDieFace(dice.dice[0] || 1, "dado 1")}
+              ${renderDieFace(dice.dice[1] || 1, "dado 2")}
+              <span class="pubpaid-dice-sum-card" aria-label="soma final ${escapeHtml(String(dice.total))}">
+                <small>soma real</small>
+                <strong>${escapeHtml(String(dice.total))}</strong>
+              </span>
+            </div>
+          ` : ""}
         </section>
 
         <section class="pubpaid-dice-scoreboard">
@@ -5269,6 +6011,13 @@
                     .join("")}
                 </div>
               `
+              : dice.phase === "rolling"
+                ? `
+                  <div class="pubpaid-card-actions">
+                    <button class="pubpaid-card-button" type="button" disabled>Copos batendo na mesa...</button>
+                    <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da mesa</button>
+                  </div>
+                `
               : `
                 <div class="pubpaid-card-actions">
                   ${
@@ -5285,6 +6034,60 @@
     `;
   }
 
+  function renderDiceCup(dice, index) {
+    const value = dice.dice[index] || 1;
+    const isRolling = dice.phase === "rolling";
+    const isReveal = dice.phase === "reveal";
+    const hasDie = isRolling || isReveal;
+    const label = `copo ${index + 1}`;
+
+    return `
+      <article class="pubpaid-dice-cup${isRolling ? " is-rolling" : ""}${isReveal ? " is-open" : ""}">
+        <div class="pubpaid-dice-cup-shadow"></div>
+        <div class="pubpaid-dice-cup-glass">
+          <div class="pubpaid-dice-cup-rim"></div>
+          <div class="pubpaid-dice-cup-body"></div>
+        </div>
+        <div class="pubpaid-dice-felt">
+          ${hasDie ? `
+            <div class="pubpaid-dice-drop${isRolling ? " is-rolling" : ""}" style="--drop-delay:${index * 0.14}s; --drop-rotate:${index === 0 ? "-16deg" : "14deg"};">
+              ${renderMiniDie(value)}
+            </div>
+          ` : '<div class="pubpaid-dice-hidden-note">?</div>'}
+        </div>
+        <span>${escapeHtml(label)}</span>
+      </article>
+    `;
+  }
+
+  function renderDiceSumCup(dice) {
+    const isRolling = dice.phase === "rolling";
+    const isReveal = dice.phase === "reveal";
+    return `
+      <article class="pubpaid-dice-cup pubpaid-dice-total${isRolling ? " is-rolling" : ""}${isReveal ? " is-open" : ""}">
+        <div class="pubpaid-dice-cup-shadow"></div>
+        <div class="pubpaid-dice-cup-glass">
+          <div class="pubpaid-dice-cup-rim"></div>
+          <div class="pubpaid-dice-cup-body"></div>
+        </div>
+        <div class="pubpaid-dice-total-readout">
+          <small>soma</small>
+          <strong>${isReveal ? escapeHtml(String(dice.total)) : "?"}</strong>
+        </div>
+        <span>soma</span>
+      </article>
+    `;
+  }
+
+  function renderMiniDie(value) {
+    const active = getDiePipMap(Math.max(1, Math.min(6, clampInteger(value))));
+    return `
+      <span class="pubpaid-mini-die">
+        ${Array.from({ length: 9 }, (_, index) => `<i class="${active.includes(index) ? "is-on" : ""}"></i>`).join("")}
+      </span>
+    `;
+  }
+
   function handleDiceGuess(guess) {
     const game = runtime.activeGame;
     if (!game || game.id !== "dicecups" || game.screen !== "playing") return;
@@ -5295,35 +6098,45 @@
     dice.botGuess = pickBotDiceGuess(guess);
     dice.dice = [randomDie(), randomDie()];
     dice.total = dice.dice[0] + dice.dice[1];
+    dice.rollSeed = Math.round(Math.random() * 9999);
+    dice.phase = "rolling";
+    dice.message = "Os copos chacoalharam, os dados cairam e a mesa ainda nao abriu o total.";
+    renderGameModal();
+    playDiceTableSound();
 
     const playerDiff = Math.abs(dice.playerGuess - dice.total);
     const botDiff = Math.abs(dice.botGuess - dice.total);
+    runtime.gameTimer = window.setTimeout(() => {
+      const activeGame = runtime.activeGame;
+      if (!activeGame || activeGame.id !== "dicecups" || activeGame.screen !== "playing") return;
 
-    if (playerDiff < botDiff) {
-      dice.playerScore += 1;
-      dice.message = `${state.profile.name || "Voce"} ficou mais perto da soma ${dice.total}.`;
-    } else if (botDiff < playerDiff) {
-      dice.botScore += 1;
-      dice.message = `${game.opponent.name} leu melhor os copos e pegou a rodada.`;
-    } else {
-      dice.message = `Os dois ficaram na mesma distancia da soma ${dice.total}.`;
-    }
+      if (playerDiff < botDiff) {
+        dice.playerScore += 1;
+        dice.message = `${state.profile.name || "Voce"} ficou mais perto da soma ${dice.total}.`;
+      } else if (botDiff < playerDiff) {
+        dice.botScore += 1;
+        dice.message = `${game.opponent.name} leu melhor os copos e pegou a rodada.`;
+      } else {
+        dice.message = `Os dois ficaram na mesma distancia da soma ${dice.total}.`;
+      }
 
-    dice.phase = "reveal";
-    renderGameModal();
+      dice.phase = "reveal";
+      renderGameModal();
+      playDiceTableSound(true);
 
-    if (dice.round === 3) {
-      runtime.gameTimer = window.setTimeout(() => {
-        if (!runtime.activeGame || runtime.activeGame.id !== "dicecups") return;
-        if (dice.playerScore > dice.botScore) {
-          finalizeGame("win", `${state.profile.name || "Voce"} leu melhor os copos e venceu a serie.`);
-        } else if (dice.botScore > dice.playerScore) {
-          finalizeGame("loss", `${game.opponent.name} ganhou mais leituras e fechou os copos.`);
-        } else {
-          finalizeGame("tie", "Os copos fecharam em igualdade e a entrada voltou.");
-        }
-      }, 1000);
-    }
+      if (dice.round === 3) {
+        runtime.gameTimer = window.setTimeout(() => {
+          if (!runtime.activeGame || runtime.activeGame.id !== "dicecups") return;
+          if (dice.playerScore > dice.botScore) {
+            finalizeGame("win", `${state.profile.name || "Voce"} leu melhor os copos e venceu a serie.`);
+          } else if (dice.botScore > dice.playerScore) {
+            finalizeGame("loss", `${game.opponent.name} ganhou mais leituras e fechou os copos.`);
+          } else {
+            finalizeGame("tie", "Os copos fecharam em igualdade e a entrada voltou.");
+          }
+        }, 1400);
+      }
+    }, 2300);
   }
 
   function advanceDiceRound() {
@@ -5338,8 +6151,20 @@
     dice.botGuess = 0;
     dice.dice = [0, 0];
     dice.total = 0;
+    dice.rollSeed = 0;
     dice.message = "Nova rodada. Escolha outra soma escondida.";
     renderGameModal();
+  }
+
+  function playDiceTableSound(isReveal = false) {
+    ensureAudioContext();
+    const ctx = runtime.audio.ctx;
+    if (!ctx) return;
+    const now = ctx.currentTime + 0.01;
+
+    playNote(isReveal ? 180 : 120, 0.08, "triangle", 0.03, now);
+    playNote(isReveal ? 140 : 92, 0.11, "square", 0.02, now + 0.05);
+    playNote(isReveal ? 220 : 150, 0.06, "triangle", 0.018, now + 0.1);
   }
 
   function pickBotDiceGuess(playerGuess) {
@@ -5594,66 +6419,159 @@
     return specs[symbol] || specs.cherry;
   }
 
-  function createRouletteState() {
+  function createRouletteState(stake = 10) {
+    const bank = Math.max(12, Math.min(80, stake * 4));
+    const chipOptions = [1, 2, 5, 10].filter((value) => value <= Math.max(10, bank));
     return {
-      phase: "ready",
+      phase: "betting",
       round: 1,
       maxRounds: 3,
       playerRounds: 0,
       botRounds: 0,
-      playerNumber: null,
-      botNumber: null,
-      pointerRotation: -28,
-      message: "Gire a roleta. Agora a mesa fecha em melhor de 3.",
-      resultLine: "Quem vencer mais giros leva a mesa."
+      chipOptions: chipOptions.length ? chipOptions : [1],
+      chipValue: chipOptions[1] || chipOptions[0] || 1,
+      bank,
+      playerChipsLeft: bank,
+      playerBets: [],
+      botBets: [],
+      resultNumber: null,
+      pendingResultNumber: null,
+      message: "Duelo indireto: monte suas fichas. O rival monta as dele em segredo e o maior retorno no mesmo giro leva o round.",
+      resultLine: "Melhor de 3 rodadas. Cada lado monta apostas separadas, mas o numero sorteado e o mesmo para os dois.",
+      playerReturn: 0,
+      botReturn: 0,
+      wheelRotation: 0,
+      ballRotation: 0,
+      spinStartWheelRotation: 0,
+      spinStartBallRotation: 0,
+      history: []
     };
   }
 
   function renderRouletteGame(game) {
     const roulette = game.tableState;
-    const canSpin = roulette.phase !== "spinning";
-    const rotation = Number.isFinite(roulette.pointerRotation) ? roulette.pointerRotation : -28;
+    const playerName = state.profile.name || "Voce";
+    const rivalHiddenLabel = roulette.phase === "betting" ? "apostas ocultas do rival" : game.opponent.name;
+    const roundSummary =
+      roulette.resultNumber === null
+        ? "maior retorno no mesmo giro vence"
+        : `${playerName}: ${roulette.playerReturn} | ${game.opponent.name}: ${roulette.botReturn}`;
+    const instructionsMarkup = `
+      <ol class="pubpaid-roulette-instructions">
+        <li>Escolha o valor da ficha nos botoes 1, 2, 5 ou 10.</li>
+        <li>Clique nas casas da mesa para montar sua aposta.</li>
+        <li>Aperte Fechar apostas e girar para rodar a mesma bola para voce e o rival.</li>
+        <li>Leva o round quem tiver maior retorno naquele numero sorteado.</li>
+      </ol>
+    `;
+    const chipOptions = roulette.chipOptions
+      .map((value) => {
+        const active = value === roulette.chipValue ? " is-active" : "";
+        return `<button class="pubpaid-stake-button${active}" type="button" data-roulette-chip="${value}">${escapeHtml(String(value))}</button>`;
+      })
+      .join("");
+
+    const playerBetsMarkup = renderRouletteBetList(roulette.playerBets, "Suas fichas ainda nao entraram na mesa.");
+    const rivalBetsMarkup = renderRouletteBetList(roulette.botBets, "O rival ainda nao abriu a propria cobertura.");
+    const historyMarkup = roulette.history.length
+      ? roulette.history
+          .map((number) => `<span class="pubpaid-roulette-history-ball is-${escapeHtml(getRouletteColor(number))}">${escapeHtml(String(number))}</span>`)
+          .join("")
+      : '<span class="pubpaid-roulette-history-empty">sem giros ainda</span>';
 
     return `
       <div class="pubpaid-roulette-layout">
         <section class="pubpaid-roulette-stage pubpaid-minigame-frame">
           <div class="pubpaid-minigame-head">
-            <strong>Roleta Alta</strong>
-            <span>Cada lado tira um numero de 0 a 36. O maior vence.</span>
+            <div>
+              <strong>Spin of Wonder</strong>
+              <span>Duelo indireto: cada lado monta sua mesa em segredo, a roleta gira uma vez e o maior retorno leva a rodada.</span>
+            </div>
+            <div class="pubpaid-game-chip-row">
+              <span class="pubpaid-turn-chip">entrada ${escapeHtml(formatCoins(game.stake))}</span>
+              <span class="pubpaid-turn-chip">rodada ${escapeHtml(`${roulette.round}/${roulette.maxRounds}`)}</span>
+            </div>
           </div>
-          <div class="pubpaid-roulette-table">
-            <div class="pubpaid-roulette-wheel${roulette.phase === "spinning" ? " is-spinning" : ""}">
-              <div class="pubpaid-roulette-ring"></div>
-              <div class="pubpaid-roulette-pointer" style="transform: rotate(${rotation}deg)"></div>
-              <div class="pubpaid-roulette-center">${escapeHtml(String(roulette.playerNumber ?? "?"))}</div>
+
+          <div class="pubpaid-roulette-rules" aria-label="Como essa roleta funciona">
+            <span class="pubpaid-roulette-rule">1. monte suas fichas</span>
+            <span class="pubpaid-roulette-rule">2. o rival cobre em segredo</span>
+            <span class="pubpaid-roulette-rule">3. o mesmo numero decide os dois lados</span>
+          </div>
+
+          <div class="pubpaid-roulette-scene">
+            <img class="pubpaid-roulette-backdrop" src="./assets/pubpaid-roulette-bar-backdrop-v3.png" alt="" loading="eager" decoding="async" />
+            <div class="pubpaid-roulette-dealer-wrap${roulette.phase === "spinning" ? " is-spinning" : ""}">
+              <span class="pubpaid-roulette-dealer-arm" aria-hidden="true"></span>
+              <img class="pubpaid-roulette-dealer" src="./assets/pubpaid-roulette-dealer-v4.png" alt="" loading="eager" decoding="async" />
             </div>
-            <div class="pubpaid-roulette-track">
-              ${Array.from({ length: 12 }, (_, index) => `<span>${escapeHtml(String(index * 3))}</span>`).join("")}
+            <div class="pubpaid-roulette-scene-center">
+              <div class="pubpaid-roulette-wheel-shell">
+                ${renderRouletteWheelMarkup(roulette)}
+              </div>
             </div>
+          </div>
+
+          <div class="pubpaid-roulette-betting-head">
+            <div class="pubpaid-stake-row">${chipOptions}</div>
+            <div class="pubpaid-roulette-bank">
+              <span class="pubpaid-game-chip">saldo da rodada ${escapeHtml(String(roulette.playerChipsLeft))}</span>
+              <span class="pubpaid-game-chip">limite da rodada ${escapeHtml(String(roulette.bank))}</span>
+            </div>
+          </div>
+
+          <div class="pubpaid-roulette-board">
+            ${renderRouletteBettingTable(roulette)}
           </div>
         </section>
 
         <section class="pubpaid-roulette-side">
           <article>
-            <span>seu giro</span>
-            <strong>${escapeHtml(roulette.playerNumber === null ? "?" : String(roulette.playerNumber))}</strong>
+            <span>como jogar</span>
+            <strong>aposte, gire e compare o retorno</strong>
+            ${instructionsMarkup}
+          </article>
+          <article>
+            <span>mesa da rodada</span>
+            <strong>${escapeHtml(roulette.resultNumber === null ? "apostas abertas" : `numero ${roulette.resultNumber}`)}</strong>
             <p>${escapeHtml(roulette.message)}</p>
           </article>
           <article>
-            <span>giro da casa</span>
-            <strong>${escapeHtml(roulette.botNumber === null ? "?" : String(roulette.botNumber))}</strong>
+            <span>placar PvP</span>
+            <strong>${escapeHtml(`${roulette.playerRounds} x ${roulette.botRounds}`)}</strong>
             <p>${escapeHtml(roulette.resultLine)}</p>
           </article>
           <article>
-            <span>série</span>
-            <strong>${escapeHtml(`${roulette.playerRounds} x ${roulette.botRounds}`)}</strong>
-            <p>Giro ${escapeHtml(`${roulette.round}/${roulette.maxRounds}`)}. Quem fechar mais alto mais vezes leva a mesa.</p>
+            <span>resumo do giro</span>
+            <strong>${escapeHtml(roundSummary)}</strong>
+            <p>O ponto vai para quem fechar acima do rival no mesmo numero sorteado.</p>
+          </article>
+          <article>
+            <span>${escapeHtml(rivalHiddenLabel)}</span>
+            <strong>${escapeHtml(String(roulette.botReturn))}</strong>
+            <p>Antes do giro, o rival so prepara a propria cobertura. Depois do giro, o retorno dele aparece aqui.</p>
+          </article>
+          <article>
+            <span>suas fichas</span>
+            <div class="pubpaid-roulette-bets-list">${playerBetsMarkup}</div>
+          </article>
+          <article>
+            <span>rival na mesa</span>
+            <div class="pubpaid-roulette-bets-list">${rivalBetsMarkup}</div>
+          </article>
+          <article>
+            <span>ultimos giros</span>
+            <div class="pubpaid-roulette-history">${historyMarkup}</div>
           </article>
           <div class="pubpaid-card-actions">
             ${
-              roulette.phase === "settled" && roulette.round < roulette.maxRounds
-                ? '<button class="pubpaid-card-button" type="button" data-roulette-next>Próximo giro</button>'
-                : `<button class="pubpaid-card-button" type="button" data-roulette-spin ${canSpin ? "" : "disabled"}>Girar roleta</button>`
+              roulette.phase === "betting"
+                ? '<button class="pubpaid-card-button" type="button" data-roulette-spin>Fechar apostas e girar</button><button class="pubpaid-card-button" type="button" data-roulette-clear>Limpar mesa</button>'
+                : roulette.phase === "spinning"
+                  ? '<button class="pubpaid-card-button" type="button" data-roulette-spin disabled>Girando a roleta...</button>'
+                  : roulette.round < roulette.maxRounds
+                    ? '<button class="pubpaid-card-button" type="button" data-roulette-next>Nova rodada</button>'
+                    : '<button class="pubpaid-card-button" type="button" data-rematch-game>Outra série</button>'
             }
             <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da mesa</button>
           </div>
@@ -5662,77 +6580,248 @@
     `;
   }
 
+  function renderRouletteWheelMarkup(roulette) {
+    const slotDeg = 360 / ROULETTE_WHEEL_ORDER.length;
+    const wheelAngle = roulette.phase === "spinning" ? roulette.spinStartWheelRotation : roulette.wheelRotation;
+    const ballAngle = roulette.phase === "spinning" ? roulette.spinStartBallRotation : roulette.ballRotation;
+    const scoreNumber = roulette.resultNumber === null ? "?" : String(roulette.resultNumber);
+    const scoreTone = roulette.resultNumber === null ? "unknown" : getRouletteColor(roulette.resultNumber);
+    const slots = ROULETTE_WHEEL_ORDER.map((number, index) => {
+      const angle = index * slotDeg;
+      return `
+        <div class="pubpaid-roulette-slot is-${escapeHtml(getRouletteColor(number))}" style="transform: rotate(${angle}deg)">
+          <span>${escapeHtml(String(number))}</span>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="pubpaid-roulette-wheel">
+        <div class="pubpaid-roulette-score is-${escapeHtml(scoreTone)}">
+          <span>resultado</span>
+          <strong>${escapeHtml(scoreNumber)}</strong>
+        </div>
+        <div class="pubpaid-roulette-top-pointer"></div>
+        <div class="pubpaid-roulette-ball-track" data-roulette-ball-track style="transform: rotate(${escapeHtml(String(ballAngle))}deg)">
+          <div class="pubpaid-roulette-ball"></div>
+        </div>
+        <div class="pubpaid-roulette-ring${roulette.phase === "spinning" ? " is-spinning" : ""}" data-roulette-ring style="transform: rotate(${escapeHtml(String(wheelAngle))}deg)">
+          ${slots}
+          <div class="pubpaid-roulette-hub">
+            <span>${escapeHtml(roulette.phase === "spinning" ? "girando" : "mesa viva")}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRouletteBettingTable(roulette) {
+    const zeroAmount = getRouletteBetAmount(roulette.playerBets, { kind: "number", value: 0 });
+    const rows = ROULETTE_NUMBERS_GRID
+      .map((row, rowIndex) => {
+        const columnValue = 3 - rowIndex;
+        const cells = row.map((number) => renderRouletteBetCell({ kind: "number", value: number }, String(number), getRouletteColor(number)));
+        cells.push(renderRouletteBetCell({ kind: "column", value: columnValue }, "2:1"));
+        return cells.join("");
+      })
+      .join("");
+
+    return `
+      <div class="pubpaid-roulette-grid">
+        <button class="pubpaid-roulette-bet pubpaid-roulette-bet-zero" type="button" data-roulette-bet="number-0">
+          <span>0</span>
+          ${zeroAmount ? `<small>${escapeHtml(String(zeroAmount))}</small>` : ""}
+        </button>
+        ${rows}
+        <div class="pubpaid-roulette-bet-spacer"></div>
+        ${renderRouletteBetWideCell({ kind: "dozen", value: 1 }, "1st 12")}
+        ${renderRouletteBetWideCell({ kind: "dozen", value: 2 }, "2nd 12")}
+        ${renderRouletteBetWideCell({ kind: "dozen", value: 3 }, "3rd 12")}
+        <div class="pubpaid-roulette-bet-spacer"></div>
+        <div class="pubpaid-roulette-bet-spacer"></div>
+        ${renderRouletteBetWideCell({ kind: "range", value: "low" }, "1-18")}
+        ${renderRouletteBetWideCell({ kind: "parity", value: "even" }, "Even")}
+        ${renderRouletteBetWideCell({ kind: "color", value: "red" }, "Red", "red")}
+        ${renderRouletteBetWideCell({ kind: "color", value: "black" }, "Black", "black")}
+        ${renderRouletteBetWideCell({ kind: "parity", value: "odd" }, "Odd")}
+        ${renderRouletteBetWideCell({ kind: "range", value: "high" }, "19-36")}
+        <div class="pubpaid-roulette-bet-spacer"></div>
+      </div>
+    `;
+  }
+
+  function renderRouletteBetCell(type, label, tone = "") {
+    const amount = getRouletteBetAmount(runtime.activeGame?.tableState?.playerBets || [], type);
+    const encoded = encodeRouletteBet(type);
+    const toneClass = tone ? ` is-${tone}` : "";
+    return `
+      <button class="pubpaid-roulette-bet${toneClass}" type="button" data-roulette-bet="${escapeHtml(encoded)}">
+        <span>${escapeHtml(label)}</span>
+        ${amount ? `<small>${escapeHtml(String(amount))}</small>` : ""}
+      </button>
+    `;
+  }
+
+  function renderRouletteBetWideCell(type, label, tone = "") {
+    const amount = getRouletteBetAmount(runtime.activeGame?.tableState?.playerBets || [], type);
+    const encoded = encodeRouletteBet(type);
+    const toneClass = tone ? ` is-${tone}` : "";
+    return `
+      <button class="pubpaid-roulette-bet pubpaid-roulette-bet-wide${toneClass}" type="button" data-roulette-bet="${escapeHtml(encoded)}">
+        <span>${escapeHtml(label)}</span>
+        ${amount ? `<small>${escapeHtml(String(amount))}</small>` : ""}
+      </button>
+    `;
+  }
+
+  function renderRouletteBetList(bets, emptyText) {
+    if (!bets.length) {
+      return `<p class="pubpaid-roulette-empty">${escapeHtml(emptyText)}</p>`;
+    }
+
+    return bets
+      .map((bet) => `<span class="pubpaid-game-chip">${escapeHtml(getRouletteBetLabel(bet.type))} ${escapeHtml(String(bet.amount))}</span>`)
+      .join("");
+  }
+
+  function handleRouletteChipSelect(value) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "roulette" || game.screen !== "playing") return;
+    const roulette = game.tableState;
+    if (roulette.phase !== "betting") return;
+    if (!roulette.chipOptions.includes(value)) return;
+    roulette.chipValue = value;
+    renderGameModal();
+  }
+
+  function handleRouletteBetPlace(encodedBet) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "roulette" || game.screen !== "playing") return;
+    const roulette = game.tableState;
+    if (roulette.phase !== "betting") return;
+    const type = decodeRouletteBet(encodedBet);
+    if (!type) return;
+    if (roulette.playerChipsLeft < roulette.chipValue) {
+      roulette.message = "Suas fichas dessa rodada acabaram. Gire ou limpe a mesa.";
+      renderGameModal();
+      return;
+    }
+
+    addRouletteBet(roulette.playerBets, type, roulette.chipValue);
+    roulette.playerChipsLeft -= roulette.chipValue;
+    roulette.message = `${state.profile.name || "Voce"} cobriu ${getRouletteBetLabel(type)} com ${roulette.chipValue} fichas.`;
+    renderGameModal();
+  }
+
+  function clearRouletteBets() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "roulette" || game.screen !== "playing") return;
+    const roulette = game.tableState;
+    if (roulette.phase !== "betting") return;
+    roulette.playerBets = [];
+    roulette.playerChipsLeft = roulette.bank;
+    roulette.message = "Mesa limpa. Suas fichas da rodada voltaram para o saldo da mesa.";
+    renderGameModal();
+  }
+
   function handleRouletteSpin() {
     const game = runtime.activeGame;
     if (!game || game.id !== "roulette" || game.screen !== "playing") return;
     const roulette = game.tableState;
-    if (roulette.phase === "spinning") return;
+    if (roulette.phase !== "betting") return;
+    if (!roulette.playerBets.length) {
+      roulette.message = "Coloque pelo menos uma ficha na mesa antes de girar.";
+      renderGameModal();
+      return;
+    }
 
+    roulette.botBets = buildRouletteBotBets(roulette.bank);
     roulette.phase = "spinning";
-    roulette.message = "A bola correu na borda e esta procurando o seu numero.";
-    roulette.resultLine = `${game.opponent.name} tambem entrou no giro.`;
-    roulette.playerNumber = null;
-    roulette.botNumber = null;
-    roulette.pointerRotation = 240 + Math.random() * 520;
+    roulette.playerReturn = 0;
+    roulette.botReturn = 0;
+    roulette.message = "A operadora soltou a bola. Agora o mesmo giro vai decidir voce e o rival.";
+    roulette.resultLine = `${game.opponent.name} ja cobriu a propria mesa em segredo e aguarda o numero final.`;
+
+    const winningNumber = rollRouletteResultNumber(game.fortune);
+    roulette.pendingResultNumber = winningNumber;
+    roulette.resultNumber = null;
+    const targetIndex = ROULETTE_WHEEL_ORDER.indexOf(winningNumber);
+    const slotDeg = 360 / ROULETTE_WHEEL_ORDER.length;
+    const targetWheelDeg = -(targetIndex * slotDeg);
+    roulette.spinStartWheelRotation = roulette.wheelRotation;
+    roulette.spinStartBallRotation = roulette.ballRotation;
+    const wheelBase = roulette.wheelRotation + 10 * 360;
+    const currentMod = ((wheelBase % 360) + 360) % 360;
+    const targetMod = ((targetWheelDeg % 360) + 360) % 360;
+    let delta = targetMod - currentMod;
+    if (delta < 0) delta += 360;
+    roulette.wheelRotation = wheelBase + delta;
+    roulette.ballRotation -= 15 * 360 + Math.round(Math.random() * 60);
+
     renderGameModal();
+    kickoffRouletteSpinAnimation(roulette);
 
     runtime.gameTimer = window.setTimeout(() => {
       const activeGame = runtime.activeGame;
       if (!activeGame || activeGame.id !== "roulette" || activeGame.screen !== "playing") return;
       resolveRouletteRound();
-    }, 1150);
+    }, 7600);
   }
 
   function resolveRouletteRound() {
     const game = runtime.activeGame;
     if (!game || game.id !== "roulette" || game.screen !== "playing") return;
     const roulette = game.tableState;
-    const playerNumber = rollRouletteNumber(game.fortune, true);
-    const botNumber = rollRouletteNumber(game.fortune, false);
-    roulette.playerNumber = playerNumber;
-    roulette.botNumber = botNumber;
+    const winningNumber = roulette.pendingResultNumber;
+    if (!Number.isInteger(winningNumber)) return;
+
+    const winningColor = getRouletteColor(winningNumber);
     roulette.phase = "settled";
-    roulette.pointerRotation = (playerNumber / 36) * 360 - 90;
+    roulette.resultNumber = winningNumber;
+    roulette.pendingResultNumber = null;
+    roulette.playerReturn = calculateRouletteReturn(roulette.playerBets, winningNumber);
+    roulette.botReturn = calculateRouletteReturn(roulette.botBets, winningNumber);
+    roulette.history = [winningNumber, ...roulette.history].slice(0, 8);
 
-    if (playerNumber > botNumber) {
+    if (roulette.playerReturn > roulette.botReturn) {
       roulette.playerRounds += 1;
-      roulette.message = `${state.profile.name || "Voce"} fechou ${playerNumber} e passou a casa.`;
-      roulette.resultLine = `${game.opponent.name} ficou em ${botNumber}.`;
-      renderGameModal();
-      if (roulette.round >= roulette.maxRounds) {
-        game.payout = Math.max(game.stake * 2.7 - Math.round(game.stake * 0.06), game.stake * 2);
-        finalizeGame("win", `${state.profile.name || "Voce"} venceu a série da roleta por ${roulette.playerRounds} a ${roulette.botRounds}.`);
-      }
-      return;
-    }
-
-    if (botNumber > playerNumber) {
+      roulette.message = `${state.profile.name || "Voce"} fechou retorno maior no ${winningNumber} ${winningColor} e levou o round.`;
+      roulette.resultLine = `${state.profile.name || "Voce"}: ${roulette.playerReturn} | ${game.opponent.name}: ${roulette.botReturn}.`;
+    } else if (roulette.botReturn > roulette.playerReturn) {
       roulette.botRounds += 1;
-      roulette.message = `${game.opponent.name} tirou ${botNumber} e ficou acima do seu giro.`;
-      roulette.resultLine = `${state.profile.name || "Voce"} parou em ${playerNumber}.`;
-      renderGameModal();
-      if (roulette.round >= roulette.maxRounds) {
-        game.payout = 0;
-        finalizeGame("loss", `${game.opponent.name} venceu a série da roleta por ${roulette.botRounds} a ${roulette.playerRounds}.`);
-      }
+      roulette.message = `${game.opponent.name} fechou retorno maior no ${winningNumber} ${winningColor} e levou o round.`;
+      roulette.resultLine = `${state.profile.name || "Voce"}: ${roulette.playerReturn} | ${game.opponent.name}: ${roulette.botReturn}.`;
+    } else {
+      roulette.message = `O numero ${winningNumber} ${winningColor} empatou a mesa em ${roulette.playerReturn}.`;
+      roulette.resultLine = `${state.profile.name || "Voce"} e ${game.opponent.name} fecharam o mesmo retorno.`;
+    }
+
+    renderGameModal();
+
+    if (roulette.round >= roulette.maxRounds) {
+      finalizeRouletteSeries();
+    }
+  }
+
+  function finalizeRouletteSeries() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "roulette" || game.screen !== "playing") return;
+    const roulette = game.tableState;
+
+    if (roulette.playerRounds > roulette.botRounds) {
+      game.payout = Math.max(game.stake * 2.8 - Math.round(game.stake * 0.08), game.stake * 2);
+      finalizeGame("win", `${state.profile.name || "Voce"} venceu a série da roleta PvP por ${roulette.playerRounds} a ${roulette.botRounds}.`);
       return;
     }
 
-    roulette.message = `Os dois bateram ${playerNumber}.`;
-    roulette.resultLine = "Empate seco neste giro. A série continua.";
-    renderGameModal();
-    if (roulette.round >= roulette.maxRounds) {
-      if (roulette.playerRounds > roulette.botRounds) {
-        game.payout = Math.max(game.stake * 2.7 - Math.round(game.stake * 0.06), game.stake * 2);
-        finalizeGame("win", `${state.profile.name || "Voce"} venceu a série da roleta por ${roulette.playerRounds} a ${roulette.botRounds}.`);
-      } else if (roulette.botRounds > roulette.playerRounds) {
-        game.payout = 0;
-        finalizeGame("loss", `${game.opponent.name} venceu a série da roleta por ${roulette.botRounds} a ${roulette.playerRounds}.`);
-      } else {
-        game.payout = 0;
-        finalizeGame("tie", `A série da roleta empatou em ${roulette.playerRounds} a ${roulette.botRounds}.`);
-      }
+    if (roulette.botRounds > roulette.playerRounds) {
+      game.payout = 0;
+      finalizeGame("loss", `${game.opponent.name} venceu a série da roleta PvP por ${roulette.botRounds} a ${roulette.playerRounds}.`);
+      return;
     }
+
+    game.payout = 0;
+    finalizeGame("tie", `A série da roleta PvP empatou em ${roulette.playerRounds} a ${roulette.botRounds}.`);
   }
 
   function advanceRouletteRound() {
@@ -5742,29 +6831,149 @@
     if (roulette.phase !== "settled" || roulette.round >= roulette.maxRounds) return;
 
     roulette.round += 1;
-    roulette.phase = "ready";
-    roulette.playerNumber = null;
-    roulette.botNumber = null;
-    roulette.pointerRotation = -28;
-    roulette.message = `Novo giro aberto. Série em ${roulette.playerRounds} a ${roulette.botRounds}.`;
-    roulette.resultLine = `${roulette.maxRounds - roulette.round + 1} giro(s) restante(s) para fechar a mesa.`;
+    roulette.phase = "betting";
+    roulette.playerBets = [];
+    roulette.botBets = [];
+    roulette.playerChipsLeft = roulette.bank;
+    roulette.resultNumber = null;
+    roulette.pendingResultNumber = null;
+    roulette.playerReturn = 0;
+    roulette.botReturn = 0;
+    roulette.message = `Nova rodada aberta. Redistribua seu saldo para tentar fechar a serie em ${roulette.playerRounds} x ${roulette.botRounds}.`;
+    roulette.resultLine = `${roulette.maxRounds - roulette.round + 1} rodada(s) restante(s) para decidir a mesa.`;
     renderGameModal();
   }
 
-  function rollRouletteNumber(fortune, isPlayer) {
+  function kickoffRouletteSpinAnimation(roulette) {
+    if (!refs.gameHost) return;
+    const ring = refs.gameHost.querySelector("[data-roulette-ring]");
+    const ballTrack = refs.gameHost.querySelector("[data-roulette-ball-track]");
+    if (!ring || !ballTrack) return;
+
+    window.requestAnimationFrame(() => {
+      ring.style.transform = `rotate(${roulette.wheelRotation}deg)`;
+      ballTrack.style.transform = `rotate(${roulette.ballRotation}deg)`;
+    });
+  }
+
+  function addRouletteBet(bets, type, amount) {
+    const key = getRouletteBetKey(type);
+    const existing = bets.find((entry) => getRouletteBetKey(entry.type) === key);
+    if (existing) {
+      existing.amount += amount;
+      return;
+    }
+    bets.push({ type, amount });
+  }
+
+  function getRouletteBetAmount(bets, type) {
+    const key = getRouletteBetKey(type);
+    const existing = bets.find((entry) => getRouletteBetKey(entry.type) === key);
+    return existing ? existing.amount : 0;
+  }
+
+  function getRouletteBetKey(type) {
+    return `${type.kind}-${type.value}`;
+  }
+
+  function encodeRouletteBet(type) {
+    return getRouletteBetKey(type);
+  }
+
+  function decodeRouletteBet(value) {
+    const [kind, raw] = String(value || "").split("-");
+    if (!kind || raw === undefined) return null;
+    if (kind === "number") return { kind, value: clampInteger(raw) };
+    if (kind === "color" && (raw === "red" || raw === "black")) return { kind, value: raw };
+    if (kind === "parity" && (raw === "even" || raw === "odd")) return { kind, value: raw };
+    if (kind === "range" && (raw === "low" || raw === "high")) return { kind, value: raw };
+    if (kind === "dozen") return { kind, value: clampInteger(raw) };
+    if (kind === "column") return { kind, value: clampInteger(raw) };
+    return null;
+  }
+
+  function getRouletteColor(number) {
+    if (number === 0) return "green";
+    return ROULETTE_RED_NUMBERS.has(number) ? "red" : "black";
+  }
+
+  function getRouletteBetLabel(type) {
+    if (type.kind === "number") return `n${type.value}`;
+    if (type.kind === "color") return type.value === "red" ? "vermelho" : "preto";
+    if (type.kind === "parity") return type.value === "even" ? "par" : "impar";
+    if (type.kind === "range") return type.value === "low" ? "1-18" : "19-36";
+    if (type.kind === "dozen") return `${type.value}ª duzia`;
+    if (type.kind === "column") return `coluna ${type.value}`;
+    return "aposta";
+  }
+
+  function getRoulettePayoutMultiplier(type) {
+    if (type.kind === "number") return 35;
+    if (type.kind === "dozen" || type.kind === "column") return 2;
+    return 1;
+  }
+
+  function rouletteBetWins(type, number) {
+    if (number === 0) return type.kind === "number" && type.value === 0;
+    if (type.kind === "number") return type.value === number;
+    if (type.kind === "color") return getRouletteColor(number) === type.value;
+    if (type.kind === "parity") return type.value === "even" ? number % 2 === 0 : number % 2 === 1;
+    if (type.kind === "range") return type.value === "low" ? number >= 1 && number <= 18 : number >= 19 && number <= 36;
+    if (type.kind === "dozen") return number >= (type.value - 1) * 12 + 1 && number <= type.value * 12;
+    if (type.kind === "column") return number % 3 === (type.value === 3 ? 0 : type.value);
+    return false;
+  }
+
+  function calculateRouletteReturn(bets, winningNumber) {
+    let total = 0;
+    bets.forEach((bet) => {
+      if (rouletteBetWins(bet.type, winningNumber)) {
+        total += bet.amount + bet.amount * getRoulettePayoutMultiplier(bet.type);
+      }
+    });
+    return total;
+  }
+
+  function buildRouletteBotBets(bank) {
+    const picks = [
+      { kind: "color", value: Math.random() > 0.5 ? "red" : "black" },
+      { kind: "parity", value: Math.random() > 0.5 ? "even" : "odd" },
+      { kind: "range", value: Math.random() > 0.5 ? "low" : "high" },
+      { kind: "dozen", value: 1 + Math.floor(Math.random() * 3) },
+      { kind: "column", value: 1 + Math.floor(Math.random() * 3) },
+      { kind: "number", value: Math.floor(Math.random() * 37) }
+    ];
+    const shuffled = picks.sort(() => Math.random() - 0.5);
+    const chipSequence = [10, 5, 5, 2, 2, 1, 1];
+    const bets = [];
+    let remaining = bank;
+
+    shuffled.forEach((type, index) => {
+      if (remaining <= 0) return;
+      const amount = Math.min(remaining, chipSequence[index] || 1);
+      addRouletteBet(bets, type, amount);
+      remaining -= amount;
+    });
+
+    while (remaining > 0) {
+      const amount = Math.min(remaining, 1 + Math.floor(Math.random() * 2));
+      const number = Math.floor(Math.random() * 37);
+      addRouletteBet(bets, { kind: "number", value: number }, amount);
+      remaining -= amount;
+    }
+
+    return bets;
+  }
+
+  function rollRouletteResultNumber(fortune) {
     const base = Math.floor(Math.random() * 37);
     if (!fortune || fortune.mood === "neutral") return base;
-    if (fortune.mood === "good" && isPlayer) {
-      return Math.min(36, base + 3 + Math.floor(Math.random() * 7));
+    if (fortune.mood === "good") {
+      const weighted = [base, base, Math.floor(Math.random() * 19), Math.floor(Math.random() * 37)];
+      return weighted[Math.floor(Math.random() * weighted.length)];
     }
-    if (fortune.mood === "bad" && isPlayer) {
-      return Math.max(0, base - (3 + Math.floor(Math.random() * 7)));
-    }
-    if (fortune.mood === "good" && !isPlayer) {
-      return Math.max(0, base - (1 + Math.floor(Math.random() * 5)));
-    }
-    if (fortune.mood === "bad" && !isPlayer) {
-      return Math.min(36, base + 1 + Math.floor(Math.random() * 5));
+    if (fortune.mood === "bad") {
+      return Math.floor(Math.random() * 37);
     }
     return base;
   }
@@ -5784,6 +6993,8 @@
     runtime.activeGame = null;
     refs.gameModal.hidden = true;
     if (refs.shopModal) refs.shopModal.hidden = true;
+    if (refs.waiterModal) refs.waiterModal.hidden = true;
+    if (refs.jukeboxModal) refs.jukeboxModal.hidden = true;
     if (refs.tutorialModal) refs.tutorialModal.hidden = true;
     refs.profileModal.hidden = true;
     clearPressedDirections();
