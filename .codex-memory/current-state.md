@@ -1,15 +1,15 @@
 # Current State
 
-Updated: 2026-04-18T02:26:06.708Z
+Updated: 2026-04-18T02:29:57.469Z
 
 ## Active Goal
 
-- Deploy Render via GitHub
+- Render pronto para criar serviço free
 
 ## Summary
 
-Projeto validado localmente para deploy no Render: checks JS/CSS passaram, review team zerou e /health respondeu 200. Usaremos o domínio .onrender.com por enquanto, sem mexer no DNS próprio.
+Commit fd907fd já está no GitHub. Como o host onrender respondeu 404 e o GitHub não tem deployments/statuses, o serviço Render ainda precisa ser criado/conectado. render.yaml foi simplificado para plano free, sem disk, usando SITE_URL do onrender.
 
 ## Next
 
-- Fazer commit/push para origin/main e acompanhar o serviço catalogo-cruzeiro-web no Render.
+- Commitar render.yaml e criar no painel Render um Blueprint/Web Service a partir do repo Juniorclss/catalogo_cruzeiro_do_sul; depois testar https://catalogo-cruzeiro-web.onrender.com/health.

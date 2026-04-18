@@ -3,26 +3,18 @@ services:
     name: catalogo-cruzeiro-web
     runtime: node
     rootDir: .
-    plan: starter
+    plan: free
     autoDeployTrigger: commit
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /health
-    disk:
-      name: catalogo-data
-      mountPath: /var/data/catalogo
-      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: "10000"
       - key: TZ
         value: America/Rio_Branco
-      - key: DATA_DIR
-        value: /var/data/catalogo
       - key: SITE_URL
-        sync: false
+        value: https://catalogo-cruzeiro-web.onrender.com
       - key: ADMIN_TOKEN
         sync: false
       - key: SUPER_ADMIN_USER
