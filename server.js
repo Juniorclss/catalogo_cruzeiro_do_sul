@@ -3349,11 +3349,18 @@ function sendFile(req, res, filePath, options = {}) {
     }
 
     const { buffer: finalBuffer, encoding } = maybeCompressBuffer(req, mimeType, fileBuffer);
+    const cacheControl = options.cacheControl || getStaticCacheControl(filePath);
     const headers = {
       "Content-Type": mimeType,
-      "Cache-Control": options.cacheControl || getStaticCacheControl(filePath),
+      "Cache-Control": cacheControl,
       "Content-Length": finalBuffer.length,
     };
+
+    if (/no-store/i.test(cacheControl)) {
+      headers.Pragma = "no-cache";
+      headers.Expires = "0";
+      headers["Surrogate-Control"] = "no-store";
+    }
 
     if (encoding) {
       headers["Content-Encoding"] = encoding;
