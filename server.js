@@ -2405,8 +2405,10 @@ function stripHtml(value) {
 
 function cleanFeedText(value) {
   return stripHtml(value)
+    .replace(/\b[\w:-]+\s*=\s*["'][^"']*["']/gi, " ")
     .replace(/\b(?:data|srcset|sizes|loading|decoding|class|width|height)-?[a-z]*\s*=\s*["'][^"']*["']/gi, " ")
     .replace(/\s*\/>\s*/g, " ")
+    .replace(/^\s*(?:foto|imagem)\s*:[^"“”]{0,140}["“”]\s*/i, "")
     .replace(/^[>"'\s-]+/g, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -3351,7 +3353,7 @@ function normalizeNewsItem(item) {
     id: item.id || sourceUrl || `news-${Date.now()}`,
     slug,
     title,
-    summary: item.summary || item.lede || item.description || "Sem resumo.",
+    summary: cleanShortText(cleanFeedText(item.summary || item.lede || item.description), 260) || "Sem resumo.",
     url: sourceUrl,
     sourceUrl,
     source: sourceName,

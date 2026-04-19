@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-18T02:26:05.222Z",
+  "lastUpdatedAt": "2026-04-19T14:55:16.445Z",
   "orders": [
     {
       "id": "2026-04-17-criar-memoria-local-persistente-para-ordens-fotos-e-textos-do-usuario",
@@ -955,6 +955,47 @@
       "tags": [],
       "nextSteps": [],
       "notes": ""
+    },
+    {
+      "id": "2026-04-19-rodada-geral-de-validacao-atualizacao-pesquisa-open-source-de-jogos-e-relatorio-",
+      "createdAt": "2026-04-19T14:35:18.082Z",
+      "updatedAt": "2026-04-19T14:55:16.445Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "validar, atualizar, reunião geral com todos os escritórios; ver erros, fotos que não aparecem, copy não editorial; equipe nerd pesquisar códigos open source dos jogos; equipe ninja dar relatório de sprites",
+      "summary": "Rodada geral de validação, atualização, pesquisa open source de jogos e relatório de sprites",
+      "normalizedTasks": [],
+      "filesTouched": [
+        "infantil.html",
+        "server.js",
+        "scripts/review-team-audit.js",
+        "news-data.js",
+        ".codex-memory/current-state.md",
+        ".codex-memory/handoff.md",
+        ".codex-memory/assets.json",
+        ".codex-memory/orders.json",
+        ".codex-temp/reports/reuniao-geral-escritorios-2026-04-19.md"
+      ],
+      "assetRefs": [
+        "reuniao-geral-escritorios-2026-04-19",
+        ".codex-temp/review-team/latest-report.md",
+        "data/news-image-focus-audit.json"
+      ],
+      "tags": [
+        "validacao",
+        "render",
+        "editorial",
+        "jogos",
+        "sprites",
+        "escritorios"
+      ],
+      "nextSteps": [
+        "Deployar as correcoes locais no Render",
+        "Ajustar foco manual das 7 imagens em fila",
+        "Criar kit de sprites PubPaid/cassino no sprite-vault/generated",
+        "Melhorar dinamica dos jogos PubPaid com animacao, som e suspense"
+      ],
+      "notes": "Rodada validou rotas do Render, corrigiu imagem quebrada local no Infantil, limpou resumos de feed, zerou review:team e registrou relatorio geral."
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-18T01:41:31.889Z",
+  "lastUpdatedAt": "2026-04-19T14:55:16.445Z",
   "assets": [
     {
       "id": "recovered-chat-assets",
@@ -187,10 +187,17 @@
       "note": "Logo Recommencer aplicado aos fundadores no splash e banners",
       "linkedOrderIds": [],
       "createdAt": "2026-04-18T01:41:31.889Z"
-    }
-  ]
-}
-41:31.889Z"
+    },
+    {
+      "id": "reuniao-geral-escritorios-2026-04-19",
+      "kind": "report",
+      "path": ".codex-temp/reports/reuniao-geral-escritorios-2026-04-19.md",
+      "source": "workspace",
+      "note": "Relatorio da reuniao geral dos escritorios: validacao Render/local, achados editoriais, pesquisa open source dos jogos e relatorio Ninja de sprites.",
+      "linkedOrderIds": [
+        "2026-04-19-rodada-geral-de-validacao-atualizacao-pesquisa-open-source-de-jogos-e-relatorio-"
+      ],
+      "createdAt": "2026-04-19T14:55:16.445Z"
     }
   ]
 }

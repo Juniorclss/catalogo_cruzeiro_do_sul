@@ -32,7 +32,7 @@ const INTERNAL_COPY_PATTERNS = [
   {
     id: "placeholder",
     label: "placeholder ou copy provisoria",
-    regex: /\b(lorem ipsum|wireframe|todo|to-do|preencher depois|texto provis[oó]rio|copy provis[oó]ria)\b/i
+    regex: /\b(lorem ipsum|wireframe|preencher depois|texto provis[oó]rio|copy provis[oó]ria)\b|(?:^|[\s/])(?:todo|to-do)\s*:/i
   },
   {
     id: "loading",

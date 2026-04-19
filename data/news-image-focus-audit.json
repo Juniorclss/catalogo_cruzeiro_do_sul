@@ -1,400 +1,141 @@
 {
-  "updatedAt": "2026-04-19T10:59:27.165Z",
+  "updatedAt": "2026-04-19T14:37:42.031Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
   "total": 30,
   "summary": {
-    "ok": 21,
-    "review": 9,
+    "ok": 23,
+    "review": 7,
     "warning": 0,
     "error": 0,
     "manualFocus": 0,
-    "newSinceLastAudit": 0,
+    "newSinceLastAudit": 30,
     "missingImage": 0,
     "unreachableImage": 0
   },
   "slugs": [
-    "estaduais-sub-11-e-15-de-futsal-com-mais-6-partidas-no-lourenco-filho",
-    "dolar-fecha-em-r-4-98-no-menor-valor-do-ano-apos-ira-reabrir-ormuz",
-    "deputada-michelle-melo-protocola-pl-que-propoe-piso-para-farmaceuticos-no-acre",
-    "mailza-da-posse-a-novos-professores-e-promete-avanco-na-educacao-publica",
-    "ex-merendeiro-e-empossado-como-professor-efetivo-8220-com-muito-esforco-8221",
-    "mailza-nega-saida-de-donadoni-e-fala-em-fogo-amigo-no-governo",
-    "no-acre-estreante-no-crime-e-preso-no-primeiro-dia-como-traficante",
-    "mailza-promove-reuniao-com-prefeitos-e-reforca-parceria-com-municipios",
-    "paralisacao-deixa-passageiros-sem-onibus-por-horas-no-terminal-de-rio-branco",
-    "xapuri-decreta-situacao-de-emergencia-apos-fortes-chuvas-atingirem-alto-acre",
-    "usuarios-do-transporte-coletivo-da-capital-reclamam-da-paralizacao-feita-pelos-motoristas",
-    "saida-de-marcio-expoe-ruidos-internos-e-testa-articulacao-politica-de-mailza",
-    "governo-mailza-passa-por-ajustes-internos-e-busca-acomodacao-politica-entre-aliados",
-    "paris-garden-recebe-noite-de-mpb-e-dj-nesta-sexta",
-    "oscar-schmidt-lenda-do-basquete-brasileiro-morre-aos-68-anos-de-idade",
-    "fe-na-missao-fest-music-reune-mais-de-16-igrejas-e-seis-bandas-neste-sabado-na-gameleira",
-    "partidas-da-2-copa-acre-irao-decidir-mais-dois-semifinalistas",
-    "incra-amplia-para-122-familias-assentamento-entre-tarauaca-e-feijo",
-    "chuvas-causam-transbordamento-de-igarape-e-interditam-trecho-da-br-364",
-    "crianca-indigena-de-4-anos-cai-de-canoa-e-desaparece-no-rio-purus",
-    "governadora-mailza-empossa-142-novos-servidores-e-reforca-rede-estadual-de-ensino",
-    "8216-eu-sonho-em-transformar-a-vida-dos-estudantes-8217-diz-professora-empossada-no-concurso-da-educacao",
-    "governadora-mailza-reune-prefeitos-do-acre-e-reforca-apoio-do-estado-as-gestoes-municipais",
-    "policia-civil-reforca-delegacia-de-investigacoes-criminais-com-nova-viatura-e-alinhamento-estrategico",
-    "governo-do-acre-busca-pactuacao-para-fortalecer-integracao-fisica-entre-brasil-e-peru-com-acesso-por-cruzeiro-do-sul",
-    "idaf-amplia-acoes-de-monitoramento-no-jurua-para-proteger-a-producao-de-banana-contra-a-praga-moko-da-bananeira",
-    "governos-do-acre-e-de-ucayali-realizam-1-reuniao-do-comite-de-fronteira-centro-brasil-peru",
-    "acre-supera-media-nacional-e-registra-alta-de-14-3-no-abate-de-bovinos-com-mais-de-644-mil-cabecas",
-    "secretaria-de-administracao-compartilha-experiencias-na-2-conferencia-nacional-de-arquivos",
-    "administracao-capacita-servidores-do-estado-para-fortalecer-a-gestao-do-patrimonio-publico"
+    "caminhao-atinge-carro-estacionado-derruba-poste-e-invade-comercio",
+    "mais-de-600-familias-saem-do-endividamento-no-acre-em-marco",
+    "homem-em-situacao-de-rua-e-agredido-a-golpes-de-ripa-em-rio-branco",
+    "trump-diz-que-negociadores-vao-ao-paquistao-para-novas-conversas-com-o-ira",
+    "projeto-de-r-10-milhoes-fortalece-mulheres-empreendedoras-e-agricultores-familiares-em-rondonia",
+    "autodeclaracao-impulsiona-crescimento-de-eleitores-indigenas-em-roraima",
+    "mpe-pede-inelegibilidade-de-ex-prefeito-de-macapa-por-abuso-de-poder-nas-eleicoes-de-2024",
+    "manaus-esta-entre-as-cidades-com-mais-beneficiarios-do-gas-do-povo-aponta-governo-federal",
+    "norte-tem-menor-acesso-a-rede-de-esgoto-no-pais-aponta-ibge",
+    "medico-preso-em-manaus-por-abusos-e-mortes-sera-transferido-para-o-para",
+    "governadora-assina-convenio-de-r-1-milhao-para-recuperacao-de-ramais-em-porto-walter",
+    "pt-pcdob-aliados-mais-rivais-nas-eleicoes-legislativas",
+    "resumo-do-bbb-26-hoje-madrugada-tem-discussao-entre-aliadas-sister-8216-apreensiva-8217-e-analise-de-juliano-floss",
+    "mailza-sacramenta-jessica-como-vice-na-sua-chapa",
+    "precisamos-de-um-novo-mimdequeeutomo",
+    "saiba-como-vai-funcionar-o-cashback-da-restituicao-automatica-do-imposto-de-renda",
+    "previsao-indica-sol-nuvens-e-chuvas-passageiras-neste-domingo-no-acre",
+    "rio-acre-sobe-e-atinge-10-71-metros-em-rio-branco-aponta-defesa-civil",
+    "mulher-fica-gravemente-ferida-e-jovem-com-escoriacoes-em-acidente-na-capital",
+    "acre-tem-apenas-12-9-de-cobertura-com-vacina-bivalente-contra-covid-19",
+    "vozes-da-floresta-em-conquista",
+    "governo-do-acre-transforma-a-realidade-de-familias-atipicas-em-acrelandia",
+    "as-digitais-femininas-que-transformam-trajetorias-indigenas",
+    "governo-e-instituicoes-parceiras-certificam-40-alunos-na-1-etapa-do-projeto-pao-na-estrada",
+    "parceria-entre-sine-e-iapen-fortalecera-ressocializacao-de-egressos-do-sistema-prisional-com-qualificacao-e-acesso-ao-emprego",
+    "entre-trilhas-e-rios-a-longa-jornada-de-tres-irmaos-que-enfrentam-horas-de-viagem-para-estudar-no-interior-do-acre",
+    "endividamento-das-familias-no-acre-recua-e-governadora-atribui-resultado-a-pagamentos-em-dia-e-geracao-de-oportunidades",
+    "acre-o-planejamento-de-longo-prazo-orienta-as-decisoes-e-investimentos-no-presente",
+    "saneacre-amplia-rede-de-abastecimento-e-leva-agua-potavel-para-moradores-da-travessa-torquato-no-bairro-sao-salvador-em-cruzeiro-do-sul",
+    "acre-e-ucayali-reforcam-necessidade-de-integracao-em-ata-da-1-reuniao-do-comite-de-fronteira-centro-brasil-peru"
   ],
   "reviewQueue": [
     {
-      "slug": "ex-merendeiro-e-empossado-como-professor-efetivo-8220-com-muito-esforco-8221",
-      "title": "Ex-merendeiro é empossado como professor efetivo: &#8220;com muito esforço&#8221;",
+      "slug": "homem-em-situacao-de-rua-e-agredido-a-golpes-de-ripa-em-rio-branco",
+      "title": "Homem em situação de rua é agredido a golpes de ripa em Rio Branco",
       "level": "review",
       "reasons": [
         "people-or-group-scene-without-manual-focus"
       ],
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/976x695_IMAGEM-DESTACADA-2026-04-17T172731.697.jpg",
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-19-08-36-21-900x1200.jpg",
       "effectiveFocus": ""
     },
     {
-      "slug": "mailza-nega-saida-de-donadoni-e-fala-em-fogo-amigo-no-governo",
-      "title": "Mailza nega saída de Donadoni e fala em “fogo amigo” no governo",
+      "slug": "trump-diz-que-negociadores-vao-ao-paquistao-para-novas-conversas-com-o-ira",
+      "title": "Trump diz que negociadores vão ao Paquistão para novas conversas com o Irã",
       "level": "review",
       "reasons": [
         "people-or-group-scene-without-manual-focus"
       ],
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/976x695_IMAGEM-DESTACADA-2026-04-17T171326.439.jpg",
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/GettyImages-2268828737.webp",
       "effectiveFocus": ""
     },
     {
-      "slug": "saida-de-marcio-expoe-ruidos-internos-e-testa-articulacao-politica-de-mailza",
-      "title": "Saída de Márcio expõe ruídos internos e testa articulação política de Mailza",
+      "slug": "medico-preso-em-manaus-por-abusos-e-mortes-sera-transferido-para-o-para",
+      "title": "Médico preso em Manaus por abusos e mortes será transferido para o Pará",
       "level": "review",
       "reasons": [
         "people-or-group-scene-without-manual-focus"
       ],
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-15-22-49-1.jpg",
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_6605.jpeg",
       "effectiveFocus": ""
     },
     {
-      "slug": "governo-mailza-passa-por-ajustes-internos-e-busca-acomodacao-politica-entre-aliados",
-      "title": "Governo Mailza passa por ajustes internos e busca acomodação política entre aliados",
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus",
-        "group-scene-without-manual-focus"
-      ],
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-15-22-49.jpg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "paris-garden-recebe-noite-de-mpb-e-dj-nesta-sexta",
-      "title": "Paris Garden recebe noite de MPB e DJ nesta sexta",
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus"
-      ],
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/5358129b-6834-493a-be0d-b31933a06f2c.jpeg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "partidas-da-2-copa-acre-irao-decidir-mais-dois-semifinalistas",
-      "title": "Partidas da 2ª Copa Acre irão decidir mais dois semifinalistas",
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus",
-        "group-scene-without-manual-focus"
-      ],
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-14-40-58-1200x1170.jpg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "governadora-mailza-empossa-142-novos-servidores-e-reforca-rede-estadual-de-ensino",
-      "title": "Governadora Mailza empossa 142 novos servidores e reforça rede estadual de ensino",
+      "slug": "pt-pcdob-aliados-mais-rivais-nas-eleicoes-legislativas",
+      "title": "PT/PCdoB: aliados, mais rivais nas eleições legislativas!",
       "level": "review",
       "reasons": [
         "group-scene-without-manual-focus"
       ],
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/Ingrid-Kelly-Posse-Educacao-Mailza-Assis-9-1024x683.jpeg",
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-19-at-15.54.17-1200x638.jpeg",
       "effectiveFocus": ""
     },
     {
-      "slug": "secretaria-de-administracao-compartilha-experiencias-na-2-conferencia-nacional-de-arquivos",
-      "title": "Secretaria de Administração compartilha experiências na 2ª Conferência Nacional de Arquivos",
+      "slug": "mailza-sacramenta-jessica-como-vice-na-sua-chapa",
+      "title": "Mailza sacramenta Jéssica como vice na sua chapa",
       "level": "review",
       "reasons": [
         "people-or-group-scene-without-manual-focus"
       ],
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/cd5bd2bd-a130-44e8-8c30-f7bcd25197ee-768x1024.jpeg",
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/MAILZA-E-JESSICA_SALES-.jpg",
       "effectiveFocus": ""
     },
     {
-      "slug": "administracao-capacita-servidores-do-estado-para-fortalecer-a-gestao-do-patrimonio-publico",
-      "title": "Administração capacita servidores do Estado para fortalecer a gestão do patrimônio público",
+      "slug": "precisamos-de-um-novo-mimdequeeutomo",
+      "title": "Precisamos de um novo #mimdequeeutomo",
       "level": "review",
       "reasons": [
         "people-or-group-scene-without-manual-focus"
       ],
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/4fdc1a9f-0d5b-4d94-9831-076b79ad71bd-1024x768.jpeg",
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/gov-e1776599318460.webp",
+      "effectiveFocus": ""
+    },
+    {
+      "slug": "governo-e-instituicoes-parceiras-certificam-40-alunos-na-1-etapa-do-projeto-pao-na-estrada",
+      "title": "Governo e instituições parceiras certificam 40 alunos na 1ª etapa do projeto Pão na Estrada",
+      "level": "review",
+      "reasons": [
+        "people-or-group-scene-without-manual-focus"
+      ],
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-18-at-17.15.56-1024x768.jpeg",
       "effectiveFocus": ""
     }
   ],
   "items": [
     {
-      "slug": "estaduais-sub-11-e-15-de-futsal-com-mais-6-partidas-no-lourenco-filho",
-      "title": "Estaduais Sub-11 e 15 de futsal com mais 6 partidas no Lourenço Filho",
-      "category": "Esporte",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-18T01:33:57.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-20.25.03-1200x809.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 809,
-        "ratio": 1.483,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": false
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "dolar-fecha-em-r-4-98-no-menor-valor-do-ano-apos-ira-reabrir-ormuz",
-      "title": "Dólar fecha em R$ 4,98, no menor valor do ano, após Irã reabrir Ormuz",
-      "category": "Negócios",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-18T00:34:20.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/2026-02-26t200758z_1_lynxmpem1p1ak_rtroptp_4_dollar-hedging-bny-2.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": null,
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "deputada-michelle-melo-protocola-pl-que-propoe-piso-para-farmaceuticos-no-acre",
-      "title": "Deputada Michelle Melo protocola PL que propõe piso para farmacêuticos no Acre",
-      "category": "Negócios",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T23:53:07.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-18.47.02-1200x675.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 675,
-        "ratio": 1.778,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "mailza-da-posse-a-novos-professores-e-promete-avanco-na-educacao-publica",
-      "title": "Mailza dá posse a novos professores e promete avanço na educação pública",
-      "category": "Educação",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T22:34:18.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-17.02.13-1-1200x687.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 687,
-        "ratio": 1.747,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "ex-merendeiro-e-empossado-como-professor-efetivo-8220-com-muito-esforco-8221",
-      "title": "Ex-merendeiro é empossado como professor efetivo: &#8220;com muito esforço&#8221;",
-      "category": "Educação",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T22:21:41.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/976x695_IMAGEM-DESTACADA-2026-04-17T172731.697.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 976,
-        "height": 695,
-        "ratio": 1.404,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus"
-      ]
-    },
-    {
-      "slug": "mailza-nega-saida-de-donadoni-e-fala-em-fogo-amigo-no-governo",
-      "title": "Mailza nega saída de Donadoni e fala em “fogo amigo” no governo",
-      "category": "Prefeitura",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T22:04:43.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/976x695_IMAGEM-DESTACADA-2026-04-17T171326.439.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 976,
-        "height": 695,
-        "ratio": 1.404,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus"
-      ]
-    },
-    {
-      "slug": "no-acre-estreante-no-crime-e-preso-no-primeiro-dia-como-traficante",
-      "title": "No Acre, estreante no crime é preso no primeiro dia como traficante",
-      "category": "Polícia",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T22:01:18.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/7af67d1d-be2a-4956-bded-4d6feaeacb54-1200x970.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 970,
-        "ratio": 1.237,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "mailza-promove-reuniao-com-prefeitos-e-reforca-parceria-com-municipios",
-      "title": "Mailza promove reunião com prefeitos e reforça parceria com municípios",
-      "category": "Prefeitura",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T21:57:23.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_5335-1200x800.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 800,
-        "ratio": 1.5,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "paralisacao-deixa-passageiros-sem-onibus-por-horas-no-terminal-de-rio-branco",
-      "title": "Paralisação deixa passageiros sem ônibus por horas no terminal de Rio Branco",
-      "category": "Negócios",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T21:07:58.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/7f40348f-93b0-4f6e-82dc-9edb0ecda3cd-1200x675.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 675,
-        "ratio": 1.778,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "xapuri-decreta-situacao-de-emergencia-apos-fortes-chuvas-atingirem-alto-acre",
-      "title": "Xapuri decreta situação de emergência após fortes chuvas atingirem Alto Acre",
+      "slug": "caminhao-atinge-carro-estacionado-derruba-poste-e-invade-comercio",
+      "title": "Caminhão atinge carro estacionado, derruba poste e invade comércio",
       "category": "Utilidade Pública",
       "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T21:03:09.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/chuvas-em-xapuri.jpg",
+      "publishedAt": "2026-04-19T14:23:01.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-19-09-11-34-1200x690.jpg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": null,
+      "dimensionsFromUrl": {
+        "width": 1200,
+        "height": 690,
+        "ratio": 1.739,
+        "orientation": "landscape"
+      },
       "hasManualFocus": false,
       "effectiveFocus": "",
       "signals": {
@@ -406,88 +147,49 @@
       "reasons": []
     },
     {
-      "slug": "usuarios-do-transporte-coletivo-da-capital-reclamam-da-paralizacao-feita-pelos-motoristas",
-      "title": "Usuários do transporte coletivo da capital reclamam da paralização feita pelos motoristas",
-      "category": "Cultura",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:48:40.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-15.43.05-1.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": null,
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "saida-de-marcio-expoe-ruidos-internos-e-testa-articulacao-politica-de-mailza",
-      "title": "Saída de Márcio expõe ruídos internos e testa articulação política de Mailza",
-      "category": "Cultura",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:33:08.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-15-22-49-1.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": null,
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": false
-      },
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus"
-      ]
-    },
-    {
-      "slug": "governo-mailza-passa-por-ajustes-internos-e-busca-acomodacao-politica-entre-aliados",
-      "title": "Governo Mailza passa por ajustes internos e busca acomodação política entre aliados",
-      "category": "Cultura",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:31:47.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-15-22-49.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": null,
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": false
-      },
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus",
-        "group-scene-without-manual-focus"
-      ]
-    },
-    {
-      "slug": "paris-garden-recebe-noite-de-mpb-e-dj-nesta-sexta",
-      "title": "Paris Garden recebe noite de MPB e DJ nesta sexta",
+      "slug": "mais-de-600-familias-saem-do-endividamento-no-acre-em-marco",
+      "title": "Mais de 600 famílias saem do endividamento no Acre em março",
       "category": "Negócios",
       "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:22:34.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/5358129b-6834-493a-be0d-b31933a06f2c.jpeg",
+      "publishedAt": "2026-04-19T14:20:49.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/03/contas-dividas-fdr-5-750x422-1.jpg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": null,
+      "dimensionsFromUrl": {
+        "width": 750,
+        "height": 422,
+        "ratio": 1.777,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "homem-em-situacao-de-rua-e-agredido-a-golpes-de-ripa-em-rio-branco",
+      "title": "Homem em situação de rua é agredido a golpes de ripa em Rio Branco",
+      "category": "Cotidiano",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:41:27.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-19-08-36-21-900x1200.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 900,
+        "height": 1200,
+        "ratio": 0.75,
+        "orientation": "portrait"
+      },
       "hasManualFocus": false,
       "effectiveFocus": "",
       "signals": {
@@ -501,16 +203,189 @@
       ]
     },
     {
-      "slug": "oscar-schmidt-lenda-do-basquete-brasileiro-morre-aos-68-anos-de-idade",
-      "title": "Oscar Schmidt, lenda do basquete brasileiro, morre aos 68 anos de idade",
-      "category": "Saúde",
+      "slug": "trump-diz-que-negociadores-vao-ao-paquistao-para-novas-conversas-com-o-ira",
+      "title": "Trump diz que negociadores vão ao Paquistão para novas conversas com o Irã",
+      "category": "Festas & Social",
       "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:20:55.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/213095711-km2d6r6bb5aabk44aiuilabpai-1200x799.webp",
+      "publishedAt": "2026-04-19T13:25:25.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/GettyImages-2268828737.webp",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/webp",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "review",
+      "reasons": [
+        "people-or-group-scene-without-manual-focus"
+      ]
+    },
+    {
+      "slug": "projeto-de-r-10-milhoes-fortalece-mulheres-empreendedoras-e-agricultores-familiares-em-rondonia",
+      "title": "Projeto de R$ 10 milhões fortalece mulheres empreendedoras e agricultores familiares em Rondônia",
+      "category": "Prefeitura",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:12:57.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/RO.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "autodeclaracao-impulsiona-crescimento-de-eleitores-indigenas-em-roraima",
+      "title": "Autodeclaração impulsiona crescimento de eleitores indígenas em Roraima",
+      "category": "Política",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:11:00.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_6609.png",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "mpe-pede-inelegibilidade-de-ex-prefeito-de-macapa-por-abuso-de-poder-nas-eleicoes-de-2024",
+      "title": "MPE pede inelegibilidade de ex-prefeito de Macapá por abuso de poder nas eleições de 2024",
+      "category": "Política",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:08:57.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_6608-1200x806.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1200,
+        "height": 806,
+        "ratio": 1.489,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "manaus-esta-entre-as-cidades-com-mais-beneficiarios-do-gas-do-povo-aponta-governo-federal",
+      "title": "Manaus está entre as cidades com mais beneficiários do Gás do Povo, aponta governo federal",
+      "category": "Prefeitura",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:07:44.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_6607-1200x816.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1200,
+        "height": 816,
+        "ratio": 1.471,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": true
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "norte-tem-menor-acesso-a-rede-de-esgoto-no-pais-aponta-ibge",
+      "title": "Norte tem menor acesso à rede de esgoto no país, aponta IBGE",
+      "category": "Negócios",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:06:08.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_6606-1200x852.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1200,
+        "height": 852,
+        "ratio": 1.408,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": true
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "medico-preso-em-manaus-por-abusos-e-mortes-sera-transferido-para-o-para",
+      "title": "Médico preso em Manaus por abusos e mortes será transferido para o Pará",
+      "category": "Polícia",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T13:03:55.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/IMG_6605.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": true
+      },
+      "level": "review",
+      "reasons": [
+        "people-or-group-scene-without-manual-focus"
+      ]
+    },
+    {
+      "slug": "governadora-assina-convenio-de-r-1-milhao-para-recuperacao-de-ramais-em-porto-walter",
+      "title": "Governadora assina convênio de R$ 1 milhão para recuperação de ramais em Porto Walter",
+      "category": "Prefeitura",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T12:39:22.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/gov-23-1200x799.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1200,
         "height": 799,
@@ -520,55 +395,28 @@
       "hasManualFocus": false,
       "effectiveFocus": "",
       "signals": {
-        "hasPersonSignal": false,
+        "hasPersonSignal": true,
         "hasGroupSignal": false,
-        "hasLandscapeSignal": true
+        "hasLandscapeSignal": false
       },
       "level": "ok",
       "reasons": []
     },
     {
-      "slug": "fe-na-missao-fest-music-reune-mais-de-16-igrejas-e-seis-bandas-neste-sabado-na-gameleira",
-      "title": "Fé na Missão Fest Music reúne mais de 16 igrejas e seis bandas neste sábado na Gameleira",
-      "category": "Cotidiano",
+      "slug": "pt-pcdob-aliados-mais-rivais-nas-eleicoes-legislativas",
+      "title": "PT/PCdoB: aliados, mais rivais nas eleições legislativas!",
+      "category": "Política",
       "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:16:35.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-14.42.36-2-1200x675.jpeg",
+      "publishedAt": "2026-04-19T12:37:35.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-19-at-15.54.17-1200x638.jpeg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1200,
-        "height": 675,
-        "ratio": 1.778,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "partidas-da-2-copa-acre-irao-decidir-mais-dois-semifinalistas",
-      "title": "Partidas da 2ª Copa Acre irão decidir mais dois semifinalistas",
-      "category": "Esporte",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T20:03:50.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-14-40-58-1200x1170.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 1170,
-        "ratio": 1.026,
+        "height": 638,
+        "ratio": 1.881,
         "orientation": "landscape"
       },
       "hasManualFocus": false,
@@ -580,48 +428,20 @@
       },
       "level": "review",
       "reasons": [
-        "people-or-group-scene-without-manual-focus",
         "group-scene-without-manual-focus"
       ]
     },
     {
-      "slug": "incra-amplia-para-122-familias-assentamento-entre-tarauaca-e-feijo",
-      "title": "Incra amplia para 122 famílias assentamento entre Tarauacá e Feijó",
-      "category": "Saúde",
+      "slug": "resumo-do-bbb-26-hoje-madrugada-tem-discussao-entre-aliadas-sister-8216-apreensiva-8217-e-analise-de-juliano-floss",
+      "title": "Resumo do BBB 26 hoje: madrugada tem discussão entre aliadas, sister &#8216;apreensiva&#8217; e análise de Juliano Floss",
+      "category": "Esporte",
       "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T19:57:20.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2025/04/Imagem-do-WhatsApp-de-2025-04-09-as-11.54.54_97faa9e2-1200x675.webp",
+      "publishedAt": "2026-04-19T12:16:19.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/sarah-aline.avif",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
-      "imageContentType": "image/webp",
-      "dimensionsFromUrl": {
-        "width": 1200,
-        "height": 675,
-        "ratio": 1.778,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "chuvas-causam-transbordamento-de-igarape-e-interditam-trecho-da-br-364",
-      "title": "Chuvas causam transbordamento de igarapé e interditam trecho da BR-364",
-      "category": "Utilidade Pública",
-      "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T19:43:15.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/PHOTO-2026-04-17-13-54-06.jpg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageContentType": "image/avif",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -634,13 +454,88 @@
       "reasons": []
     },
     {
-      "slug": "crianca-indigena-de-4-anos-cai-de-canoa-e-desaparece-no-rio-purus",
-      "title": "Criança indígena de 4 anos cai de canoa e desaparece no Rio Purus",
-      "category": "Negócios",
+      "slug": "mailza-sacramenta-jessica-como-vice-na-sua-chapa",
+      "title": "Mailza sacramenta Jéssica como vice na sua chapa",
+      "category": "Prefeitura",
       "sourceName": "ac24horas",
-      "publishedAt": "2026-04-17T19:42:03.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://ac24horas.com/wp-content/uploads/2025/04/Imagem-do-WhatsApp-de-2025-04-10-as-10.47.18_01ba5c88-1200x675.webp",
+      "publishedAt": "2026-04-19T11:56:23.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/MAILZA-E-JESSICA_SALES-.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "review",
+      "reasons": [
+        "people-or-group-scene-without-manual-focus"
+      ]
+    },
+    {
+      "slug": "precisamos-de-um-novo-mimdequeeutomo",
+      "title": "Precisamos de um novo #mimdequeeutomo",
+      "category": "Saúde",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T11:48:50.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/gov-e1776599318460.webp",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/webp",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "review",
+      "reasons": [
+        "people-or-group-scene-without-manual-focus"
+      ]
+    },
+    {
+      "slug": "saiba-como-vai-funcionar-o-cashback-da-restituicao-automatica-do-imposto-de-renda",
+      "title": "Saiba como vai funcionar o cashback da restituição automática do Imposto de Renda",
+      "category": "Cotidiano",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T11:45:58.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-18-at-07.46.29-1-1200x800.avif",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/avif",
+      "dimensionsFromUrl": {
+        "width": 1200,
+        "height": 800,
+        "ratio": 1.5,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "previsao-indica-sol-nuvens-e-chuvas-passageiras-neste-domingo-no-acre",
+      "title": "Previsão indica sol, nuvens e chuvas passageiras neste domingo no Acre",
+      "category": "Cotidiano",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T11:43:42.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-16-at-21.53.44-1200x675.webp",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/webp",
@@ -653,7 +548,34 @@
       "hasManualFocus": false,
       "effectiveFocus": "",
       "signals": {
-        "hasPersonSignal": true,
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "rio-acre-sobe-e-atinge-10-71-metros-em-rio-branco-aponta-defesa-civil",
+      "title": "Rio Acre sobe e atinge 10,71 metros em Rio Branco, aponta Defesa Civil",
+      "category": "Cotidiano",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T11:42:45.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-27-at-15.28.07-2-1200x800.webp",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/webp",
+      "dimensionsFromUrl": {
+        "width": 1200,
+        "height": 800,
+        "ratio": 1.5,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
@@ -661,130 +583,69 @@
       "reasons": []
     },
     {
-      "slug": "governadora-mailza-empossa-142-novos-servidores-e-reforca-rede-estadual-de-ensino",
-      "title": "Governadora Mailza empossa 142 novos servidores e reforça rede estadual de ensino",
-      "category": "Educação",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-18T00:39:24.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/Ingrid-Kelly-Posse-Educacao-Mailza-Assis-9-1024x683.jpeg",
+      "slug": "mulher-fica-gravemente-ferida-e-jovem-com-escoriacoes-em-acidente-na-capital",
+      "title": "Mulher fica gravemente ferida e jovem com escoriações em acidente na capital",
+      "category": "Utilidade Pública",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T11:41:36.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-19-at-05.59.04-1-1200x675.jpeg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
-        "width": 1024,
-        "height": 683,
-        "ratio": 1.499,
+        "width": 1200,
+        "height": 675,
+        "ratio": 1.778,
         "orientation": "landscape"
       },
       "hasManualFocus": false,
       "effectiveFocus": "",
       "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": true
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "acre-tem-apenas-12-9-de-cobertura-com-vacina-bivalente-contra-covid-19",
+      "title": "Acre tem apenas 12,9% de cobertura com vacina bivalente contra Covid-19",
+      "category": "Saúde",
+      "sourceName": "ac24horas",
+      "publishedAt": "2026-04-19T11:37:42.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://ac24horas.com/wp-content/uploads/2025/02/vacina_dengue_07.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": null,
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "review",
-      "reasons": [
-        "group-scene-without-manual-focus"
-      ]
-    },
-    {
-      "slug": "8216-eu-sonho-em-transformar-a-vida-dos-estudantes-8217-diz-professora-empossada-no-concurso-da-educacao",
-      "title": "&#8216;Eu sonho em transformar a vida dos estudantes&#8217;, diz professora empossada no concurso da Educação",
-      "category": "Educação",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T22:56:02.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/d3f0666a-5405-4136-adbd-256b7ed02633-1024x637.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1024,
-        "height": 637,
-        "ratio": 1.608,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
       "level": "ok",
       "reasons": []
     },
     {
-      "slug": "governadora-mailza-reune-prefeitos-do-acre-e-reforca-apoio-do-estado-as-gestoes-municipais",
-      "title": "Governadora Mailza reúne prefeitos do Acre e reforça apoio do Estado às gestões municipais",
+      "slug": "vozes-da-floresta-em-conquista",
+      "title": "Vozes da floresta em conquista",
       "category": "Prefeitura",
       "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T22:38:25.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/bdf41f2c-94bd-4e97-b1c3-48e409f1b3e8-1024x682.jpg",
+      "publishedAt": "2026-04-19T14:23:17.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/FRANCISCA-ARARA-1@Cleiton.cinegrafista-05-1024x576.jpg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
-        "height": 682,
-        "ratio": 1.501,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "policia-civil-reforca-delegacia-de-investigacoes-criminais-com-nova-viatura-e-alinhamento-estrategico",
-      "title": "Polícia Civil reforça Delegacia de Investigações Criminais com nova viatura e alinhamento estratégico",
-      "category": "Polícia",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T22:02:38.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/ABRE-MATERIA-DA-CIVIL-1-1024x682.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1024,
-        "height": 682,
-        "ratio": 1.501,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "governo-do-acre-busca-pactuacao-para-fortalecer-integracao-fisica-entre-brasil-e-peru-com-acesso-por-cruzeiro-do-sul",
-      "title": "Governo do Acre busca pactuação para fortalecer integração física entre Brasil e Peru, com acesso por Cruzeiro do Sul",
-      "category": "Prefeitura",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T21:59:47.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-16.39.07-3-1024x683.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1024,
-        "height": 683,
-        "ratio": 1.499,
+        "height": 576,
+        "ratio": 1.778,
         "orientation": "landscape"
       },
       "hasManualFocus": false,
@@ -798,123 +659,67 @@
       "reasons": []
     },
     {
-      "slug": "idaf-amplia-acoes-de-monitoramento-no-jurua-para-proteger-a-producao-de-banana-contra-a-praga-moko-da-bananeira",
-      "title": "Idaf amplia ações de monitoramento no Juruá para proteger a produção de banana contra a praga moko da bananeira",
+      "slug": "governo-do-acre-transforma-a-realidade-de-familias-atipicas-em-acrelandia",
+      "title": "Governo do Acre Transforma a Realidade de Famílias Atípicas em Acrelândia",
       "category": "Saúde",
       "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T21:52:11.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-15.28.16-654x1024.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 654,
-        "height": 1024,
-        "ratio": 0.639,
-        "orientation": "portrait"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": false
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "governos-do-acre-e-de-ucayali-realizam-1-reuniao-do-comite-de-fronteira-centro-brasil-peru",
-      "title": "Governos do Acre e de Ucayali realizam 1ª Reunião do Comitê de Fronteira Centro Brasil-Peru",
-      "category": "Negócios",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T20:42:21.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-12.23.05-1024x683.jpeg",
+      "publishedAt": "2026-04-19T14:21:32.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-18-at-16.43.56-1024x682.jpeg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
-        "height": 683,
-        "ratio": 1.499,
+        "height": 682,
+        "ratio": 1.501,
         "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "acre-supera-media-nacional-e-registra-alta-de-14-3-no-abate-de-bovinos-com-mais-de-644-mil-cabecas",
-      "title": "Acre supera média nacional e registra alta de 14,3% no abate de bovinos, com mais de 644 mil cabeças",
-      "category": "Prefeitura",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T20:06:47.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-13.38.33-1024x680.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 1024,
-        "height": 680,
-        "ratio": 1.506,
-        "orientation": "landscape"
-      },
-      "hasManualFocus": false,
-      "effectiveFocus": "",
-      "signals": {
-        "hasPersonSignal": false,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": false
-      },
-      "level": "ok",
-      "reasons": []
-    },
-    {
-      "slug": "secretaria-de-administracao-compartilha-experiencias-na-2-conferencia-nacional-de-arquivos",
-      "title": "Secretaria de Administração compartilha experiências na 2ª Conferência Nacional de Arquivos",
-      "category": "Prefeitura",
-      "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T19:47:50.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/cd5bd2bd-a130-44e8-8c30-f7bcd25197ee-768x1024.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
-      "dimensionsFromUrl": {
-        "width": 768,
-        "height": 1024,
-        "ratio": 0.75,
-        "orientation": "portrait"
       },
       "hasManualFocus": false,
       "effectiveFocus": "",
       "signals": {
         "hasPersonSignal": true,
-        "hasGroupSignal": true,
-        "hasLandscapeSignal": true
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
       },
-      "level": "review",
-      "reasons": [
-        "people-or-group-scene-without-manual-focus"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
-      "slug": "administracao-capacita-servidores-do-estado-para-fortalecer-a-gestao-do-patrimonio-publico",
-      "title": "Administração capacita servidores do Estado para fortalecer a gestão do patrimônio público",
+      "slug": "as-digitais-femininas-que-transformam-trajetorias-indigenas",
+      "title": "As digitais femininas que transformam trajetórias indígenas",
       "category": "Prefeitura",
       "sourceName": "Agencia Acre",
-      "publishedAt": "2026-04-17T19:43:43.000Z",
-      "isNewSinceLastAudit": false,
-      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/4fdc1a9f-0d5b-4d94-9831-076b79ad71bd-1024x768.jpeg",
+      "publishedAt": "2026-04-19T14:18:38.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/6-FESTIVAL_KADA-SHAWA-KAYA_SHAWADAWA@Cleiton.cinegrafista-2959-1024x574.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1024,
+        "height": 574,
+        "ratio": 1.784,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "governo-e-instituicoes-parceiras-certificam-40-alunos-na-1-etapa-do-projeto-pao-na-estrada",
+      "title": "Governo e instituições parceiras certificam 40 alunos na 1ª etapa do projeto Pão na Estrada",
+      "category": "Utilidade Pública",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-19T14:11:38.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-18-at-17.15.56-1024x768.jpeg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
       "imageContentType": "image/jpeg",
@@ -928,13 +733,175 @@
       "effectiveFocus": "",
       "signals": {
         "hasPersonSignal": true,
-        "hasGroupSignal": false,
-        "hasLandscapeSignal": false
+        "hasGroupSignal": true,
+        "hasLandscapeSignal": true
       },
       "level": "review",
       "reasons": [
         "people-or-group-scene-without-manual-focus"
       ]
+    },
+    {
+      "slug": "parceria-entre-sine-e-iapen-fortalecera-ressocializacao-de-egressos-do-sistema-prisional-com-qualificacao-e-acesso-ao-emprego",
+      "title": "Parceria entre Sine e Iapen fortalecerá ressocialização de egressos do sistema prisional com qualificação e acesso ao emprego",
+      "category": "Prefeitura",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-19T14:10:00.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/sine-e-iapen-parceria-1024x680.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1024,
+        "height": 680,
+        "ratio": 1.506,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": true
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "entre-trilhas-e-rios-a-longa-jornada-de-tres-irmaos-que-enfrentam-horas-de-viagem-para-estudar-no-interior-do-acre",
+      "title": "Entre trilhas e rios, a longa jornada de três irmãos que enfrentam horas de viagem para estudar no interior do Acre",
+      "category": "Educação",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-19T14:07:52.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/IMG_6811-1024x681.jpg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1024,
+        "height": 681,
+        "ratio": 1.504,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "endividamento-das-familias-no-acre-recua-e-governadora-atribui-resultado-a-pagamentos-em-dia-e-geracao-de-oportunidades",
+      "title": "Endividamento das famílias no Acre recua, e governadora atribui resultado a pagamentos em dia e geração de oportunidades",
+      "category": "Prefeitura",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-19T14:01:04.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2024/10/SINE-EMPREGO-FOTO-NETO-LUCENA-7-scaled-1-1024x683.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1024,
+        "height": 683,
+        "ratio": 1.499,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": true,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "acre-o-planejamento-de-longo-prazo-orienta-as-decisoes-e-investimentos-no-presente",
+      "title": "Acre: o planejamento de longo prazo orienta as decisões e investimentos no presente",
+      "category": "Prefeitura",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-19T13:58:31.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/MAILZA-POSSE-JOSE-CAMINHA-3-683x1024.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 683,
+        "height": 1024,
+        "ratio": 0.667,
+        "orientation": "portrait"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": false
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "saneacre-amplia-rede-de-abastecimento-e-leva-agua-potavel-para-moradores-da-travessa-torquato-no-bairro-sao-salvador-em-cruzeiro-do-sul",
+      "title": "Saneacre amplia rede de abastecimento e leva água potável para moradores da Travessa Torquato no bairro São Salvador em Cruzeiro do Sul",
+      "category": "Saúde",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-18T23:56:19.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-17-at-13.19.27-1024x768.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1024,
+        "height": 768,
+        "ratio": 1.333,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": false,
+        "hasLandscapeSignal": true
+      },
+      "level": "ok",
+      "reasons": []
+    },
+    {
+      "slug": "acre-e-ucayali-reforcam-necessidade-de-integracao-em-ata-da-1-reuniao-do-comite-de-fronteira-centro-brasil-peru",
+      "title": "Acre e Ucayali reforçam necessidade de integração em ata da 1ª Reunião do Comitê de Fronteira Centro Brasil-Peru",
+      "category": "Negócios",
+      "sourceName": "Agencia Acre",
+      "publishedAt": "2026-04-18T21:04:17.000Z",
+      "isNewSinceLastAudit": true,
+      "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-18-at-11.44.59-1024x683.jpeg",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
+      "dimensionsFromUrl": {
+        "width": 1024,
+        "height": 683,
+        "ratio": 1.499,
+        "orientation": "landscape"
+      },
+      "hasManualFocus": false,
+      "effectiveFocus": "",
+      "signals": {
+        "hasPersonSignal": false,
+        "hasGroupSignal": true,
+        "hasLandscapeSignal": true
+      },
+      "level": "ok",
+      "reasons": []
     }
   ]
 }
