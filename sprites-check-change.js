@@ -17,6 +17,9 @@
   const menu = document.querySelector("[data-sprite-menu]");
   const searchInput = document.querySelector("[data-sprite-search]");
   const statusFilter = document.querySelector("[data-sprite-status-filter]");
+  const builderPanel = document.querySelector("[data-pubpaid-builder]");
+  const builderStats = document.querySelector("[data-builder-stats]");
+  const builderTargets = document.querySelector("[data-builder-targets]");
   const viewer = document.querySelector("[data-sprite-viewer]");
   const viewerImage = document.querySelector("[data-viewer-image]");
   const viewerKicker = document.querySelector("[data-viewer-kicker]");
@@ -59,6 +62,14 @@
     return "asset estatico";
   }
 
+  function isPubPaidItem(item) {
+    const contexts = Array.isArray(item?.contexts) ? item.contexts.join(" ") : "";
+    const haystack = `${item?.name || ""} ${item?.path || ""} ${item?.category || ""} ${contexts}`.toLowerCase();
+    return /(pubpaid|pub paid|bar|bartender|garcom|garçon|dealer|mesa|table|roulette|roleta|dice|dado|cup|copo|jukebox|pool|sinuca|poker|blackjack|slot|arcade|chair|stool|balcao|balcão|chip|ficha|casino|neon|stage|dance|cocktail|drink|glass|hud|ui)/.test(
+      haystack
+    );
+  }
+
   function escapeHtml(value) {
     return String(value || "")
       .replace(/&/g, "&amp;")
@@ -84,12 +95,62 @@
     });
   }
 
+  function updateBuilderPanel() {
+    if (!builderPanel || !builderStats || !builderTargets) return;
+    const pubpaidItems = state.items.filter(isPubPaidItem);
+    const counts = [
+      pubpaidItems.length,
+      pubpaidItems.filter((item) => item.category === "personagens").length,
+      pubpaidItems.filter(
+        (item) =>
+          item.category === "cenarios" ||
+          item.reviewMode === "construction" ||
+          /mapa|cenario|mesa|floor|room|tile/i.test(`${item.name} ${item.path}`)
+      ).length,
+      pubpaidItems.filter(
+        (item) =>
+          ["efeitos", "interface"].includes(item.category) ||
+          /hud|fx|effect|light|spark|glow|ui/i.test(`${item.name} ${item.path}`)
+      ).length
+    ];
+
+    builderStats.querySelectorAll("strong").forEach((node, index) => {
+      node.textContent = String(counts[index] ?? "--");
+    });
+
+    const highlights = pubpaidItems
+      .slice()
+      .sort((left, right) => {
+        const score = (item) =>
+          (Array.isArray(item.contexts) && item.contexts.some((context) => /pubpaid/i.test(context)) ? 6 : 0) +
+          (Number(item.frameCount || 0) > 1 ? 3 : 0) +
+          (item.reviewMode === "construction" ? 2 : 0) +
+          (item.locked ? 1 : 0);
+        return score(right) - score(left);
+      })
+      .slice(0, 10);
+
+    builderTargets.innerHTML = highlights.length
+      ? highlights
+          .map(
+            (item) =>
+              `<span>${escapeHtml(item.name)} · ${escapeHtml(
+                item.reviewMode === "construction" ? "mapa" : item.frameCount > 1 ? "animado" : item.category
+              )}</span>`
+          )
+          .join("")
+      : "<span>Nenhum candidato PubPaid encontrado no cofre ainda.</span>";
+
+    builderPanel.classList.toggle("is-active", state.category === "pubpaidbuilder");
+  }
+
   function filterItems() {
     const query = state.query.trim().toLowerCase();
     return state.items.filter((item) => {
       const categoryMatch =
         state.category === "todos" ||
         state.category === "checkpubpaid" ||
+        (state.category === "pubpaidbuilder" && isPubPaidItem(item)) ||
         item.category === state.category ||
         (state.category === "animados" && Number(item.frameCount || 0) > 1);
       const statusMatch = state.status === "todos" || item.status === state.status;
@@ -118,11 +179,16 @@
   function renderGrid() {
     if (!grid) return;
     const items = filterItems();
+    updateBuilderPanel();
     if (!items.length) {
       grid.innerHTML = `
         <article class="sprite-empty-state">
           <strong>Nenhum candidato encontrado nesse filtro.</strong>
-          <p>Troque busca, categoria ou status. Assets que ja estao no site nao entram nessa fila.</p>
+          <p>${
+            state.category === "pubpaidbuilder"
+              ? "Nenhum pacote PubPaid apareceu nesse recorte. Tente buscar por bar, garcom, mesa, roleta, copos ou dados."
+              : "Troque busca, categoria ou status. Assets que ja estao no site nao entram nessa fila."
+          }</p>
         </article>
       `;
       return;
@@ -198,6 +264,7 @@
     state.items = Array.isArray(payload.items) ? payload.items : [];
     state.itemMap = new Map(state.items.map((item) => [item.id, item]));
     updateSummary(payload);
+    updateBuilderPanel();
     renderGrid();
     setStatus(`Cofre pronto: ${state.items.length} grupos uteis. Frames soltos foram agrupados.`);
   }
@@ -363,5 +430,6 @@
     loadSprites().catch(() => setStatus("Falha ao restaurar sessao.", true));
   }
 
+  updateBuilderPanel();
   window.requestAnimationFrame(animateSprites);
 })();

@@ -45,7 +45,7 @@ body.catalogo-lock-scroll {
   padding: clamp(18px, 4vw, 36px);
   opacity: 0;
   pointer-events: none;
-  background: rgba(247, 238, 236, 0.12);
+  background: rgba(13, 21, 34, 0.18);
   transition: opacity 320ms ease;
 }
 
@@ -62,9 +62,9 @@ body.catalogo-lock-scroll {
 
 .catalogo-founder-thanks-overlay {
   background:
-    radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.52), transparent 26%),
-    radial-gradient(circle at 50% 62%, rgba(255, 224, 214, 0.28), transparent 30%),
-    linear-gradient(180deg, rgba(255, 247, 245, 0.48), rgba(243, 219, 216, 0.82));
+    radial-gradient(circle at 50% 14%, rgba(255, 223, 157, 0.18), transparent 26%),
+    radial-gradient(circle at 50% 58%, rgba(25, 52, 88, 0.28), transparent 34%),
+    linear-gradient(180deg, rgba(11, 20, 34, 0.52), rgba(19, 34, 55, 0.92));
   backdrop-filter: blur(2px);
 }
 
@@ -85,10 +85,12 @@ body.catalogo-lock-scroll {
   width: min(1080px, 94vw);
   padding: clamp(1rem, 3vw, 2rem);
   border-radius: 28px;
-  border: 1px solid rgba(192, 141, 132, 0.16);
-  background: rgba(255, 251, 249, 0.36);
+  border: 1px solid rgba(208, 181, 124, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 251, 241, 0.92), rgba(237, 230, 214, 0.88)),
+    linear-gradient(180deg, rgba(17, 31, 51, 0.1), rgba(17, 31, 51, 0));
   box-shadow:
-    0 26px 60px rgba(124, 83, 77, 0.1),
+    0 26px 60px rgba(6, 13, 24, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(8px);
 }
@@ -98,12 +100,12 @@ body.catalogo-lock-scroll {
   overflow: hidden;
   min-height: clamp(240px, 38vw, 420px);
   border-radius: 22px;
-  border: 1px solid rgba(189, 140, 132, 0.18);
+  border: 1px solid rgba(25, 46, 74, 0.18);
   box-shadow:
-    0 18px 42px rgba(124, 83, 77, 0.14),
+    0 18px 42px rgba(7, 16, 29, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.66);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.84), rgba(245, 226, 223, 0.72));
+    linear-gradient(145deg, rgba(255, 253, 246, 0.96), rgba(232, 223, 205, 0.78));
 }
 
 .catalogo-founder-thanks-media::after {
@@ -111,8 +113,8 @@ body.catalogo-lock-scroll {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(120, 74, 68, 0.12)),
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 26%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(14, 30, 52, 0.18)),
+    radial-gradient(circle at top right, rgba(255, 239, 199, 0.18), transparent 26%);
   pointer-events: none;
 }
 
@@ -131,6 +133,7 @@ body.catalogo-lock-scroll {
 }
 
 .catalogo-founder-orb,
+.catalogo-founder-spotlight,
 .catalogo-founder-beam,
 .catalogo-founder-spark {
   position: absolute;
@@ -149,7 +152,7 @@ body.catalogo-lock-scroll {
   left: 22%;
   width: 160px;
   height: 160px;
-  background: radial-gradient(circle, rgba(255, 227, 193, 0.74), rgba(255, 214, 202, 0.12) 70%);
+  background: radial-gradient(circle, rgba(255, 224, 150, 0.54), rgba(255, 214, 202, 0.08) 70%);
 }
 
 .catalogo-founder-orb.orb-b {
@@ -157,7 +160,7 @@ body.catalogo-lock-scroll {
   right: 18%;
   width: 188px;
   height: 188px;
-  background: radial-gradient(circle, rgba(255, 210, 224, 0.72), rgba(244, 205, 200, 0.1) 72%);
+  background: radial-gradient(circle, rgba(107, 175, 255, 0.42), rgba(244, 205, 200, 0.06) 72%);
   animation-delay: -2.8s;
 }
 
@@ -166,8 +169,37 @@ body.catalogo-lock-scroll {
   left: calc(50% - 88px);
   width: 176px;
   height: 176px;
-  background: radial-gradient(circle, rgba(255, 238, 222, 0.68), rgba(255, 209, 184, 0.08) 72%);
+  background: radial-gradient(circle, rgba(255, 231, 176, 0.5), rgba(255, 209, 184, 0.06) 72%);
   animation-delay: -4.1s;
+}
+
+.catalogo-founder-spotlight {
+  top: -10%;
+  width: 24%;
+  height: 118%;
+  opacity: 0.28;
+  filter: blur(1px);
+  background: linear-gradient(180deg, rgba(255, 247, 214, 0.94), rgba(255, 207, 108, 0.1) 54%, transparent);
+  clip-path: polygon(48% 0, 52% 0, 100% 100%, 0 100%);
+  transform-origin: top center;
+  animation: catalogoFounderBeamGlow 4.8s ease-in-out infinite;
+}
+
+.catalogo-founder-spotlight.spot-a {
+  left: 7%;
+  transform: rotate(-8deg);
+}
+
+.catalogo-founder-spotlight.spot-b {
+  left: 38%;
+  transform: rotate(-1deg);
+  animation-delay: -1.4s;
+}
+
+.catalogo-founder-spotlight.spot-c {
+  right: 9%;
+  transform: rotate(8deg);
+  animation-delay: -2.6s;
 }
 
 .catalogo-founder-beam {
@@ -287,7 +319,7 @@ body.catalogo-lock-scroll {
 
 .catalogo-founder-thanks-kicker {
   margin: 0;
-  color: #9d645f;
+  color: #8c6426;
   font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.28em;
@@ -300,16 +332,16 @@ body.catalogo-lock-scroll {
   min-height: 36px;
   padding: 0.48rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid rgba(183, 123, 114, 0.24);
-  background: rgba(255, 247, 243, 0.54);
-  color: #b06f68;
+  border: 1px solid rgba(173, 132, 57, 0.24);
+  background: rgba(255, 250, 236, 0.74);
+  color: #74531d;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 12px 30px rgba(177, 110, 102, 0.12);
+    0 12px 30px rgba(13, 26, 42, 0.12);
 }
 
 .catalogo-founder-thanks-logo {
@@ -317,8 +349,8 @@ body.catalogo-lock-scroll {
   width: min(460px, 100%);
   height: auto;
   filter:
-    drop-shadow(0 18px 34px rgba(112, 65, 59, 0.18))
-    drop-shadow(0 0 26px rgba(255, 239, 233, 0.78));
+    drop-shadow(0 18px 34px rgba(13, 26, 42, 0.2))
+    drop-shadow(0 0 26px rgba(255, 241, 205, 0.58));
   animation: catalogoFounderLogoFloat 4.8s ease-in-out infinite alternate;
 }
 
@@ -411,8 +443,8 @@ body.catalogo-lock-scroll {
 
 .catalogo-founder-thanks-copy strong,
 .catalogo-founder-thanks-copy span {
-  color: #7f4f4a;
-  text-shadow: 0 4px 18px rgba(255, 255, 255, 0.52);
+  color: #18273a;
+  text-shadow: 0 4px 18px rgba(255, 255, 255, 0.3);
 }
 
 .catalogo-founder-thanks-copy strong {
@@ -426,6 +458,65 @@ body.catalogo-lock-scroll {
 .catalogo-founder-thanks-copy span {
   font-size: clamp(0.98rem, 1.5vw, 1.08rem);
   font-weight: 600;
+}
+
+.catalogo-founder-opening {
+  width: min(520px, 100%);
+  margin-top: 0.25rem;
+  padding: 0.92rem 1rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(24, 39, 58, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 244, 0.86), rgba(245, 238, 220, 0.72));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 14px 28px rgba(13, 26, 42, 0.08);
+}
+
+.catalogo-founder-opening-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.catalogo-founder-opening-head strong {
+  margin: 0;
+  font-size: 0.92rem !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  max-width: none !important;
+}
+
+.catalogo-founder-opening-head span {
+  font-size: 0.86rem;
+  font-weight: 900;
+  color: #6b521d;
+}
+
+.catalogo-founder-opening-bar {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(24, 39, 58, 0.08);
+}
+
+.catalogo-founder-opening-bar span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #173a61, #37628f 48%, #f0b451 100%);
+  box-shadow: 0 0 18px rgba(240, 180, 81, 0.3);
+  transition: width 160ms linear;
+}
+
+.catalogo-founder-opening p {
+  margin: 0.7rem 0 0;
+  color: rgba(24, 39, 58, 0.76);
+  font-size: 0.94rem;
+  line-height: 1.5;
 }
 
 .catalogo-welcome.is-thanking .catalogo-welcome-card,
@@ -624,8 +715,8 @@ body.catalogo-lock-scroll {
 
 .catalogo-welcome.is-compact .catalogo-welcome-visual {
   display: block;
-  min-height: 220px;
-  padding: 0.85rem 0.85rem 0.7rem;
+  min-height: 186px;
+  padding: 0.7rem 0.7rem 0.6rem;
   border-bottom: 1px solid rgba(214, 226, 240, 0.44);
 }
 
@@ -853,7 +944,7 @@ body.catalogo-lock-scroll {
 .catalogo-welcome.is-compact .catalogo-visual-copy {
   right: 0.5rem;
   bottom: 0.45rem;
-  width: min(184px, calc(100% - 1rem));
+  width: min(168px, calc(100% - 1rem));
   padding: 0.56rem 0.64rem;
 }
 
@@ -868,8 +959,56 @@ body.catalogo-lock-scroll {
 .catalogo-welcome.is-compact .catalogo-sky-ribbon.ribbon-b,
 .catalogo-welcome.is-compact .catalogo-orbital-satellite.satellite-b,
 .catalogo-welcome.is-compact .catalogo-ufo.ufo-b,
-.catalogo-welcome.is-compact .catalogo-skywatcher.watcher-two {
+.catalogo-welcome.is-compact .catalogo-skywatcher.watcher-two,
+.catalogo-welcome.is-compact .catalogo-prophecy-panel,
+.catalogo-welcome.is-compact .catalogo-visual-copy {
   display: none;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-thanks {
+  padding: 12px;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-thanks-layout {
+  width: min(520px, 100%);
+  gap: 0.82rem;
+  padding: 0.82rem;
+  border-radius: 20px;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-thanks-media {
+  min-height: 140px;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-thanks-video {
+  transform: scale(1.03);
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-thanks-copy {
+  gap: 0.55rem;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-opening {
+  padding: 0.78rem 0.84rem 0.82rem;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-opening p {
+  font-size: 0.86rem;
+}
+
+.catalogo-welcome.is-compact .catalogo-founder-banner-card .catalogo-founder-thanks-logo {
+  width: min(156px, 100%);
+  max-height: 96px;
+}
+
+@media (max-width: 520px) {
+  .catalogo-welcome.is-compact .catalogo-founder-thanks-media {
+    display: none;
+  }
+
+  .catalogo-welcome.is-compact .catalogo-founder-thanks-layout {
+    width: min(440px, 100%);
+  }
 }
 
 .catalogo-compact-banner {

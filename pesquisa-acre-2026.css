@@ -226,6 +226,110 @@ body::after {
     linear-gradient(180deg, rgba(120, 148, 176, 0.42), rgba(58, 78, 102, 0.86));
 }
 
+.poll-hero-scene-election {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 220, 148, 0.22), transparent 20%),
+    radial-gradient(circle at 20% 18%, rgba(98, 166, 233, 0.2), transparent 24%),
+    radial-gradient(circle at 80% 20%, rgba(98, 166, 233, 0.14), transparent 24%),
+    linear-gradient(180deg, rgba(34, 55, 84, 0.94), rgba(18, 32, 51, 0.98));
+}
+
+.election-scene-light,
+.election-scene-marquee,
+.election-scene-strip {
+  position: absolute;
+  display: block;
+}
+
+.election-scene-light {
+  top: -8%;
+  width: 30%;
+  height: 116%;
+  opacity: 0.28;
+  background: linear-gradient(180deg, rgba(255, 242, 202, 0.92), rgba(255, 207, 108, 0.08) 52%, transparent);
+  clip-path: polygon(48% 0, 52% 0, 100% 100%, 0 100%);
+}
+
+.election-scene-light.light-left {
+  left: 4%;
+  transform: rotate(-8deg);
+}
+
+.election-scene-light.light-center {
+  left: 35%;
+}
+
+.election-scene-light.light-right {
+  right: 4%;
+  transform: rotate(8deg);
+}
+
+.election-scene-marquee {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  gap: 0.55rem;
+  width: min(100%, 420px);
+  padding: 1.3rem 1rem 1.2rem;
+  border-radius: 24px;
+  border: 1px solid rgba(230, 209, 153, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 249, 234, 0.96), rgba(242, 234, 212, 0.92));
+  box-shadow:
+    0 22px 48px rgba(5, 14, 27, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  text-align: center;
+}
+
+.election-scene-kicker {
+  color: #7f5b1d;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.election-scene-marquee strong {
+  color: #163152;
+  font-family: "Fraunces", serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 0.95;
+}
+
+.election-scene-marquee small {
+  color: rgba(22, 49, 82, 0.76);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.election-scene-strip {
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.election-scene-strip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(179, 220, 255, 0.18);
+  background: rgba(13, 28, 46, 0.66);
+  color: rgba(239, 247, 255, 0.9);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
 .scene-glow,
 .scene-orbit,
 .scene-satellite,

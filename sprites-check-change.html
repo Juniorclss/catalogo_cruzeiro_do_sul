@@ -8,7 +8,7 @@
       name="description"
       content="Painel CHECKPUBPAID para revisar sprites, itens, cenarios e assets capturados pela equipe Ninja."
     />
-    <link rel="stylesheet" href="./sprites-check-change.css?v=20260419a" />
+    <link rel="stylesheet" href="./sprites-check-change.css?v=20260419b" />
   </head>
   <body>
     <main class="sprite-control-shell">
@@ -20,6 +20,7 @@
         </a>
         <nav class="sprite-control-menu" data-sprite-menu>
           <button class="active" type="button" data-category="checkpubpaid">CHECKPUBPAID</button>
+          <button type="button" data-category="pubpaidbuilder">PUBPAIDBUILDER</button>
           <button type="button" data-category="animados">Sprites animados</button>
           <button type="button" data-category="personagens">Personagens</button>
           <button type="button" data-category="itens">Itens e props</button>
@@ -92,6 +93,41 @@
           </article>
         </section>
 
+        <section class="sprite-builder-panel" data-pubpaid-builder aria-label="Painel de construção do PubPaid">
+          <div class="sprite-builder-head">
+            <div>
+              <span>PUBPAIDBUILDER</span>
+              <h2>Kit vivo do bar: sprites, mapas, props, NPCs e efeitos com foco de jogo.</h2>
+            </div>
+            <p>
+              Aqui entram primeiro os candidatos com contexto direto para PubPaid: balcão, garçom, mesas, roleta,
+              copos, dados, jukebox, clientes, luz de pista, HUD e tilesets de bar/cassino.
+            </p>
+          </div>
+          <div class="sprite-builder-stats" data-builder-stats>
+            <article><span>Prontos pro bar</span><strong>--</strong></article>
+            <article><span>NPCs e personagens</span><strong>--</strong></article>
+            <article><span>Mapas e mesas</span><strong>--</strong></article>
+            <article><span>Efeitos e HUD</span><strong>--</strong></article>
+          </div>
+          <div class="sprite-builder-focus">
+            <div>
+              <strong>Prioridade de captura</strong>
+              <p>Garçom, dealer, clientes, mesas jogáveis, copos reais, dados caindo, fichas, jukebox e luzes do bar.</p>
+            </div>
+            <div>
+              <strong>Regras de aceitação</strong>
+              <p>Pacote completo, animação agrupada, contexto claro e leitura pronta para construção dentro do PubPaid.</p>
+            </div>
+            <div>
+              <strong>Fila imediata</strong>
+              <div class="sprite-builder-targets" data-builder-targets>
+                <span>Aguardando cofre</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="sprite-toolbar">
           <label>
             Buscar asset
@@ -141,6 +177,6 @@
       </article>
     </section>
 
-    <script src="./sprites-check-change.js?v=20260419a" defer></script>
+    <script src="./sprites-check-change.js?v=20260419b" defer></script>
   </body>
 </html>

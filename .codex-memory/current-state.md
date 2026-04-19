@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-04-19T15:05:00.000Z
+Updated: 2026-04-19T17:15:00.000Z
 
 ## Active Goal
 
@@ -28,6 +28,15 @@ Updated: 2026-04-19T15:05:00.000Z
 - Validacao local do Escritorio de Arte: pagina 200, config 200, sitemap com `/escritorio-arte.html`, 50 agentes confirmados, `npm run review:team` com 0 achados.
 - Painel `SPRTIS CHECK & CHANGE` corrigido: removeu `assets` ja publicados da fila de aprovacao, apagou a senha visivel do placeholder, agrupa frames em sprites animados, abre avaliacao em tela cheia e adiciona plano de uso/modo construcao para mapas e cenarios.
 - Validacao local do painel corrigido: HTML 200, sem senha no HTML, sem `<canvas>`, 2107 grupos a partir de 2542 arquivos do cofre, 190 grupos animados, 1668 candidatos de mapa/cenario/construcao, 0 itens vindos de `assets`.
+- Novo subsistema `Crescimento Neural` criado para todos os escritorios via `office-neural-subsystem.js`, com painel flutuante, ciclos de estudo, modulos de aprendizado e botao para ordenar busca de sprites PubPaid.
+- Novas APIs: `GET/POST /api/office-neural-growth`, `GET /api/pubpaid-sprite-scout` e `POST /api/pubpaid-sprite-scout/order`. A ordem de busca aciona Ninjas + Arte/Game Design + Nerd pela hierarquia.
+- Fontes iniciais do scout PubPaid: Kenney, OpenGameArt, itch.io free game assets, CraftPix freebies e GameDev Market free assets, sempre com verificacao de licenca antes de uso.
+- Validacao local: escritórios carregam `office-neural-subsystem.js`, API neural ok com 5 modulos, scout ok com 5 fontes, pulso neural e ordem PubPaid responderam 201; `npm run review:team` 0 achados.
+- `sprites-check-change.html`, `sprites-check-change.js` e `sprites-check-change.css` agora incluem a secao dedicada `PUBPAIDBUILDER`, com botao proprio no menu, contagem de candidatos do bar, foco de captura e fila imediata de sprites/contextos para o PubPaid.
+- `startup-experience.js` e `startup-experience.css` foram atualizados para segurar o agradecimento dos fundadores por 5 segundos, com visual mais editorial/jornal, spotlights sobre os destaques e barra de progresso textual da abertura da edicao.
+- `pesquisa-acre-2026.html` e `pesquisa-acre-2026.css` trocaram a cena abstrata do topo por um letreiro visual `Eleições 2026`.
+- `styles.css` recebeu uma passada estrutural forte no topo mobile da home: constelacao oculta no celular, masthead em grade, navegacao e atalhos empilhados sem sobreposicao, e faixa de atualizacoes mais controlada.
+- Validacoes locais desta retomada: `node --check sprites-check-change.js`, `node --check startup-experience.js`, `node --check office-neural-subsystem.js`, `npm run review:team` com 0 achados, `GET /`, `GET /sprites-check-change.html` e `GET /pesquisa-acre-2026.html` responderam 200 na porta 4108.
 
 ## Next
 
@@ -37,3 +46,5 @@ Updated: 2026-04-19T15:05:00.000Z
 - Publicar o painel/check chat no `origin/main` e conferir no Render: `https://catalogo-cruzeiro-web.onrender.com/sprites-check-change.html`.
 - Publicar e conferir `https://catalogo-cruzeiro-web.onrender.com/escritorio-arte.html`.
 - Conferir no Render a nova versao do `SPRTIS CHECK & CHANGE` com animacao, tela cheia e regras de contexto.
+- Conferir no Render o botao `Crescimento Neural` nos quatro escritorios e o envio de ordem de busca PubPaid.
+- Publicar esta rodada no `origin/main` e conferir no Render o topo mobile da home, o novo `PUBPAIDBUILDER`, o splash dos fundadores e o letreiro `Eleições 2026`.

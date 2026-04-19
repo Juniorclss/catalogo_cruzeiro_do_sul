@@ -1,6 +1,6 @@
 # Handoff
 
-Updated: 2026-04-19T15:05:00.000Z
+Updated: 2026-04-19T17:15:00.000Z
 
 Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current-state.md`, `.codex-memory/orders.json`, `.codex-memory/assets.json` e `.codex-memory/credit-end-protocol.md`.
 
@@ -21,6 +21,14 @@ Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current
 - Validacoes locais do Escritorio de Arte: `node --check escritorio-arte-config.js`, `node --check server.js`, `node --check office-command-chat.js`, `npm run review:team` com 0 achados, `GET /escritorio-arte.html` 200, config 200, sitemap inclui `/escritorio-arte.html`.
 - Correcao importante no `SPRTIS CHECK & CHANGE`: a API agora varre apenas `sprite-vault`, nao `assets`; agrupa frames em sprites animados; marca usados no site como aceitos/travados caso aparecam; adiciona contexto de uso e plano de construcao; front abre avaliacao em tela cheia e troca frames por `<img>`, sem canvas.
 - Validacoes locais do painel corrigido: `node --check server.js`, `node --check sprites-check-change.js`, `npm run review:team` 0 achados, HTML 200, senha nao aparece no HTML, sem `<canvas>`, 2107 grupos, 190 grupos animados, 1668 mapas/cenarios/construcao, 0 itens de `assets`.
+- Novo subsistema dos escritorios: `office-neural-subsystem.js` com botao `Crescimento Neural`, painel de estudo das IAs, modulos de aprendizado e botao `Ordenar busca de sprites PubPaid`.
+- APIs novas: `GET /api/office-neural-growth`, `POST /api/office-neural-growth/pulse`, `GET /api/pubpaid-sprite-scout`, `POST /api/pubpaid-sprite-scout/order`. POST exige senha Full Admin e registra a ordem para Ninjas + Arte/Game Design + Nerd.
+- Validacoes locais do subsistema: `node --check server.js`, `node --check office-neural-subsystem.js`, `npm run review:team` 0 achados, `GET /escritorio.html` 200 com script neural, APIs neural/scout ok, pulso e ordem responderam 201.
+- Retomada local posterior adicionou `PUBPAIDBUILDER` ao `SPRTIS CHECK & CHANGE` (`sprites-check-change.html/js/css`), com botao proprio no menu, painel de contagem e fila priorizada de candidatos para o PubPaid.
+- O splash de fundadores em `startup-experience.js/css` foi reforcado: tempo de 5s, progresso de abertura da edicao, spotlights de destaque e paleta menos rosa / mais editorial.
+- `pesquisa-acre-2026.html/css` agora usa um letreiro `Eleições 2026` no topo em vez da arte abstrata anterior.
+- `styles.css` ganhou um reparo forte do topo mobile da home para impedir sobreposicao de botoes, sumico parcial da constelacao e quebra de faixas.
+- Validacoes locais desta ultima passada: `node --check sprites-check-change.js`, `node --check startup-experience.js`, `node --check office-neural-subsystem.js`, `npm run review:team` com 0 achados, `GET /`, `GET /sprites-check-change.html` e `GET /pesquisa-acre-2026.html` 200 na porta 4108.
 
 ## Pendencias
 
@@ -30,6 +38,8 @@ Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current
 - Se publicar esta etapa, conferir no Render a URL `https://catalogo-cruzeiro-web.onrender.com/sprites-check-change.html` e os escritorios com botao flutuante `Ordens`.
 - Conferir no Render tambem `https://catalogo-cruzeiro-web.onrender.com/escritorio-arte.html`.
 - Na proxima retomada, se o usuario reclamar do painel, primeiro verificar se ele esta vendo a versao nova: sem placeholder com senha, cards animando frames e botao `Tela cheia`.
+- Conferir no Render todos os escritorios com o novo botao `Crescimento Neural`, especialmente se nao sobrepoe o botao `Ordens` em mobile.
+- Ainda falta publicar esta passada; o Render no momento nao recebeu `PUBPAIDBUILDER`, o novo splash nem o reparo mobile desta rodada.
 
 ## Referencias de jogos pesquisadas
 

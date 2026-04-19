@@ -78,6 +78,8 @@ const HEARTBEATS_FILE = path.join(DATA_DIR, "heartbeats.json");
 const ACRE_2026_POLL_FILE = path.join(DATA_DIR, "acre-2026-poll.json");
 const SPRITE_CHECK_REVIEWS_FILE = path.join(DATA_DIR, "sprite-check-reviews.json");
 const OFFICE_ORDERS_FILE = path.join(DATA_DIR, "office-orders.json");
+const OFFICE_NEURAL_GROWTH_FILE = path.join(DATA_DIR, "office-neural-growth.json");
+const PUBPAID_SPRITE_SCOUT_FILE = path.join(DATA_DIR, "pubpaid-sprite-scout.json");
 const SITE_URL = String(process.env.SITE_URL || "").trim().replace(/\/+$/, "");
 const SPRITE_CHECK_PASSWORD = String(process.env.SPRITE_CHECK_PASSWORD || "99831455").trim();
 const FULL_ADMIN_PASSWORD = String(process.env.FULL_ADMIN_PASSWORD || "99831455A").trim();
@@ -4286,6 +4288,211 @@ function buildOfficeOrderPayload() {
   };
 }
 
+function appendOfficeOrder(order) {
+  const orders = readJson(OFFICE_ORDERS_FILE, []);
+  const nextOrders = Array.isArray(orders) ? orders.concat(order).slice(-250) : [order];
+  writeJson(OFFICE_ORDERS_FILE, nextOrders);
+  return nextOrders;
+}
+
+const PUBPAID_SPRITE_SCOUT_SOURCES = [
+  {
+    name: "Kenney Assets",
+    url: "https://kenney.nl/assets",
+    licenseFocus: "CC0 / permissivo",
+    use: "base segura para UI, tiles, itens, personagens e prototipos comerciais"
+  },
+  {
+    name: "OpenGameArt",
+    url: "https://opengameart.org/",
+    licenseFocus: "varia por asset",
+    use: "buscar sprites animados, tilesets, props de bar/cassino e efeitos revisando licenca item a item"
+  },
+  {
+    name: "itch.io Game Assets",
+    url: "https://itch.io/game-assets/free",
+    licenseFocus: "varia por pacote",
+    use: "garimpar pixel art de bar, cassino, interiores, UI e personagens com pagina de licenca clara"
+  },
+  {
+    name: "CraftPix Freebies",
+    url: "https://craftpix.net/freebies/",
+    licenseFocus: "ver termos do pacote",
+    use: "spritesheets, personagens e UI packs para estudo e referencia de pipeline"
+  },
+  {
+    name: "GameDev Market Free Assets",
+    url: "https://www.gamedevmarket.net/category/free/",
+    licenseFocus: "ver termos do pacote",
+    use: "props, UI, personagens e ambientes com revisao de permissao antes de uso"
+  }
+];
+
+const PUBPAID_SPRITE_SCOUT_CATEGORIES = [
+  "Garcom de busto/idle/talk para balcão",
+  "Clientes sentados, rivais e dealer com idle e pequenas falas",
+  "Copos, dados, fichas, cartas, garrafas e moedas com estados de animacao",
+  "Roleta, sinuca, poker, blackjack, damas e caca-niqueis com sprites completos",
+  "Tilesets de bar/pub/cassino: chao, parede, balcão, palco, luzes e mesas",
+  "FX de moedas, jackpot, luz RGB, fumaca, brilho, confete e impacto",
+  "UI/HUD: icones de mesa, marcadores de interacao, botoes, placas e prompts"
+];
+
+function buildDefaultNeuralGrowthState() {
+  return {
+    ok: true,
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    cycles: 0,
+    score: 0,
+    hierarchy: "Full Admin -> Codex CEO -> Ninjas + Arte/Game Design + Nerd",
+    modules: [
+      {
+        id: "sprites",
+        name: "Sprites com movimento",
+        team: "Ninjas + Arte",
+        level: 1,
+        focus: "captar pacote completo, agrupar frames e separar acoes jogaveis"
+      },
+      {
+        id: "game-engine",
+        name: "Game engine e loop",
+        team: "Nerd + Arte",
+        level: 1,
+        focus: "estado de jogo, input, render, tempo, camadas e performance"
+      },
+      {
+        id: "collision-physics",
+        name: "Colisao e fisica",
+        team: "Nerd",
+        level: 1,
+        focus: "hitbox, parede, mesa, atrito, quique, easing e resposta"
+      },
+      {
+        id: "maps",
+        name: "Mapas e modo construcao",
+        team: "Arte + Ninjas",
+        level: 1,
+        focus: "tiles, layers, colisao, decoracao, hotspots e fluxo"
+      },
+      {
+        id: "pubpaid-feel",
+        name: "PubPaid vivo",
+        team: "Ninjas + Arte + Nerd",
+        level: 1,
+        focus: "som, suspense, NPCs, luz, UI e sensacao de aposta"
+      }
+    ],
+    lessons: [
+      "Nao avaliar frame solto quando o correto e sprite animado.",
+      "Nao colocar assets ja publicados na fila de aceite.",
+      "Priorizar contexto real: PubPaid, jogos, escritorios e subsites existentes.",
+      "Sem canvas para ilustracao nova de personagem/conteudo; usar bitmap real revisado."
+    ],
+    pulses: []
+  };
+}
+
+function buildNeuralGrowthPayload() {
+  const persisted = readJson(OFFICE_NEURAL_GROWTH_FILE, null);
+  const fallback = buildDefaultNeuralGrowthState();
+  if (!persisted || typeof persisted !== "object" || Array.isArray(persisted)) return fallback;
+
+  return {
+    ...fallback,
+    ...persisted,
+    modules: Array.isArray(persisted.modules) && persisted.modules.length ? persisted.modules : fallback.modules,
+    lessons: Array.isArray(persisted.lessons) && persisted.lessons.length ? persisted.lessons : fallback.lessons,
+    pulses: Array.isArray(persisted.pulses) ? persisted.pulses : []
+  };
+}
+
+function recordNeuralGrowthPulse(body = {}) {
+  const current = buildNeuralGrowthPayload();
+  const focus = cleanShortText(body.focus || "sprites-pubpaid", 120);
+  const note = cleanShortText(body.note || "", 500);
+  const pulse = {
+    id: createRecordId("neural"),
+    focus,
+    note,
+    from: "Full Admin",
+    to: "Codex CEO + equipes",
+    createdAt: new Date().toISOString()
+  };
+  const modules = current.modules.map((moduleItem) => {
+    const shouldGrow =
+      focus === "todos" ||
+      normalizeText(`${moduleItem.id} ${moduleItem.name} ${moduleItem.focus}`).includes(normalizeText(focus));
+    return {
+      ...moduleItem,
+      level: Number(moduleItem.level || 1) + (shouldGrow ? 1 : 0)
+    };
+  });
+  const nextState = {
+    ...current,
+    ok: true,
+    updatedAt: new Date().toISOString(),
+    cycles: Number(current.cycles || 0) + 1,
+    score: Number(current.score || 0) + 7,
+    modules,
+    pulses: [pulse].concat(current.pulses || []).slice(0, 80)
+  };
+  writeJson(OFFICE_NEURAL_GROWTH_FILE, nextState);
+  return nextState;
+}
+
+function buildPubPaidSpriteScoutPayload() {
+  const requests = readJson(PUBPAID_SPRITE_SCOUT_FILE, []);
+  const safeRequests = Array.isArray(requests) ? requests : [];
+  return {
+    ok: true,
+    updatedAt: new Date().toISOString(),
+    mission: "Buscar na internet sprites completos, animados e licenciaveis para o PubPaid.",
+    rules: [
+      "Priorizar sprite pronto com movimento, nao frame solto.",
+      "Registrar fonte, licenca, URL, contexto de uso e risco antes de baixar.",
+      "Nada entra no jogo sem passar pelo CHECKPUBPAID.",
+      "Foco em bitmap/sprite real; canvas serve para mecanica, nao para ilustrar personagem novo."
+    ],
+    categories: PUBPAID_SPRITE_SCOUT_CATEGORIES,
+    sources: PUBPAID_SPRITE_SCOUT_SOURCES,
+    requests: safeRequests.slice(-60).reverse()
+  };
+}
+
+function recordPubPaidSpriteScoutOrder(body = {}) {
+  const target = cleanShortText(body.target || "Ninjas + Arte/Game Design + Nerd", 120);
+  const focus = cleanShortText(body.focus || "sprites completos do PubPaid", 200);
+  const scoutOrder = {
+    id: createRecordId("scout"),
+    target,
+    focus,
+    status: "ordem-enviada",
+    createdAt: new Date().toISOString(),
+    categories: PUBPAID_SPRITE_SCOUT_CATEGORIES,
+    sources: PUBPAID_SPRITE_SCOUT_SOURCES
+  };
+  const requests = readJson(PUBPAID_SPRITE_SCOUT_FILE, []);
+  const nextRequests = Array.isArray(requests) ? requests.concat(scoutOrder).slice(-120) : [scoutOrder];
+  writeJson(PUBPAID_SPRITE_SCOUT_FILE, nextRequests);
+
+  appendOfficeOrder({
+    id: createRecordId("ord"),
+    from: "Full Admin",
+    to: target,
+    priority: "critica",
+    message:
+      `Buscar pela internet sprites completos e animados para PubPaid: ${focus}. Registrar fonte, licenca, URL, contexto e risco antes de qualquer uso.`,
+    ceoReply:
+      "Recebido. CEO acionou Ninjas para garimpo/licenca, Arte para qualidade visual e Nerd para aplicacao em gameplay.",
+    status: "recebida-pelo-ceo",
+    hierarchy: "Full Admin -> Codex CEO -> Ninjas + Arte/Game Design + Nerd",
+    createdAt: scoutOrder.createdAt
+  });
+
+  return scoutOrder;
+}
+
 function requireAcre2026PollAdmin(req) {
   if (requireAdmin(req)) {
     return true;
@@ -4846,11 +5053,37 @@ async function handleApi(req, res, pathname, searchParams) {
       hierarchy: "Full Admin -> Codex CEO -> equipes",
       createdAt: new Date().toISOString()
     };
-    const orders = readJson(OFFICE_ORDERS_FILE, []);
-    const nextOrders = Array.isArray(orders) ? orders.concat(order).slice(-250) : [order];
-    writeJson(OFFICE_ORDERS_FILE, nextOrders);
+    appendOfficeOrder(order);
 
     return sendJson(res, 201, { ok: true, order, ceoReply, ...buildOfficeOrderPayload() });
+  }
+
+  if (req.method === "GET" && pathname === "/api/office-neural-growth") {
+    return sendJson(res, 200, buildNeuralGrowthPayload());
+  }
+
+  if (req.method === "POST" && pathname === "/api/office-neural-growth/pulse") {
+    const body = await parseBody(req);
+    if (!requireFullAdminOrderAccess(req, body)) {
+      return sendJson(res, 401, { ok: false, error: "Acesso restrito ao Full Admin." });
+    }
+
+    const payload = recordNeuralGrowthPulse(body);
+    return sendJson(res, 201, payload);
+  }
+
+  if (req.method === "GET" && pathname === "/api/pubpaid-sprite-scout") {
+    return sendJson(res, 200, buildPubPaidSpriteScoutPayload());
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid-sprite-scout/order") {
+    const body = await parseBody(req);
+    if (!requireFullAdminOrderAccess(req, body)) {
+      return sendJson(res, 401, { ok: false, error: "Acesso restrito ao Full Admin." });
+    }
+
+    const order = recordPubPaidSpriteScoutOrder(body);
+    return sendJson(res, 201, { ok: true, order, ...buildPubPaidSpriteScoutPayload() });
   }
 
   if (req.method === "GET" && pathname === "/api/news/aggregator") {

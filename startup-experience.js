@@ -5,11 +5,19 @@
   const CONSENT_BANNER_ID = "catalogo-cookie-consent";
   const READY_FALLBACK_MS = 6800;
   const OPEN_DELAY_MS = 260;
-  const THANKS_SCREEN_MS = 3600;
+  const THANKS_SCREEN_MS = 5000;
+  const THANKS_SCREEN_MS_COMPACT = 3200;
   const SESSION_ACCEPT_KEY = "catalogo_terms_session_accept_v1";
   const FOUNDERS_VIDEO_SRC = "./assets/founders-cafe-pack-anim.mp4";
   const FOUNDERS_GEANE_LOGO_SRC = "./assets/founders-geane-logo.png";
   const FOUNDERS_RECOMMENCER_LOGO_SRC = "./assets/founders-recommencer-logo.svg";
+  const FOUNDERS_OPENING_STEPS = [
+    "Abrindo noticias atuais do Vale do Jurua.",
+    "Atualizando manchetes de politica, servico e cidade.",
+    "Lendo fontes monitoradas e checando resumos.",
+    "Montando radar local, agenda e destaques do dia.",
+    "Conferindo capas, editorias e atalhos do portal."
+  ];
 
   function ready(callback) {
     if (document.readyState === "loading") {
@@ -179,6 +187,9 @@
           <span class="catalogo-founder-orb orb-a"></span>
           <span class="catalogo-founder-orb orb-b"></span>
           <span class="catalogo-founder-orb orb-c"></span>
+          <span class="catalogo-founder-spotlight spot-a"></span>
+          <span class="catalogo-founder-spotlight spot-b"></span>
+          <span class="catalogo-founder-spotlight spot-c"></span>
           <span class="catalogo-founder-beam beam-a"></span>
           <span class="catalogo-founder-beam beam-b"></span>
           <span class="catalogo-founder-spark spark-a"></span>
@@ -233,11 +244,55 @@
               </article>
             </div>
             <strong class="catalogo-founder-reveal reveal-4">Nossos agradecimentos em destaque.</strong>
-            <span class="catalogo-founder-reveal reveal-5">Obrigado.</span>
+            <span class="catalogo-founder-reveal reveal-5">Obrigado. O portal esta abrindo.</span>
+            <div class="catalogo-founder-opening catalogo-founder-reveal reveal-5" aria-live="polite">
+              <div class="catalogo-founder-opening-head">
+                <strong>Abrindo edicao atual</strong>
+                <span data-founder-opening-percent>0%</span>
+              </div>
+              <div class="catalogo-founder-opening-bar">
+                <span data-founder-opening-bar></span>
+              </div>
+              <p data-founder-opening-text>${FOUNDERS_OPENING_STEPS[0]}</p>
+            </div>
           </div>
         </div>
       </div>
     `;
+  }
+
+  function startFounderOpening(modal) {
+    const openingText = modal?.querySelector("[data-founder-opening-text]");
+    const openingPercent = modal?.querySelector("[data-founder-opening-percent]");
+    const openingBar = modal?.querySelector("[data-founder-opening-bar]");
+    if (!openingText || !openingPercent || !openingBar) {
+      return () => {};
+    }
+
+    const startedAt = Date.now();
+    let stepIndex = 0;
+    openingText.textContent = FOUNDERS_OPENING_STEPS[0];
+    openingPercent.textContent = "0%";
+    openingBar.style.width = "0%";
+
+    const progressTimer = window.setInterval(() => {
+      const elapsed = Date.now() - startedAt;
+      const progress = Math.min(100, Math.round((elapsed / THANKS_SCREEN_MS) * 100));
+      openingPercent.textContent = `${progress}%`;
+      openingBar.style.width = `${progress}%`;
+    }, 120);
+
+    const stepTimer = window.setInterval(() => {
+      stepIndex = (stepIndex + 1) % FOUNDERS_OPENING_STEPS.length;
+      openingText.textContent = FOUNDERS_OPENING_STEPS[stepIndex];
+    }, 760);
+
+    return () => {
+      window.clearInterval(progressTimer);
+      window.clearInterval(stepTimer);
+      openingPercent.textContent = "100%";
+      openingBar.style.width = "100%";
+    };
   }
 
   function buildWelcomeVisualMarkup(options = {}) {
@@ -510,7 +565,11 @@
       return;
     }
 
+    const thanksDuration = modal.classList.contains("is-compact")
+      ? THANKS_SCREEN_MS_COMPACT
+      : THANKS_SCREEN_MS;
     const thanksVideo = modal.querySelector(".catalogo-founder-thanks-video");
+    modal.__stopFounderOpening = startFounderOpening(modal);
     modal.classList.add("is-thanking");
     modal.setAttribute("aria-hidden", "true");
 
@@ -530,14 +589,20 @@
       modal.classList.add("is-leaving");
       document.body.classList.remove("catalogo-lock-scroll");
       window.setTimeout(() => {
+        if (typeof modal.__stopFounderOpening === "function") {
+          modal.__stopFounderOpening();
+        }
         modal.remove();
         dispatchIntroFinished();
       }, 320);
-    }, THANKS_SCREEN_MS);
+    }, thanksDuration);
   }
 
   function closeWelcomeModalImmediately(modal) {
     if (!modal) return;
+    if (typeof modal.__stopFounderOpening === "function") {
+      modal.__stopFounderOpening();
+    }
     modal.classList.add("is-leaving");
     modal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("catalogo-lock-scroll");
