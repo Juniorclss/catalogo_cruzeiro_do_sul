@@ -17,6 +17,8 @@ Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current
 - Em andamento/concluido localmente: painel `SPRTIS CHECK & CHANGE` em `sprites-check-change.html`, com menu `CHECKPUBPAID`, senha `99831455`, listagem de 2600 assets vindos de `sprite-vault` e `assets`, e salvamento de revisoes em `data/sprite-check-reviews.json`.
 - Chat hierarquico de ordens adicionado aos escritorios por `office-command-chat.js`: senha Full Admin `99831455A`, fluxo `Full Admin -> Codex CEO -> equipes`, APIs `/api/office-orders`.
 - Validacoes locais desta etapa: `node --check server.js`, `node --check sprites-check-change.js`, `node --check office-command-chat.js`, `npm run review:team` com 0 achados, `GET /sprites-check-change.html` 200, `GET /api/sprites-check?password=99831455` ok, `POST /api/office-orders` ok.
+- Novo `Escritorio de Arte` em `escritorio-arte.html` com `escritorio-arte-config.js`: 50 agentes de Design Art e Programacao de Game Design, trabalhando junto com Ninjas em pixel art, sprites, engine, colisao, fisica, mapas, som, QA, balanceamento e build.
+- Validacoes locais do Escritorio de Arte: `node --check escritorio-arte-config.js`, `node --check server.js`, `node --check office-command-chat.js`, `npm run review:team` com 0 achados, `GET /escritorio-arte.html` 200, config 200, sitemap inclui `/escritorio-arte.html`.
 
 ## Pendencias
 
@@ -24,6 +26,7 @@ Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current
 - PubPaid ainda precisa ficar mais dinamico: copos/dados com animacao e som, roleta com giro/suspense, sinuca com fisica clara.
 - Equipe Ninja recomenda criar kits `sprite-vault/generated/pubpaid/*` e `sprite-vault/generated/offices/agents/*`.
 - Se publicar esta etapa, conferir no Render a URL `https://catalogo-cruzeiro-web.onrender.com/sprites-check-change.html` e os escritorios com botao flutuante `Ordens`.
+- Conferir no Render tambem `https://catalogo-cruzeiro-web.onrender.com/escritorio-arte.html`.
 
 ## Referencias de jogos pesquisadas
 

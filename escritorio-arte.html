@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Escritório de Arte | Design Art e Programação de Game Design</title>
+    <meta
+      name="description"
+      content="Escritório de Arte com 50 agentes especializados em pixel art, sprites, game design, engine, colisão, física, mapas e programação de jogos."
+    />
+    <meta property="og:title" content="Escritório de Arte | Design Art e Programação de Game Design" />
+    <meta
+      property="og:description"
+      content="Equipe irmã dos Ninjas para estudar e aplicar pixel art, sprites, mapas, engine, colisão, física e game design nos jogos do portal."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{SITE_URL}}/escritorio-arte.html" />
+    <meta property="og:image" content="{{SITE_URL}}{{OG_IMAGE}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Escritório de Arte | Game Design" />
+    <meta
+      name="twitter:description"
+      content="50 agentes de arte e programação de jogos trabalhando junto com os Ninjas."
+    />
+    <link rel="canonical" href="{{SITE_URL}}/escritorio-arte.html" />
+    <link rel="stylesheet" href="./escritorio.css?v=20260419arte" />
+  </head>
+  <body class="office-page office-page-nerd office-page-art" data-office-theme="editorial-hq">
+    <div class="office-shell">
+      <header class="office-topbar">
+        <a class="office-brand" href="./index.html?skipIntro=1" aria-label="Voltar para a home">
+          <img src="./assets/logo-czs.svg" alt="" />
+          <div>
+            <span>design art + game design</span>
+            <strong>Escritório de Arte</strong>
+          </div>
+        </a>
+
+        <nav class="office-nav" aria-label="Navegação do escritório de arte">
+          <a href="./sprites-check-change.html">CHECKPUBPAID</a>
+          <a href="#planta">Ateliê</a>
+          <a href="#terminal">Terminal 24h</a>
+          <a href="#inventario">Inventário</a>
+          <a href="./escritorio-ninjas.html">Ninjas</a>
+          <a href="./escritorio-nerd.html">Nerd</a>
+          <a href="./escritorio.html">Editorial</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="office-hero">
+          <div class="office-hero-copy">
+            <p class="office-eyebrow">novo escritório operacional</p>
+            <h1>Escritório de Arte: 50 agentes estudando pixel art, sprites, engine, física e mapas.</h1>
+            <p>
+              Esta equipe trabalha junto com os Ninjas: os Ninjas organizam o cofre e a origem dos assets; a Arte
+              transforma isso em linguagem de jogo, colisão, mapa, animação, feedback e programação jogável.
+            </p>
+            <div class="office-hero-actions">
+              <a class="office-button primary" href="#planta">Abrir ateliê</a>
+              <a class="office-button" href="./escritorio-ninjas.html">Ver equipe Ninja</a>
+              <a class="office-button" href="./sprites-check-change.html">Revisar sprites</a>
+            </div>
+          </div>
+
+          <aside class="office-hero-panel" aria-label="Resumo do escritório de arte">
+            <span>missão</span>
+            <strong>Arte + programação de jogos</strong>
+            <p>
+              Pixel art, sprites, tilesets, game loop, engine, colisão, física, câmera, mapa, som, UI e playtest
+              andando em uma fila única de aprendizado e execução.
+            </p>
+          </aside>
+        </section>
+
+        <section class="office-world-section" id="planta" aria-labelledby="office-world-title">
+          <div class="office-section-head">
+            <div>
+              <p class="office-eyebrow">mapa do ateliê</p>
+              <h2 id="office-world-title">Um laboratório de arte e game design conectado ao site e ao cofre Ninja.</h2>
+            </div>
+            <p>
+              Os agentes circulam entre ateliê, mapas, QA e engine para estudar, testar e transformar referência em
+              melhoria prática nos jogos.
+            </p>
+          </div>
+
+          <div class="office-vscode-frame" data-office-frame aria-label="Escritório de Arte em estilo pixel art top-down">
+            <div class="office-vscode-titlebar" aria-label="Atalhos da janela do escritório de arte">
+              <button type="button" data-office-titlebar="terminal">terminal</button>
+              <button class="is-active" type="button" data-office-titlebar="office">escritorios</button>
+              <button type="button" data-office-titlebar="backstage">bastidores</button>
+              <button type="button" data-office-titlebar="home">pubpaid</button>
+            </div>
+
+            <div class="office-vscode-body">
+              <aside class="office-side-rail" aria-label="Atalhos do escritório de arte">
+                <button type="button" data-office-action="gather" title="Reunir equipe">+</button>
+                <button type="button" data-office-action="reset" title="Voltar ao mapa">ART</button>
+                <button type="button" data-office-action="cafe" title="Abrir vaquinha do ateliê">PIX</button>
+                <button type="button" data-office-action="terminal" title="Abrir modo terminal">FX</button>
+              </aside>
+
+              <div class="office-map-panel" data-office-map-panel>
+                <div class="office-map-tabs" aria-label="Modos do escritório de arte">
+                  <button class="is-active" type="button" data-office-tab="team">equipe</button>
+                  <button type="button" data-office-tab="environment">ambientes</button>
+                  <button type="button" data-office-tab="visual">visual</button>
+                  <button type="button" data-office-tab="inventory">inventario</button>
+                </div>
+
+                <div class="office-control-deck">
+                  <section class="office-control-panel" data-office-panel="environment" hidden>
+                    <div class="office-control-head">
+                      <span>3 modos</span>
+                      <strong>Escolha o foco do ateliê</strong>
+                    </div>
+                    <div class="office-environment-grid" data-office-environment-grid></div>
+                    <p class="office-control-copy" data-office-environment-copy>
+                      Troque o ambiente para mudar o foco entre pixel art, engine e mapas.
+                    </p>
+                  </section>
+
+                  <section class="office-control-panel" data-office-panel="visual" hidden>
+                    <div class="office-control-head">
+                      <span>vaquinha do ateliê</span>
+                      <strong>Empurre ferramentas para a equipe de arte</strong>
+                    </div>
+                    <p class="office-control-copy" data-office-visual-copy>
+                      Apoios entram como itens concretos: mesa digitalizadora, kit de mapas, bancada de engine e som.
+                    </p>
+                    <div class="office-visual-actions">
+                      <button class="office-button primary" type="button" data-open-support-modal>Mostrar melhorias</button>
+                      <button class="office-button" type="button" data-office-action="boost">Reforçar visual</button>
+                    </div>
+                  </section>
+
+                  <section
+                    class="office-control-panel office-control-panel-inventory"
+                    id="inventario"
+                    data-office-panel="inventory"
+                    hidden
+                  >
+                    <div class="office-control-head">
+                      <span>inventario</span>
+                      <strong>Itens já puxados para dentro do ateliê</strong>
+                    </div>
+                    <div class="office-inventory-summary">
+                      <article><span>itens</span><strong data-inventory-count>0</strong></article>
+                      <article><span>vaquinha</span><strong data-inventory-total>R$ 0</strong></article>
+                      <article><span>foco</span><strong data-inventory-focus>Pixel art e engine</strong></article>
+                    </div>
+                    <div class="office-inventory-grid" data-office-inventory-grid></div>
+                  </section>
+                </div>
+
+                <div
+                  class="office-map"
+                  id="office-map"
+                  data-office-world
+                  tabindex="0"
+                  aria-label="Planta animada do escritório de arte com 50 agentes"
+                >
+                  <div class="office-grid" aria-hidden="true"></div>
+                  <div class="office-map-ambient office-window-cluster" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-notes-board" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-status-board" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-map-ambient office-floor-runner" aria-hidden="true"></div>
+
+                  <article class="office-room room-ceo"><span>Direção</span><strong>Arte Lead • CEO</strong></article>
+                  <article class="office-room room-news"><span>Fundamento</span><strong>Pixel Art • Sprites</strong></article>
+                  <article class="office-room room-subpages"><span>Mundo</span><strong>Mapas • Tiles • Ninja</strong></article>
+                  <article class="office-room room-design"><span>Visual</span><strong>Props • HUD • FX</strong></article>
+                  <article class="office-room room-review"><span>Teste</span><strong>Colisão • QA • Física</strong></article>
+                  <article class="office-room room-cafe"><span>Referência</span><strong>Site • Pesquisa • Café</strong></article>
+                  <article class="office-room room-dev"><span>Engine</span><strong>Loop • Input • Build</strong></article>
+
+                  <div class="office-furniture desk desk-ceo" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-furniture desk desk-news" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-furniture desk desk-subpages" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-furniture design-table" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-furniture review-table" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-furniture coffee-machine" data-office-obstacle aria-label="Máquina de café">
+                    <span></span>
+                  </div>
+                  <div class="office-furniture sofa" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span>
+                  </div>
+                  <div class="office-furniture server-rack" data-office-obstacle aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="office-furniture plant plant-a" aria-hidden="true"></div>
+                  <div class="office-furniture plant plant-b" aria-hidden="true"></div>
+
+                  <div class="office-agent-layer" data-agent-layer></div>
+                  <div class="office-dialogue-layer" data-dialogue-layer aria-hidden="true"></div>
+                </div>
+              </div>
+
+              <aside
+                class="office-terminal-panel"
+                id="terminal"
+                data-office-terminal-panel
+                aria-label="Terminal com o Escritório de Arte rodando"
+              >
+                <div class="office-terminal-head">
+                  <span>TERMINAL</span>
+                  <strong>ART_GAME_PIPELINE_24H</strong>
+                </div>
+                <div class="office-terminal-avatar" data-terminal-avatar aria-hidden="true"></div>
+                <pre class="office-terminal-output"><code data-terminal-output>&gt; boot studio/art-game-design
+status: 50 agentes online
+fonte: site + cofre ninja + playtest
+acao: passe o mouse em um agente para ver o estudo atual</code></pre>
+                <div class="office-live-panel" aria-live="polite">
+                  <span>rodando 24h</span>
+                  <strong data-office-feed>O Escritório de Arte está estudando sprites, mapas, colisão, física e engine.</strong>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="office-roster" id="equipe" aria-labelledby="office-roster-title">
+          <div class="office-section-head">
+            <div>
+              <p class="office-eyebrow">50 agentes</p>
+              <h2 id="office-roster-title">Cada agente tem uma especialidade de arte ou programação de jogos.</h2>
+            </div>
+            <p>
+              O time aprende por áreas: pixel art, spritesheets, props, HUD, tiles, mapa, colisão, física, engine,
+              áudio, playtest e build.
+            </p>
+          </div>
+          <div class="office-roster-grid" data-roster-grid></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="office-modal" data-agent-modal hidden role="dialog" aria-modal="true" aria-labelledby="agent-modal-title">
+      <div class="office-modal-backdrop" data-close-agent-modal></div>
+      <article class="office-modal-card">
+        <button class="office-modal-close" type="button" data-close-agent-modal aria-label="Fechar perfil do agente">
+          Fechar
+        </button>
+        <div class="office-modal-avatar" data-modal-avatar></div>
+        <div class="office-modal-copy">
+          <p class="office-eyebrow" data-modal-kicker>perfil do agente</p>
+          <h2 id="agent-modal-title" data-modal-name>Agente</h2>
+          <strong data-modal-title>Especialidade</strong>
+          <p data-modal-description></p>
+          <ul data-modal-skills></ul>
+          <div class="office-modal-status">
+            <span>agora</span>
+            <p data-modal-task></p>
+          </div>
+          <section class="office-rating-panel" aria-label="Avaliação do agente">
+            <div class="office-rating-head">
+              <span>aprendizado</span>
+              <strong data-modal-eval-level>Equipe em treino</strong>
+            </div>
+            <div class="office-rating-grid">
+              <article><span>pontos</span><strong data-modal-eval-score>70</strong></article>
+              <article><span>tendência</span><strong data-modal-eval-trend>Estável</strong></article>
+              <article><span>aprende</span><strong data-modal-eval-learning>55%</strong></article>
+            </div>
+            <div class="office-rating-neural">
+              <span>perfil neural</span>
+              <p data-modal-eval-neural>Foco 58% • Qualidade 62% • Ritmo 52%</p>
+            </div>
+            <div class="office-rating-conversation">
+              <span>sinal da conversa</span>
+              <p>Diga se a solução ficou boa ou ruim para o agente ajustar o comportamento nas próximas rodadas.</p>
+              <textarea
+                class="office-rating-textarea"
+                data-modal-conversation-input
+                rows="3"
+                placeholder="Ex.: agora sim, esse sprite encaixou no mapa"
+              ></textarea>
+              <div class="office-rating-actions">
+                <button class="office-button primary" type="button" data-conversation-feedback="analyze">Ler conversa</button>
+                <button class="office-button" type="button" data-conversation-feedback="good">Gostei</button>
+                <button class="office-button" type="button" data-conversation-feedback="bad">Nao gostei</button>
+              </div>
+              <p class="office-rating-feedback" data-modal-conversation-status aria-live="polite">
+                +0 / -0 • ultimo: aguardando confirmação
+              </p>
+            </div>
+            <div class="office-rating-actions">
+              <button class="office-button primary" type="button" data-rate-agent="good">Mandou bem</button>
+              <button class="office-button" type="button" data-rate-agent="bad">Fez merda</button>
+            </div>
+            <p class="office-rating-feedback" data-modal-eval-feedback aria-live="polite">
+              Avalie o agente para ajustar o histórico dele.
+            </p>
+          </section>
+        </div>
+      </article>
+    </div>
+
+    <div class="office-modal" data-support-modal hidden role="dialog" aria-modal="true" aria-labelledby="office-support-title">
+      <div class="office-modal-backdrop" data-close-support-modal></div>
+      <article class="office-modal-card office-support-card office-support-card-wide">
+        <button class="office-modal-close" type="button" data-close-support-modal aria-label="Fechar apoio ao ateliê">
+          Fechar
+        </button>
+        <div class="office-modal-avatar office-support-avatar" aria-hidden="true">
+          <div class="office-support-cup"><span></span></div>
+        </div>
+        <div class="office-modal-copy">
+          <p class="office-eyebrow">vaquinha do ateliê</p>
+          <h2 id="office-support-title">Ajude a equipar o Escritório de Arte</h2>
+          <strong>Escolha um upgrade para acelerar arte, mapas e programação de jogos.</strong>
+          <p>
+            A ideia é transformar apoio em ferramentas visíveis: tablet, kit de mapas, bancada de engine e laboratório de som.
+          </p>
+          <div class="office-support-selection">
+            <div class="office-support-selected">
+              <span>item selecionado</span>
+              <strong data-support-item-name>Escolha uma melhoria</strong>
+              <p data-support-item-description>Os upgrades do ateliê entram aqui.</p>
+            </div>
+            <div class="office-modal-status office-support-status">
+              <span>pix</span>
+              <p data-support-pix-key>99567741204</p>
+              <strong data-support-item-price>R$ 0</strong>
+            </div>
+          </div>
+          <div class="office-support-catalog" data-support-catalog></div>
+          <div class="office-modal-status office-support-status">
+            <span>inventário vivo</span>
+            <p data-support-inventory-text>Nenhum upgrade registrado ainda.</p>
+          </div>
+          <div class="office-support-actions office-support-actions-wide">
+            <button class="office-button primary" type="button" data-copy-pix-key>Copiar chave Pix</button>
+            <button class="office-button" type="button" data-confirm-support-item>Registrar item no inventário</button>
+            <span data-support-feedback aria-live="polite">Escolha um item da vaquinha para registrar o upgrade.</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="office-modal" data-shortcuts-modal hidden role="dialog" aria-modal="true" aria-labelledby="office-shortcuts-title">
+      <div class="office-modal-backdrop" data-close-shortcuts-modal></div>
+      <article class="office-modal-card office-shortcuts-card">
+        <button class="office-modal-close" type="button" data-close-shortcuts-modal aria-label="Fechar atalhos">
+          Fechar
+        </button>
+        <div class="office-modal-avatar office-shortcuts-avatar" aria-hidden="true">
+          <div class="office-shortcuts-sign">ART</div>
+        </div>
+        <div class="office-modal-copy">
+          <p class="office-eyebrow">atalho dos escritórios</p>
+          <h2 id="office-shortcuts-title">Escolha qual escritório abrir</h2>
+          <strong>Agora a família tem Editorial, Nerd, Ninjas e Arte.</strong>
+          <p>O de Arte aprende e aplica pixel art, sprites, mapas, engine e física junto com os Ninjas.</p>
+          <div class="office-support-actions">
+            <a class="office-button primary" href="./escritorio-arte.html">Escritório de Arte</a>
+            <a class="office-button" href="./escritorio-ninjas.html">Escritório de Ninjas</a>
+            <a class="office-button" href="./escritorio-nerd.html">Escritório Nerd</a>
+            <a class="office-button" href="./escritorio.html">Escritório Editorial</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="office-modal" data-gossip-modal hidden role="dialog" aria-modal="true" aria-labelledby="office-gossip-title">
+      <div class="office-modal-backdrop" data-close-gossip-modal></div>
+      <article class="office-modal-card office-gossip-card">
+        <button class="office-modal-close" type="button" data-close-gossip-modal aria-label="Fechar bastidores">
+          Fechar
+        </button>
+        <div class="office-modal-avatar" data-gossip-avatar></div>
+        <div class="office-modal-copy">
+          <p class="office-eyebrow">bastidores do ateliê</p>
+          <h2 id="office-gossip-title" data-gossip-speaker>Agente</h2>
+          <strong data-gossip-kicker>Memória do escritório</strong>
+          <p data-gossip-text>Os bastidores ainda estão esquentando.</p>
+          <div class="office-modal-status">
+            <span>agora</span>
+            <p data-gossip-meta>A memória da rotina vai aparecer aqui.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <script src="./escritorio-arte-config.js?v=20260419a" defer></script>
+    <script src="./escritorio.js?v=20260419arte" defer></script>
+    <script src="./office-command-chat.js?v=20260419b" defer></script>
+  </body>
+</html>

@@ -42,6 +42,7 @@
             Alvo
             <select name="target">
               <option>Codex CEO</option>
+              <option>Equipe Arte/Game Design</option>
               <option>Equipe Ninjas</option>
               <option>Equipe Nerd</option>
               <option>Equipe Editorial</option>

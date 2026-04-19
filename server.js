@@ -304,6 +304,18 @@ const STATIC_PAGE_SEO = {
     changefreq: "weekly",
     fileName: "escritorio-ninjas.html"
   },
+  "/escritorio-arte.html": {
+    title: `Escritorio de Arte | ${SITE_NAME}`,
+    description:
+      "Escritorio de Arte com 50 agentes de Design Art e Programacao de Game Design estudando pixel art, sprites, engine, colisao, fisica, mapas e jogos junto com os Ninjas.",
+    themeColor: "#111827",
+    colorScheme: "dark light",
+    ogType: "website",
+    schemaType: "CollectionPage",
+    priority: "0.72",
+    changefreq: "weekly",
+    fileName: "escritorio-arte.html"
+  },
   "/sprites-check-change.html": {
     title: `SPRTIS CHECK & CHANGE | ${SITE_NAME}`,
     description:
@@ -3998,7 +4010,7 @@ function buildSpriteCheckPayload() {
       fullAdmin: "Junior",
       ceo: "Codex CEO",
       flow: "Full Admin -> Codex CEO -> equipes",
-      teams: ["Ninjas", "Nerd", "Editorial", "PubPaid"]
+      teams: ["Ninjas", "Arte/Game Design", "Nerd", "Editorial", "PubPaid"]
     },
     summary,
     reviews: reviewMap,
@@ -4024,7 +4036,7 @@ function buildOfficeOrderPayload() {
       fullAdmin: "Junior",
       ceo: "Codex CEO",
       rule: "O Full Admin ordena, o CEO responde, e as equipes recebem tarefas pelo CEO.",
-      teams: ["Ninjas", "Nerd", "Editorial", "PubPaid", "Design", "Revisao"]
+      teams: ["Ninjas", "Arte/Game Design", "Nerd", "Editorial", "PubPaid", "Design", "Revisao"]
     },
     orders: safeOrders.slice(-80).reverse()
   };

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-19T15:51:57.450Z",
+  "lastUpdatedAt": "2026-04-19T16:06:32.337Z",
   "orders": [
     {
       "id": "2026-04-17-criar-memoria-local-persistente-para-ordens-fotos-e-textos-do-usuario",
@@ -1005,6 +1005,21 @@
       "source": "chat",
       "rawRequest": "Criar subsite SPRTIS CHECK E CHANGE para revisar sprites com menu CHECKPUBPAID primeiro, senha 99831455, aceitar/reprovar mudancas, e incluir chat dentro dos escritorios para ordens do Full Admin com senha 99831455A, hierarquia Full Admin -> CEO -> equipes.",
       "summary": "Criar painel SPRTIS CHECK & CHANGE e chat hierarquico de ordens",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-19-adicionar-escritorio-de-arte-com-50-agentes-de-game-design",
+      "createdAt": "2026-04-19T16:06:32.337Z",
+      "updatedAt": "2026-04-19T16:06:32.337Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Adicionar equipe Design Art e Programacao de Game Design, trabalhando junto com Ninjas, com 50 agentes especializados em pixel art, sprites, game engine, colisao, fisica, mapeamento, criacao de mapas e jogos, abrindo o Escritorio de Arte.",
+      "summary": "Adicionar Escritorio de Arte com 50 agentes de game design",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

@@ -14,6 +14,7 @@ Ultima atualizacao: 2026-04-17 01:39 -05:00 (America/Rio_Branco)
 - Painel `SPRTIS CHECK & CHANGE` criado em `sprites-check-change.html`, com `CHECKPUBPAID` primeiro no menu, senha `99831455`, varredura de `sprite-vault` e `assets`, e botoes de aceitar/reprovar/pedir ajuste por sprite.
 - Chat flutuante de ordens criado para os escritorios via `office-command-chat.js`, com senha Full Admin `99831455A`, hierarquia `Full Admin -> Codex CEO -> equipes` e APIs `/api/office-orders`.
 - Validacoes locais: `node --check server.js`, `node --check sprites-check-change.js`, `node --check office-command-chat.js`, `npm run review:team` com 0 achados, API de sprites retornando 2600 assets.
+- `Escritorio de Arte` criado em `escritorio-arte.html` com `escritorio-arte-config.js`: 50 agentes de Design Art e Programacao de Game Design, trabalhando junto com Ninjas para aprender/aplicar pixel art, sprites, game engine, colisao, fisica, mapeamento, mapas, som, QA e build. Menus e chat de ordens atualizados com `Equipe Arte/Game Design`.
 
 ## Pedido atual em andamento
 
