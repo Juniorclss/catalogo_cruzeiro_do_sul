@@ -210,6 +210,10 @@
 
         <div class="catalogo-founder-thanks-layout">
           <div class="catalogo-founder-thanks-media catalogo-founder-reveal reveal-2">
+            <div class="catalogo-founder-stage-label">
+              <span>Fundador em cena</span>
+              <strong>Cafe Cruzeiro</strong>
+            </div>
             <video
               class="catalogo-founder-thanks-video"
               muted
@@ -220,11 +224,17 @@
             >
               <source src="${FOUNDERS_VIDEO_SRC}" type="video/mp4" />
             </video>
+            <div class="catalogo-founder-stage-applause" aria-hidden="true">
+              <span>aplausos</span>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
           </div>
 
           <div class="catalogo-founder-thanks-copy">
             <p class="catalogo-founder-thanks-kicker catalogo-founder-reveal reveal-1">Socios fundadores</p>
-            <span class="catalogo-founder-thanks-seal catalogo-founder-reveal reveal-2">Agradecimento especial</span>
+            <span class="catalogo-founder-thanks-seal catalogo-founder-reveal reveal-2">Homenagem de abertura</span>
             <div class="catalogo-founder-banner-rail catalogo-founder-reveal reveal-3">
               <article class="catalogo-founder-banner-card">
                 <span>Fundadora em destaque</span>
@@ -251,8 +261,8 @@
                 </div>
               </article>
             </div>
-            <strong class="catalogo-founder-reveal reveal-4">Nossos agradecimentos em destaque.</strong>
-            <span class="catalogo-founder-reveal reveal-5">Obrigado. O portal esta abrindo.</span>
+            <strong class="catalogo-founder-reveal reveal-4">Cafe Cruzeiro, Dra. Geane Campo e Recommencer em destaque no palco de abertura.</strong>
+            <span class="catalogo-founder-reveal reveal-5">Obrigado por manter este portal vivo. As noticias estao entrando no ar.</span>
             <div class="catalogo-founder-opening catalogo-founder-reveal reveal-5" aria-live="polite">
               <div class="catalogo-founder-opening-head">
                 <strong>Abrindo edicao atual</strong>
