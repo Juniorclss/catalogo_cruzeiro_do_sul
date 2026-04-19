@@ -496,7 +496,7 @@
         venueKey: "checkers",
         x: 154,
         y: 292,
-        radius: 82
+        radius: 118
       },
       {
         id: "cards21",
@@ -1736,7 +1736,8 @@
   function getInteractionStandPoint(interaction) {
     const offsets = {
       pool: { x: 0, y: 56 },
-      checkers: { x: 18, y: 58 },
+      // A mesa de damas fica mais acessivel parando pelo corredor central de baixo.
+      checkers: { x: 0, y: 104 },
       cards21: { x: 0, y: 62 },
       poker: { x: 0, y: 62 },
       dicecups: { x: 0, y: 58 },
@@ -1813,7 +1814,7 @@
   function getInteractionClickArea(interaction) {
     const explicitAreas = {
       pool: { x: 36, y: 66, w: 182, h: 166 },
-      checkers: { x: 72, y: 202, w: 168, h: 152 },
+      checkers: { x: 60, y: 196, w: 188, h: 192 },
       cards21: { x: 218, y: 396, w: 176, h: 160 },
       poker: { x: 354, y: 418, w: 146, h: 122 },
       dicecups: { x: 690, y: 176, w: 242, h: 174 },
