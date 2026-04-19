@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-19T16:21:46.829Z",
+  "lastUpdatedAt": "2026-04-19T17:51:42.732Z",
   "orders": [
     {
       "id": "2026-04-17-criar-memoria-local-persistente-para-ordens-fotos-e-textos-do-usuario",
@@ -1040,6 +1040,54 @@
       "assetRefs": [],
       "tags": [],
       "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-19-adicionar-crescimento-neural-e-busca-de-sprites-pubpaid-nos-escritorios",
+      "createdAt": "2026-04-19T16:41:15.252Z",
+      "updatedAt": "2026-04-19T16:41:15.252Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Criar subsistema dentro de todos os escritorios com botao de Crescimento Neural e estudo das IAs. Os escritorios tambem devem enviar ordem para procurar pela internet sprites para o jogo PubPaid, com Ninjas, Arte/Game Design e Nerd atuando juntos.",
+      "summary": "Adicionar crescimento neural e busca de sprites PubPaid nos escritorios",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-19-refazer-a-home-para-mobile-tablet-e-iphone-com-estrutura-nativa-responsiva",
+      "createdAt": "2026-04-19T17:51:42.732Z",
+      "updatedAt": "2026-04-19T17:51:42.732Z",
+      "status": "in_progress",
+      "source": "chat",
+      "rawRequest": "eu quero que vc mude toda verão mobile, refaça no mesmo estilo mais totalmente voltada ao mobile, a versão em  cpomputador simplesmente e linda mais nada e responsivo, eu quero uma reunião geral a oden e do admin geral eu, para o ceo, bote todos pra trabalhar a versão mobile e tablete e outros iphones totalmetne nova e responsiva, usando omesmo conteudo mais estruta based baseada mais naoi gual",
+      "summary": "Refazer a home para mobile, tablet e iPhone com estrutura nativa responsiva",
+      "normalizedTasks": [
+        "Reunir equipe para diagnostico mobile",
+        "Redesenhar topo e hero mobile/tablet",
+        "Reordenar rails e grids editoriais",
+        "Validar home localmente"
+      ],
+      "filesTouched": [
+        "styles.css",
+        ".codex-memory/current-state.md",
+        ".codex-memory/handoff.md"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "mobile",
+        "responsivo",
+        "tablet",
+        "home",
+        "editorial"
+      ],
+      "nextSteps": [
+        "Validar visualmente em larguras reais",
+        "Publicar no origin/main quando aprovado"
+      ],
       "notes": ""
     }
   ]

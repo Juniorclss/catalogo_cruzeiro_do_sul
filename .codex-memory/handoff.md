@@ -1,6 +1,6 @@
 # Handoff
 
-Updated: 2026-04-19T17:15:00.000Z
+Updated: 2026-04-19T18:45:00.000Z
 
 Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current-state.md`, `.codex-memory/orders.json`, `.codex-memory/assets.json` e `.codex-memory/credit-end-protocol.md`.
 
@@ -29,6 +29,16 @@ Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current
 - `pesquisa-acre-2026.html/css` agora usa um letreiro `Eleições 2026` no topo em vez da arte abstrata anterior.
 - `styles.css` ganhou um reparo forte do topo mobile da home para impedir sobreposicao de botoes, sumico parcial da constelacao e quebra de faixas.
 - Validacoes locais desta ultima passada: `node --check sprites-check-change.js`, `node --check startup-experience.js`, `node --check office-neural-subsystem.js`, `npm run review:team` com 0 achados, `GET /`, `GET /sprites-check-change.html` e `GET /pesquisa-acre-2026.html` 200 na porta 4108.
+- Nova passada grande de mobile/tablet da home feita so em `styles.css`, preservando o desktop:
+  - bloco final `Mobile/tablet rebuild for the editorial home`;
+  - header reorganizado em fluxo mobile nativo;
+  - `main-nav` e `header-services-strip` como trilhos horizontais;
+  - `hero-newsroom-shell` em uma coluna com ordem visual clara;
+  - `top-construction-yard` oculto no mobile;
+  - `left-rail` e `side-rail` movidos para depois do conteudo principal por ordem visual;
+  - `mosaic-hero` simplificado para 1 destaque + apoios;
+  - grids de secoes em 1 coluna no celular e 2 colunas apenas onde util no tablet.
+- Validacoes locais dessa passada: `npm run review:team` com 0 achados, checagem simples de braces em `styles.css` ok (`UNBALANCED_BRACES=0`), marcadores `HAS_MOBILE_REBUILD=true` e `HAS_HERO_REFLOW=true`, `GET /` 200 na porta 3000.
 
 ## Pendencias
 
@@ -39,7 +49,8 @@ Retomada obrigatoria: ler `AGENTS.md`, `CODEX_MEMORY.md`, `.codex-memory/current
 - Conferir no Render tambem `https://catalogo-cruzeiro-web.onrender.com/escritorio-arte.html`.
 - Na proxima retomada, se o usuario reclamar do painel, primeiro verificar se ele esta vendo a versao nova: sem placeholder com senha, cards animando frames e botao `Tela cheia`.
 - Conferir no Render todos os escritorios com o novo botao `Crescimento Neural`, especialmente se nao sobrepoe o botao `Ordens` em mobile.
-- Ainda falta publicar esta passada; o Render no momento nao recebeu `PUBPAIDBUILDER`, o novo splash nem o reparo mobile desta rodada.
+- Ainda falta publicar esta passada; o Render no momento nao recebeu a reconstrução mobile/tablet da home.
+- Proxima retomada: validar visualmente a home mobile em largura de iPhone, Android e tablet e, se ficar boa, fazer commit/push antes da sync no Render Blueprint.
 
 ## Referencias de jogos pesquisadas
 

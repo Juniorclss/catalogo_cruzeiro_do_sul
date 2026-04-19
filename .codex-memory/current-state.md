@@ -1,10 +1,10 @@
 # Current State
 
-Updated: 2026-04-19T17:15:00.000Z
+Updated: 2026-04-19T18:45:00.000Z
 
 ## Active Goal
 
-- Criar controle administrativo dos sprites e chat de ordens hierarquico nos escritorios.
+- Refazer a home para mobile/tablet com arquitetura realmente responsiva sem estragar o desktop.
 
 ## Summary
 
@@ -37,6 +37,15 @@ Updated: 2026-04-19T17:15:00.000Z
 - `pesquisa-acre-2026.html` e `pesquisa-acre-2026.css` trocaram a cena abstrata do topo por um letreiro visual `Eleições 2026`.
 - `styles.css` recebeu uma passada estrutural forte no topo mobile da home: constelacao oculta no celular, masthead em grade, navegacao e atalhos empilhados sem sobreposicao, e faixa de atualizacoes mais controlada.
 - Validacoes locais desta retomada: `node --check sprites-check-change.js`, `node --check startup-experience.js`, `node --check office-neural-subsystem.js`, `npm run review:team` com 0 achados, `GET /`, `GET /sprites-check-change.html` e `GET /pesquisa-acre-2026.html` responderam 200 na porta 4108.
+- Nova rodada de reuniao geral para a home mobile/tablet concluida com decisoes de topo -> hero -> conteudo -> utilitarios -> widgets.
+- `styles.css` ganhou uma camada final `Mobile/tablet rebuild for the editorial home`, trocando a home mobile para fluxo nativo:
+  - topo em blocos com `top-strip-actions` em grade;
+  - `main-nav` e `header-services-strip` em trilhos horizontais reais;
+  - `hero-newsroom-shell` refluido para uma coluna com CTA, card diario e painel em ordem clara;
+  - `left-rail` e `side-rail` descem para depois do conteudo principal;
+  - `mosaic-hero` vira destaque principal + apoios empilhados;
+  - grids editoriais ficam em 1 coluna no celular e, no tablet, 2 colunas apenas onde faz sentido.
+- Validacoes locais desta rodada mobile/tablet: `npm run review:team` com 0 achados, verificacao de chaves em `styles.css` com `UNBALANCED_BRACES=0`, marcadores `HAS_MOBILE_REBUILD=true` e `HAS_HERO_REFLOW=true`, `GET /` respondeu 200 na porta 3000.
 
 ## Next
 
@@ -48,3 +57,4 @@ Updated: 2026-04-19T17:15:00.000Z
 - Conferir no Render a nova versao do `SPRTIS CHECK & CHANGE` com animacao, tela cheia e regras de contexto.
 - Conferir no Render o botao `Crescimento Neural` nos quatro escritorios e o envio de ordem de busca PubPaid.
 - Publicar esta rodada no `origin/main` e conferir no Render o topo mobile da home, o novo `PUBPAIDBUILDER`, o splash dos fundadores e o letreiro `Eleições 2026`.
+- Conferir visualmente a home nova em mobile real (Chrome/Android e iPhone widths) e depois publicar essa rodada no `origin/main`.
