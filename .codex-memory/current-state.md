@@ -26,6 +26,8 @@ Updated: 2026-04-19T15:05:00.000Z
 - `escritorio-arte-config.js` usa a conexao do proprio site (`/api/news`) para alimentar conversas/referencias e trabalha como ponte com o cofre Ninja.
 - Menus da home e escritorios agora apontam para o `Escritorio de Arte`; o chat de ordens inclui `Equipe Arte/Game Design`.
 - Validacao local do Escritorio de Arte: pagina 200, config 200, sitemap com `/escritorio-arte.html`, 50 agentes confirmados, `npm run review:team` com 0 achados.
+- Painel `SPRTIS CHECK & CHANGE` corrigido: removeu `assets` ja publicados da fila de aprovacao, apagou a senha visivel do placeholder, agrupa frames em sprites animados, abre avaliacao em tela cheia e adiciona plano de uso/modo construcao para mapas e cenarios.
+- Validacao local do painel corrigido: HTML 200, sem senha no HTML, sem `<canvas>`, 2107 grupos a partir de 2542 arquivos do cofre, 190 grupos animados, 1668 candidatos de mapa/cenario/construcao, 0 itens vindos de `assets`.
 
 ## Next
 
@@ -34,3 +36,4 @@ Updated: 2026-04-19T15:05:00.000Z
 - Proxima rodada Ninjas: criar kits especificos de sprites para pub/cassino antes de coletar mais asset generico.
 - Publicar o painel/check chat no `origin/main` e conferir no Render: `https://catalogo-cruzeiro-web.onrender.com/sprites-check-change.html`.
 - Publicar e conferir `https://catalogo-cruzeiro-web.onrender.com/escritorio-arte.html`.
+- Conferir no Render a nova versao do `SPRTIS CHECK & CHANGE` com animacao, tela cheia e regras de contexto.

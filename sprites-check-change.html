@@ -20,18 +20,18 @@
         </a>
         <nav class="sprite-control-menu" data-sprite-menu>
           <button class="active" type="button" data-category="checkpubpaid">CHECKPUBPAID</button>
+          <button type="button" data-category="animados">Sprites animados</button>
           <button type="button" data-category="personagens">Personagens</button>
           <button type="button" data-category="itens">Itens e props</button>
-          <button type="button" data-category="cenarios">Cenarios</button>
+          <button type="button" data-category="cenarios">Mapas e cenarios</button>
           <button type="button" data-category="interface">Interface</button>
           <button type="button" data-category="efeitos">Efeitos</button>
-          <button type="button" data-category="outros">Outros</button>
           <button type="button" data-category="todos">Todos</button>
         </nav>
         <section class="sprite-hierarchy-card">
           <span>hierarquia</span>
           <strong>Full Admin -> CEO -> Equipes</strong>
-          <p>Voce aprova. O CEO organiza. Ninjas, Arte e Nerds executam.</p>
+          <p>Voce aprova candidatos novos. O que ja esta no site fica aceito e fora da fila.</p>
         </section>
       </aside>
 
@@ -39,16 +39,16 @@
         <header class="sprite-control-hero">
           <div>
             <p class="sprite-kicker">CHECKPUBPAID primeiro no menu</p>
-            <h1>Sprites, itens, cenarios e mudancas sob seu controle.</h1>
+            <h1>Sprites prontos, em movimento, e mapas com modo construção.</h1>
             <p>
-              A equipe Ninja separa tudo que existe no cofre. Voce aceita, reprova ou manda ajustar antes de entrar no
-              PubPaid e nos outros subsites.
+              O painel agora mostra candidatos do cofre, agrupando frames em animação. Assets já publicados no site não
+              entram para aprovação: já estão aceitos. Sem canvas para ilustrar personagem ou conteúdo novo.
             </p>
           </div>
           <form class="sprite-login-card" data-sprite-login>
             <label for="sprite-password">Senha do painel</label>
             <div>
-              <input id="sprite-password" name="password" type="password" placeholder="99831455" autocomplete="current-password" />
+              <input id="sprite-password" name="password" type="password" placeholder="Digite a senha de acesso" autocomplete="off" />
               <button type="submit">Entrar</button>
             </div>
             <small data-sprite-login-status>Restrito ao CHECKPUBPAID.</small>
@@ -56,22 +56,40 @@
         </header>
 
         <section class="sprite-summary-grid" data-sprite-summary aria-live="polite">
-          <article><span>Total</span><strong>--</strong></article>
-          <article><span>Pendentes</span><strong>--</strong></article>
-          <article><span>Aceitos</span><strong>--</strong></article>
-          <article><span>Reprovados</span><strong>--</strong></article>
+          <article><span>Candidatos</span><strong>--</strong></article>
+          <article><span>Com movimento</span><strong>--</strong></article>
+          <article><span>Mapas/cenarios</span><strong>--</strong></article>
+          <article><span>Ja aceitos</span><strong>--</strong></article>
           <article><span>Ajustes</span><strong>--</strong></article>
         </section>
 
         <section class="sprite-report-panel">
           <div>
-            <span>Relatorio Ninja</span>
-            <h2>O que vamos melhorar depois da triagem</h2>
+            <span>reunião geral</span>
+            <h2>Nova regra de captura e avaliação</h2>
           </div>
           <p>
-            Separar personagens em partes equipaveis, mapear itens que podem entrar nos corpos, marcar cenarios de bar,
-            jogos e escritorios, e mandar a equipe de Arte transformar aprovados em sprite, mapa, engine e gameplay.
+            Ninjas captam pacote util, não frame perdido. Arte transforma em sprite animado, mapa ou prop. Nerd testa
+            colisão, física e game loop. Tudo prioriza PubPaid, jogos, escritórios e subsites já existentes.
           </p>
+        </section>
+
+        <section class="sprite-learning-panel" aria-label="Protocolo de aprendizado das equipes">
+          <article>
+            <span>Ninjas</span>
+            <strong>Captura com contexto</strong>
+            <p>Registrar origem, licença, pacote completo, movimento e qual subsite usaria.</p>
+          </article>
+          <article>
+            <span>Arte</span>
+            <strong>Sprite pronto</strong>
+            <p>Ver animação, hitbox, itens equipáveis, tiles, layers e mapa em modo construção.</p>
+          </article>
+          <article>
+            <span>Nerd</span>
+            <strong>Game feel</strong>
+            <p>Testar colisão, física, som, câmera, input, feedback e se o jogo dá vontade de torcer.</p>
+          </article>
         </section>
 
         <section class="sprite-toolbar">
@@ -84,7 +102,7 @@
             <select data-sprite-status-filter>
               <option value="todos">Todos</option>
               <option value="pending">Pendentes</option>
-              <option value="accepted">Aceitos</option>
+              <option value="accepted">Aceitos / ja no site</option>
               <option value="rejected">Reprovados</option>
               <option value="needs-change">Pedir ajuste</option>
             </select>
@@ -94,11 +112,34 @@
         <section class="sprite-grid" data-sprite-grid aria-live="polite">
           <article class="sprite-empty-state">
             <strong>Entre com a senha para carregar o cofre.</strong>
-            <p>Depois disso aparece a galeria inteira para aceitar, negar ou pedir ajuste.</p>
+            <p>A senha não fica escrita aqui. Depois aparecem apenas candidatos do cofre, animados quando houver frames.</p>
           </article>
         </section>
       </section>
     </main>
+
+    <section class="sprite-viewer" data-sprite-viewer hidden aria-label="Avaliação em tela cheia">
+      <div class="sprite-viewer-backdrop" data-close-viewer></div>
+      <article class="sprite-viewer-card">
+        <button class="sprite-viewer-close" type="button" data-close-viewer>Fechar</button>
+        <div class="sprite-viewer-stage">
+          <img data-viewer-image alt="" />
+        </div>
+        <div class="sprite-viewer-copy">
+          <span data-viewer-kicker>sprite</span>
+          <h2 data-viewer-name>Sprite</h2>
+          <p data-viewer-path></p>
+          <div class="sprite-viewer-tags" data-viewer-tags></div>
+          <section class="sprite-construction-plan">
+            <strong data-viewer-mode>Modo construção</strong>
+            <p data-viewer-usage></p>
+            <p data-viewer-observation></p>
+            <p data-viewer-collision></p>
+          </section>
+          <div class="sprite-card-actions sprite-viewer-actions" data-viewer-actions></div>
+        </div>
+      </article>
+    </section>
 
     <script src="./sprites-check-change.js?v=20260419a" defer></script>
   </body>

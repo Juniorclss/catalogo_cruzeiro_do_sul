@@ -3863,8 +3863,41 @@ function requireAdmin(req) {
 
 const SPRITE_IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".svg"]);
 const SPRITE_SCAN_ROOTS = [
-  { key: "sprite-vault", label: "Sprite Vault", dir: path.join(ROOT_DIR, "sprite-vault"), publicBase: "/sprite-vault" },
-  { key: "assets", label: "Assets do site", dir: path.join(ROOT_DIR, "assets"), publicBase: "/assets" }
+  {
+    key: "sprite-vault",
+    label: "Sprite Vault - candidatos",
+    dir: path.join(ROOT_DIR, "sprite-vault"),
+    publicBase: "/sprite-vault"
+  }
+];
+const SPRITE_CONTEXT_FILES = [
+  "index.html",
+  "pubpaid.html",
+  "games.html",
+  "infantil.html",
+  "estudantes.html",
+  "escritorio.html",
+  "escritorio-nerd.html",
+  "escritorio-ninjas.html",
+  "escritorio-arte.html",
+  "sprites-check-change.html",
+  "pubpaid.js",
+  "escritorio.js",
+  "escritorio-arte-config.js"
+];
+const SPRITE_ACTION_ORDER = [
+  "idle",
+  "front",
+  "walk",
+  "run",
+  "jump",
+  "climb",
+  "duck",
+  "hit",
+  "attack",
+  "roll",
+  "spin",
+  "fall"
 ];
 
 function getAuthValue(req, body = {}, keys = ["password", "token"]) {
@@ -3913,10 +3946,13 @@ function toPublicAssetUrl(rootConfig, absoluteFilePath) {
 
 function categorizeSpriteAsset(relativePath) {
   const value = normalizeText(relativePath);
-  if (/(character|characters|personagem|avatar|agent|ninja|dealer|garcom|waiter|hero|npc|player|body|head|skin)/i.test(value)) {
+  if (/(character|characters|personagem|avatar|agent|ninja|dealer|garcom|waiter|hero|npc|player|enemy|enemies|monster|boss|body|head|skin)/i.test(value)) {
     return "personagens";
   }
-  if (/(background|cenario|scene|floor|tile|tileset|wall|room|office|bar|pub|interior|exterior|map|terrain)/i.test(value)) {
+  if (
+    /(background|cenario|scene|floor|tile|tileset|wall|room|office|interior|exterior|map|terrain)/i.test(value) ||
+    /(^|[\/_\-\s])(bar|pub)([\/_\-\s]|$)/i.test(value)
+  ) {
     return "cenarios";
   }
   if (/(item|items|prop|props|cup|dice|table|chair|coin|card|glass|bottle|jukebox|roulette|pool|ball|furniture)/i.test(value)) {
@@ -3929,6 +3965,129 @@ function categorizeSpriteAsset(relativePath) {
     return "efeitos";
   }
   return "outros";
+}
+
+function inferSpriteAction(fileBase) {
+  const value = normalizeText(fileBase);
+  return SPRITE_ACTION_ORDER.find((action) => value.includes(action)) || "";
+}
+
+function getFrameOrderToken(fileBase) {
+  const match = String(fileBase || "").match(/(?:[_-])(?:frame)?([a-z]|\d{1,3})$/i);
+  if (!match) return 0;
+  const token = match[1].toLowerCase();
+  if (/^\d+$/.test(token)) return Number(token);
+  return token.charCodeAt(0) - 96;
+}
+
+function buildAnimationGroupInfo(relativePath, category) {
+  const directory = path.posix.dirname(relativePath);
+  const fileBase = path.basename(relativePath, path.extname(relativePath));
+  const normalizedBase = normalizeText(fileBase).replace(/\s+/g, "_");
+  const action = inferSpriteAction(fileBase);
+  let groupBase = normalizedBase.replace(/(?:[_-])(?:frame)?([a-z]|\d{1,3})$/i, "");
+
+  if (category === "personagens") {
+    const characterMatch = normalizedBase.match(/^(character|player|hero|npc|agent|dealer|garcom|waiter)[_-]([a-z0-9]+)(?:[_-].*)?$/i);
+    if (characterMatch) {
+      groupBase = `${characterMatch[1]}_${characterMatch[2]}`;
+    }
+  }
+
+  if (category === "efeitos" || /(roll|spin|spark|smoke|fire|explosion|effect|fx)/i.test(normalizedBase)) {
+    groupBase = groupBase.replace(/(?:[_-])(?:frame)?([a-z]|\d{1,3})$/i, "");
+  }
+
+  return {
+    groupKey: `${directory}/${groupBase}`,
+    action,
+    frameOrder: getFrameOrderToken(fileBase)
+  };
+}
+
+function inferSpriteContexts(relativePath, category) {
+  const value = normalizeText(relativePath);
+  const contexts = [];
+  const add = (label) => {
+    if (!contexts.includes(label)) contexts.push(label);
+  };
+
+  if (
+    /(^|[\/_\-\s])(pub|bar|casino|roulette|roleta|cup|copo|dice|dado|card|poker|blackjack|pool|sinuca|jukebox|glass|bottle|drink|table|chair|dealer|waiter|garcom)([\/_\-\s]|$)/i.test(value)
+  ) {
+    add("PubPaid");
+  }
+  if (/(office|escritorio|agent|ninja|avatar|desk|room|worker|terminal)/i.test(value)) {
+    add("Escritorios");
+  }
+  if (/(game|platform|character|tile|tileset|map|controller|hud|ui)/i.test(value) || ["personagens", "cenarios", "interface"].includes(category)) {
+    add("Games");
+  }
+  if (/(kid|child|infantil|toy|school|student|book)/i.test(value)) {
+    add("Infantil/Estudantes");
+  }
+  if (!contexts.length) add("Cofre Ninja");
+  return contexts;
+}
+
+function buildConstructionPlan(item) {
+  if (item.category === "cenarios") {
+    return {
+      mode: "modo construcao",
+      usage: "Dividir em base visual, camada de colisao, decoracao e hotspots antes de virar mapa jogavel.",
+      observation:
+        "A equipe de Arte deve separar chao, parede, bloqueios e objetos. A equipe Nerd valida fluxo, camera e colisao.",
+      collision: "Mapear paredes, mesas, balcões e limites como retangulos simples antes de detalhar.",
+      layers: ["base", "colisao", "decoracao", "hotspots"]
+    };
+  }
+  if (item.category === "personagens") {
+    return {
+      mode: "sprite animado",
+      usage: "Avaliar o ciclo inteiro em movimento, nao frame solto. Depois mapear idle, walk, hit, jump e acoes.",
+      observation:
+        "So entra no jogo se tiver leitura parado e em movimento; itens equipaveis precisam encaixar no corpo.",
+      collision: "Usar hitbox menor que a arte para nao prender em mesas e portas.",
+      layers: ["corpo", "animacoes", "hitbox", "itens"]
+    };
+  }
+  if (item.category === "itens") {
+    return {
+      mode: "prop jogavel",
+      usage: "Definir se e decoracao, item clicavel, item equipavel ou feedback de rodada.",
+      observation: "Copos, dados, cartas e fichas precisam ter som/queda/estado quando forem jogo.",
+      collision: "Itens de mesa normalmente nao bloqueiam; moveis grandes bloqueiam passagem.",
+      layers: ["visual", "estado", "som", "interacao"]
+    };
+  }
+  return {
+    mode: "asset de apoio",
+    usage: "Validar se atende um contexto real do site antes de entrar em producao.",
+    observation: "Prioridade para PubPaid, jogos, escritorios e subsites ja existentes.",
+    collision: "Sem colisao ate virar mapa, item ou personagem.",
+    layers: ["triagem", "contexto", "uso"]
+  };
+}
+
+function buildSiteSpriteReferenceSet() {
+  const references = new Set();
+  SPRITE_CONTEXT_FILES.forEach((fileName) => {
+    const filePath = path.join(ROOT_DIR, fileName);
+    if (!fs.existsSync(filePath)) return;
+    let content = "";
+    try {
+      content = fs.readFileSync(filePath, "utf-8");
+    } catch (_error) {
+      return;
+    }
+    const regex = /(?:\.\/)?(sprite-vault\/[^"'\s)]+)/gi;
+    let match = regex.exec(content);
+    while (match) {
+      references.add(`/${match[1].replace(/\\/g, "/")}`);
+      match = regex.exec(content);
+    }
+  });
+  return references;
 }
 
 function collectSpriteFiles(rootConfig, currentDir = rootConfig.dir, output = []) {
@@ -3952,7 +4111,13 @@ function collectSpriteFiles(rootConfig, currentDir = rootConfig.dir, output = []
       return;
     }
 
+    if (/^(preview|sample)\b/i.test(entry.name)) {
+      return;
+    }
+
     const relativePath = path.relative(rootConfig.dir, absolutePath).split(path.sep).join("/");
+    const category = categorizeSpriteAsset(relativePath);
+    const groupInfo = buildAnimationGroupInfo(relativePath, category);
     let stat = null;
     try {
       stat = fs.statSync(absolutePath);
@@ -3965,10 +4130,13 @@ function collectSpriteFiles(rootConfig, currentDir = rootConfig.dir, output = []
       name: path.basename(entry.name, path.extname(entry.name)).replace(/[-_]+/g, " "),
       fileName: entry.name,
       extension: path.extname(entry.name).replace(".", "").toLowerCase(),
-      category: categorizeSpriteAsset(relativePath),
+      category,
       sourceRoot: rootConfig.label,
       path: relativePath,
       publicUrl: toPublicAssetUrl(rootConfig, absolutePath),
+      groupKey: groupInfo.groupKey,
+      action: groupInfo.action,
+      frameOrder: groupInfo.frameOrder,
       sizeBytes: stat?.size || 0,
       updatedAt: stat?.mtime ? stat.mtime.toISOString() : ""
     });
@@ -3977,16 +4145,82 @@ function collectSpriteFiles(rootConfig, currentDir = rootConfig.dir, output = []
   return output;
 }
 
+function groupSpriteFiles(files, siteReferences) {
+  const groups = new Map();
+  files.forEach((file) => {
+    const key = `${file.sourceRoot}:${file.groupKey}`;
+    const existing = groups.get(key) || {
+      id: `sprite-group:${key}`,
+      name: path.basename(file.groupKey).replace(/[-_]+/g, " "),
+      category: file.category,
+      sourceRoot: file.sourceRoot,
+      path: file.groupKey.replace(/^\.\//, ""),
+      extension: file.extension,
+      sizeBytes: 0,
+      updatedAt: file.updatedAt,
+      actions: [],
+      frames: [],
+      contexts: inferSpriteContexts(file.path, file.category)
+    };
+
+    existing.frames.push({
+      name: file.name,
+      fileName: file.fileName,
+      path: file.path,
+      publicUrl: file.publicUrl,
+      action: file.action,
+      frameOrder: file.frameOrder,
+      sizeBytes: file.sizeBytes
+    });
+    existing.sizeBytes += Number(file.sizeBytes || 0);
+    if (file.action && !existing.actions.includes(file.action)) existing.actions.push(file.action);
+    if (file.updatedAt > existing.updatedAt) existing.updatedAt = file.updatedAt;
+    if (siteReferences.has(file.publicUrl)) existing.alreadyInSite = true;
+    groups.set(key, existing);
+  });
+
+  return Array.from(groups.values()).map((group) => {
+    const actionOrder = new Map(SPRITE_ACTION_ORDER.map((action, index) => [action, index]));
+    group.frames.sort((a, b) => {
+      const actionDiff = (actionOrder.get(a.action) ?? 99) - (actionOrder.get(b.action) ?? 99);
+      if (actionDiff) return actionDiff;
+      return (a.frameOrder || 0) - (b.frameOrder || 0) || a.path.localeCompare(b.path);
+    });
+    group.actions.sort((a, b) => (actionOrder.get(a) ?? 99) - (actionOrder.get(b) ?? 99));
+    group.frameCount = group.frames.length;
+    group.previewUrl = group.frames[0]?.publicUrl || "";
+    group.publicUrl = group.previewUrl;
+    group.reviewMode =
+      group.category === "cenarios"
+        ? "construction"
+        : group.frameCount > 1
+          ? "animation"
+          : "static";
+    group.priority =
+      (group.contexts.includes("PubPaid") ? 100 : 0) +
+      (group.contexts.includes("Escritorios") ? 70 : 0) +
+      (group.contexts.includes("Games") ? 45 : 0) +
+      (group.frameCount > 1 ? 20 : 0);
+    group.construction = buildConstructionPlan(group);
+    return group;
+  });
+}
+
 function buildSpriteCheckPayload() {
   const reviews = readJson(SPRITE_CHECK_REVIEWS_FILE, {});
   const reviewMap = reviews && typeof reviews === "object" && !Array.isArray(reviews) ? reviews : {};
-  const items = SPRITE_SCAN_ROOTS.flatMap((rootConfig) => collectSpriteFiles(rootConfig))
-    .sort((a, b) => a.category.localeCompare(b.category) || a.path.localeCompare(b.path))
+  const siteReferences = buildSiteSpriteReferenceSet();
+  const rawFiles = SPRITE_SCAN_ROOTS.flatMap((rootConfig) => collectSpriteFiles(rootConfig));
+  const items = groupSpriteFiles(rawFiles, siteReferences)
+    .sort((a, b) => b.priority - a.priority || a.category.localeCompare(b.category) || a.path.localeCompare(b.path))
     .map((item) => {
       const review = reviewMap[item.id] && typeof reviewMap[item.id] === "object" ? reviewMap[item.id] : {};
+      const locked = Boolean(item.alreadyInSite);
       return {
         ...item,
-        status: cleanShortText(review.status || "pending", 40),
+        locked,
+        status: cleanShortText(locked ? "accepted" : review.status || "pending", 40),
+        statusReason: locked ? "Ja esta em uso no site/subsite, entao entra como aceito e nao volta para aprovacao." : "",
         note: cleanShortText(review.note || "", 500),
         reviewedAt: cleanShortText(review.reviewedAt || "", 60),
         reviewedBy: cleanShortText(review.reviewedBy || "", 80)
@@ -3997,9 +4231,12 @@ function buildSpriteCheckPayload() {
       acc.total += 1;
       acc.byCategory[item.category] = (acc.byCategory[item.category] || 0) + 1;
       acc.byStatus[item.status] = (acc.byStatus[item.status] || 0) + 1;
+      if (item.frameCount > 1) acc.animated += 1;
+      if (item.reviewMode === "construction") acc.construction += 1;
+      if (item.locked) acc.alreadyAccepted += 1;
       return acc;
     },
-    { total: 0, byCategory: {}, byStatus: {} }
+    { total: 0, animated: 0, construction: 0, alreadyAccepted: 0, byCategory: {}, byStatus: {} }
   );
 
   return {
@@ -4013,6 +4250,13 @@ function buildSpriteCheckPayload() {
       teams: ["Ninjas", "Arte/Game Design", "Nerd", "Editorial", "PubPaid"]
     },
     summary,
+    rawFiles: rawFiles.length,
+    rules: {
+      siteAssets: "Assets ja publicados nao entram na fila de aprovacao.",
+      movement: "Personagens chegam agrupados como sprite animado, nao como frame solto.",
+      canvas: "Sem canvas para ilustracao de personagens ou conteudo do site; usar arquivos reais em assets/sprite-vault.",
+      context: "Prioridade para PubPaid, jogos, escritorios e subsites existentes."
+    },
     reviews: reviewMap,
     items
   };

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-19T16:06:32.337Z",
+  "lastUpdatedAt": "2026-04-19T16:21:46.829Z",
   "orders": [
     {
       "id": "2026-04-17-criar-memoria-local-persistente-para-ordens-fotos-e-textos-do-usuario",
@@ -1020,6 +1020,21 @@
       "source": "chat",
       "rawRequest": "Adicionar equipe Design Art e Programacao de Game Design, trabalhando junto com Ninjas, com 50 agentes especializados em pixel art, sprites, game engine, colisao, fisica, mapeamento, criacao de mapas e jogos, abrindo o Escritorio de Arte.",
       "summary": "Adicionar Escritorio de Arte com 50 agentes de game design",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-19-corrigir-painel-de-sprites-para-grupos-animados-e-contexto-do-site",
+      "createdAt": "2026-04-19T16:21:46.829Z",
+      "updatedAt": "2026-04-19T16:21:46.829Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Corrigir erros do SPRTIS CHECK: nao avaliar assets ja usados no site, remover senha visivel do campo, agrupar frames em sprites com movimento, priorizar contexto de site/subsites, abrir sprite em tela cheia, mostrar observacoes de uso e modo construcao para cenarios/mapas, e reforcar aprendizado continuo das equipes para criar jogos melhores.",
+      "summary": "Corrigir painel de sprites para grupos animados e contexto do site",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],
