@@ -1001,6 +1001,118 @@ body.catalogo-lock-scroll {
   max-height: 96px;
 }
 
+.catalogo-welcome.is-phone {
+  place-items: center;
+  padding: 10px;
+  background: rgba(7, 19, 34, 0.92);
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-card {
+  width: min(420px, 100%);
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow:
+    0 18px 42px rgba(3, 9, 19, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-copy {
+  padding: 0.9rem 0.9rem 1rem;
+}
+
+.catalogo-welcome.is-phone .catalogo-compact-banner {
+  min-height: 32px;
+  margin-bottom: 0.72rem;
+  padding: 0.38rem 0.62rem;
+  font-size: 0.75rem;
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-kicker {
+  margin-bottom: 0.28rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-copy h2 {
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.3rem, 6vw, 1.7rem);
+  line-height: 1.04;
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-lead {
+  margin-bottom: 0.7rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.catalogo-welcome.is-phone .catalogo-terms-summary {
+  gap: 0.5rem;
+  margin-bottom: 0.68rem;
+}
+
+.catalogo-welcome.is-phone .catalogo-summary-card:nth-child(n + 2) {
+  display: none;
+}
+
+.catalogo-welcome.is-phone .catalogo-summary-card {
+  padding: 0.7rem 0.76rem;
+  border-radius: 12px;
+}
+
+.catalogo-welcome.is-phone .catalogo-summary-card p,
+.catalogo-welcome.is-phone .catalogo-term-item span,
+.catalogo-welcome.is-phone .catalogo-terms-check span,
+.catalogo-welcome.is-phone .catalogo-welcome-note {
+  font-size: 0.82rem;
+  line-height: 1.38;
+}
+
+.catalogo-welcome.is-phone .catalogo-terms-list {
+  gap: 0.44rem;
+  margin-bottom: 0.7rem;
+}
+
+.catalogo-welcome.is-phone .catalogo-term-item {
+  padding: 0.7rem 0.76rem;
+  border-radius: 12px;
+}
+
+.catalogo-welcome.is-phone .catalogo-term-item:nth-child(n + 2) {
+  display: none;
+}
+
+.catalogo-welcome.is-phone .catalogo-terms-check {
+  gap: 0.62rem;
+  margin-bottom: 0.72rem;
+  padding: 0.72rem 0.76rem;
+  border-radius: 12px;
+}
+
+.catalogo-welcome.is-phone .catalogo-terms-check input {
+  width: 18px;
+  height: 18px;
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-note {
+  margin-bottom: 0.76rem;
+}
+
+.catalogo-welcome.is-phone .catalogo-welcome-actions {
+  gap: 0.55rem;
+}
+
+.catalogo-welcome.is-phone .catalogo-btn {
+  min-height: 44px;
+  padding: 0.78rem 0.95rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+
+.catalogo-welcome.is-phone .catalogo-founder-thanks,
+.catalogo-welcome.is-phone .catalogo-welcome-visual {
+  display: none;
+}
+
 @media (max-width: 520px) {
   .catalogo-welcome.is-compact .catalogo-founder-thanks-media {
     display: none;
@@ -1008,6 +1120,27 @@ body.catalogo-lock-scroll {
 
   .catalogo-welcome.is-compact .catalogo-founder-thanks-layout {
     width: min(440px, 100%);
+  }
+
+  .catalogo-welcome.is-phone {
+    padding: 8px;
+  }
+
+  .catalogo-welcome.is-phone .catalogo-welcome-card {
+    border-radius: 14px;
+  }
+
+  .catalogo-welcome.is-phone .catalogo-welcome-copy {
+    padding: 0.82rem 0.78rem 0.9rem;
+  }
+
+  .catalogo-welcome.is-phone .catalogo-welcome-copy h2 {
+    font-size: 1.22rem;
+  }
+
+  .catalogo-welcome.is-phone .catalogo-btn {
+    min-height: 42px;
+    font-size: 0.78rem;
   }
 }
 

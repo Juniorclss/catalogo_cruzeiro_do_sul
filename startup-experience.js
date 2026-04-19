@@ -89,9 +89,16 @@
 
   function shouldUseCompactWelcome() {
     return (
-      window.matchMedia("(max-width: 760px)").matches ||
+      window.matchMedia("(max-width: 920px)").matches ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       connectionPrefersLite()
+    );
+  }
+
+  function shouldUsePhoneWelcome() {
+    return (
+      window.matchMedia("(max-width: 760px)").matches ||
+      (window.matchMedia("(max-width: 720px)").matches && connectionPrefersLite())
     );
   }
 
@@ -509,9 +516,13 @@
 
   function createWelcomeModal(options = {}) {
     const compact = options.compact === true;
+    const phone = options.phone === true;
     const modal = document.createElement("section");
     modal.id = MODAL_ID;
     modal.className = compact ? "catalogo-welcome is-compact" : "catalogo-welcome";
+    if (phone) {
+      modal.classList.add("is-phone");
+    }
     modal.setAttribute("aria-hidden", "true");
     modal.innerHTML = compact
       ? `
@@ -521,7 +532,7 @@
           aria-modal="true"
           aria-labelledby="catalogoWelcomeTitle"
         >
-          ${buildWelcomeVisualMarkup({ compact: true })}
+          ${phone ? "" : buildWelcomeVisualMarkup({ compact: true })}
           <div class="catalogo-welcome-copy">
             <div class="catalogo-compact-banner" aria-hidden="true">
               <span class="catalogo-compact-dot"></span>
@@ -530,7 +541,7 @@
             ${buildWelcomeCopyMarkup()}
           </div>
         </article>
-        ${buildFounderThanksMarkup()}
+        ${phone ? "" : buildFounderThanksMarkup()}
       `
       : `
         <div class="catalogo-welcome-shell">
@@ -562,6 +573,11 @@
 
   function closeWelcomeModal(modal) {
     if (!modal || modal.classList.contains("is-thanking") || modal.classList.contains("is-leaving")) {
+      return;
+    }
+
+    if (modal.classList.contains("is-phone")) {
+      closeWelcomeModalImmediately(modal);
       return;
     }
 
@@ -671,7 +687,8 @@
         }
 
         const modal = createWelcomeModal({
-          compact: shouldUseCompactWelcome()
+          compact: shouldUseCompactWelcome(),
+          phone: shouldUsePhoneWelcome()
         });
         document.body.appendChild(modal);
 
