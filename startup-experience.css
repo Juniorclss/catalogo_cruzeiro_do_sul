@@ -1283,10 +1283,6 @@ body.catalogo-lock-scroll {
   min-height: 44px;
   font-size: 0.85rem;
 }
-  margin-bottom: 0.7rem;
-  font-size: 0.88rem;
-  line-height: 1.45;
-}
 
 .catalogo-welcome.is-phone .catalogo-terms-summary {
   gap: 0.5rem;
@@ -1352,11 +1348,7 @@ body.catalogo-lock-scroll {
 }
 
 .catalogo-welcome.is-phone .catalogo-welcome-visual.catalogo-welcome-visual-phone {
-  display: block;
-  min-height: 208px;
-  max-height: 208px;
-  padding: 0.72rem 0.72rem 0.58rem;
-  border-bottom: 1px solid rgba(16, 35, 60, 0.08);
+  display: none;
 }
 
 .catalogo-welcome.is-phone .catalogo-welcome-visual.catalogo-welcome-visual-phone::before {

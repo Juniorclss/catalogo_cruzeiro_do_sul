@@ -2763,7 +2763,9 @@ const ensureMobileHomeLeadLayout = () => {
   }
 
   const moveAfterHero = [
+    document.querySelector(".top-strip"),
     document.querySelector(".device-version-notice"),
+    document.querySelector(".mobile-agent-hub"),
     document.querySelector(".top-construction-yard"),
     document.querySelector(".ticker-live-shell"),
     document.querySelector(".header-services-strip")
