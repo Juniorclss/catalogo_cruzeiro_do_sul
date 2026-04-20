@@ -32,10 +32,23 @@ function normalizeStatus(value, fallback = "pending") {
   if (normalized === "approved" || normalized === "approve" || normalized === "aprovado" || normalized === "aprovar") {
     return "approved";
   }
+  if (normalized === "creditos-liberados" || normalized === "saque-liberado" || normalized === "confirmado-manual") {
+    return "approved";
+  }
   if (normalized === "rejected" || normalized === "reject" || normalized === "rejeitado" || normalized === "rejeitar") {
     return "rejected";
   }
+  if (normalized === "deposito-rejeitado" || normalized === "saque-rejeitado" || normalized === "rejeitado-manual") {
+    return "rejected";
+  }
   if (normalized === "pending" || normalized === "pendente") {
+    return "pending";
+  }
+  if (
+    normalized === "aguardando-confirmacao-pix" ||
+    normalized === "aguardando-confirmacao-saque" ||
+    normalized === "pendente-manual"
+  ) {
     return "pending";
   }
   return fallback;
@@ -62,11 +75,20 @@ function normalizeMoney(value) {
 
 function normalizeDeposit(item = {}, index = 0) {
   const amount = normalizeMoney(
-    item.amountCoins ?? item.amount ?? item.valueCoins ?? item.value ?? item.coins
+    item.amountCoins ?? item.amount ?? item.valueCoins ?? item.value ?? item.coins ?? item.creditsRequested
   );
-  const playerId = normalizeText(item.playerId ?? item.userId ?? item.playerSlug ?? item.email ?? item.whatsApp, "");
-  const playerName = normalizeText(item.playerName ?? item.player ?? item.name ?? item.depositante, "Jogador");
-  const reference = normalizeText(item.reference ?? item.receiptReference ?? item.txid ?? item.comprovante ?? item.receipt ?? "-", "-");
+  const playerId = normalizeText(
+    item.playerId ?? item.userId ?? item.playerSlug ?? item.email ?? item.whatsApp ?? item.user?.email,
+    ""
+  );
+  const playerName = normalizeText(
+    item.playerName ?? item.player ?? item.name ?? item.depositante ?? item.depositorName ?? item.user?.name,
+    "Jogador"
+  );
+  const reference = normalizeText(
+    item.reference ?? item.receiptReference ?? item.txid ?? item.comprovante ?? item.receipt ?? item.payment?.txid ?? "-",
+    "-"
+  );
   return {
     id: normalizeId("deposit", item.id, index),
     playerId,
@@ -74,7 +96,7 @@ function normalizeDeposit(item = {}, index = 0) {
     amountCoins: amount,
     reference,
     notes: normalizeText(item.notes ?? item.observation ?? item.obs, ""),
-    status: normalizeStatus(item.status, "pending"),
+    status: normalizeStatus(item.status ?? item.payment?.status, "pending"),
     createdAt: normalizeText(item.createdAt ?? item.requestedAt ?? item.date ?? item.when, new Date().toISOString()),
     reviewedAt: normalizeText(item.reviewedAt ?? item.updatedAt, ""),
     reviewedBy: normalizeText(item.reviewedBy ?? item.adminUser, ""),

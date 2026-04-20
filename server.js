@@ -5288,8 +5288,22 @@ function getPubpaidWallet(authUser = {}, { createIfMissing = true } = {}) {
     return null;
   }
 
-  const wallets = getPubpaidWalletStore();
-  let wallet = wallets.find((item) => safeString(item.walletKey || "", 180).toLowerCase() === key) || null;
+  const walletStore = getPubpaidWalletStore();
+  const wallets = walletStore && typeof walletStore === "object" ? walletStore : {};
+  let walletRecord = wallets[key] || null;
+  let wallet = walletRecord
+    ? {
+        id: safeString(walletRecord.id || "", 120) || createRecordId("pubwallet"),
+        walletKey: key,
+        user: publicAuthUser(authUser),
+        balanceCoins: clampInteger(walletRecord.balanceCoins ?? walletRecord.balance),
+        lockedWithdrawalCoins: clampInteger(walletRecord.lockedWithdrawalCoins ?? walletRecord.locked),
+        totalApprovedDeposits: clampInteger(walletRecord.totalApprovedDeposits ?? walletRecord.approvedDeposits),
+        totalApprovedWithdrawals: clampInteger(walletRecord.totalApprovedWithdrawals ?? walletRecord.approvedWithdrawals),
+        createdAt: safeString(walletRecord.createdAt || "", 40),
+        updatedAt: safeString(walletRecord.updatedAt || "", 40)
+      }
+    : null;
 
   if (!wallet && createIfMissing) {
     wallet = {
@@ -5303,8 +5317,19 @@ function getPubpaidWallet(authUser = {}, { createIfMissing = true } = {}) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    wallets.push(wallet);
-    writePubpaidWalletStore(wallets);
+    savePubpaidWalletStore({
+      ...wallets,
+      [key]: {
+        playerId: key,
+        playerName: safeString(authUser.name, 120) || "Jogador",
+        balanceCoins: 0,
+        lockedWithdrawalCoins: 0,
+        totalApprovedDeposits: 0,
+        totalApprovedWithdrawals: 0,
+        createdAt: wallet.createdAt,
+        updatedAt: wallet.updatedAt
+      }
+    });
   }
 
   return wallet;
@@ -5316,24 +5341,19 @@ function updatePubpaidWallet(authUser = {}, updater = null) {
     return null;
   }
 
-  const wallets = getPubpaidWalletStore();
-  let index = wallets.findIndex((item) => safeString(item.walletKey || "", 180).toLowerCase() === key);
-  if (index < 0) {
-    wallets.push({
-      id: createRecordId("pubwallet"),
-      walletKey: key,
-      user: publicAuthUser(authUser),
-      balanceCoins: 0,
-      lockedWithdrawalCoins: 0,
-      totalApprovedDeposits: 0,
-      totalApprovedWithdrawals: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
-    index = wallets.length - 1;
-  }
-
-  const current = wallets[index];
+  const walletStore = getPubpaidWalletStore();
+  const wallets = walletStore && typeof walletStore === "object" ? walletStore : {};
+  const current = getPubpaidWallet(authUser, { createIfMissing: true }) || {
+    id: createRecordId("pubwallet"),
+    walletKey: key,
+    user: publicAuthUser(authUser),
+    balanceCoins: 0,
+    lockedWithdrawalCoins: 0,
+    totalApprovedDeposits: 0,
+    totalApprovedWithdrawals: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
   const next = typeof updater === "function" ? updater({ ...current }) || current : current;
   next.user = publicAuthUser(authUser);
   next.walletKey = key;
@@ -5342,8 +5362,19 @@ function updatePubpaidWallet(authUser = {}, updater = null) {
   next.totalApprovedDeposits = Math.max(0, clampInteger(next.totalApprovedDeposits));
   next.totalApprovedWithdrawals = Math.max(0, clampInteger(next.totalApprovedWithdrawals));
   next.updatedAt = new Date().toISOString();
-  wallets[index] = next;
-  writePubpaidWalletStore(wallets);
+  savePubpaidWalletStore({
+    ...wallets,
+    [key]: {
+      playerId: key,
+      playerName: safeString(next?.user?.name || authUser.name || "", 120) || "Jogador",
+      balanceCoins: next.balanceCoins,
+      lockedWithdrawalCoins: next.lockedWithdrawalCoins,
+      totalApprovedDeposits: next.totalApprovedDeposits,
+      totalApprovedWithdrawals: next.totalApprovedWithdrawals,
+      createdAt: safeString(next.createdAt || "", 40) || new Date().toISOString(),
+      updatedAt: next.updatedAt
+    }
+  });
   return next;
 }
 

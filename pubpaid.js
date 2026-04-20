@@ -698,6 +698,7 @@
   const depositState = {
     amount: 10,
     txid: "",
+    qrReady: false,
     locked: false,
     pendingId: ""
   };
@@ -945,10 +946,7 @@
       void requestPubPaidWithdrawal();
     });
     refs.depositAmount?.addEventListener("change", () => {
-      depositState.locked = false;
-      depositState.pendingId = "";
-      if (refs.depositorName) refs.depositorName.value = "";
-      void generatePubPaidDepositQr(true);
+      resetDepositQrState("Valor alterado. Gere um novo QR Code para esse deposito.");
     });
 
     refs.touchMoveButtons.forEach((button) => {
@@ -3547,7 +3545,7 @@
     }
     applyGoogleProfile(user, { announce: true });
     void syncPubpaidAccount();
-    void generatePubPaidDepositQr(false);
+    resetDepositQrState();
     openGameFromGoogleSession({ announce: true, openProfileIfNeeded: true });
   }
 
@@ -3617,6 +3615,16 @@
       .slice(0, 25);
   }
 
+  function resetDepositQrState(message = "Informe o nome do pagador e clique em gerar para abrir o QR do deposito.") {
+    depositState.txid = "";
+    depositState.qrReady = false;
+    depositState.locked = false;
+    depositState.pendingId = "";
+    if (refs.depositQr) {
+      refs.depositQr.innerHTML = `<p>${escapeHtml(message)}</p>`;
+    }
+  }
+
   async function generatePubPaidDepositQr(forceNewTxid = false) {
     if (!refs.depositQr) return;
     const user = getCatalogoGoogleAuthUser();
@@ -3628,9 +3636,20 @@
       return;
     }
 
+    const depositorName = String(refs.depositorName?.value || "").trim();
+    if (!depositorName || depositorName.length < 3) {
+      if (refs.depositFeedback) {
+        refs.depositFeedback.textContent = "Preencha primeiro o nome de quem fez o Pix e depois gere o QR.";
+      }
+      refs.depositorField.hidden = false;
+      refs.depositorName?.focus?.();
+      return;
+    }
+
     const amount = getDepositAmount();
     if (forceNewTxid || !depositState.txid || depositState.amount !== amount) {
       depositState.txid = buildDepositTxid();
+      depositState.qrReady = false;
       depositState.locked = false;
       depositState.pendingId = "";
     }
@@ -3649,12 +3668,14 @@
       });
       const payload = await requestApiJson(`/api/pubpaid/deposit/pix?${params.toString()}`, { method: "GET" });
       depositState.txid = payload.txid || depositState.txid;
+      depositState.qrReady = true;
       refs.depositQr.innerHTML = payload.qrSvg || "<p>QR indisponivel. Tente gerar novamente.</p>";
       if (refs.depositFeedback) {
         refs.depositFeedback.textContent =
           `QR criado para ${user.email}: ${amount} creditos, referencia ${depositState.txid}.`;
       }
     } catch (error) {
+      depositState.qrReady = false;
       refs.depositQr.innerHTML = `<p>${escapeHtml(error.message)}</p>`;
       if (refs.depositFeedback) refs.depositFeedback.textContent = "Nao foi possivel gerar o QR agora.";
     }
@@ -3666,10 +3687,12 @@
       if (refs.depositFeedback) refs.depositFeedback.textContent = "Entre com Google antes de avisar o pagamento.";
       return;
     }
-    if (!depositState.txid) {
-      await generatePubPaidDepositQr(true);
+    if (!depositState.txid || !depositState.qrReady) {
+      if (refs.depositFeedback) {
+        refs.depositFeedback.textContent = "Gere o QR Code primeiro para registrar o deposito.";
+      }
+      return;
     }
-    if (!depositState.txid) return;
     if (depositState.locked) {
       if (refs.depositFeedback) {
         refs.depositFeedback.textContent = "Esse pagamento ja foi enviado para conferencia manual.";
@@ -3698,13 +3721,13 @@
         })
       });
       depositState.locked = true;
+      depositState.qrReady = false;
       depositState.pendingId = payload?.item?.id || "";
       refs.depositQr.innerHTML = `
         <p><strong>Pagamento avisado.</strong></p>
         <p>Agora aguarde a conferência manual. O crédito pode levar até 3 horas para ser liberado.</p>
         <p>Referência: ${escapeHtml(depositState.txid)}</p>
       `;
-      if (refs.depositorField) refs.depositorField.hidden = true;
       if (refs.depositFeedback) {
         refs.depositFeedback.textContent =
           payload.message || "Deposito enviado para a dashboard. Aguarde a confirmacao manual.";
