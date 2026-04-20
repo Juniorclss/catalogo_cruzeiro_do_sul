@@ -1,46 +1,6 @@
 {
-  "votes": {
-    "governador": {
-      "alan-rick-governador": 1
-    }
-  },
-  "voters": {
-    "codex-validation-4073": {
-      "governador": {
-        "candidateId": "alan-rick-governador",
-        "weekKey": "2026-W17",
-        "at": "2026-04-20T14:34:26.563Z"
-      }
-    }
-  },
-  "records": [
-    {
-      "id": "elv-mo7aq64k8kxnh5",
-      "officeId": "governador",
-      "office": "Governador",
-      "candidateId": "alan-rick-governador",
-      "candidateName": "Alan Rick",
-      "candidateParty": "Republicanos",
-      "city": "Cruzeiro do Sul",
-      "voterName": "Teste Codex",
-      "voterParty": "Independente",
-      "observation": "apoio local para validacao",
-      "sentiment": "positivo",
-      "sentimentScore": 1,
-      "reelectionSignal": "neutro",
-      "pagePath": "/",
-      "referrerHost": "direto",
-      "country": "não informado",
-      "ip": "127.0.0.1",
-      "browser": "Outro",
-      "deviceType": "desktop",
-      "googleEmail": "",
-      "googleSub": "",
-      "visitorId": "",
-      "sessionId": "",
-      "weekKey": "2026-W17",
-      "at": "2026-04-20T14:34:26.564Z"
-    }
-  ],
-  "updatedAt": "2026-04-20T14:34:26.564Z"
+  "votes": {},
+  "voters": {},
+  "records": [],
+  "updatedAt": "2026-04-20T00:00:00.000Z"
 }

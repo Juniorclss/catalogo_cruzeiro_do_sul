@@ -22,7 +22,8 @@
     votes: {},
     userVotes: {},
     authUser: null,
-    pendingVote: null
+    pendingVote: null,
+    statusMessage: ""
   };
 
   const numberFormatter = new Intl.NumberFormat("pt-BR");
@@ -153,7 +154,7 @@
               data-vote-button="${escapeHtml(candidate.id)}"
               ${isCurrentVote ? "disabled" : ""}
             >
-              ${isCurrentVote ? "Seu voto desta semana" : "Votar com Google"}
+              ${isCurrentVote ? "Você já votou" : "Votar com Google"}
             </button>
           </article>
         `;
@@ -209,11 +210,24 @@
       .join("");
   }
 
+  function renderStatusMessage() {
+    if (!thanksBanner) return;
+
+    if (!state.statusMessage) {
+      thanksBanner.hidden = true;
+      return;
+    }
+
+    thanksBanner.hidden = false;
+    thanksBanner.innerHTML = state.statusMessage;
+  }
+
   function renderAll() {
     renderOfficeTabs();
     renderOfficeStage();
     renderCandidates();
     renderResults();
+    renderStatusMessage();
   }
 
   async function loadElectionConfig() {
@@ -247,8 +261,12 @@
 
     state.votes = payload.votes || {};
     state.userVotes = payload.userVotes || {};
+    state.statusMessage = Object.keys(state.userVotes || {}).length
+      ? "<strong>Você já votou.</strong><p>Seu voto da semana já foi registrado. Acompanhe semanalmente para ver as parciais.</p>"
+      : "";
     renderResults();
     renderCandidates();
+    renderStatusMessage();
   }
 
   function openVoteModal(candidateId) {
@@ -307,15 +325,24 @@
 
       state.votes = payload.votes || state.votes;
       state.userVotes = payload.userVotes || state.userVotes;
+      state.statusMessage =
+        "<strong>Obrigado por votar.</strong><p>Acompanhe semanalmente para ver como o cenário muda ao longo da campanha.</p>";
       renderResults();
       renderCandidates();
-      if (thanksBanner) {
-        thanksBanner.hidden = false;
-      }
+      renderStatusMessage();
       closeVoteModal();
       thanksBanner?.scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (error) {
-      window.alert(error.message || "Falha ao registrar o voto.");
+      if (String(error.message || "").toLowerCase().includes("já registrou voto")) {
+        state.statusMessage =
+          "<strong>Você já votou.</strong><p>Seu voto da semana já foi registrado. Acompanhe semanalmente para ver as parciais.</p>";
+        await loadVotes().catch(() => {});
+        renderStatusMessage();
+        closeVoteModal();
+        thanksBanner?.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        window.alert(error.message || "Falha ao registrar o voto.");
+      }
     } finally {
       voteConfirmButton.disabled = false;
       voteConfirmButton.textContent = "Confirmar voto";

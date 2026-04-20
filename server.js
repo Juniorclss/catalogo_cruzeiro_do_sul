@@ -4232,7 +4232,7 @@ function recordElectionVote(payload = {}, req = null) {
     return {
       ok: false,
       status: 409,
-      message: "Seu login Google já registrou voto para esse cargo nesta semana. Aguarde a próxima rodada.",
+      message: "Você já votou neste cargo nesta semana.",
       ...snapshot
     };
   }
