@@ -191,30 +191,13 @@
         <p class="catalogo-welcome-kicker">Antes de entrar</p>
         <h2 id="catalogoWelcomeTitle">Cookies e preferências</h2>
         <p class="catalogo-welcome-lead">
-          Usamos o básico para o portal funcionar e medir carregamento nesta visita.
-        </p>
-
-        <div class="catalogo-consent-intro">
-          <strong>Resumo rápido</strong>
-          <p>É só um aceite simples para abrir o site com cookies essenciais e medição básica.</p>
-        </div>
-
-        <label class="catalogo-terms-check">
-          <input type="checkbox" id="catalogoAcceptTerms" />
-          <span>Aceito os cookies essenciais e a medição básica desta visita.</span>
-        </label>
-
-        <p class="catalogo-welcome-note">
-          A política completa continua disponível para consulta.
+          Usamos só o básico para o portal funcionar melhor e medir o carregamento desta visita.
         </p>
 
         <div class="catalogo-welcome-actions">
-          <button class="catalogo-btn primary" id="catalogoAcceptButton" type="button" disabled>
+          <button class="catalogo-btn primary" id="catalogoAcceptButton" type="button">
             Aceitar e continuar
           </button>
-          <a class="catalogo-btn ghost" href="./legal.html" target="_blank" rel="noopener noreferrer">
-            Ver política
-          </a>
         </div>
       `;
     }
@@ -801,18 +784,21 @@
 
         const checkbox = modal.querySelector("#catalogoAcceptTerms");
         const acceptButton = modal.querySelector("#catalogoAcceptButton");
+        const requiresCheckbox = Boolean(checkbox);
 
-        if (!checkbox || !acceptButton) {
+        if (!acceptButton) {
           closeWelcomeModalImmediately(modal);
           return;
         }
 
-        checkbox.addEventListener("change", () => {
-          acceptButton.disabled = !checkbox.checked;
-        });
+        if (checkbox) {
+          checkbox.addEventListener("change", () => {
+            acceptButton.disabled = !checkbox.checked;
+          });
+        }
 
         acceptButton.addEventListener("click", () => {
-          if (!checkbox.checked) {
+          if (requiresCheckbox && !checkbox.checked) {
             return;
           }
 

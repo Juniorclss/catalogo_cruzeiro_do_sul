@@ -590,7 +590,7 @@ canvas {
   padding: 24px;
   background:
     linear-gradient(180deg, rgba(7, 5, 14, 0.18), rgba(7, 5, 14, 0.58)),
-    url("./assets/pubpaid-exterior-v2.png") center / cover no-repeat;
+    url("./assets/pubpaid-exterior-v3.png") center / cover no-repeat;
 }
 
 .pubpaid-splash-bitmap-copy {

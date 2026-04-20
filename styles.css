@@ -21905,6 +21905,63 @@ body.fx-lite .insiders-command-stage .robot-squad .robot-shadow {
 @media (max-width: 760px) {
   .founders-banner-strip {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .founders-summary {
+    align-items: flex-start;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+  }
+
+  .founders-summary strong {
+    font-size: 1.02rem;
+    line-height: 1.2;
+  }
+
+  .founder-banner-card {
+    min-height: auto;
+    padding: 0.9rem;
+    border-radius: 18px;
+  }
+
+  .founder-banner-copy {
+    min-height: auto;
+  }
+
+  .founder-banner-copy strong {
+    font-size: 1.1rem;
+    line-height: 1.08;
+  }
+
+  .founder-banner-copy p {
+    font-size: 0.84rem;
+    line-height: 1.35;
+  }
+
+  .founder-banner-card img {
+    width: min(240px, 100%);
+    max-height: 84px;
+  }
+
+  .founders-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .founder-card {
+    padding: 0.92rem 0.95rem;
+    border-radius: 16px;
+  }
+
+  .founder-card strong {
+    font-size: 0.94rem;
+    line-height: 1.25;
+  }
+
+  .founder-card p,
+  .founder-card span {
+    font-size: 0.84rem;
   }
 }
 

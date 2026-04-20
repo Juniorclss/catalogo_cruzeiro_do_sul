@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T10:34:58.818Z",
+  "lastUpdatedAt": "2026-04-20T11:14:38.402Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -1985,6 +1985,36 @@
       "source": "chat",
       "rawRequest": "mude o pop up do mobile, dos cokkies para algo bem mais simples, e depois desse pop up, lance a homen agem aos fundadores que nao ta aparecendo",
       "summary": "Simplificar popup mobile de cookies e corrigir homenagem aos fundadores após aceite",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-expandir-fachada-do-pubpaid-com-rua-viva-carros-motos-cachorros-e-ativar-modo-de",
+      "createdAt": "2026-04-20T11:08:46.785Z",
+      "updatedAt": "2026-04-20T11:08:46.785Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "primeiro cade os carros mottos cachorros e tudo que eu pedi pra por ai? expanda o bitmap pra ter uma rua e movimento na rua em frente ao bar, e adicione modo demo, pra texta os jogos e treina",
+      "summary": "Expandir fachada do PubPaid com rua viva, carros, motos, cachorros e ativar modo demo como treino",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-simplificar-popup-mobile-de-cookies-para-texto-aceite-e-ajustar-fundadores-para-",
+      "createdAt": "2026-04-20T11:14:38.402Z",
+      "updatedAt": "2026-04-20T11:14:38.402Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "trabalhe no mobile, eu quero o pop up de kokies mais reduzido e sem a animação lateral so texto, e aceitação, e os fundadores, mude para caber no mobile de algum geito ta feio e nao aparece todos",
+      "summary": "Simplificar popup mobile de cookies para texto + aceite e ajustar fundadores para caber melhor no mobile",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

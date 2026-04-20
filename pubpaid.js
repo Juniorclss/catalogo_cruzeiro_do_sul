@@ -452,6 +452,70 @@
         "A jukebox nao ganha por voce, mas muda seu ritmo.",
         "Se o pub acalmar, aproveite para subir a aposta."
       ]
+    },
+    {
+      id: "caio-palco",
+      name: "Caio Palco",
+      archetype: "street",
+      x: 706,
+      y: 236,
+      zone: { x: 688, y: 220, w: 44, h: 28 },
+      behavior: "wander",
+      facing: "left",
+      prop: "drink",
+      lines: [
+        "A cantora puxou o salão hoje, olha o povo colando no palco.",
+        "Tem noite que a melhor mesa e so a que deixa voce enxergar tudo.",
+        "Quando o bar enche, ate blefe ruim parece corajoso."
+      ]
+    },
+    {
+      id: "maya-roulette",
+      name: "Maya Roulette",
+      archetype: "neon",
+      x: 722,
+      y: 476,
+      zone: { x: 700, y: 460, w: 62, h: 34 },
+      behavior: "wander",
+      facing: "right",
+      prop: "drink",
+      lines: [
+        "A roleta gira melhor quando a galera para de gritar o obvio.",
+        "Eu vim pela conversa e fiquei pela ultima rodada.",
+        "Mesa cheia faz o pub parecer vivo de verdade."
+      ]
+    },
+    {
+      id: "otto-sinuca",
+      name: "Otto Sinuca",
+      archetype: "cowboy",
+      x: 176,
+      y: 182,
+      zone: { x: 118, y: 154, w: 96, h: 42 },
+      behavior: "wander",
+      facing: "right",
+      prop: "hat",
+      lines: [
+        "Encosta aqui, a sinuca hoje ta chamando conversa longa.",
+        "Tem noite que o taco acerta mais quando o salão para para olhar.",
+        "Quem chega cedo pega a mesa, quem fica tarde pega as historias."
+      ]
+    },
+    {
+      id: "luna-cards",
+      name: "Luna Cards",
+      archetype: "lounge",
+      x: 248,
+      y: 468,
+      zone: { x: 214, y: 434, w: 64, h: 54 },
+      behavior: "wander",
+      facing: "down",
+      prop: "drink",
+      lines: [
+        "O vinte e um lotou, mas metade do salão veio mesmo foi pra fofocar.",
+        "Se ouvir duas mesas ao mesmo tempo, ja entende o clima da casa.",
+        "Aqui dentro sempre tem alguem prometendo a ultima rodada."
+      ]
     }
   ];
 
@@ -949,7 +1013,7 @@
 
   function preloadImages() {
     return Promise.all([
-      loadImage(images.exterior, "./assets/pubpaid-exterior-v2.png"),
+      loadImage(images.exterior, "./assets/pubpaid-exterior-v3.png"),
       loadImage(images.interior, "./assets/pubpaid-interior-v5.png"),
       loadImage(images.bartenderTorso, "./assets/pubpaid-bartender-counter-v1.png")
     ]);
@@ -2598,6 +2662,50 @@
         facing: "right",
         archetype: "cowboy",
         prop: "leash"
+      }),
+      createExteriorWalker({
+        id: "front-walker-office",
+        x: 436,
+        y: 586,
+        minX: 288,
+        maxX: 694,
+        speed: 26,
+        facing: "right",
+        archetype: "street",
+        prop: "bag"
+      }),
+      createExteriorWalker({
+        id: "front-walker-night-kid",
+        x: 606,
+        y: 568,
+        minX: 468,
+        maxX: 826,
+        speed: 42,
+        facing: "left",
+        archetype: "neon",
+        prop: "kid"
+      }),
+      createExteriorWalker({
+        id: "front-walker-elder-couple",
+        x: 168,
+        y: 602,
+        minX: 104,
+        maxX: 462,
+        speed: 17,
+        facing: "right",
+        archetype: "lounge",
+        prop: "cane"
+      }),
+      createExteriorWalker({
+        id: "front-walker-pub-runner",
+        x: 928,
+        y: 578,
+        minX: 584,
+        maxX: 930,
+        speed: 34,
+        facing: "left",
+        archetype: "cowboy",
+        prop: "hat"
       })
     ];
   }
@@ -2700,6 +2808,46 @@
         dir: -1,
         length: 48,
         color: "#70ebff"
+      }),
+      createTrafficVehicle({
+        id: "road-car-e",
+        kind: "car",
+        x: -420,
+        y: 486,
+        speed: 148,
+        dir: 1,
+        length: 82,
+        color: "#f4c56d"
+      }),
+      createTrafficVehicle({
+        id: "road-car-f",
+        kind: "car",
+        x: 1380,
+        y: 566,
+        speed: 174,
+        dir: -1,
+        length: 92,
+        color: "#7de4b8"
+      }),
+      createTrafficVehicle({
+        id: "road-bike-e",
+        kind: "moto",
+        x: -360,
+        y: 598,
+        speed: 208,
+        dir: 1,
+        length: 44,
+        color: "#ff8f62"
+      }),
+      createTrafficVehicle({
+        id: "road-bike-f",
+        kind: "moto",
+        x: 1420,
+        y: 470,
+        speed: 196,
+        dir: -1,
+        length: 42,
+        color: "#9d8cff"
       })
     ];
   }
@@ -2714,7 +2862,7 @@
       dir: config.dir,
       length: config.length,
       color: config.color,
-      wait: randomBetween(0.2, 2.4)
+      wait: randomBetween(0.1, 1.8)
     };
   }
 
@@ -2730,7 +2878,7 @@
       text,
       life
     });
-    runtime.npcBubbles = runtime.npcBubbles.slice(-4);
+    runtime.npcBubbles = runtime.npcBubbles.slice(-6);
   }
 
   function pickNpcLine(npc) {
@@ -2741,7 +2889,7 @@
   function primeNpcBubbles() {
     if (runtime.scene !== "interior" || !runtime.npcs.length) return;
     runtime.npcBubbles = [];
-    ["lito-copos", "bia-lounge"].forEach((npcId) => {
+    ["lito-copos", "bia-lounge", "rex-barra"].forEach((npcId) => {
       const npc = findNpcById(npcId);
       const text = pickNpcLine(npc);
       if (text) pushNpcBubble(npcId, text, 4.8);
@@ -2790,8 +2938,11 @@
     });
 
     if (runtime.npcBubbleTimer <= 0) {
-      runtime.npcBubbleTimer = randomBetween(2.6, 4.8);
+      runtime.npcBubbleTimer = randomBetween(1.4, 2.8);
       spawnNpcBubble();
+      if (Math.random() > 0.52) {
+        spawnNpcBubble();
+      }
     }
   }
 
@@ -2904,8 +3055,39 @@
 
     const drunkBob = Math.sin(now / 430) * 2;
     const dogTail = Math.sin(now / 210) * 4;
+    const roadPulse = (Math.sin(now / 520) + 1) / 2;
+    const signGlow = (Math.sin(now / 280) + 1) / 2;
+    const lampPulse = (Math.cos(now / 470) + 1) / 2;
 
     sceneCtx.save();
+
+    const roadGradient = sceneCtx.createLinearGradient(0, 450, 0, 640);
+    roadGradient.addColorStop(0, "rgba(28, 24, 34, 0.88)");
+    roadGradient.addColorStop(0.4, "rgba(20, 20, 28, 0.95)");
+    roadGradient.addColorStop(1, "rgba(14, 14, 20, 0.98)");
+    sceneCtx.fillStyle = roadGradient;
+    sceneCtx.fillRect(0, 448, WORLD.width, 192);
+
+    sceneCtx.fillStyle = "rgba(58, 50, 64, 0.92)";
+    sceneCtx.fillRect(0, 432, WORLD.width, 20);
+    sceneCtx.fillStyle = "rgba(235, 198, 126, 0.28)";
+    sceneCtx.fillRect(0, 430, WORLD.width, 2);
+
+    sceneCtx.fillStyle = `rgba(255, 221, 148, ${0.26 + roadPulse * 0.14})`;
+    for (let x = 28; x < WORLD.width; x += 118) {
+      sceneCtx.fillRect(x, 532, 56, 5);
+    }
+
+    sceneCtx.fillStyle = "rgba(255,255,255,0.05)";
+    sceneCtx.fillRect(0, 486, WORLD.width, 2);
+    sceneCtx.fillRect(0, 584, WORLD.width, 2);
+
+    sceneCtx.fillStyle = "rgba(255, 170, 105, 0.14)";
+    sceneCtx.fillRect(344, 424, 272, 74);
+    sceneCtx.fillStyle = "rgba(255, 229, 180, 0.12)";
+    sceneCtx.fillRect(382, 436, 196, 34);
+    sceneCtx.fillStyle = `rgba(255, 184, 111, ${0.08 + lampPulse * 0.06})`;
+    sceneCtx.fillRect(0, 392, WORLD.width, 126);
 
     sceneCtx.fillStyle = "rgba(0,0,0,0.24)";
     sceneCtx.fillRect(146, 560, 104, 24);
@@ -2948,6 +3130,81 @@
     sceneCtx.fillRect(618, 542, 9, 8);
     sceneCtx.fillRect(638 + dogTail * 0.12, 548, 7, 3);
 
+    sceneCtx.fillStyle = "#5c422f";
+    sceneCtx.fillRect(96, 446, 112, 26);
+    sceneCtx.fillStyle = `rgba(255, 193, 102, ${0.32 + signGlow * 0.18})`;
+    sceneCtx.fillRect(100, 450, 104, 18);
+    sceneCtx.fillStyle = "#1f1020";
+    sceneCtx.fillRect(104, 454, 12, 10);
+    sceneCtx.fillRect(118, 454, 10, 10);
+    sceneCtx.fillRect(130, 454, 10, 10);
+    sceneCtx.fillRect(144, 454, 10, 10);
+    sceneCtx.fillRect(158, 454, 10, 10);
+    sceneCtx.fillRect(170, 454, 10, 10);
+    sceneCtx.fillRect(182, 454, 10, 10);
+    sceneCtx.fillRect(194, 454, 8, 10);
+
+    sceneCtx.fillStyle = "rgba(0,0,0,0.28)";
+    sceneCtx.fillRect(458, 484, 44, 82);
+    sceneCtx.fillStyle = "#15131a";
+    sceneCtx.fillRect(462, 486, 34, 46);
+    sceneCtx.fillRect(466, 530, 26, 30);
+    sceneCtx.fillStyle = "#e9c39f";
+    sceneCtx.fillRect(472, 476 + drunkBob * 0.3, 16, 16);
+    sceneCtx.fillStyle = "#242630";
+    sceneCtx.fillRect(468, 496, 24, 22);
+    sceneCtx.fillStyle = "#111216";
+    sceneCtx.fillRect(468, 538, 9, 22);
+    sceneCtx.fillRect(481, 538, 9, 22);
+    sceneCtx.fillStyle = "#ffca6b";
+    sceneCtx.fillRect(466, 502, 4, 10);
+    sceneCtx.fillRect(490, 502, 4, 10);
+    sceneCtx.fillStyle = "#dfe9ff";
+    sceneCtx.fillRect(474, 483 + drunkBob * 0.2, 4, 3);
+    sceneCtx.fillRect(482, 483 + drunkBob * 0.2, 4, 3);
+
+    sceneCtx.fillStyle = "rgba(255, 214, 153, 0.12)";
+    sceneCtx.fillRect(446, 472, 68, 108);
+
+    sceneCtx.fillStyle = "#463228";
+    sceneCtx.fillRect(820, 450, 52, 24);
+    sceneCtx.fillStyle = "#24161f";
+    sceneCtx.fillRect(826, 456, 40, 12);
+    sceneCtx.fillStyle = `rgba(255, 187, 102, ${0.2 + signGlow * 0.1})`;
+    sceneCtx.fillRect(822, 448, 48, 2);
+
+    sceneCtx.fillStyle = "rgba(0,0,0,0.22)";
+    sceneCtx.fillRect(422, 564, 148, 20);
+    sceneCtx.fillRect(576, 552, 98, 18);
+
+    sceneCtx.fillStyle = "#261920";
+    sceneCtx.fillRect(434, 534, 22, 28);
+    sceneCtx.fillRect(454, 542, 16, 20);
+    sceneCtx.fillStyle = "#f2c7a6";
+    sceneCtx.fillRect(438, 526 + drunkBob * 0.5, 10, 10);
+    sceneCtx.fillStyle = "#6aa8ff";
+    sceneCtx.fillRect(437, 538, 12, 12);
+    sceneCtx.fillStyle = "#ffca6b";
+    sceneCtx.fillRect(457, 538, 5, 14);
+
+    sceneCtx.fillStyle = "#1a1419";
+    sceneCtx.fillRect(588, 544, 30, 10);
+    sceneCtx.fillRect(612, 548, 12, 8);
+    sceneCtx.fillStyle = "#8a6a52";
+    sceneCtx.fillRect(592, 536, 10, 8);
+    sceneCtx.fillRect(618 + dogTail * 0.14, 544, 8, 3);
+    sceneCtx.fillStyle = "#f4c59f";
+    sceneCtx.fillRect(604, 536, 6, 6);
+
+    sceneCtx.fillStyle = "rgba(255, 205, 134, 0.12)";
+    sceneCtx.beginPath();
+    sceneCtx.moveTo(462, 430);
+    sceneCtx.lineTo(408, 640);
+    sceneCtx.lineTo(620, 640);
+    sceneCtx.lineTo(532, 430);
+    sceneCtx.closePath();
+    sceneCtx.fill();
+
     sceneCtx.restore();
   }
 
@@ -2982,6 +3239,8 @@
     sceneCtx.beginPath();
     sceneCtx.ellipse(x + width / 2, y + height + 8, width * 0.52, 8, 0, 0, Math.PI * 2);
     sceneCtx.fill();
+    sceneCtx.fillStyle = vehicle.dir > 0 ? "rgba(255, 226, 165, 0.16)" : "rgba(255, 110, 92, 0.14)";
+    sceneCtx.fillRect(vehicle.dir > 0 ? x + width - 4 : x - 26, y + 10, 30, 8);
     sceneCtx.fillStyle = vehicle.color;
     sceneCtx.fillRect(x + 4, y + 8, width - 8, height - 8);
     sceneCtx.fillRect(x + 18, y, width - 36, 14);
@@ -3001,6 +3260,7 @@
     const x = vehicle.x;
     const y = vehicle.y;
     const length = vehicle.length;
+    const enginePulse = (Math.sin(performance.now() / 88 + x * 0.01) + 1) / 2;
     sceneCtx.save();
     if (vehicle.dir < 0) {
       sceneCtx.translate(x + length / 2, y + 12);
@@ -3026,15 +3286,20 @@
     sceneCtx.fillRect(x + length - 16, y + 2, 3, 8);
     sceneCtx.fillStyle = "#f7f2d5";
     sceneCtx.fillRect(x + length - 10, y + 8, 3, 3);
+    sceneCtx.fillStyle = `rgba(255, 205, 122, ${0.16 + enginePulse * 0.18})`;
+    sceneCtx.fillRect(x + length - 7, y + 7, 12, 5);
     sceneCtx.restore();
   }
 
   function spawnNpcBubble() {
     if (!runtime.npcs.length || runtime.scene !== "interior") return;
-    const npc = runtime.npcs[Math.floor(Math.random() * runtime.npcs.length)];
+    const busyNpcs = runtime.npcBubbles.map((bubble) => bubble.npcId);
+    const available = runtime.npcs.filter((npc) => !busyNpcs.includes(npc.id) && Array.isArray(npc.lines) && npc.lines.length);
+    const pool = available.length ? available : runtime.npcs;
+    const npc = pool[Math.floor(Math.random() * pool.length)];
     const text = pickNpcLine(npc);
     if (!text) return;
-    pushNpcBubble(npc.id, text, 4.1);
+    pushNpcBubble(npc.id, text, randomBetween(3.6, 5.4));
   }
 
   function updateNpcBubbles(delta) {
@@ -3115,11 +3380,18 @@
       let bubbleY = npc.y - 76;
       if (bubbleY > stackY - 24) bubbleY = stackY - 26;
       stackY = bubbleY;
-      sceneCtx.fillStyle = "rgba(8, 7, 18, 0.88)";
+      sceneCtx.fillStyle = "rgba(8, 7, 18, 0.9)";
       sceneCtx.strokeStyle = alpha > 0.4 ? "rgba(112, 235, 255, 0.55)" : "rgba(255,255,255,0.24)";
       sceneCtx.lineWidth = 1;
       sceneCtx.fillRect(npc.x - width / 2, bubbleY, width, 22);
       sceneCtx.strokeRect(npc.x - width / 2, bubbleY, width, 22);
+      sceneCtx.beginPath();
+      sceneCtx.moveTo(npc.x - 6, bubbleY + 22);
+      sceneCtx.lineTo(npc.x + 2, bubbleY + 22);
+      sceneCtx.lineTo(npc.x - 2, bubbleY + 28);
+      sceneCtx.closePath();
+      sceneCtx.fill();
+      sceneCtx.stroke();
       sceneCtx.fillStyle = "#f7f2d5";
       sceneCtx.fillText(bubble.text, npc.x - width / 2 + 9, bubbleY + 15);
       sceneCtx.restore();
@@ -3980,7 +4252,7 @@
     if (runtime.scene !== "interior") enterInterior();
     if (!state.profile.name) {
       state.profile.name = "Visitante demo";
-      state.profile.motto = "Passeando pela versão demonstrativa do PubPaid.";
+      state.profile.motto = "Treinando no modo demonstrativo do PubPaid.";
       state.profile.favorite = state.profile.favorite || "pool";
     }
     if (!hasGoogleSession()) {
@@ -3990,7 +4262,7 @@
     syncGameModeUi();
     renderAll();
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setWorldMessage("Visita guiada ativa. Explore o salao em tela cheia antes de conectar sua conta Google.", 3200);
+    setWorldMessage("Modo treino ativo. Teste os jogos, rode partidas e aprenda sem gastar saldo real.", 3200);
     return true;
   }
 
@@ -5257,12 +5529,12 @@
   function enterInterior() {
     runtime.scene = "interior";
     runtime.player.x = 480;
-    runtime.player.y = 604;
+    runtime.player.y = 560;
     runtime.player.facing = "up";
     clearPlayerWalkPath();
     runtime.prompt = null;
     if (!runtime.npcs.length) runtime.npcs = createInteriorNpcs();
-    runtime.npcBubbleTimer = 1.1;
+    runtime.npcBubbleTimer = 0.65;
     primeNpcBubbles();
   }
 
@@ -6141,7 +6413,7 @@
     clearGameTimer();
     runtime.activeGame = {
       id: normalized,
-      mode: "valendo",
+      mode: runtime.demoMode ? "treino" : "valendo",
       screen: "lobby",
       stake: TABLE_META[normalized].stakes[0],
       payout: 0,
@@ -6155,7 +6427,7 @@
       fortune: null,
       tableState: null,
       startedAt: "",
-      multiplayer: TABLE_META[normalized].pvp
+      multiplayer: TABLE_META[normalized].pvp && !runtime.demoMode
         ? {
             enabled: true,
             state: "idle",
@@ -6307,7 +6579,8 @@
 
     const isSolo = Boolean(TABLE_META[game.id].isSolo);
     const isPvp = Boolean(TABLE_META[game.id].pvp);
-    const startLabel = isSolo ? "Sentar na maquina" : "Encontrar rival";
+    const trainingMode = runtime.demoMode;
+    const startLabel = trainingMode ? "Treinar agora" : isSolo ? "Sentar na maquina" : "Encontrar rival";
     const pvpStartLabel =
       game.multiplayer?.state === "waiting"
         ? "Esperando outro jogador"
@@ -6346,7 +6619,7 @@
             <div class="pubpaid-game-chip-row">
               <span class="pubpaid-game-chip">saldo ${escapeHtml(formatCoins(state.wallet.coins))}</span>
               <span class="pubpaid-game-chip">aposta ${escapeHtml(formatCoins(game.stake))}</span>
-              <span class="pubpaid-game-chip">${game.multiplayer?.state === "waiting" ? "aguardando rival" : "mesa PvP ao vivo"}</span>
+              <span class="pubpaid-game-chip">${trainingMode ? "modo treino" : game.multiplayer?.state === "waiting" ? "aguardando rival" : "mesa PvP ao vivo"}</span>
             </div>
             <div class="pubpaid-lobby-avatar-row">
               ${renderLobbyAvatarCard(selfPlayer, "self")}
@@ -6355,7 +6628,7 @@
             <div class="pubpaid-stake-row">${stakes}</div>
             <p class="pubpaid-feedback">${escapeHtml(game.feedback || `A mesa de ${TABLE_META[game.id].shortLabel} agora sobe com outro jogador real.`)}</p>
             <div class="pubpaid-card-actions">
-              <button class="pubpaid-card-button" type="button" data-start-game ${game.multiplayer?.state === "waiting" ? "disabled" : ""}>${escapeHtml(pvpStartLabel)}</button>
+              <button class="pubpaid-card-button" type="button" data-start-game ${!trainingMode && game.multiplayer?.state === "waiting" ? "disabled" : ""}>${escapeHtml(trainingMode ? "Treino instantaneo" : pvpStartLabel)}</button>
               <button class="pubpaid-card-button" type="button" data-close-finished>Voltar ao salao</button>
             </div>
           </article>
@@ -6375,13 +6648,13 @@
         <article class="pubpaid-game-box">
           <div class="pubpaid-game-chip-row">
             <span class="pubpaid-game-chip">saldo ${escapeHtml(formatCoins(state.wallet.coins))}</span>
-            <span class="pubpaid-game-chip">${escapeHtml(isSolo ? "maquina solo" : "rival")} ${escapeHtml(game.opponent.name)}</span>
+            <span class="pubpaid-game-chip">${trainingMode ? "treino livre" : `${escapeHtml(isSolo ? "maquina solo" : "rival")} ${escapeHtml(game.opponent.name)}`}</span>
             <span class="pubpaid-game-chip">${game.activeDrink ? `bebida ${escapeHtml(game.activeDrink.name)}` : "sem bebida ativa"}</span>
           </div>
           <p>${escapeHtml(game.opponent.bio)}</p>
           ${game.activeDrink ? `<p class="pubpaid-feedback">A bebida pode dar boa sorte em ${Math.round(game.activeDrink.goodChance * 100)}% ou azar em ${Math.round(game.activeDrink.badChance * 100)}% da rodada.</p>` : ""}
           <div class="pubpaid-stake-row">${stakes}</div>
-          <p class="pubpaid-feedback">Toda mesa agora consome saldo real da sua carteira aprovada.</p>
+          <p class="pubpaid-feedback">${escapeHtml(trainingMode ? "Modo demo ativo: a mesa vale treino, nao desconta saldo e deixa voce testar as mecanicas." : "Toda mesa agora consome saldo real da sua carteira aprovada.")}</p>
           <div class="pubpaid-card-actions">
             <button class="pubpaid-card-button" type="button" data-start-game>${escapeHtml(startLabel)}</button>
             <button class="pubpaid-card-button" type="button" data-close-finished>Voltar ao salao</button>
@@ -6430,10 +6703,13 @@
   function startActiveGame() {
     const game = runtime.activeGame;
     if (!game || game.screen !== "lobby") return;
+    const trainingMode = runtime.demoMode;
     if (state.wallet.coins < game.stake) {
-      game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
-      renderGameModal();
-      return;
+      if (!trainingMode) {
+        game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
+        renderGameModal();
+        return;
+      }
     }
 
     game.feedback = "";
@@ -6442,7 +6718,9 @@
     game.payout = getMatchWinnerPayout(game.stake);
     game.fortune = rollDrinkFortune(game.activeDrink, game.stake, getSecretLuckBoost());
     game.screen = "playing";
-    state.wallet.coins -= game.stake;
+    if (!trainingMode) {
+      state.wallet.coins -= game.stake;
+    }
     state.shop.activeDrinkId = "";
     if (state.secrets.singerCharm > 0) state.secrets.singerCharm -= 1;
 
@@ -6568,6 +6846,7 @@
   function finalizeGame(result, summary) {
     const game = runtime.activeGame;
     if (!game || game.screen === "finished") return;
+    const trainingMode = runtime.demoMode;
 
     clearGameTimer();
     clearPoolRefs(false);
@@ -6575,8 +6854,17 @@
     const resolved = resolveFortuneOutcome(game, result, summary);
     game.screen = "finished";
     game.result = resolved.result;
-    game.summary = resolved.summary;
+    game.summary = trainingMode
+      ? `${resolved.summary} Rodada em modo demo, sem desconto real no saldo.`
+      : resolved.summary;
     game.fortuneNote = resolved.fortuneNote;
+
+    if (trainingMode) {
+      game.resultAmount = resolved.result === "loss" ? "Treino concluido" : "Treino concluido";
+      saveState();
+      renderAll();
+      return;
+    }
 
     if (resolved.result === "win") {
       const finalPayout = Math.max(0, game.payout + resolved.coinDelta);

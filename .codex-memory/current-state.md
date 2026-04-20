@@ -1,15 +1,17 @@
 # Current State
 
-Updated: 2026-04-20T10:34:58.838Z
+Updated: 2026-04-20T11:08:46.915Z
 
 ## Active Goal
 
-- Popup mobile simplificado + homenagem aos fundadores corrigida
+- PubPaid com rua viva e modo treino
 
 ## Summary
 
-O popup mobile de cookies foi reduzido para uma versão curta e a etapa de homenagem aos fundadores deixou de ser ocultada pelo CSS do modo phone.
+Novo bitmap exterior v3 aplicado no splash e na cena; rua da fachada ganhou mais trafego, pedestres, props de calcada e luz; modo demo agora abre treino sem consumir saldo real nem fila PvP.
 
 ## Next
 
-- Validar visualmente no mobile se a transição do aceite para a homenagem ficou no tempo e na escala certos.
+- Validar visualmente o PubPaid no navegador e
+- se o usuario aprovar
+- preparar commit/deploy dessas mudancas.

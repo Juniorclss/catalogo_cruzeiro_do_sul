@@ -1,9 +1,9 @@
 # Handoff
 
-Updated: 2026-04-20T10:33:31.914Z
+Updated: 2026-04-20T11:08:46.915Z
 
-Home com hero editorial por área em andamento/ajustada no script; PubPaid com rua externa mais movimentada, mais carros/motos, crianças, idosos e cachorros encostados no pub.
+PubPaid recebeu novo bitmap exterior v3, reforco de rua em frente ao bar com mais carros, motos, NPCs e props, e modo demo convertido em treino sem desconto de saldo.
 
 ## Next
 
-- Abrir validação visual local da home e do PubPaid para calibrar enquadramento da hero e densidade dos NPCs/veículos.
+- Fazer validacao visual da cena externa e decidir se ja segue para commit e deploy.
