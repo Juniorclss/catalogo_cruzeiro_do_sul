@@ -64,6 +64,7 @@ const heroDailyNewsCard = document.querySelector("[data-hero-daily-link]");
 const heroDailyNewsCategory = document.querySelector("[data-hero-daily-category]");
 const heroDailyNewsTitle = document.querySelector("[data-hero-daily-title]");
 const heroDailyNewsSummary = document.querySelector("[data-hero-daily-summary]");
+const heroTopicCards = [...document.querySelectorAll("[data-hero-topic-card]")];
 const heroOfficeStatusNodes = [...document.querySelectorAll("[data-hero-office-status]")];
 const heroOfficeBubble = document.querySelector("[data-hero-office-bubble]");
 const archiveBrowserLaunchers = [...document.querySelectorAll("[data-open-archive-browser]")];
@@ -3172,6 +3173,57 @@ const setHeroTourismMeta = (photo) => {
   }
 };
 
+const renderHeroDesktopHighlights = (items = []) => {
+  if (!heroTopicCards.length) {
+    return;
+  }
+
+  const safeItems = Array.isArray(items) ? items.filter(Boolean).slice(0, heroTopicCards.length) : [];
+
+  heroTopicCards.forEach((card, index) => {
+    const item = safeItems[index];
+    const categoryNode = card.querySelector("[data-hero-topic-category]");
+    const titleNode = card.querySelector("[data-hero-topic-title]");
+    const summaryNode = card.querySelector("[data-hero-topic-summary]");
+    const photoNode = card.querySelector("[data-hero-topic-photo]");
+
+    if (!item) {
+      card.hidden = true;
+      return;
+    }
+
+    card.hidden = false;
+    card.href = item.articleHref || "#radar";
+
+    if (categoryNode) {
+      categoryNode.textContent = item.articleCategory || item.title || "Area em destaque";
+    }
+
+    if (titleNode) {
+      titleNode.textContent = truncateCopy(
+        item.articleTitle || item.title || "Noticia principal do dia",
+        86
+      );
+    }
+
+    if (summaryNode) {
+      summaryNode.textContent = truncateCopy(
+        item.articleSummary || item.note || "Resumo curto do destaque mais importante desta editoria.",
+        120
+      );
+    }
+
+    if (photoNode) {
+      const imageUrl = item.proxyUrl || item.fallbackUrl || "";
+      photoNode.style.backgroundImage = imageUrl
+        ? `linear-gradient(180deg, rgba(8, 20, 38, 0.04), rgba(8, 20, 38, 0.3)), url("${imageUrl}")`
+        : "linear-gradient(135deg, rgba(64, 109, 160, 0.7), rgba(15, 39, 66, 0.92))";
+      photoNode.style.backgroundPosition = item.focusPosition || "center 42%";
+      photoNode.style.backgroundSize = "cover";
+    }
+  });
+};
+
 const paintHeroTourismBackdrop = (slideNode, photo) => {
   if (shouldUseSolidHeroShell()) {
     return Promise.resolve(false);
@@ -3264,6 +3316,8 @@ const initializeHeroTourismHero = () => {
     return;
   }
 
+  const dailyPool = getHeroTourismDailyPool();
+
   if (heroTourismRotation.timerId) {
     window.clearInterval(heroTourismRotation.timerId);
   }
@@ -3280,6 +3334,7 @@ const initializeHeroTourismHero = () => {
   heroTourismRotation.activeSlideIndex = 0;
   heroTourismRotation.statusIndex = 0;
   heroTourismRotation.bubbleIndex = 0;
+  renderHeroDesktopHighlights(dailyPool);
 
   if (shouldUseSolidHeroShell()) {
     heroTourismSlides.forEach((slide) => {
@@ -3287,7 +3342,7 @@ const initializeHeroTourismHero = () => {
       slide.style.backgroundImage = "none";
       slide.dataset.heroBackdropReady = "false";
     });
-    setHeroTourismMeta(getHeroTourismPhoto(0));
+    setHeroTourismMeta(dailyPool[0] || getHeroTourismPhoto(0));
     heroTourismShell.dataset.heroTourismReady = "solid";
   } else {
     renderHeroTourismBackground(0, { initial: true });
@@ -3296,8 +3351,12 @@ const initializeHeroTourismHero = () => {
   rotateHeroOfficeStatus(0);
   rotateHeroOfficeBubble(0);
 
-  if (!shouldUseSolidHeroShell() && getHeroTourismDailyPool().length > 1) {
+  if (!shouldUseSolidHeroShell() && dailyPool.length > 1) {
     heroTourismRotation.timerId = window.setInterval(() => {
+      if (heroDesktopBackdropMedia?.matches) {
+        return;
+      }
+
       const currentPool = getHeroTourismDailyPool();
       const nextPhotoIndex = (heroTourismRotation.photoIndex + 1) % currentPool.length;
       renderHeroTourismBackground(nextPhotoIndex);

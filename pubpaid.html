@@ -133,10 +133,20 @@
 
           <div class="pubpaid-world-stage">
             <div class="pubpaid-splash-bitmap" aria-hidden="true">
-              <div class="pubpaid-splash-bitmap-copy">
+              <div class="pubpaid-splash-roof-sign">
                 <span>noite aberta</span>
-                <strong>PUBPAID</strong>
-                <small>Entre pela conta Google ou abra o modo demo para treinar.</small>
+                <strong>PUB PAID</strong>
+              </div>
+              <div class="pubpaid-splash-jukebox-cover"></div>
+              <div class="pubpaid-splash-entry-mark">
+                <span class="pubpaid-splash-entry-road">Veja a estrada</span>
+                <strong>Entrada principal</strong>
+                <small>Primeiro conheça a fachada. Depois entre no bar.</small>
+              </div>
+              <div class="pubpaid-splash-bitmap-copy">
+                <span>fachada e estrada</span>
+                <strong>PubPaid na calçada</strong>
+                <small>Veja o ambiente por fora, encontre a porta marcada e só então entre no bar.</small>
               </div>
             </div>
             <canvas
@@ -151,8 +161,8 @@
           <div class="pubpaid-world-hud" aria-label="Leitura do salao">
             <article>
               <span>agora</span>
-              <strong data-scene-title>fachada neon</strong>
-              <small data-scene-hint>chegue até a porta principal</small>
+              <strong data-scene-title>fachada e estrada</strong>
+              <small data-scene-hint>observe a frente do pub e siga até a porta principal</small>
             </article>
             <article>
               <span>por aqui</span>
@@ -446,6 +456,15 @@
                 <strong>Damas Pixel</strong>
                 <span>Uma disputa mais calma, mas nem por isso menos afiada.</span>
               </article>
+              <article data-venue-card="chess">
+                <div class="pubpaid-venue-icon pubpaid-venue-chess" aria-hidden="true">
+                  <span class="checkers-board"></span>
+                  <span class="chess-piece piece-king">K</span>
+                  <span class="chess-piece piece-queen">Q</span>
+                </div>
+                <strong>Xadrez de Mesa</strong>
+                <span>Peças completas, centro disputado e leitura mais longa jogada por jogada.</span>
+              </article>
               <article data-venue-card="cards21">
                 <div class="pubpaid-venue-icon pubpaid-venue-21" aria-hidden="true">
                   <span class="card card-a">A</span>
@@ -582,6 +601,7 @@
             <select name="favorite">
               <option value="pool">Sinuca Real</option>
               <option value="checkers">Damas Pixel</option>
+              <option value="chess">Xadrez de Mesa</option>
               <option value="cards21">21 do Bar</option>
               <option value="poker">Poker da Mesa Redonda</option>
               <option value="truco">Truco Paulista</option>

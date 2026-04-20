@@ -6,7 +6,7 @@
   const PUBPAID_PVP_POLL_MS = 1800;
   const WORLD = { width: 960, height: 640 };
   const SCENE_HINTS = {
-    exterior: "na frente do pub",
+    exterior: "fachada e estrada",
     interior: "dentro do salao"
   };
 
@@ -68,6 +68,13 @@
       sceneCopy: "O tabuleiro está pronto. Escolha suas jogadas e leia o ritmo da casa.",
       stakes: DEMO_STAKES,
       pvp: true
+    },
+    chess: {
+      label: "Xadrez de Mesa",
+      shortLabel: "xadrez",
+      description: "Tabuleiro clássico com peças completas, leitura longa e pressão por linhas, colunas e diagonais.",
+      sceneCopy: "As peças já estão montadas. Abra espaço, proteja o rei e veja quem domina melhor a mesa.",
+      stakes: DEMO_STAKES
     },
     cards21: {
       label: "21 do Bar",
@@ -135,6 +142,11 @@
       name: "Rex Square",
       archetype: "street",
       bio: "Vê a jogada antes e raramente entrega espaço fácil."
+    },
+    chess: {
+      name: "Mestre Brasa",
+      archetype: "cowboy",
+      bio: "Joga simples, ocupa o centro cedo e gosta de trocar peça quando está na frente."
     },
     cards21: {
       name: "Luna Deck",
@@ -592,6 +604,16 @@
         radius: 118
       },
       {
+        id: "chess",
+        type: "game",
+        gameId: "chess",
+        label: TABLE_META.chess.label,
+        venueKey: "chess",
+        x: 244,
+        y: 292,
+        radius: 116
+      },
+      {
         id: "cards21",
         type: "game",
         gameId: "cards21",
@@ -647,9 +669,9 @@
         gameId: "roulette",
         label: TABLE_META.roulette.label,
         venueKey: "roulette",
-        x: 764,
-        y: 510,
-        radius: 84
+        x: 806,
+        y: 152,
+        radius: 92
       },
       {
         id: "wall-darts",
@@ -657,9 +679,9 @@
         gameId: "darts",
         label: TABLE_META.darts.label,
         venueKey: "darts",
-        x: 742,
-        y: 110,
-        radius: 82
+        x: 738,
+        y: 154,
+        radius: 86
       },
       {
         id: "stage",
@@ -1363,6 +1385,15 @@
       return;
     }
 
+    const chessCell = event.target.closest("[data-chess-cell]");
+    if (chessCell) {
+      handleChessClick(
+        clampInteger(chessCell.dataset.row),
+        clampInteger(chessCell.dataset.col)
+      );
+      return;
+    }
+
     if (event.target.closest("[data-cards-action='hit']")) {
       handleCardsAction("hit");
       return;
@@ -1922,11 +1953,37 @@
     runtime.player.pendingInteraction = null;
   }
 
+  function teleportPlayerToInteraction(interaction) {
+    if (!interaction) return false;
+    const standPoint = getInteractionStandPoint(interaction);
+    if (!standPoint) return false;
+
+    runtime.player.x = standPoint.x;
+    runtime.player.y = standPoint.y;
+
+    const dx = interaction.x - standPoint.x;
+    const dy = interaction.y - standPoint.y;
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      runtime.player.facing = dx >= 0 ? "right" : "left";
+    } else {
+      runtime.player.facing = dy >= 0 ? "down" : "up";
+    }
+
+    runtime.prompt = interaction;
+    clearPlayerWalkPath();
+    return true;
+  }
+
   function queuePlayerWalk(targetX, targetY, pendingInteraction = null) {
     const path = buildWalkPath(targetX, targetY);
     if (path === null) {
       runtime.player.path = [];
       runtime.player.pendingInteraction = null;
+      if (pendingInteraction && teleportPlayerToInteraction(pendingInteraction)) {
+        renderSceneHud();
+        triggerInteraction(pendingInteraction);
+        return true;
+      }
       return false;
     }
 
@@ -1975,7 +2032,13 @@
       tryMovePlayer((dx / distance) * step, (dy / distance) * step);
       const movedDistance = Math.hypot(runtime.player.x - beforeX, runtime.player.y - beforeY);
       if (movedDistance <= 0.2) {
+        const blockedInteraction = runtime.player.pendingInteraction;
         clearPlayerWalkPath();
+        if (blockedInteraction && teleportPlayerToInteraction(blockedInteraction)) {
+          renderSceneHud();
+          triggerInteraction(blockedInteraction);
+          return true;
+        }
         return false;
       }
       return true;
@@ -1995,11 +2058,13 @@
       pool: { x: 0, y: 56 },
       // A mesa de damas fica mais acessivel parando pelo corredor central de baixo.
       checkers: { x: 0, y: 104 },
+      chess: { x: 0, y: 104 },
       cards21: { x: 0, y: 62 },
       poker: { x: 0, y: 62 },
       dicecups: { x: 0, y: 58 },
       slots: { x: 0, y: 58 },
-      roulette: { x: 0, y: 66 },
+      roulette: { x: -36, y: 76 },
+      "wall-darts": { x: -34, y: 82 },
       stage: { x: -54, y: 36 },
       "bartender-shop": { x: 0, y: 66 },
       "waiter-tips": { x: 0, y: 72 },
@@ -2072,11 +2137,13 @@
     const explicitAreas = {
       pool: { x: 36, y: 66, w: 182, h: 166 },
       checkers: { x: 60, y: 196, w: 188, h: 192 },
+      chess: { x: 148, y: 196, w: 190, h: 192 },
       cards21: { x: 218, y: 396, w: 176, h: 160 },
       poker: { x: 354, y: 418, w: 146, h: 122 },
       dicecups: { x: 690, y: 176, w: 242, h: 174 },
       slots: { x: 520, y: 58, w: 280, h: 166 },
-      roulette: { x: 676, y: 438, w: 176, h: 132 },
+      roulette: { x: 742, y: 64, w: 170, h: 168 },
+      "wall-darts": { x: 668, y: 86, w: 144, h: 144 },
       stage: { x: 796, y: 74, w: 128, h: 136 },
       "bartender-shop": { x: 266, y: 70, w: 82, h: 112 },
       "waiter-tips": { x: 744, y: 78, w: 94, h: 116 },
@@ -2089,12 +2156,12 @@
       return explicitAreas[interaction.id];
     }
 
-    return {
-      x: interaction.x - 52,
-      y: interaction.y - 52,
-      w: 104,
-      h: 104
-    };
+      return {
+        x: interaction.x - 52,
+        y: interaction.y - 52,
+        w: 104,
+        h: 104
+      };
   }
 
   function renderScene(now) {
@@ -2115,6 +2182,7 @@
       drawDanceCouples(now);
       drawInteractionMarkers(now);
       drawInteriorNpcs();
+      drawStageSinger(now);
       drawStageNotes();
       drawNpcBubbles();
       drawSingerBursts();
@@ -2664,15 +2732,16 @@
         prop: "leash"
       }),
       createExteriorWalker({
-        id: "front-walker-office",
-        x: 436,
-        y: 586,
-        minX: 288,
-        maxX: 694,
-        speed: 26,
+        id: "front-door-security",
+        x: 418,
+        y: 470,
+        minX: 418,
+        maxX: 418,
+        speed: 0,
         facing: "right",
         archetype: "street",
-        prop: "bag"
+        prop: "security",
+        behavior: "fixed"
       }),
       createExteriorWalker({
         id: "front-walker-night-kid",
@@ -2723,7 +2792,8 @@
       walkFrame: 0,
       walkClock: 0,
       pause: randomBetween(0.2, 1.8),
-      prop: config.prop || ""
+      prop: config.prop || "",
+      behavior: config.behavior || "patrol"
     };
   }
 
@@ -2949,6 +3019,11 @@
   function updateExteriorWalkers(delta) {
     if (runtime.scene !== "exterior" || !runtime.exteriorWalkers.length) return;
     runtime.exteriorWalkers.forEach((walker) => {
+      if (walker.behavior === "fixed") {
+        walker.walkFrame = 0;
+        walker.walkClock = 0;
+        return;
+      }
       walker.pause -= delta;
       if (walker.pause > 0) {
         walker.walkFrame = 0;
@@ -3045,6 +3120,14 @@
       sceneCtx.moveTo(startX, walker.y - 10);
       sceneCtx.lineTo(startX + (walker.facing === "left" ? -18 : 18), walker.y - 4);
       sceneCtx.stroke();
+    } else if (walker.prop === "security") {
+      sceneCtx.fillStyle = "#d9b47a";
+      sceneCtx.fillRect(walker.x + 8, walker.y - 36, 8, 3);
+      sceneCtx.fillStyle = "#11131b";
+      sceneCtx.fillRect(walker.x + 6, walker.y - 33, 12, 4);
+      sceneCtx.fillStyle = "#d8c08b";
+      sceneCtx.fillRect(walker.x + 17, walker.y - 18, 2, 16);
+      sceneCtx.fillRect(walker.x + 17, walker.y - 20, 6, 2);
     }
 
     sceneCtx.restore();
@@ -3088,6 +3171,31 @@
     sceneCtx.fillRect(382, 436, 196, 34);
     sceneCtx.fillStyle = `rgba(255, 184, 111, ${0.08 + lampPulse * 0.06})`;
     sceneCtx.fillRect(0, 392, WORLD.width, 126);
+
+    const entryPulse = (Math.sin(now / 260) + 1) / 2;
+    const doorGlow = sceneCtx.createRadialGradient(480, 420, 12, 480, 420, 94);
+    doorGlow.addColorStop(0, `rgba(112, 235, 255, ${0.32 + entryPulse * 0.14})`);
+    doorGlow.addColorStop(0.45, `rgba(255, 207, 103, ${0.18 + entryPulse * 0.08})`);
+    doorGlow.addColorStop(1, "rgba(255, 207, 103, 0)");
+    sceneCtx.fillStyle = doorGlow;
+    sceneCtx.beginPath();
+    sceneCtx.ellipse(480, 420, 110, 58, 0, 0, Math.PI * 2);
+    sceneCtx.fill();
+
+    sceneCtx.strokeStyle = `rgba(112, 235, 255, ${0.54 + entryPulse * 0.24})`;
+    sceneCtx.lineWidth = 3;
+    sceneCtx.strokeRect(434, 396, 92, 56);
+    sceneCtx.strokeStyle = `rgba(255, 214, 122, ${0.48 + entryPulse * 0.18})`;
+    sceneCtx.strokeRect(444, 406, 72, 36);
+
+    sceneCtx.fillStyle = "rgba(10, 8, 18, 0.82)";
+    sceneCtx.fillRect(404, 360, 152, 26);
+    sceneCtx.strokeStyle = "rgba(112, 235, 255, 0.6)";
+    sceneCtx.lineWidth = 2;
+    sceneCtx.strokeRect(404, 360, 152, 26);
+    sceneCtx.fillStyle = "#f7f2d5";
+    sceneCtx.font = "12px Chakra Petch";
+    sceneCtx.fillText("Entrada principal", 420, 377);
 
     sceneCtx.fillStyle = "rgba(0,0,0,0.24)";
     sceneCtx.fillRect(146, 560, 104, 24);
@@ -3398,6 +3506,61 @@
     });
   }
 
+  function drawStageSinger(now) {
+    if (runtime.scene !== "interior") return;
+
+    const sway = Math.sin(now / 320) * 1.6;
+    const micPulse = (Math.sin(now / 210) + 1) / 2;
+    const x = 860;
+    const y = 154;
+
+    sceneCtx.save();
+
+    sceneCtx.fillStyle = "rgba(0, 0, 0, 0.22)";
+    sceneCtx.beginPath();
+    sceneCtx.ellipse(x, y + 20, 24, 8, 0, 0, Math.PI * 2);
+    sceneCtx.fill();
+
+    sceneCtx.fillStyle = "#f0c7a4";
+    sceneCtx.fillRect(x - 7, y - 24 + sway, 14, 14);
+    sceneCtx.fillStyle = "#ffddea";
+    sceneCtx.fillRect(x - 3, y - 18 + sway, 2, 2);
+    sceneCtx.fillRect(x + 1, y - 18 + sway, 2, 2);
+
+    sceneCtx.fillStyle = "#ff84c3";
+    sceneCtx.fillRect(x - 11, y - 30 + sway, 22, 8);
+    sceneCtx.fillRect(x - 9, y - 22 + sway, 18, 4);
+    sceneCtx.fillStyle = "#6f2249";
+    sceneCtx.fillRect(x - 13, y - 12, 26, 24);
+    sceneCtx.fillRect(x - 9, y + 12, 8, 12);
+    sceneCtx.fillRect(x + 1, y + 12, 8, 12);
+    sceneCtx.fillStyle = "#ffb1d8";
+    sceneCtx.fillRect(x - 5, y - 6, 10, 10);
+    sceneCtx.fillStyle = "#ffe7f1";
+    sceneCtx.fillRect(x - 4, y - 5, 3, 3);
+
+    sceneCtx.fillStyle = "#f0c7a4";
+    sceneCtx.fillRect(x - 16, y - 8, 4, 14);
+    sceneCtx.fillRect(x + 12, y - 8, 4, 14);
+    sceneCtx.fillRect(x - 8, y + 24, 4, 12);
+    sceneCtx.fillRect(x + 4, y + 24, 4, 12);
+
+    sceneCtx.fillStyle = "#11131b";
+    sceneCtx.fillRect(x - 10, y + 36, 7, 4);
+    sceneCtx.fillRect(x + 3, y + 36, 7, 4);
+
+    sceneCtx.fillStyle = "#d8f6ff";
+    sceneCtx.fillRect(x - 19, y - 19, 3, 16);
+    sceneCtx.fillStyle = `rgba(255, 232, 180, ${0.45 + micPulse * 0.3})`;
+    sceneCtx.fillRect(x - 20, y - 22, 5, 5);
+
+    sceneCtx.fillStyle = `rgba(255, 124, 194, ${0.2 + micPulse * 0.2})`;
+    sceneCtx.fillRect(x - 25, y - 28, 10, 2);
+    sceneCtx.fillRect(x - 28, y - 24, 8, 2);
+
+    sceneCtx.restore();
+  }
+
   function updateSingerBursts(delta) {
     runtime.singerBursts = runtime.singerBursts
       .map((burst) => ({
@@ -3434,7 +3597,12 @@
     const bundle = getFocusBundle(focus);
 
     setText(refs.sceneTitle, SCENE_HINTS[runtime.scene]);
-    setText(refs.sceneHint, runtime.scene === "exterior" ? "a entrada está logo à frente" : "o salão está aberto para você");
+    setText(
+      refs.sceneHint,
+      runtime.scene === "exterior"
+        ? "veja a fachada, a estrada e siga para a entrada principal"
+        : "o salão está aberto para você"
+    );
     setText(refs.sceneNearby, nearbyLabel);
     setText(refs.sceneNearbyNote, nearbyNote);
     setText(refs.scenePrompt, getWorldPromptText());
@@ -3489,16 +3657,16 @@
       return {
         title: "Entrada principal",
         copy: canEnterPubGame()
-          ? "A porta está aberta. Um clique e o PubPaid assume a tela toda."
+          ? "A fachada já foi apresentada. Agora a porta está aberta para levar você ao bar em tela cheia."
           : hasGoogle
-            ? "O Google já está ligado. Falta só montar o avatar para o salão abrir valendo."
-            : "Aqui começa a sua noite no PubPaid: primeiro Google, depois avatar, depois o game em tela cheia.",
+            ? "Você já viu a frente do pub. Falta só montar o avatar para a entrada abrir valendo."
+            : "Aqui a ideia é simples: primeiro ver a fachada e a entrada, depois ligar Google, montar avatar e entrar.",
         meta: canEnterPubGame() ? "entrar no game" : hasGoogle ? "montar avatar" : "conectar google",
         description: canEnterPubGame()
-          ? "Sempre que quiser, a entrada leva você de volta ao salão em modo full tela."
+          ? "Sempre que quiser, a porta marcada leva você do lado de fora para o salão em modo full tela."
           : hasAvatar
             ? "Seu avatar já existe, mas você precisa reconectar o Google para entrar."
-            : "A primeira entrada prepara a conta, o personagem e a carteira antes do jogo.",
+            : "A entrada primeiro apresenta o ambiente. Depois prepara conta, personagem e carteira antes do jogo.",
         venueKey: "door"
       };
     }
@@ -3603,7 +3771,7 @@
     if (runtime.message.text) return runtime.message.text;
     if (!runtime.prompt) {
       return runtime.scene === "exterior"
-        ? "chegue até a porta principal"
+        ? "veja a fachada e chegue até a porta principal"
         : "circule pelo salão e escolha o seu próximo passo";
     }
 
@@ -6520,6 +6688,12 @@
       return;
     }
 
+    if (game.id === "chess") {
+      refs.gameHost.innerHTML = renderChessGame(game);
+      clearPoolRefs();
+      return;
+    }
+
     if (game.id === "cards21") {
       refs.gameHost.innerHTML = renderCardsGame(game);
       clearPoolRefs();
@@ -6728,6 +6902,8 @@
       game.tableState = createPoolState();
     } else if (game.id === "checkers") {
       game.tableState = createCheckersState();
+    } else if (game.id === "chess") {
+      game.tableState = createChessState();
     } else if (game.id === "cards21") {
       game.tableState = createCardsState();
     } else if (game.id === "poker") {
@@ -7781,6 +7957,26 @@
     };
   }
 
+  function createChessState() {
+    return {
+      board: [
+        ["r", "n", "b", "q", "k", "b", "n", "r"],
+        ["p", "p", "p", "p", "p", "p", "p", "p"],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["P", "P", "P", "P", "P", "P", "P", "P"],
+        ["R", "N", "B", "Q", "K", "B", "N", "R"]
+      ],
+      turn: "player",
+      selected: null,
+      validMoves: [],
+      message: "Sua vez. Clique numa peca azul e depois no destino.",
+      turnCount: 0
+    };
+  }
+
   function renderCheckersGame(game) {
     const stateCheckers = game.tableState;
     const validTargets = new Set(
@@ -7862,6 +8058,24 @@
   function getCheckersOwner(piece) {
     if (!piece) return "";
     return piece.toLowerCase() === "p" ? "player" : "opponent";
+  }
+
+  function getChessOwner(piece) {
+    if (!piece) return "";
+    return piece === piece.toUpperCase() ? "player" : "opponent";
+  }
+
+  function cloneChessBoard(board) {
+    return board.map((row) => row.slice());
+  }
+
+  function inChessBounds(row, col) {
+    return row >= 0 && row < 8 && col >= 0 && col < 8;
+  }
+
+  function getChessGlyph(piece) {
+    const map = { p: "P", r: "T", n: "C", b: "B", q: "Q", k: "K" };
+    return map[String(piece || "").toLowerCase()] || "?";
   }
 
   function getCheckersDirections(piece) {
@@ -7957,6 +8171,134 @@
     if (!botPieces) return "win";
     if (!getAllCheckersMoves(board, "player").length) return "loss";
     if (!getAllCheckersMoves(board, "opponent").length) return "win";
+    return "";
+  }
+
+  function getChessMovesForPiece(board, row, col) {
+    const piece = board[row][col];
+    if (!piece) return [];
+    const owner = getChessOwner(piece);
+    const enemy = owner === "player" ? "opponent" : "player";
+    const lower = piece.toLowerCase();
+    const moves = [];
+    const pushStep = (r, c) => {
+      if (!inChessBounds(r, c)) return false;
+      const target = board[r][c];
+      if (!target) {
+        moves.push({ from: { row, col }, to: { row: r, col: c }, capture: null });
+        return true;
+      }
+      if (getChessOwner(target) === enemy) {
+        moves.push({ from: { row, col }, to: { row: r, col: c }, capture: { row: r, col: c } });
+      }
+      return false;
+    };
+    const pushRay = (dirs) => {
+      dirs.forEach(([dr, dc]) => {
+        let r = row + dr;
+        let c = col + dc;
+        while (inChessBounds(r, c)) {
+          if (!pushStep(r, c)) break;
+          r += dr;
+          c += dc;
+        }
+      });
+    };
+
+    if (lower === "p") {
+      const dir = owner === "player" ? -1 : 1;
+      const startRow = owner === "player" ? 6 : 1;
+      if (inChessBounds(row + dir, col) && !board[row + dir][col]) {
+        moves.push({ from: { row, col }, to: { row: row + dir, col }, capture: null });
+        if (row === startRow && !board[row + dir * 2][col]) {
+          moves.push({ from: { row, col }, to: { row: row + dir * 2, col }, capture: null });
+        }
+      }
+      [-1, 1].forEach((offset) => {
+        const r = row + dir;
+        const c = col + offset;
+        if (!inChessBounds(r, c)) return;
+        const target = board[r][c];
+        if (target && getChessOwner(target) === enemy) {
+          moves.push({ from: { row, col }, to: { row: r, col: c }, capture: { row: r, col: c } });
+        }
+      });
+      return moves;
+    }
+
+    if (lower === "n") {
+      [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]].forEach(([dr, dc]) => {
+        pushStep(row + dr, col + dc);
+      });
+      return moves;
+    }
+
+    if (lower === "b") {
+      pushRay([[-1, -1], [-1, 1], [1, -1], [1, 1]]);
+      return moves;
+    }
+
+    if (lower === "r") {
+      pushRay([[-1, 0], [1, 0], [0, -1], [0, 1]]);
+      return moves;
+    }
+
+    if (lower === "q") {
+      pushRay([[-1, -1], [-1, 1], [1, -1], [1, 1], [-1, 0], [1, 0], [0, -1], [0, 1]]);
+      return moves;
+    }
+
+    if (lower === "k") {
+      [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]].forEach(([dr, dc]) => {
+        pushStep(row + dr, col + dc);
+      });
+    }
+
+    return moves;
+  }
+
+  function getAllChessMoves(board, owner) {
+    const moves = [];
+    for (let row = 0; row < 8; row += 1) {
+      for (let col = 0; col < 8; col += 1) {
+        if (getChessOwner(board[row][col]) !== owner) continue;
+        moves.push(...getChessMovesForPiece(board, row, col));
+      }
+    }
+    return moves;
+  }
+
+  function applyChessMove(board, move) {
+    const next = cloneChessBoard(board);
+    let piece = next[move.from.row][move.from.col];
+    next[move.from.row][move.from.col] = "";
+    if (move.capture) next[move.capture.row][move.capture.col] = "";
+    if (piece === "P" && move.to.row === 0) piece = "Q";
+    if (piece === "p" && move.to.row === 7) piece = "q";
+    next[move.to.row][move.to.col] = piece;
+    return next;
+  }
+
+  function countChessPieces(board, owner) {
+    let count = 0;
+    for (let row = 0; row < 8; row += 1) {
+      for (let col = 0; col < 8; col += 1) {
+        if (getChessOwner(board[row][col]) === owner) count += 1;
+      }
+    }
+    return count;
+  }
+
+  function getChessKingAlive(board, owner) {
+    const king = owner === "player" ? "K" : "k";
+    return board.some((row) => row.includes(king));
+  }
+
+  function checkChessOutcome(board) {
+    if (!getChessKingAlive(board, "player")) return "loss";
+    if (!getChessKingAlive(board, "opponent")) return "win";
+    if (!getAllChessMoves(board, "player").length) return "loss";
+    if (!getAllChessMoves(board, "opponent").length) return "win";
     return "";
   }
 
@@ -8082,6 +8424,93 @@
     checkers.selected = null;
     checkers.validMoves = [];
     checkers.message = "Sua vez de novo. Clique numa peca azul.";
+    renderGameModal();
+  }
+
+  function handleChessClick(row, col) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "chess" || game.screen !== "playing") return;
+    const chess = game.tableState;
+    if (chess.turn !== "player") return;
+
+    const cell = chess.board[row][col];
+    const owner = getChessOwner(cell);
+
+    if (owner === "player") {
+      const moves = getChessMovesForPiece(chess.board, row, col);
+      chess.selected = { row, col };
+      chess.validMoves = moves;
+      chess.message = moves.length ? "Destino marcado. Feche a jogada." : "Essa peca nao tem rota agora.";
+      renderGameModal();
+      return;
+    }
+
+    const chosenMove = chess.validMoves.find((move) => move.to.row === row && move.to.col === col);
+    if (!chosenMove) return;
+
+    chess.board = applyChessMove(chess.board, chosenMove);
+    chess.turnCount += 1;
+    const outcome = checkChessOutcome(chess.board);
+    if (outcome === "win") {
+      finalizeGame("win", `${state.profile.name || "Voce"} derrubou o rei rival e venceu a mesa de xadrez.`);
+      return;
+    }
+    if (outcome === "loss") {
+      finalizeGame("loss", `${game.opponent.name} tomou seu rei e fechou a mesa.`);
+      return;
+    }
+
+    chess.turn = "opponent";
+    chess.selected = null;
+    chess.validMoves = [];
+    chess.message = `${game.opponent.name} esta lendo a posicao.`;
+    renderGameModal();
+    runtime.gameTimer = window.setTimeout(runChessBotTurn, 680);
+  }
+
+  function runChessBotTurn() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "chess" || game.screen !== "playing") return;
+    const chess = game.tableState;
+    const moves = getAllChessMoves(chess.board, "opponent");
+    if (!moves.length) {
+      finalizeGame("win", `${state.profile.name || "Voce"} cercou o rival e venceu a mesa.`);
+      return;
+    }
+
+    const captures = moves.filter((move) => move.capture);
+    const pool = captures.length ? captures : moves;
+    const move = pool[Math.floor(Math.random() * pool.length)];
+    chess.board = applyChessMove(chess.board, move);
+    chess.turnCount += 1;
+
+    const outcome = checkChessOutcome(chess.board);
+    if (outcome === "win") {
+      finalizeGame("win", `${state.profile.name || "Voce"} segurou melhor o rei e levou a mesa.`);
+      return;
+    }
+    if (outcome === "loss") {
+      finalizeGame("loss", `${game.opponent.name} dominou a mesa e venceu no xadrez.`);
+      return;
+    }
+
+    if (chess.turnCount >= 80) {
+      const playerPieces = countChessPieces(chess.board, "player");
+      const opponentPieces = countChessPieces(chess.board, "opponent");
+      if (playerPieces > opponentPieces) {
+        finalizeGame("win", `${state.profile.name || "Voce"} terminou com mais material e venceu a mesa.`);
+      } else if (opponentPieces > playerPieces) {
+        finalizeGame("loss", `${game.opponent.name} terminou com mais material e segurou o fim.`);
+      } else {
+        finalizeGame("tie", "A mesa de xadrez travou em equilibrio e a entrada voltou.");
+      }
+      return;
+    }
+
+    chess.turn = "player";
+    chess.selected = null;
+    chess.validMoves = [];
+    chess.message = "Sua vez de novo. Escolha uma peca azul.";
     renderGameModal();
   }
 
@@ -8228,6 +8657,80 @@
             <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da mesa</button>
           </div>
         </section>
+      </div>
+    `;
+  }
+
+  function renderChessGame(game) {
+    const stateChess = game.tableState;
+    const validTargets = new Set(stateChess.validMoves.map((move) => `${move.to.row}-${move.to.col}`));
+    const selected = stateChess.selected ? `${stateChess.selected.row}-${stateChess.selected.col}` : "";
+    const boardMarkup = stateChess.board
+      .map((row, rowIndex) =>
+        row
+          .map((cell, colIndex) => {
+            const dark = (rowIndex + colIndex) % 2 === 1;
+            const key = `${rowIndex}-${colIndex}`;
+            const isSelected = key === selected;
+            const isValid = validTargets.has(key);
+            const owner = getChessOwner(cell);
+            const clickable = owner === "player" || isValid;
+            return `
+              <button
+                type="button"
+                class="pubpaid-checkers-cell${dark ? " is-dark" : ""}${isSelected ? " is-selected" : ""}${isValid ? " is-valid" : ""}"
+                data-chess-cell="1"
+                data-row="${rowIndex}"
+                data-col="${colIndex}"
+                ${clickable ? "" : "disabled"}
+              >
+                ${cell ? `<span class="pubpaid-piece chess ${owner}">${escapeHtml(getChessGlyph(cell))}</span>` : ""}
+              </button>
+            `;
+          })
+          .join("")
+      )
+      .join("");
+
+    return `
+      <div class="pubpaid-checkers-wrap">
+        <div class="pubpaid-game-chip-row">
+          <span class="pubpaid-turn-chip">${escapeHtml(stateChess.turn === "player" ? "sua vez" : `${game.opponent.name} pensa`)}</span>
+          <span class="pubpaid-turn-chip">pote ${escapeHtml(formatCoins(game.payout))}</span>
+          <span class="pubpaid-turn-chip">xadrez</span>
+        </div>
+        <section class="pubpaid-checkers-stage pubpaid-minigame-frame">
+          <div class="pubpaid-minigame-head">
+            <strong>Xadrez de Mesa</strong>
+            <span>Peças completas, centro disputado e pressão direta no rei.</span>
+          </div>
+          <div class="pubpaid-checkers-board-wrap">
+            <div class="pubpaid-checkers-axis pubpaid-checkers-axis-top">
+              ${["A", "B", "C", "D", "E", "F", "G", "H"].map((label) => `<span>${label}</span>`).join("")}
+            </div>
+            <div class="pubpaid-checkers-stage-row">
+              <div class="pubpaid-checkers-axis pubpaid-checkers-axis-side">
+                ${Array.from({ length: 8 }, (_, index) => `<span>${8 - index}</span>`).join("")}
+              </div>
+              <div class="pubpaid-checkers-board">${boardMarkup}</div>
+            </div>
+          </div>
+        </section>
+        <section class="pubpaid-pool-side">
+          <article>
+            <span>status</span>
+            <strong>${escapeHtml(stateChess.message)}</strong>
+            <p>Sem roque, en passant ou xeque formal nesta primeira versão. Capturar o rei fecha a mesa.</p>
+          </article>
+          <article>
+            <span>pecas vivas</span>
+            <strong>${escapeHtml(String(countChessPieces(stateChess.board, "player")))} x ${escapeHtml(String(countChessPieces(stateChess.board, "opponent")))}</strong>
+            <p>${escapeHtml(`Seu lado contra ${game.opponent.name}.`)}</p>
+          </article>
+        </section>
+        <div class="pubpaid-card-actions">
+          <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da mesa</button>
+        </div>
       </div>
     `;
   }
