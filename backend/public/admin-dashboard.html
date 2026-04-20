@@ -664,6 +664,7 @@
                 <tr>
                   <th>Quando</th>
                   <th>Jogador</th>
+                  <th>Depositante</th>
                   <th>Valor</th>
                   <th>Referência</th>
                   <th>Prazo</th>
@@ -1354,6 +1355,10 @@
                   <strong>${escapeHtml(row.name || "-")}</strong><br />
                   <span class="muted">${escapeHtml(row.email || "-")}</span>
                 </td>
+                <td class="truncate">
+                  <strong>${escapeHtml(row.depositorName || "-")}</strong><br />
+                  <span class="muted">nome do Pix/comprovante</span>
+                </td>
                 <td><strong>${escapeHtml(`${row.amount || 0}`)}</strong> créditos</td>
                 <td class="mono">${escapeHtml(row.txid || "-")}</td>
                 <td>${formatDateTime(row.reviewDeadlineAt)}</td>
@@ -1365,7 +1370,7 @@
                 </td>
               </tr>
             `,
-            6,
+            7,
             "Sem depósitos pendentes."
           );
 

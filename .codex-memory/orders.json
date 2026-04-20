@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T05:47:09.577Z",
+  "lastUpdatedAt": "2026-04-20T05:57:36.329Z",
   "orders": [
     {
       "id": "2026-04-19-google-auth-pix-qr-sem-chave-e-pubpaid-sem-creditos-gratis",
@@ -1663,6 +1663,36 @@
       "source": "chat",
       "rawRequest": "Remover tags desnecessarias no PubPaid que mostram Voltar para fora e Dentro do salao.",
       "summary": "Ocultar meta tecnica do foco no PubPaid",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-adicionar-roleta-de-parede-e-dardos-ao-bitmap-e-ao-pubpaid",
+      "createdAt": "2026-04-20T05:54:09.145Z",
+      "updatedAt": "2026-04-20T05:54:09.145Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Pegar o bitmap existente do jogo PubPaid, aumentar/incluir uma roleta na parede e um jogo de dardos na parede, e adicionar os jogos.",
+      "summary": "Adicionar roleta de parede e dardos ao bitmap e ao PubPaid",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-corrigir-fluxo-de-deposito-pendente-pubpaid-no-dashboard",
+      "createdAt": "2026-04-20T05:57:36.329Z",
+      "updatedAt": "2026-04-20T05:57:36.329Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Corrigir depósito PubPaid: quando o usuário clica 'Avisei o pagamento', pedir nome do depositante, esconder QR, mostrar espera de até 3h e criar depósito pendente no dashboard admin com dados para confirmação manual.",
+      "summary": "Corrigir fluxo de depósito pendente PubPaid no dashboard",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

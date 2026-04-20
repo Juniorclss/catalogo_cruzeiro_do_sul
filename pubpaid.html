@@ -39,7 +39,7 @@
       href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./pubpaid.css?v=20260420cleanfocusmeta" />
+    <link rel="stylesheet" href="./pubpaid.css?v=20260420wallgames" />
     <link rel="stylesheet" href="./solid-surfaces.css?v=20260419solidfinal" />
   </head>
   <body class="pubpaid-page" data-office-command-mode="embedded">
@@ -349,6 +349,16 @@
               <div class="pubpaid-deposit-qr" data-pubpaid-deposit-qr>
                 <p>Entre com Google e gere o QR do deposito.</p>
               </div>
+              <label data-pubpaid-depositor-field hidden>
+                <span>Nome de quem fez o Pix</span>
+                <input
+                  type="text"
+                  maxlength="90"
+                  autocomplete="name"
+                  placeholder="Nome que aparece no comprovante"
+                  data-pubpaid-depositor-name
+                />
+              </label>
               <div class="pubpaid-cashier-actions">
                 <button class="pubpaid-button solid" type="button" data-pubpaid-generate-deposit>
                   Gerar QR Code
@@ -460,6 +470,24 @@
                 </div>
                 <strong>Roleta Alta</strong>
                 <span>Roleta em série curta: gira, sai o número e vence quem fechar mais alto mais vezes.</span>
+              </article>
+              <article data-venue-card="wallroulette">
+                <div class="pubpaid-venue-roulette" aria-hidden="true">
+                  <span class="pubpaid-venue-roulette-wheel"></span>
+                  <span class="pubpaid-venue-roulette-ball"></span>
+                  <span class="pubpaid-venue-roulette-pointer"></span>
+                </div>
+                <strong>Roleta da parede</strong>
+                <span>Atalho direto para girar a roleta nova pendurada no salão.</span>
+              </article>
+              <article data-venue-card="darts">
+                <div class="pubpaid-venue-icon pubpaid-venue-darts" aria-hidden="true">
+                  <span class="dart-board"></span>
+                  <span class="dart-pin pin-a"></span>
+                  <span class="dart-pin pin-b"></span>
+                </div>
+                <strong>Dardos de Parede</strong>
+                <span>Três arremessos rápidos para medir mira, risco e sorte.</span>
               </article>
               <article data-venue-card="shop">
                 <div class="pubpaid-venue-icon pubpaid-venue-shop" aria-hidden="true">
@@ -807,7 +835,7 @@
     <script defer src="./runtime-config.js?v=20260415d"></script>
     <script defer src="./analytics-client.js?v=20260415c"></script>
     <script defer src="./site-google-auth.js?v=20260420voteauthfix"></script>
-    <script defer src="./pubpaid.js?v=20260420adminfooterfix"></script>
+    <script defer src="./pubpaid.js?v=20260420wallgames"></script>
     <script defer src="./office-command-chat.js?v=20260419call"></script>
   </body>
 </html>

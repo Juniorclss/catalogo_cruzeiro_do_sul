@@ -1,18 +1,18 @@
 # Current State
 
-Updated: 2026-04-20T05:38:54.479Z
+Updated: 2026-04-20T05:57:43.194Z
 
 ## Active Goal
 
-- Modal de voto ajustado para Chrome 100%
+- PubPaid deposito manual corrigido
 
 ## Summary
 
-styles.css agora alinha o modal de voto no topo, limita altura em 100vh, reduz campos/textarea e deixa as acoes sticky no rodape do painel; index.html usa cache-bust styles.css?v=20260420votemodaltop.
+Ao avisar pagamento, PubPaid exige nome do depositante, envia depositorName para /api/pubpaid/deposits, esconde QR e mostra aviso de conferencia ate 3h; dashboard admin mostra coluna Depositante e servidor inclui depositorName no payload/CSV.
 
 ## Next
 
-- Se usuario pedir deploy
-- incluir alteracoes de voto
-- PubPaid dashboards
-- editorias Games/Animes/Moda e modal compacto em um commit isolado.
+- Deployar e testar fluxo real: gerar QR
+- preencher nome
+- avisar pagamento
+- abrir dashboard e aprovar deposito.

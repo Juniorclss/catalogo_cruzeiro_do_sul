@@ -5679,6 +5679,7 @@ function buildAdminDashboardPayload() {
       createdAt: item.createdAt,
       email: item?.user?.email || "",
       name: item?.user?.name || "",
+      depositorName: item.depositorName || item?.payment?.depositorName || "",
       amount: item.amount || 0,
       creditsRequested: item.creditsRequested || 0,
       status: item.status || "",
@@ -5694,6 +5695,7 @@ function buildAdminDashboardPayload() {
       createdAt: item.createdAt,
       email: item?.user?.email || "",
       name: item?.user?.name || "",
+      depositorName: item.depositorName || item?.payment?.depositorName || "",
       amount: item.amount || 0,
       creditsRequested: item.creditsRequested || 0,
       status: item.status || "",
@@ -6757,6 +6759,13 @@ async function handleApi(req, res, pathname, searchParams) {
     const deposits = readJson(PUBPAID_DEPOSITS_FILE, []);
     const amount = normalizePubpaidAmount(body.amount, 10);
     const txid = normalizePixToken(body.paymentTxid || body.txid || `PUB${Date.now()}`, 25) || `PUB${Date.now()}`;
+    const depositorName = cleanShortText(body.depositorName || body.depositName || body.payerName || "", 90);
+    if (!depositorName || depositorName.length < 3) {
+      return sendJson(res, 400, {
+        ok: false,
+        error: "Informe o nome de quem fez o Pix para a conferencia manual."
+      });
+    }
     const tracking = buildTrackingMeta(req, body);
     const wallet = getPubpaidWallet(authUser);
     const reviewDeadlineAt = new Date(Date.now() + PUBPAID_PENDING_WINDOW_MS).toISOString();
@@ -6764,6 +6773,7 @@ async function handleApi(req, res, pathname, searchParams) {
       id: createRecordId("pubdep"),
       type: "pubpaid-deposito",
       user: publicAuthUser(authUser),
+      depositorName,
       walletKey: wallet?.walletKey || getPubpaidWalletKey(authUser),
       amount: Number(amount.toFixed(2)),
       creditsRequested: Math.floor(amount),
@@ -6772,6 +6782,7 @@ async function handleApi(req, res, pathname, searchParams) {
         method: "pix-qr-code",
         keyVisible: false,
         txid,
+        depositorName,
         status: "pendente-manual",
         confirmationMode: "manual"
       },
@@ -7122,6 +7133,7 @@ async function handleApi(req, res, pathname, searchParams) {
       createdAt: item.createdAt,
       player: item.user?.name || item.name,
       email: item.user?.email || item.email,
+      depositorName: item.depositorName || item.payment?.depositorName,
       amount: item.amount,
       creditsRequested: item.creditsRequested,
       status: item.status,
@@ -7137,7 +7149,7 @@ async function handleApi(req, res, pathname, searchParams) {
     return sendCsv(
       res,
       200,
-      toCsv(rows) || "createdAt,player,email,amount,creditsRequested,status,paymentStatus,txid,reference,reviewedAt,reviewedBy,reviewNote,sourcePage,ip\n",
+      toCsv(rows) || "createdAt,player,email,depositorName,amount,creditsRequested,status,paymentStatus,txid,reference,reviewedAt,reviewedBy,reviewNote,sourcePage,ip\n",
       "pubpaid_depositos.csv"
     );
   }

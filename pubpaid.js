@@ -102,6 +102,13 @@
       description: "Cada lado gira em série curta. Quem vencer mais giros leva a mesa.",
       sceneCopy: "A roleta está pronta para uma melhor de 3. O maior placar fecha a noite.",
       stakes: DEMO_STAKES
+    },
+    darts: {
+      label: "Dardos de Parede",
+      shortLabel: "dardos",
+      description: "Alvo na parede, três arremessos por rodada e disputa direta de precisão contra a casa.",
+      sceneCopy: "O alvo está preso na parede. Escolha o risco do arremesso e tente fechar mais pontos.",
+      stakes: DEMO_STAKES
     }
   };
 
@@ -140,6 +147,11 @@
       name: "Dante Giro",
       archetype: "lounge",
       bio: "Gosta de confiar em uma rodada so e levar no numero mais alto."
+    },
+    darts: {
+      name: "Tuca Mira",
+      archetype: "cowboy",
+      bio: "Respira curto, mira rapido e costuma acertar o aro certo quando a sala esta barulhenta."
     }
   };
 
@@ -548,6 +560,26 @@
         radius: 84
       },
       {
+        id: "wall-roulette",
+        type: "game",
+        gameId: "roulette",
+        label: "Roleta da parede",
+        venueKey: "wallroulette",
+        x: 612,
+        y: 108,
+        radius: 82
+      },
+      {
+        id: "wall-darts",
+        type: "game",
+        gameId: "darts",
+        label: TABLE_META.darts.label,
+        venueKey: "darts",
+        x: 742,
+        y: 110,
+        radius: 82
+      },
+      {
         id: "stage",
         type: "stage",
         label: "Cantora do palco",
@@ -635,6 +667,8 @@
     profileFeedback: document.querySelector("[data-profile-feedback]"),
     depositAmount: document.querySelector("[data-pubpaid-deposit-amount]"),
     depositQr: document.querySelector("[data-pubpaid-deposit-qr]"),
+    depositorField: document.querySelector("[data-pubpaid-depositor-field]"),
+    depositorName: document.querySelector("[data-pubpaid-depositor-name]"),
     depositFeedback: document.querySelector("[data-pubpaid-deposit-feedback]"),
     withdrawAmount: document.querySelector("[data-pubpaid-withdraw-amount]"),
     withdrawFeedback: document.querySelector("[data-pubpaid-withdraw-feedback]"),
@@ -664,7 +698,8 @@
   const depositState = {
     amount: 10,
     txid: "",
-    locked: false
+    locked: false,
+    pendingId: ""
   };
   if (sceneCtx) sceneCtx.imageSmoothingEnabled = false;
   const badEndingCtx = refs.badEndingCanvas?.getContext("2d");
@@ -880,7 +915,7 @@
   function preloadImages() {
     return Promise.all([
       loadImage(images.exterior, "./assets/pubpaid-exterior-v2.png"),
-      loadImage(images.interior, "./assets/pubpaid-interior-v2.png"),
+      loadImage(images.interior, "./assets/pubpaid-interior-v3.png"),
       loadImage(images.bartenderTorso, "./assets/pubpaid-bartender-counter-v1.png")
     ]);
   }
@@ -911,6 +946,8 @@
     });
     refs.depositAmount?.addEventListener("change", () => {
       depositState.locked = false;
+      depositState.pendingId = "";
+      if (refs.depositorName) refs.depositorName.value = "";
       void generatePubPaidDepositQr(true);
     });
 
@@ -1259,6 +1296,12 @@
 
     if (event.target.closest("[data-roulette-next]")) {
       advanceRouletteRound();
+      return;
+    }
+
+    const dartsThrow = event.target.closest("[data-darts-throw]");
+    if (dartsThrow) {
+      handleDartsThrow(dartsThrow.dataset.dartsThrow || "focus");
       return;
     }
   }
@@ -3575,8 +3618,10 @@
     if (forceNewTxid || !depositState.txid || depositState.amount !== amount) {
       depositState.txid = buildDepositTxid();
       depositState.locked = false;
+      depositState.pendingId = "";
     }
     depositState.amount = amount;
+    if (refs.depositorField) refs.depositorField.hidden = false;
     refs.depositQr.innerHTML = "<p>Gerando QR Code protegido...</p>";
     if (refs.depositFeedback) {
       refs.depositFeedback.textContent = "A chave Pix fica escondida; use somente o QR Code.";
@@ -3611,6 +3656,22 @@
       await generatePubPaidDepositQr(true);
     }
     if (!depositState.txid) return;
+    if (depositState.locked) {
+      if (refs.depositFeedback) {
+        refs.depositFeedback.textContent = "Esse pagamento ja foi enviado para conferencia manual.";
+      }
+      return;
+    }
+
+    const depositorName = String(refs.depositorName?.value || "").trim();
+    if (!depositorName || depositorName.length < 3) {
+      if (refs.depositFeedback) {
+        refs.depositFeedback.textContent = "Informe o nome de quem fez o Pix para aparecer na dashboard.";
+      }
+      refs.depositorField.hidden = false;
+      refs.depositorName?.focus?.();
+      return;
+    }
 
     try {
       const payload = await requestApiJson("/api/pubpaid/deposits", {
@@ -3618,13 +3679,21 @@
         body: JSON.stringify({
           amount: depositState.amount || getDepositAmount(),
           paymentTxid: depositState.txid,
+          depositorName,
           sourcePage: window.location.pathname
         })
       });
       depositState.locked = true;
+      depositState.pendingId = payload?.item?.id || "";
+      refs.depositQr.innerHTML = `
+        <p><strong>Pagamento avisado.</strong></p>
+        <p>Agora aguarde a conferência manual. O crédito pode levar até 3 horas para ser liberado.</p>
+        <p>Referência: ${escapeHtml(depositState.txid)}</p>
+      `;
+      if (refs.depositorField) refs.depositorField.hidden = true;
       if (refs.depositFeedback) {
         refs.depositFeedback.textContent =
-          payload.message || "Deposito avisado. Os creditos entram depois da confirmacao manual.";
+          payload.message || "Deposito enviado para a dashboard. Aguarde a confirmacao manual.";
       }
       void syncPubpaidAccount();
       setWorldMessage("Deposito enviado para conferencia. Nenhum credito gratis foi liberado automaticamente.", 3600);
@@ -4727,6 +4796,12 @@
     if (game.id === "roulette") {
       refs.gameHost.innerHTML = renderRouletteGame(game);
       clearPoolRefs();
+      return;
+    }
+
+    if (game.id === "darts") {
+      refs.gameHost.innerHTML = renderDartsGame(game);
+      clearPoolRefs();
     }
   }
 
@@ -4856,6 +4931,8 @@
       game.tableState = createSlotsState();
     } else if (game.id === "roulette") {
       game.tableState = createRouletteState(game.stake);
+    } else if (game.id === "darts") {
+      game.tableState = createDartsState();
     }
 
     saveState();
@@ -6940,6 +7017,125 @@
       bell: { icon: "🔔", label: "Sino" }
     };
     return specs[symbol] || specs.cherry;
+  }
+
+  function createDartsState() {
+    return {
+      round: 1,
+      maxRounds: 3,
+      playerScore: 0,
+      botScore: 0,
+      lastPlayer: null,
+      lastBot: null,
+      message: "Escolha a pegada do arremesso. Seguro pontua pouco; risco pode acertar o miolo.",
+      history: []
+    };
+  }
+
+  function renderDartsGame(game) {
+    const darts = game.tableState || createDartsState();
+    const playerName = state.profile.name || "Voce";
+    const buttonsDisabled = darts.round > darts.maxRounds ? "disabled" : "";
+    const historyMarkup = darts.history.length
+      ? darts.history
+          .map(
+            (item) => `
+              <span class="pubpaid-game-chip">
+                ${escapeHtml(String(item.round))}. ${escapeHtml(String(item.player))} x ${escapeHtml(String(item.bot))}
+              </span>
+            `
+          )
+          .join("")
+      : '<span class="pubpaid-game-chip">sem arremessos ainda</span>';
+
+    return `
+      <div class="pubpaid-darts-layout">
+        <section class="pubpaid-minigame-frame pubpaid-darts-stage">
+          <div class="pubpaid-minigame-head">
+            <div>
+              <span class="pubpaid-game-chip">rodada ${escapeHtml(`${Math.min(darts.round, darts.maxRounds)}/${darts.maxRounds}`)}</span>
+              <h3>Alvo de dardos na parede</h3>
+            </div>
+            <div class="pubpaid-game-chip-row">
+              <span class="pubpaid-turn-chip">${escapeHtml(playerName)} ${escapeHtml(String(darts.playerScore))}</span>
+              <span class="pubpaid-turn-chip">${escapeHtml(game.opponent.name)} ${escapeHtml(String(darts.botScore))}</span>
+            </div>
+          </div>
+          <div class="pubpaid-darts-board" aria-label="Alvo de dardos">
+            <span class="ring ring-a"></span>
+            <span class="ring ring-b"></span>
+            <span class="ring ring-c"></span>
+            <span class="bull"></span>
+            ${darts.lastPlayer ? `<span class="dart-hit player" style="--hit-x:${escapeHtml(String(darts.lastPlayer.x))}%; --hit-y:${escapeHtml(String(darts.lastPlayer.y))}%"></span>` : ""}
+            ${darts.lastBot ? `<span class="dart-hit bot" style="--hit-x:${escapeHtml(String(darts.lastBot.x))}%; --hit-y:${escapeHtml(String(darts.lastBot.y))}%"></span>` : ""}
+          </div>
+        </section>
+        <section class="pubpaid-game-box">
+          <span class="pubpaid-game-chip">parede nova</span>
+          <h3>Dardos de Parede</h3>
+          <p>${escapeHtml(darts.message)}</p>
+          <div class="pubpaid-stake-row">
+            <button class="pubpaid-stake-button" type="button" data-darts-throw="safe" ${buttonsDisabled}>Seguro</button>
+            <button class="pubpaid-stake-button is-active" type="button" data-darts-throw="focus" ${buttonsDisabled}>Focado</button>
+            <button class="pubpaid-stake-button" type="button" data-darts-throw="risk" ${buttonsDisabled}>Arriscado</button>
+          </div>
+          <div class="pubpaid-game-chip-row">${historyMarkup}</div>
+          <div class="pubpaid-card-actions">
+            <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da parede</button>
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
+  function rollDartThrow(style = "focus", isBot = false) {
+    const specs = {
+      safe: { base: 38, spread: 24, bull: 0.08 },
+      focus: { base: 30, spread: 35, bull: 0.14 },
+      risk: { base: 18, spread: 56, bull: 0.22 }
+    };
+    const spec = specs[style] || specs.focus;
+    const bull = Math.random() < spec.bull + (isBot ? 0.02 : 0);
+    const score = bull
+      ? 50
+      : Math.max(1, Math.min(45, Math.round(spec.base + (isBot ? 5 : 0) + Math.random() * spec.spread)));
+    const distance = bull ? Math.random() * 7 : Math.max(10, 58 - score + Math.random() * 16);
+    const angle = Math.random() * Math.PI * 2;
+    return {
+      score,
+      x: Math.max(6, Math.min(94, 50 + Math.cos(angle) * distance)),
+      y: Math.max(6, Math.min(94, 50 + Math.sin(angle) * distance))
+    };
+  }
+
+  function handleDartsThrow(style = "focus") {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "darts" || game.screen !== "playing") return;
+    const darts = game.tableState || createDartsState();
+    if (darts.round > darts.maxRounds) return;
+
+    const player = rollDartThrow(style, false);
+    const bot = rollDartThrow(["safe", "focus", "risk"][Math.floor(Math.random() * 3)], true);
+    darts.playerScore += player.score;
+    darts.botScore += bot.score;
+    darts.lastPlayer = player;
+    darts.lastBot = bot;
+    darts.history.push({ round: darts.round, player: player.score, bot: bot.score });
+    darts.message = `${state.profile.name || "Voce"} marcou ${player.score}. ${game.opponent.name} respondeu com ${bot.score}.`;
+    darts.round += 1;
+
+    if (darts.round > darts.maxRounds) {
+      if (darts.playerScore > darts.botScore) {
+        finalizeGame("win", `${state.profile.name || "Voce"} venceu nos dardos por ${darts.playerScore} a ${darts.botScore}.`);
+      } else if (darts.botScore > darts.playerScore) {
+        finalizeGame("loss", `${game.opponent.name} venceu nos dardos por ${darts.botScore} a ${darts.playerScore}.`);
+      } else {
+        finalizeGame("tie", `A parede de dardos empatou em ${darts.playerScore} a ${darts.botScore}.`);
+      }
+      return;
+    }
+
+    renderGameModal();
   }
 
   function createRouletteState(stake = 10) {
