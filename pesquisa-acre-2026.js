@@ -363,10 +363,21 @@
 
       state.authUser = getGoogleUser();
       if (!state.authUser?.sub || !state.authUser?.email) {
-        document.querySelector("[data-google-auth-card]")?.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
+        Promise.resolve(window.CatalogoGoogleAuth?.promptSignIn?.())
+          .then((opened) => {
+            if (!opened) {
+              document.querySelector("[data-google-auth-card]")?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+              });
+            }
+          })
+          .catch(() => {
+            document.querySelector("[data-google-auth-card]")?.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+          });
         return;
       }
 
