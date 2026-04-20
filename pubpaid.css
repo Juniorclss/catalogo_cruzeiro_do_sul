@@ -265,6 +265,10 @@ canvas {
   gap: 10px;
 }
 
+.pubpaid-top-actions .pubpaid-chip-button[data-toggle-night-panel] {
+  display: none;
+}
+
 .pubpaid-enter-chip {
   gap: 10px;
   border-color: rgba(255, 150, 150, 0.32) !important;
@@ -2316,6 +2320,50 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
   grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
 }
 
+.pubpaid-lobby-avatar-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.pubpaid-lobby-avatar-card {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 14px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.pubpaid-lobby-avatar-card small {
+  color: var(--pub-muted);
+}
+
+.pubpaid-lobby-avatar {
+  position: relative;
+  width: 58px;
+  height: 72px;
+  image-rendering: pixelated;
+}
+
+.pubpaid-lobby-avatar span {
+  position: absolute;
+  display: block;
+}
+
+.pubpaid-lobby-avatar .hair { left: 14px; top: 4px; width: 30px; height: 10px; background: var(--hair); }
+.pubpaid-lobby-avatar .face { left: 18px; top: 14px; width: 22px; height: 16px; background: var(--skin); }
+.pubpaid-lobby-avatar .shirt { left: 14px; top: 30px; width: 30px; height: 18px; background: var(--shirt); }
+.pubpaid-lobby-avatar .jacket.left { left: 10px; top: 32px; width: 6px; height: 16px; background: var(--jacket); }
+.pubpaid-lobby-avatar .jacket.right { right: 10px; top: 32px; width: 6px; height: 16px; background: var(--jacket); }
+.pubpaid-lobby-avatar .pants.left { left: 18px; top: 48px; width: 8px; height: 18px; background: var(--pants); }
+.pubpaid-lobby-avatar .pants.right { right: 18px; top: 48px; width: 8px; height: 18px; background: var(--pants); }
+.pubpaid-lobby-avatar .accent.a { left: 20px; top: 18px; width: 4px; height: 4px; background: var(--accent); }
+.pubpaid-lobby-avatar .accent.b { right: 20px; top: 18px; width: 4px; height: 4px; background: var(--accent); }
+
 .pubpaid-shop-panel {
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
 }
@@ -4117,9 +4165,58 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
     justify-content: flex-start;
   }
 
+  .pubpaid-topbar {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
   .pubpaid-top-actions {
+    display: flex;
+    position: relative;
+    width: 100%;
+  }
+
+  body.pubpaid-page.pubpaid-in-game .pubpaid-top-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 0;
+  }
+
+  body.pubpaid-page.pubpaid-in-game .pubpaid-top-actions .pubpaid-chip-button {
+    display: none;
+  }
+
+  body.pubpaid-page.pubpaid-in-game .pubpaid-top-actions .pubpaid-chip-button[data-toggle-night-panel] {
+    display: inline-flex;
+    width: 100%;
+  }
+
+  body.pubpaid-page.pubpaid-in-game .pubpaid-top-actions::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  body.pubpaid-page.pubpaid-in-game.pubpaid-night-panel-open .pubpaid-top-actions {
+    gap: 8px;
+  }
+
+  body.pubpaid-page.pubpaid-in-game.pubpaid-night-panel-open .pubpaid-top-actions .pubpaid-chip-button {
+    display: inline-flex;
+    width: 100%;
+  }
+
+  body.pubpaid-page.pubpaid-in-game.pubpaid-night-panel-open .pubpaid-top-actions .pubpaid-chip-button:not([data-toggle-night-panel]) {
+    border-radius: 12px;
+    border: 1px solid var(--pub-line);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 32%),
+      var(--pub-panel-solid);
+    box-shadow: var(--pub-shadow);
   }
 
   .pubpaid-profile-head {
@@ -4143,6 +4240,7 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
   .pubpaid-result-actions,
   .pubpaid-card-actions,
   .pubpaid-stake-row,
+  .pubpaid-lobby-avatar-row,
   .pubpaid-form-actions,
   .pubpaid-slots-top,
   .pubpaid-slots-bottom {

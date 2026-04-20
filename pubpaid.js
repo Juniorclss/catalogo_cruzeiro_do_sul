@@ -3,6 +3,7 @@
   const TUTORIAL_SESSION_KEY = "pubpaid_demo_tutorial_seen_v1";
   const DEMO_STAKES = [2, 5, 10, 20, 30, 40, 50, 100];
   const HISTORY_LIMIT = 12;
+  const PUBPAID_PVP_POLL_MS = 1800;
   const WORLD = { width: 960, height: 640 };
   const SCENE_HINTS = {
     exterior: "na frente do pub",
@@ -65,7 +66,8 @@
       shortLabel: "damas",
       description: "Uma disputa mais estratégica, daquelas que prendem atenção em silêncio.",
       sceneCopy: "O tabuleiro está pronto. Escolha suas jogadas e leia o ritmo da casa.",
-      stakes: DEMO_STAKES
+      stakes: DEMO_STAKES,
+      pvp: true
     },
     cards21: {
       label: "21 do Bar",
@@ -662,6 +664,7 @@
     touchMoveButtons: Array.from(document.querySelectorAll("[data-touch-move]")),
     touchActionButtons: Array.from(document.querySelectorAll("[data-touch-action]")),
     venueCards: Array.from(document.querySelectorAll("[data-venue-card]")),
+    topActions: document.querySelector(".pubpaid-top-actions"),
     profileModal: document.querySelector("[data-profile-modal]"),
     profileForm: document.querySelector("[data-profile-form]"),
     profileFeedback: document.querySelector("[data-profile-feedback]"),
@@ -730,6 +733,7 @@
     npcBubbles: [],
     singerBursts: [],
     activeGame: null,
+    pvpPollTimer: 0,
     keys: new Set(),
     touchMove: "",
     lastFrame: performance.now(),
@@ -1204,7 +1208,11 @@
     }
 
     if (event.target.closest("[data-start-game]")) {
-      startActiveGame();
+      if (runtime.activeGame?.id === "checkers" && TABLE_META.checkers.pvp) {
+        void startCheckersPvpFlow();
+      } else {
+        startActiveGame();
+      }
       return;
     }
 
@@ -3398,7 +3406,7 @@
   function syncGameModeUi() {
     const inGame = Boolean(runtime.gameMode);
     document.body.classList.toggle("pubpaid-in-game", inGame);
-    document.body.classList.toggle("pubpaid-night-panel-open", false);
+    document.body.classList.toggle("pubpaid-night-panel-open", inGame && Boolean(runtime.nightPanelOpen));
 
     refs.enterGameButtons.forEach((button) => {
       button.hidden = inGame;
@@ -3409,9 +3417,9 @@
     });
 
     refs.toggleGamePanelButtons.forEach((button) => {
-      button.hidden = true;
-      button.textContent = "Painel da noite";
-      button.setAttribute("aria-expanded", "false");
+      button.hidden = !inGame;
+      button.textContent = runtime.nightPanelOpen ? "Fechar menu" : "Menu do jogo";
+      button.setAttribute("aria-expanded", runtime.nightPanelOpen ? "true" : "false");
     });
   }
 
@@ -3619,6 +3627,224 @@
       return session.user;
     }
     throw new Error("Sua sessão Google expirou no servidor. Entre novamente antes de usar o caixa.");
+  }
+
+  function getProfileSnapshot() {
+    return {
+      name: String(state.profile.name || "").trim() || "Jogador",
+      archetype: normalizeArchetype(state.profile.archetype),
+      favorite: normalizeGameId(state.profile.favorite),
+      motto: String(state.profile.motto || "").trim()
+    };
+  }
+
+  function getLobbyPalette(archetype) {
+    return PALETTES[normalizeArchetype(archetype)] || PALETTES.neon;
+  }
+
+  function renderLobbyAvatarCard(player, variant = "self") {
+    const palette = getLobbyPalette(player?.archetype);
+    const label = player?.name || (variant === "self" ? state.profile.name || "Você" : "Aguardando rival");
+    const subtitle = variant === "self" ? "você" : player?.name ? "rival conectado" : "aguardando conexão";
+    return `
+      <article class="pubpaid-lobby-avatar-card ${variant === "self" ? "is-self" : "is-rival"}">
+        <div class="pubpaid-lobby-avatar" style="--hair:${palette.hair};--skin:${palette.skin};--shirt:${palette.shirt};--jacket:${palette.jacket};--pants:${palette.pants};--accent:${palette.accent};">
+          <span class="hair"></span>
+          <span class="face"></span>
+          <span class="shirt"></span>
+          <span class="jacket left"></span>
+          <span class="jacket right"></span>
+          <span class="pants left"></span>
+          <span class="pants right"></span>
+          <span class="accent a"></span>
+          <span class="accent b"></span>
+        </div>
+        <strong>${escapeHtml(label)}</strong>
+        <small>${escapeHtml(subtitle)}</small>
+      </article>
+    `;
+  }
+
+  function getCheckersPvpSeatPlayer(match, seat) {
+    if (!match || !seat) return null;
+    return seat === "playerOne" ? match.playerOne : match.playerTwo;
+  }
+
+  function getCheckersPvpOpponent(match, seat) {
+    if (!match || !seat) return null;
+    return seat === "playerOne" ? match.playerTwo : match.playerOne;
+  }
+
+  function mapPointForSeat(point, seat) {
+    if (!point) return null;
+    return seat === "playerTwo"
+      ? { row: 7 - clampInteger(point.row), col: 7 - clampInteger(point.col) }
+      : { row: clampInteger(point.row), col: clampInteger(point.col) };
+  }
+
+  function mapBoardForSeat(board, seat) {
+    const safeBoard = Array.isArray(board) ? board.map((row) => row.slice()) : createCheckersState().board;
+    if (seat !== "playerTwo") return safeBoard;
+    return safeBoard
+      .slice()
+      .reverse()
+      .map((row) =>
+        row
+          .slice()
+          .reverse()
+          .map((cell) => {
+            if (!cell) return "";
+            return cell.toLowerCase() === "p"
+              ? cell === cell.toUpperCase() ? "O" : "o"
+              : cell === cell.toUpperCase() ? "P" : "p";
+          })
+      );
+  }
+
+  function startPvpPolling() {
+    clearPvpPoll();
+    const game = runtime.activeGame;
+    if (!game || game.id !== "checkers" || !game.multiplayer) return;
+    runtime.pvpPollTimer = window.setTimeout(() => {
+      void refreshCheckersPvpState();
+    }, PUBPAID_PVP_POLL_MS);
+  }
+
+  async function leaveCheckersPvp(game = runtime.activeGame) {
+    if (!game?.multiplayer?.enabled) return;
+    clearPvpPoll();
+    try {
+      await requestApiJson("/api/pubpaid/pvp/leave", {
+        method: "POST",
+        body: JSON.stringify({ gameId: "checkers" })
+      });
+    } catch (_error) {
+      // best effort
+    }
+  }
+
+  function hydrateCheckersPvpGame(match, seat) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "checkers") return;
+    const opponent = getCheckersPvpOpponent(match, seat);
+    game.multiplayer = {
+      ...(game.multiplayer || {}),
+      enabled: true,
+      state: match?.status || "active",
+      matchId: match?.id || "",
+      seat,
+      waiting: false,
+      stakeLocked: Boolean(game.multiplayer?.stakeLocked),
+      settled: Boolean(game.multiplayer?.settled),
+    };
+    game.opponent = {
+      ...(opponent || HOUSE_OPPONENTS.checkers),
+      name: opponent?.name || "Rival",
+      bio: opponent?.name ? "Conectado na mesma mesa de damas." : HOUSE_OPPONENTS.checkers.bio,
+      archetype: opponent?.archetype || HOUSE_OPPONENTS.checkers.archetype
+    };
+    if (!game.multiplayer.stakeLocked) {
+      game.startedAt = match?.startedAt || new Date().toISOString();
+      game.houseFee = 0;
+      game.payout = game.stake * 2;
+      state.wallet.coins -= game.stake;
+      game.multiplayer.stakeLocked = true;
+    }
+    game.screen = match?.status === "finished" ? "playing" : "playing";
+    game.tableState = {
+      board: mapBoardForSeat(match?.board, seat),
+      turn: match?.turn === seat ? "player" : "opponent",
+      selected: null,
+      validMoves: [],
+      message:
+        match?.resultSummary ||
+        (match?.turn === seat ? "Sua vez. Clique numa peca e feche a jogada." : `${game.opponent.name} está pensando.`),
+      turnCount: clampInteger(match?.moveCount),
+      multiplayer: true,
+    };
+    saveState();
+    renderAll();
+    if (match?.status === "finished" && !game.multiplayer.settled) {
+      const result = match?.winner === seat ? "win" : "loss";
+      game.multiplayer.settled = true;
+      finalizeGame(result, match?.resultSummary || (result === "win" ? "Você venceu a mesa PvP." : "O rival venceu a mesa PvP."));
+      return;
+    }
+    renderGameModal();
+    startPvpPolling();
+  }
+
+  function applyCheckersPvpState(payload) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "checkers" || !game.multiplayer) return;
+    game.multiplayer.state = payload?.state || "idle";
+    game.multiplayer.matchId = payload?.match?.id || "";
+    game.multiplayer.seat = payload?.seat || "";
+    game.multiplayer.waiting = payload?.state === "waiting";
+    if (payload?.state === "waiting") {
+      game.feedback = "Lobby aberto. A mesa vai subir assim que outro jogador entrar na mesma aposta.";
+      renderGameModal();
+      startPvpPolling();
+      return;
+    }
+    if (payload?.match && payload?.seat) {
+      hydrateCheckersPvpGame(payload.match, payload.seat);
+      return;
+    }
+    renderGameModal();
+  }
+
+  async function refreshCheckersPvpState() {
+    clearPvpPoll();
+    const game = runtime.activeGame;
+    if (!game || game.id !== "checkers" || !game.multiplayer?.enabled) return;
+    try {
+      const payload = await requestApiJson("/api/pubpaid/pvp/state?gameId=checkers", { method: "GET" });
+      applyCheckersPvpState(payload);
+    } catch (error) {
+      game.feedback = String(error?.message || "Não consegui atualizar a mesa PvP.");
+      renderGameModal();
+    }
+  }
+
+  async function startCheckersPvpFlow() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "checkers") return;
+    if (state.wallet.coins < game.stake) {
+      game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
+      renderGameModal();
+      return;
+    }
+    await ensurePubpaidServerSession();
+    game.feedback = "Entrando na fila PvP da mesa de damas...";
+    renderGameModal();
+    const payload = await requestApiJson("/api/pubpaid/pvp/join", {
+      method: "POST",
+      body: JSON.stringify({
+        gameId: "checkers",
+        stake: game.stake,
+        profile: getProfileSnapshot()
+      })
+    });
+    applyCheckersPvpState(payload);
+  }
+
+  async function submitCheckersPvpMove(move) {
+    const game = runtime.activeGame;
+    if (!game?.multiplayer?.matchId) return;
+    const serverMove = {
+      from: mapPointForSeat(move.from, game.multiplayer.seat),
+      to: mapPointForSeat(move.to, game.multiplayer.seat),
+      capture: mapPointForSeat(move.capture, game.multiplayer.seat)
+    };
+    const payload = await requestApiJson("/api/pubpaid/pvp/checkers/move", {
+      method: "POST",
+      body: JSON.stringify({
+        matchId: game.multiplayer.matchId,
+        move: serverMove
+      })
+    });
+    applyCheckersPvpState(payload);
   }
 
   function getDepositAmount() {
@@ -4833,7 +5059,18 @@
       activeDrink: getActiveDrinkDefinition(),
       fortune: null,
       tableState: null,
-      startedAt: ""
+      startedAt: "",
+      multiplayer: TABLE_META[normalized].pvp
+        ? {
+            enabled: true,
+            state: "idle",
+            matchId: "",
+            seat: "",
+            waiting: false,
+            stakeLocked: false,
+            settled: false,
+          }
+        : null,
     };
 
     refs.gameModal.hidden = false;
@@ -4851,7 +5088,11 @@
       return;
     }
 
+    if (runtime.activeGame.id === "checkers" && runtime.activeGame.multiplayer?.enabled) {
+      void leaveCheckersPvp(runtime.activeGame);
+    }
     clearGameTimer();
+    clearPvpPoll();
     runtime.activeGame = null;
     refs.gameModal.hidden = true;
     refs.gameHost.innerHTML = "";
@@ -4964,7 +5205,14 @@
       .join("");
 
     const isSolo = Boolean(TABLE_META[game.id].isSolo);
+    const isPvp = Boolean(TABLE_META[game.id].pvp);
     const startLabel = isSolo ? "Sentar na maquina" : "Encontrar rival";
+    const pvpStartLabel =
+      game.multiplayer?.state === "waiting"
+        ? "Esperando outro jogador"
+        : game.multiplayer?.matchId
+          ? "Mesa conectada"
+          : "Entrar na fila PvP";
     const flowLines = isSolo
       ? `
         <li>Voce joga sozinho contra a maquina e a aposta entra no instante em que a rodada começa.</li>
@@ -4976,6 +5224,43 @@
         <li>Se ganhar a série, leva o pote. Se perder, deixa a aposta na mesa.</li>
         <li>Apostas liberadas: ${DEMO_STAKES.map((stake) => formatCoins(stake)).join(", ")}.</li>
       `;
+
+    if (isPvp) {
+      const selfPlayer = getProfileSnapshot();
+      const rivalPlayer = game.multiplayer?.state === "waiting" ? null : game.opponent;
+      return `
+        <div class="pubpaid-game-lobby is-pvp">
+          <article class="pubpaid-game-box">
+            <span class="pubpaid-game-chip">${escapeHtml(TABLE_META[game.id].shortLabel)}</span>
+            <h3>${escapeHtml(TABLE_META[game.id].label)} PvP</h3>
+            <p>${escapeHtml(TABLE_META[game.id].description)}</p>
+            <ul>
+              <li>Escolha a aposta, sente na mesa e o lobby espera outro jogador real entrar na mesma rodada.</li>
+              <li>Quando a segunda conexão chega, a partida sobe automaticamente para os dois lados.</li>
+              <li>Seu avatar fica visível no lobby enquanto a mesa conecta.</li>
+            </ul>
+          </article>
+
+          <article class="pubpaid-game-box">
+            <div class="pubpaid-game-chip-row">
+              <span class="pubpaid-game-chip">saldo ${escapeHtml(formatCoins(state.wallet.coins))}</span>
+              <span class="pubpaid-game-chip">aposta ${escapeHtml(formatCoins(game.stake))}</span>
+              <span class="pubpaid-game-chip">${game.multiplayer?.state === "waiting" ? "aguardando rival" : "mesa PvP ao vivo"}</span>
+            </div>
+            <div class="pubpaid-lobby-avatar-row">
+              ${renderLobbyAvatarCard(selfPlayer, "self")}
+              ${renderLobbyAvatarCard(rivalPlayer, "rival")}
+            </div>
+            <div class="pubpaid-stake-row">${stakes}</div>
+            <p class="pubpaid-feedback">${escapeHtml(game.feedback || "A mesa de damas agora sobe com outro jogador real.")}</p>
+            <div class="pubpaid-card-actions">
+              <button class="pubpaid-card-button" type="button" data-start-game ${game.multiplayer?.state === "waiting" ? "disabled" : ""}>${escapeHtml(pvpStartLabel)}</button>
+              <button class="pubpaid-card-button" type="button" data-close-finished>Voltar ao salao</button>
+            </div>
+          </article>
+        </div>
+      `;
+    }
 
     return `
       <div class="pubpaid-game-lobby">
@@ -5163,6 +5448,9 @@
 
   function abandonActiveGame() {
     if (!runtime.activeGame || runtime.activeGame.screen !== "playing") return;
+    if (runtime.activeGame.id === "checkers" && runtime.activeGame.multiplayer?.enabled) {
+      void leaveCheckersPvp(runtime.activeGame);
+    }
     finalizeGame("loss", "Voce levantou da mesa antes do fim da rodada.");
   }
 
@@ -6038,6 +6326,7 @@
         <div class="pubpaid-game-chip-row">
           <span class="pubpaid-turn-chip">${escapeHtml(stateCheckers.turn === "player" ? "sua vez" : `${game.opponent.name} pensa`)}</span>
           <span class="pubpaid-turn-chip">pote ${escapeHtml(formatCoins(game.payout))}</span>
+          ${game.multiplayer?.enabled ? `<span class="pubpaid-turn-chip">pvp ao vivo</span>` : ""}
         </div>
         <section class="pubpaid-checkers-stage pubpaid-minigame-frame">
           <div class="pubpaid-minigame-head">
@@ -6065,7 +6354,7 @@
           <article>
             <span>pecas vivas</span>
             <strong>${escapeHtml(String(countCheckersPieces(stateCheckers.board, "player")))} x ${escapeHtml(String(countCheckersPieces(stateCheckers.board, "opponent")))}</strong>
-            <p>Seu lado contra o rival da casa.</p>
+            <p>${escapeHtml(game.multiplayer?.enabled ? `Seu lado contra ${game.opponent.name}.` : "Seu lado contra o rival da casa.")}</p>
           </article>
         </section>
         <div class="pubpaid-card-actions">
@@ -6199,6 +6488,18 @@
 
     const chosenMove = checkers.validMoves.find((move) => move.to.row === row && move.to.col === col);
     if (!chosenMove) return;
+
+    if (game.multiplayer?.enabled) {
+      checkers.message = "Enviando sua jogada para a mesa PvP...";
+      checkers.selected = null;
+      checkers.validMoves = [];
+      renderGameModal();
+      void submitCheckersPvpMove(chosenMove).catch((error) => {
+        checkers.message = String(error?.message || "Nao consegui enviar a jogada.");
+        renderGameModal();
+      });
+      return;
+    }
 
     checkers.board = applyCheckersMove(checkers.board, chosenMove);
     checkers.turnCount += 1;
@@ -7844,6 +8145,13 @@
     if (runtime.gameTimer) {
       window.clearTimeout(runtime.gameTimer);
       runtime.gameTimer = null;
+    }
+  }
+
+  function clearPvpPoll() {
+    if (runtime.pvpPollTimer) {
+      window.clearTimeout(runtime.pvpPollTimer);
+      runtime.pvpPollTimer = 0;
     }
   }
 

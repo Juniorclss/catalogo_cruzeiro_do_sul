@@ -108,6 +108,7 @@ const PUBPAID_SPRITE_SCOUT_FILE = path.join(DATA_DIR, "pubpaid-sprite-scout.json
 const PUBPAID_DEPOSITS_FILE = path.join(DATA_DIR, "pubpaid-deposits.json");
 const PUBPAID_WITHDRAWALS_FILE = path.join(DATA_DIR, "pubpaid-withdrawals.json");
 const PUBPAID_WALLETS_FILE = path.join(DATA_DIR, "pubpaid-wallets.json");
+const PUBPAID_PVP_FILE = path.join(DATA_DIR, "pubpaid-pvp.json");
 const LEGACY_BACKEND_DATA_DIR = path.join(ROOT_DIR, "backend", "data");
 const LEGACY_PUBPAID_DEPOSITS_FILE = path.join(LEGACY_BACKEND_DATA_DIR, "pubpaidDeposits.json");
 const LEGACY_PUBPAID_WITHDRAWALS_FILE = path.join(LEGACY_BACKEND_DATA_DIR, "pubpaidWithdrawals.json");
@@ -6847,6 +6848,196 @@ async function handleApi(req, res, pathname, searchParams) {
     return sendJson(res, 200, buildPubpaidAccountPayload(authUser));
   }
 
+  if (req.method === "GET" && pathname === "/api/pubpaid/pvp/state") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para abrir a fila PvP." });
+    }
+    const gameId = normalizePubpaidPvpGameId(searchParams.get("gameId"));
+    if (!gameId) {
+      return sendJson(res, 400, { ok: false, error: "Mesa PvP ainda nao liberada para esse jogo." });
+    }
+    const store = writePubpaidPvpStore(cleanupPubpaidPvpStore(readPubpaidPvpStore()));
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, gameId));
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/join") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para entrar na fila PvP." });
+    }
+    const body = await parseBody(req);
+    const gameId = normalizePubpaidPvpGameId(body.gameId);
+    if (!gameId) {
+      return sendJson(res, 400, { ok: false, error: "Mesa PvP ainda nao liberada para esse jogo." });
+    }
+    const stake = normalizePubpaidAmount(body.stake, 10);
+    const walletKey = getPubpaidWalletKey(authUser);
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    store.waiting = store.waiting.filter((entry) => entry?.player?.walletKey !== walletKey);
+    const existingMatch = store.matches.find((entry) =>
+      entry?.gameId === gameId &&
+      entry?.status === "active" &&
+      [entry?.playerOne?.walletKey, entry?.playerTwo?.walletKey].includes(walletKey)
+    );
+    if (existingMatch) {
+      store = writePubpaidPvpStore(store);
+      return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, gameId));
+    }
+
+    const player = createPubpaidPvpPlayer(authUser, body.profile || {});
+    const rivalWaiting = store.waiting.find((entry) =>
+      entry?.gameId === gameId &&
+      clampInteger(entry?.stake) === stake &&
+      entry?.player?.walletKey !== walletKey
+    );
+
+    if (rivalWaiting) {
+      store.waiting = store.waiting.filter((entry) => entry.id !== rivalWaiting.id);
+      store.matches.push({
+        id: createRecordId("pvp"),
+        gameId,
+        stake,
+        status: "active",
+        createdAt: new Date().toISOString(),
+        startedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        playerOne: rivalWaiting.player,
+        playerTwo: player,
+        board: createCheckersPvPBoard(),
+        turn: "playerOne",
+        winner: "",
+        resultSummary: "",
+        moveCount: 0,
+      });
+    } else {
+      store.waiting.push({
+        id: createRecordId("pvpw"),
+        gameId,
+        stake,
+        createdAt: new Date().toISOString(),
+        player,
+      });
+    }
+
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, gameId));
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/leave") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para sair da fila PvP." });
+    }
+    const body = await parseBody(req);
+    const gameId = normalizePubpaidPvpGameId(body.gameId);
+    if (!gameId) {
+      return sendJson(res, 400, { ok: false, error: "Mesa PvP ainda nao liberada para esse jogo." });
+    }
+    const walletKey = getPubpaidWalletKey(authUser);
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    store.waiting = store.waiting.filter((entry) => !(entry?.gameId === gameId && entry?.player?.walletKey === walletKey));
+    store.matches = store.matches.map((entry) => {
+      if (entry?.gameId !== gameId || entry?.status !== "active") return entry;
+      const isPlayerOne = entry?.playerOne?.walletKey === walletKey;
+      const isPlayerTwo = entry?.playerTwo?.walletKey === walletKey;
+      if (!isPlayerOne && !isPlayerTwo) return entry;
+      const winner = isPlayerOne ? "playerTwo" : "playerOne";
+      return {
+        ...entry,
+        status: "finished",
+        winner,
+        resultSummary: isPlayerOne
+          ? `${entry?.playerOne?.name || "Jogador"} saiu da mesa. ${entry?.playerTwo?.name || "Rival"} venceu por abandono.`
+          : `${entry?.playerTwo?.name || "Jogador"} saiu da mesa. ${entry?.playerOne?.name || "Rival"} venceu por abandono.`,
+        finishedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+    });
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, gameId));
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/checkers/move") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para jogar a mesa PvP." });
+    }
+    const body = await parseBody(req);
+    const matchId = cleanShortText(body.matchId || "", 120);
+    if (!matchId) {
+      return sendJson(res, 400, { ok: false, error: "Informe a mesa PvP." });
+    }
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    const matchIndex = store.matches.findIndex((entry) => entry?.id === matchId && entry?.gameId === "checkers");
+    if (matchIndex < 0) {
+      return sendJson(res, 404, { ok: false, error: "Mesa PvP nao encontrada." });
+    }
+    const match = store.matches[matchIndex];
+    const walletKey = getPubpaidWalletKey(authUser);
+    const seat = match?.playerOne?.walletKey === walletKey ? "playerOne" : match?.playerTwo?.walletKey === walletKey ? "playerTwo" : "";
+    if (!seat) {
+      return sendJson(res, 403, { ok: false, error: "Essa mesa pertence a outros jogadores." });
+    }
+    if (match.status !== "active") {
+      return sendJson(res, 400, { ok: false, error: "Essa mesa PvP nao esta mais ativa." });
+    }
+    if (match.turn !== seat) {
+      return sendJson(res, 409, { ok: false, error: "Espere a vez do outro jogador." });
+    }
+
+    const move = body.move || {};
+    const board = Array.isArray(match.board) ? match.board : createCheckersPvPBoard();
+    const validMoves = getAllPvpCheckersMoves(board, seat);
+    const chosenMove = validMoves.find((entry) =>
+      clampInteger(entry?.from?.row, -1) === clampInteger(move?.from?.row, -1) &&
+      clampInteger(entry?.from?.col, -1) === clampInteger(move?.from?.col, -1) &&
+      clampInteger(entry?.to?.row, -1) === clampInteger(move?.to?.row, -1) &&
+      clampInteger(entry?.to?.col, -1) === clampInteger(move?.to?.col, -1)
+    );
+    if (!chosenMove) {
+      return sendJson(res, 400, { ok: false, error: "Jogada invalida para o tabuleiro atual." });
+    }
+
+    let nextBoard = applyPvpCheckersMove(board, chosenMove);
+    let nextTurn = seat === "playerOne" ? "playerTwo" : "playerOne";
+    let resultSummary = "";
+    let winner = getPvpCheckersOutcome(nextBoard);
+    if (!winner && chosenMove.capture) {
+      const followCaptures = getMovesForPvpCheckersPiece(nextBoard, chosenMove.to.row, chosenMove.to.col).filter((entry) => entry.capture);
+      if (followCaptures.length) {
+        nextTurn = seat;
+        resultSummary = "A captura continua com a mesma peca.";
+      }
+    }
+    if (!winner && !resultSummary) {
+      resultSummary = nextTurn === "playerOne"
+        ? `${match?.playerOne?.name || "Jogador 1"} pensa a resposta.`
+        : `${match?.playerTwo?.name || "Jogador 2"} pensa a resposta.`;
+    }
+    const finished = Boolean(winner);
+    if (winner) {
+      resultSummary =
+        winner === "playerOne"
+          ? `${match?.playerOne?.name || "Jogador 1"} fechou a mesa de damas.`
+          : `${match?.playerTwo?.name || "Jogador 2"} fechou a mesa de damas.`;
+    }
+
+    store.matches[matchIndex] = {
+      ...match,
+      board: nextBoard,
+      turn: nextTurn,
+      winner: winner || "",
+      resultSummary,
+      moveCount: clampInteger(match.moveCount) + 1,
+      status: finished ? "finished" : "active",
+      finishedAt: finished ? new Date().toISOString() : "",
+      updatedAt: new Date().toISOString(),
+    };
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, "checkers"));
+  }
+
   if (req.method === "POST" && pathname === "/api/pubpaid/deposits") {
     const authUser = readCatalogoAuthSession(req);
     if (!authUser) {
@@ -7515,6 +7706,204 @@ function buildPubpaidAdminPayload() {
     pendingPubpaidDeposits: dashboard.pendingDeposits,
     pendingPubpaidWithdrawals: dashboard.pendingWithdrawals,
     pubpaidWalletBoard: dashboard.walletBoard,
+  };
+}
+
+const PUBPAID_PVP_ENABLED_GAMES = new Set(["checkers"]);
+const PUBPAID_PVP_WAIT_MS = 1000 * 60 * 15;
+const PUBPAID_PVP_MATCH_MS = 1000 * 60 * 60 * 6;
+
+function emptyPubpaidPvpStore() {
+  return {
+    updatedAt: null,
+    waiting: [],
+    matches: [],
+  };
+}
+
+function readPubpaidPvpStore() {
+  const parsed = readJson(PUBPAID_PVP_FILE, emptyPubpaidPvpStore());
+  return {
+    updatedAt: parsed?.updatedAt || null,
+    waiting: Array.isArray(parsed?.waiting) ? parsed.waiting : [],
+    matches: Array.isArray(parsed?.matches) ? parsed.matches : [],
+  };
+}
+
+function writePubpaidPvpStore(store = emptyPubpaidPvpStore()) {
+  const nextStore = {
+    updatedAt: new Date().toISOString(),
+    waiting: Array.isArray(store?.waiting) ? store.waiting : [],
+    matches: Array.isArray(store?.matches) ? store.matches : [],
+  };
+  writeJson(PUBPAID_PVP_FILE, nextStore);
+  return nextStore;
+}
+
+function cleanupPubpaidPvpStore(store = emptyPubpaidPvpStore()) {
+  const now = Date.now();
+  return {
+    ...store,
+    waiting: (Array.isArray(store.waiting) ? store.waiting : []).filter((entry) => {
+      const createdAt = new Date(entry?.createdAt || 0).getTime();
+      return createdAt && now - createdAt < PUBPAID_PVP_WAIT_MS;
+    }),
+    matches: (Array.isArray(store.matches) ? store.matches : []).filter((entry) => {
+      if (entry?.status === "finished") {
+        const finishedAt = new Date(entry?.finishedAt || entry?.updatedAt || 0).getTime();
+        return finishedAt && now - finishedAt < PUBPAID_PVP_MATCH_MS;
+      }
+      const startedAt = new Date(entry?.startedAt || entry?.createdAt || 0).getTime();
+      return startedAt && now - startedAt < PUBPAID_PVP_MATCH_MS;
+    }),
+  };
+}
+
+function normalizePubpaidPvpGameId(value = "") {
+  const normalized = safeString(value, 40).toLowerCase();
+  return PUBPAID_PVP_ENABLED_GAMES.has(normalized) ? normalized : "";
+}
+
+function createCheckersPvPBoard() {
+  const board = Array.from({ length: 8 }, () => Array(8).fill(""));
+  for (let row = 0; row < 3; row += 1) {
+    for (let col = 0; col < 8; col += 1) {
+      if ((row + col) % 2 === 1) board[row][col] = "o";
+    }
+  }
+  for (let row = 5; row < 8; row += 1) {
+    for (let col = 0; col < 8; col += 1) {
+      if ((row + col) % 2 === 1) board[row][col] = "p";
+    }
+  }
+  return board;
+}
+
+function getPvpCheckersOwner(piece = "") {
+  if (!piece) return "";
+  return piece.toLowerCase() === "p" ? "playerOne" : "playerTwo";
+}
+
+function getPvpCheckersDirections(piece = "") {
+  if (!piece) return [];
+  if (piece === piece.toUpperCase()) return [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+  return piece.toLowerCase() === "p" ? [[-1, -1], [-1, 1]] : [[1, -1], [1, 1]];
+}
+
+function inPvpCheckersBounds(row, col) {
+  return row >= 0 && row < 8 && col >= 0 && col < 8;
+}
+
+function crownPvpCheckersPiece(piece, row) {
+  if (piece === "p" && row === 0) return "P";
+  if (piece === "o" && row === 7) return "O";
+  return piece;
+}
+
+function clonePvpCheckersBoard(board = []) {
+  return board.map((row) => row.slice());
+}
+
+function getMovesForPvpCheckersPiece(board, row, col) {
+  const piece = board?.[row]?.[col];
+  if (!piece) return [];
+  const owner = getPvpCheckersOwner(piece);
+  const enemy = owner === "playerOne" ? "playerTwo" : "playerOne";
+  const moves = [];
+  getPvpCheckersDirections(piece).forEach(([rowStep, colStep]) => {
+    const nextRow = row + rowStep;
+    const nextCol = col + colStep;
+    if (!inPvpCheckersBounds(nextRow, nextCol)) return;
+    if (!board[nextRow][nextCol]) {
+      moves.push({ from: { row, col }, to: { row: nextRow, col: nextCol }, capture: null });
+      return;
+    }
+    if (getPvpCheckersOwner(board[nextRow][nextCol]) !== enemy) return;
+    const jumpRow = nextRow + rowStep;
+    const jumpCol = nextCol + colStep;
+    if (!inPvpCheckersBounds(jumpRow, jumpCol) || board[jumpRow][jumpCol]) return;
+    moves.push({
+      from: { row, col },
+      to: { row: jumpRow, col: jumpCol },
+      capture: { row: nextRow, col: nextCol },
+    });
+  });
+  return moves;
+}
+
+function getAllPvpCheckersMoves(board, owner) {
+  const moves = [];
+  for (let row = 0; row < 8; row += 1) {
+    for (let col = 0; col < 8; col += 1) {
+      if (getPvpCheckersOwner(board[row][col]) !== owner) continue;
+      moves.push(...getMovesForPvpCheckersPiece(board, row, col));
+    }
+  }
+  const captures = moves.filter((move) => move.capture);
+  return captures.length ? captures : moves;
+}
+
+function applyPvpCheckersMove(board, move) {
+  const next = clonePvpCheckersBoard(board);
+  const piece = next[move.from.row][move.from.col];
+  next[move.from.row][move.from.col] = "";
+  if (move.capture) next[move.capture.row][move.capture.col] = "";
+  next[move.to.row][move.to.col] = crownPvpCheckersPiece(piece, move.to.row);
+  return next;
+}
+
+function countPvpCheckersPieces(board, owner) {
+  let count = 0;
+  for (let row = 0; row < 8; row += 1) {
+    for (let col = 0; col < 8; col += 1) {
+      if (getPvpCheckersOwner(board[row][col]) === owner) count += 1;
+    }
+  }
+  return count;
+}
+
+function getPvpCheckersOutcome(board) {
+  const playerOnePieces = countPvpCheckersPieces(board, "playerOne");
+  const playerTwoPieces = countPvpCheckersPieces(board, "playerTwo");
+  if (!playerOnePieces) return "playerTwo";
+  if (!playerTwoPieces) return "playerOne";
+  if (!getAllPvpCheckersMoves(board, "playerOne").length) return "playerTwo";
+  if (!getAllPvpCheckersMoves(board, "playerTwo").length) return "playerOne";
+  return "";
+}
+
+function createPubpaidPvpPlayer(authUser = {}, profile = {}) {
+  return {
+    walletKey: getPubpaidWalletKey(authUser),
+    sub: safeString(authUser.sub, 160),
+    email: cleanEmail(authUser.email),
+    name: cleanShortText(profile.name || authUser.name || authUser.givenName || "Jogador", 100),
+    archetype: cleanShortText(profile.archetype || "neon", 40) || "neon",
+    favorite: cleanShortText(profile.favorite || "", 40),
+    picture: safeString(authUser.picture, 360),
+  };
+}
+
+function buildPubpaidPvpStatePayload(store, authUser, gameId) {
+  const walletKey = getPubpaidWalletKey(authUser);
+  const waitingEntry = store.waiting.find((entry) => entry?.gameId === gameId && entry?.player?.walletKey === walletKey) || null;
+  const matchEntry = store.matches.find((entry) =>
+    entry?.gameId === gameId &&
+    ["active", "finished"].includes(entry?.status) &&
+    [entry?.playerOne?.walletKey, entry?.playerTwo?.walletKey].includes(walletKey)
+  ) || null;
+  const seat = matchEntry
+    ? matchEntry.playerOne?.walletKey === walletKey
+      ? "playerOne"
+      : "playerTwo"
+    : "";
+  return {
+    ok: true,
+    gameId,
+    state: matchEntry ? matchEntry.status : waitingEntry ? "waiting" : "idle",
+    seat,
+    queue: waitingEntry,
+    match: matchEntry,
   };
 }
 
