@@ -373,6 +373,24 @@ body {
   cursor: pointer;
 }
 
+.candidate-google-slot {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.candidate-google-slot small {
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.candidate-google-button,
+.candidate-google-button > div {
+  width: 100%;
+  min-height: 46px;
+}
+
 .candidate-vote-button[disabled] {
   opacity: 0.56;
   cursor: not-allowed;

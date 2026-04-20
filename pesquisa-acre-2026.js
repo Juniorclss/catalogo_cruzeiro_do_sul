@@ -120,14 +120,47 @@
       .toUpperCase();
   }
 
+  function scheduleGoogleButtonRefresh() {
+    window.setTimeout(() => {
+      window.CatalogoGoogleAuth?.refresh?.();
+    }, 0);
+  }
+
   function renderCandidates() {
     const office = currentOffice();
     if (!candidateGrid || !office) return;
 
     const currentUserVote = state.userVotes?.[office.id] || "";
+    const isSignedIn = Boolean(state.authUser?.sub && state.authUser?.email);
     candidateGrid.innerHTML = (Array.isArray(office.candidates) ? office.candidates : [])
       .map((candidate) => {
         const isCurrentVote = currentUserVote === candidate.id;
+        const actionMarkup = isCurrentVote
+          ? `
+            <button type="button" class="candidate-vote-button" disabled>
+              Você já votou
+            </button>
+          `
+          : isSignedIn
+            ? `
+              <button
+                type="button"
+                class="candidate-vote-button"
+                data-vote-button="${escapeHtml(candidate.id)}"
+              >
+                Confirmar voto
+              </button>
+            `
+            : `
+              <div class="candidate-google-slot">
+                <small>Entre com Google para votar</small>
+                <div
+                  class="candidate-google-button"
+                  data-google-auth-button
+                  data-candidate-google="${escapeHtml(candidate.id)}"
+                ></div>
+              </div>
+            `;
         return `
           <article class="candidate-card${isCurrentVote ? " is-voted" : ""}">
             <div class="candidate-head">
@@ -148,18 +181,15 @@
             <div class="candidate-footer">
               <span>${escapeHtml(candidate.currentPosition || "Perfil público em acompanhamento")}</span>
             </div>
-            <button
-              type="button"
-              class="candidate-vote-button"
-              data-vote-button="${escapeHtml(candidate.id)}"
-              ${isCurrentVote ? "disabled" : ""}
-            >
-              ${isCurrentVote ? "Você já votou" : "Votar com Google"}
-            </button>
+            ${actionMarkup}
           </article>
         `;
       })
       .join("");
+
+    if (!isSignedIn) {
+      scheduleGoogleButtonRefresh();
+    }
   }
 
   function renderResults() {
@@ -363,21 +393,10 @@
 
       state.authUser = getGoogleUser();
       if (!state.authUser?.sub || !state.authUser?.email) {
-        Promise.resolve(window.CatalogoGoogleAuth?.promptSignIn?.())
-          .then((opened) => {
-            if (!opened) {
-              document.querySelector("[data-google-auth-card]")?.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-              });
-            }
-          })
-          .catch(() => {
-            document.querySelector("[data-google-auth-card]")?.scrollIntoView({
-              behavior: "smooth",
-              block: "center"
-            });
-          });
+        document.querySelector("[data-google-auth-card]")?.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
         return;
       }
 
