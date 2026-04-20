@@ -119,29 +119,43 @@
                   Entrar com Google
                 </button>
                 <button class="pubpaid-button outline" type="button" data-enter-demo>
-                  Entrar no modo demo
+                  Conhecer os jogos agora
                 </button>
                 <button class="pubpaid-button ghost" type="button" data-open-tutorial>
                   Ver como funciona
                 </button>
               </div>
               <p class="pubpaid-entry-caption">
-                A carteira real aparece só para quem entrou com Google. O modo demo abre treino livre dos jogos, sem Pix e sem depósito.
+                Quem entra com Google libera a carteira completa. Se quiser só conhecer o salão e experimentar as mesas, dá para começar sem Pix e sem depósito.
               </p>
             </div>
           </div>
 
           <div class="pubpaid-world-stage">
             <div class="pubpaid-splash-bitmap" aria-hidden="true">
+              <div class="pubpaid-splash-road-motion">
+                <span class="pubpaid-splash-road-glow pubpaid-splash-road-glow-a"></span>
+                <span class="pubpaid-splash-road-glow pubpaid-splash-road-glow-b"></span>
+                <span class="pubpaid-splash-road-dash pubpaid-splash-road-dash-a"></span>
+                <span class="pubpaid-splash-road-dash pubpaid-splash-road-dash-b"></span>
+              </div>
               <div class="pubpaid-splash-roof-sign">
                 <span>noite aberta</span>
                 <strong>PUB PAID</strong>
               </div>
               <div class="pubpaid-splash-jukebox-cover"></div>
+              <div class="pubpaid-splash-player-badge" data-splash-player-badge hidden>
+                <div class="pubpaid-splash-player-avatar" data-splash-player-avatar aria-hidden="true"></div>
+                <div class="pubpaid-splash-player-copy">
+                  <span data-splash-player-kicker>visitante na rua</span>
+                  <strong data-splash-player-name>Visitante da calçada</strong>
+                  <small data-splash-player-note>Conecte o Google para a porta reconhecer você.</small>
+                </div>
+              </div>
               <div class="pubpaid-splash-entry-mark">
-                <span class="pubpaid-splash-entry-road">Veja a estrada</span>
-                <strong>Entrada principal</strong>
-                <small>Primeiro conheça a fachada. Depois entre no bar.</small>
+                <span class="pubpaid-splash-entry-road" data-splash-entry-road>Veja a estrada</span>
+                <strong data-splash-entry-title>Entrada principal</strong>
+                <small data-splash-entry-note>Primeiro conheça a fachada. Depois entre no bar.</small>
               </div>
               <div class="pubpaid-splash-bitmap-copy">
                 <span>fachada e estrada</span>
@@ -733,10 +747,8 @@
         <div class="pubpaid-modal-head">
           <div>
             <p class="pubpaid-eyebrow">porta do salao</p>
-            <h2>Vou encher a cara, apostar muito e entrar no salao?</h2>
-            <p class="pubpaid-modal-copy">
-              Ou eu volto pra casa antes da mulher aparecer com o cabo de vassoura?
-            </p>
+            <h2>Entrada do PubPaid</h2>
+            <p class="pubpaid-modal-copy">Daqui você só decide se entra no salão ou volta para a rua.</p>
           </div>
           <button class="pubpaid-close" type="button" data-close-modal="door">
             Fechar
@@ -748,7 +760,7 @@
             Entrar no salao
           </button>
           <button class="pubpaid-button danger" type="button" data-door-choice="retreat">
-            Melhor nao, vou fugir
+            Sair para a rua
           </button>
         </div>
       </div>

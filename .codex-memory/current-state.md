@@ -1,17 +1,15 @@
 # Current State
 
-Updated: 2026-04-20T11:08:46.915Z
+Updated: 2026-04-20T12:33:17.541Z
 
 ## Active Goal
 
-- PubPaid com rua viva e modo treino
+- Fluxo de votacao com Google e confirmacao
 
 ## Summary
 
-Novo bitmap exterior v3 aplicado no splash e na cena; rua da fachada ganhou mais trafego, pedestres, props de calcada e luz; modo demo agora abre treino sem consumir saldo real nem fila PvP.
+A area de eleicoes da home agora abre o voto, pede Google, exige confirmacao final, memoriza o ultimo voto localmente e mostra popup de agradecimento chamando para acompanhar parciais e graficos.
 
 ## Next
 
-- Validar visualmente o PubPaid no navegador e
-- se o usuario aprovar
-- preparar commit/deploy dessas mudancas.
+- Validar no navegador real se o popup abre corretamente ao clicar em votar e se o prompt do Google aparece no ambiente publicado.

@@ -443,39 +443,48 @@
             </div>
           </div>
 
-          <section class="hero-desktop-topic-grid" aria-label="Destaques do dia por editoria">
-            <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
-              <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
-              <span class="hero-desktop-topic-copy">
-                <small data-hero-topic-category>Area em destaque</small>
-                <strong data-hero-topic-title>Noticia principal do dia</strong>
-                <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
-              </span>
-            </a>
-            <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
-              <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
-              <span class="hero-desktop-topic-copy">
-                <small data-hero-topic-category>Area em destaque</small>
-                <strong data-hero-topic-title>Noticia principal do dia</strong>
-                <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
-              </span>
-            </a>
-            <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
-              <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
-              <span class="hero-desktop-topic-copy">
-                <small data-hero-topic-category>Area em destaque</small>
-                <strong data-hero-topic-title>Noticia principal do dia</strong>
-                <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
-              </span>
-            </a>
-            <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
-              <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
-              <span class="hero-desktop-topic-copy">
-                <small data-hero-topic-category>Area em destaque</small>
-                <strong data-hero-topic-title>Noticia principal do dia</strong>
-                <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
-              </span>
-            </a>
+          <section class="hero-desktop-topic-carousel" aria-label="Destaques do dia por editoria">
+            <div class="hero-desktop-topic-carousel-head">
+              <span>Assuntos do dia</span>
+              <strong>Carrossel de destaques</strong>
+            </div>
+            <div class="hero-desktop-topic-viewport">
+              <div class="hero-desktop-topic-track" data-hero-topic-track>
+                <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
+                  <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
+                  <span class="hero-desktop-topic-copy">
+                    <small data-hero-topic-category>Area em destaque</small>
+                    <strong data-hero-topic-title>Noticia principal do dia</strong>
+                    <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
+                  </span>
+                </a>
+                <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
+                  <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
+                  <span class="hero-desktop-topic-copy">
+                    <small data-hero-topic-category>Area em destaque</small>
+                    <strong data-hero-topic-title>Noticia principal do dia</strong>
+                    <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
+                  </span>
+                </a>
+                <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
+                  <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
+                  <span class="hero-desktop-topic-copy">
+                    <small data-hero-topic-category>Area em destaque</small>
+                    <strong data-hero-topic-title>Noticia principal do dia</strong>
+                    <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
+                  </span>
+                </a>
+                <a class="hero-desktop-topic-card" href="#radar" data-hero-topic-card>
+                  <span class="hero-desktop-topic-photo" aria-hidden="true" data-hero-topic-photo></span>
+                  <span class="hero-desktop-topic-copy">
+                    <small data-hero-topic-category>Area em destaque</small>
+                    <strong data-hero-topic-title>Noticia principal do dia</strong>
+                    <span data-hero-topic-summary>Resumo curto do destaque mais importante desta editoria.</span>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="hero-desktop-topic-dots" data-hero-topic-dots aria-label="Paginação dos destaques"></div>
           </section>
 
           <section class="hero-newsroom-panel hero-office-panel" aria-label="Cobertura local em tempo real">
@@ -1774,17 +1783,15 @@
             <p class="panel-label">Pesquisa local com contexto</p>
             <h3 id="electionVoteTitle">Registrar voto com leitura da cidade</h3>
             <p class="election-vote-lead" id="electionVoteLead">
-              O voto continua limitado a um por cargo neste navegador, mas agora a leitura ganha
-              cidade obrigatória e espaço opcional para nome, partido e observações.
+              O voto continua limitado a um por cargo neste dispositivo, com cidade obrigatória
+              e espaço opcional para nome, partido e observações.
             </p>
             <div class="google-identity-card election-vote-auth-card" data-google-auth-card>
               <div>
-                <span>Google obrigatório para votar</span>
-                <strong data-google-auth-status>Entre com Google para continuar</strong>
-                <p data-google-auth-email>O login evita voto duplicado e libera um voto por cargo a cada semana.</p>
+                <span>Contingência desta semana</span>
+                <strong data-google-auth-status>Voto autenticado pelo próprio dispositivo</strong>
+                <p data-google-auth-email>Enquanto o Google falha, cada aparelho libera um voto por cargo a cada semana.</p>
               </div>
-              <div class="google-auth-button" data-google-auth-button></div>
-              <button class="outline-button" type="button" data-google-auth-logout hidden>Sair do Google</button>
             </div>
             <form class="election-vote-form" id="electionVoteForm">
               <input type="hidden" name="officeId" />

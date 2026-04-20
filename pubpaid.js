@@ -116,7 +116,7 @@
       isSolo: true
     },
     roulette: {
-      label: "Roleta Alta",
+      label: "Roleta",
       shortLabel: "roleta",
       description: "Cada lado gira em série curta. Quem vencer mais giros leva a mesa.",
       sceneCopy: "A roleta está pronta para uma melhor de 3. O maior placar fecha a noite.",
@@ -363,7 +363,9 @@
         "No 21, pare no 18 se a mao vier limpa.",
         "A cantora ajuda mais quem ja perdeu uma rodada.",
         "Blefe curto funciona melhor nos copos.",
-        "Nao gaste tudo cedo. O pub vira depois."
+        "Nao gaste tudo cedo. O pub vira depois.",
+        "Hoje o balcão está mais fofoqueiro que a mesa.",
+        "Tem gente que veio jogar e acabou ficando pela conversa."
       ]
     },
     {
@@ -379,7 +381,9 @@
       lines: [
         "Damas premia paciencia. Nao corra para virar dama.",
         "Aposta baixa compra mais leitura de mesa.",
-        "Revanche boa nasce depois de derrota curta."
+        "Revanche boa nasce depois de derrota curta.",
+        "Essa mesa já viu amizade acabar por uma dama torta.",
+        "Quem bate a mão na mesa antes da hora geralmente perde."
       ]
     },
     {
@@ -396,7 +400,9 @@
         "Nos copos, o centro costuma mentir menos.",
         "Bebida ajuda pouco. Palpite ruim continua ruim.",
         "Se a rodada alongar, a casa entrega sinais.",
-        "Olhe o ritmo antes de subir a entrada."
+        "Olhe o ritmo antes de subir a entrada.",
+        "O povo jura que entende os copos, mas quase sempre chuta.",
+        "Se a mesa ficou silenciosa, alguém aprontou."
       ]
     },
     {
@@ -412,7 +418,9 @@
       lines: [
         "O poker cresce quando voce segura so o necessario.",
         "Slot paga mais quando voce aguenta a serie curta.",
-        "Entrada alta sem leitura vira presente pra casa."
+        "Entrada alta sem leitura vira presente pra casa.",
+        "Quem fala alto no balcão normalmente está blefando.",
+        "Bar cheio sempre inventa um especialista por minuto."
       ]
     },
     {
@@ -420,8 +428,8 @@
       name: "Garçom",
       archetype: "cowboy",
       x: 302,
-      y: 139,
-      zone: { x: 292, y: 129, w: 24, h: 14 },
+      y: 156,
+      zone: { x: 292, y: 148, w: 24, h: 18 },
       behavior: "fixed",
       facing: "down",
       prop: "bottle",
@@ -429,7 +437,9 @@
       lines: [
         "Chegue no balcao. Eu recebo o pedido e deixo a proxima rodada pronta.",
         "Bebida da sorte existe, mas so muda detalhe.",
-        "Quer lobby rapido? Eu abro qualquer mesa daqui."
+        "Quer lobby rapido? Eu abro qualquer mesa daqui.",
+        "Se pedir gelo demais, eu já sei que perdeu rodada.",
+        "Aqui no balcão eu ouço aposta, desculpa e promessa."
       ]
     },
     {
@@ -447,7 +457,9 @@
         "Sinuca pede forca menor. Mesa cheia espalha melhor.",
         "No caca-niqueis, fruta repetida vale mais que sino solto.",
         "Poker forte troca no maximo tres. Ganancia desmonta a mao.",
-        "Roleta boa e serie. Nao trate um giro como final."
+        "Roleta boa e serie. Nao trate um giro como final.",
+        "Metade desse pub sobrevive de dica errada dada com confiança.",
+        "Todo mundo aqui diz que tem método até a mesa virar."
       ]
     },
     {
@@ -462,7 +474,9 @@
       prop: "drink",
       lines: [
         "A jukebox nao ganha por voce, mas muda seu ritmo.",
-        "Se o pub acalmar, aproveite para subir a aposta."
+        "Se o pub acalmar, aproveite para subir a aposta.",
+        "Quando a música acerta, até derrota parece estilosa.",
+        "Tem noite que a trilha vale mais que o prêmio."
       ]
     },
     {
@@ -478,7 +492,9 @@
       lines: [
         "A cantora puxou o salão hoje, olha o povo colando no palco.",
         "Tem noite que a melhor mesa e so a que deixa voce enxergar tudo.",
-        "Quando o bar enche, ate blefe ruim parece corajoso."
+        "Quando o bar enche, ate blefe ruim parece corajoso.",
+        "O povo do palco comenta mais jogo que quem está jogando.",
+        "Se alguém apontou para a roleta, já começou discussão."
       ]
     },
     {
@@ -494,7 +510,9 @@
       lines: [
         "A roleta gira melhor quando a galera para de gritar o obvio.",
         "Eu vim pela conversa e fiquei pela ultima rodada.",
-        "Mesa cheia faz o pub parecer vivo de verdade."
+        "Mesa cheia faz o pub parecer vivo de verdade.",
+        "Sempre tem alguém jurando que o próximo giro vem limpo.",
+        "Roleta chama superstição como luz chama mariposa."
       ]
     },
     {
@@ -510,7 +528,9 @@
       lines: [
         "Encosta aqui, a sinuca hoje ta chamando conversa longa.",
         "Tem noite que o taco acerta mais quando o salão para para olhar.",
-        "Quem chega cedo pega a mesa, quem fica tarde pega as historias."
+        "Quem chega cedo pega a mesa, quem fica tarde pega as historias.",
+        "O bar só esquenta de verdade quando começa aposta besta.",
+        "Sinuca boa é a que rende história antes do prêmio."
       ]
     },
     {
@@ -526,7 +546,9 @@
       lines: [
         "O vinte e um lotou, mas metade do salão veio mesmo foi pra fofocar.",
         "Se ouvir duas mesas ao mesmo tempo, ja entende o clima da casa.",
-        "Aqui dentro sempre tem alguem prometendo a ultima rodada."
+        "Aqui dentro sempre tem alguem prometendo a ultima rodada.",
+        "Essa mesa de cartas já ouviu mais segredos que o balcão.",
+        "No bar, ninguém vai embora na hora que fala que vai."
       ]
     }
   ];
@@ -599,9 +621,9 @@
         gameId: "checkers",
         label: TABLE_META.checkers.label,
         venueKey: "checkers",
-        x: 154,
-        y: 292,
-        radius: 118
+        x: 190,
+        y: 332,
+        radius: 92
       },
       {
         id: "chess",
@@ -609,9 +631,9 @@
         gameId: "chess",
         label: TABLE_META.chess.label,
         venueKey: "chess",
-        x: 244,
-        y: 292,
-        radius: 116
+        x: 198,
+        y: 544,
+        radius: 102
       },
       {
         id: "cards21",
@@ -619,9 +641,9 @@
         gameId: "cards21",
         label: TABLE_META.cards21.label,
         venueKey: "cards21",
-        x: 306,
-        y: 494,
-        radius: 86
+        x: 286,
+        y: 456,
+        radius: 72
       },
       {
         id: "poker",
@@ -639,9 +661,9 @@
         gameId: "truco",
         label: TABLE_META.truco.label,
         venueKey: "truco",
-        x: 546,
-        y: 494,
-        radius: 82
+        x: 666,
+        y: 456,
+        radius: 74
       },
       {
         id: "dicecups",
@@ -649,9 +671,9 @@
         gameId: "dicecups",
         label: TABLE_META.dicecups.label,
         venueKey: "dicecups",
-        x: 836,
-        y: 320,
-        radius: 84
+        x: 796,
+        y: 306,
+        radius: 78
       },
       {
         id: "slots",
@@ -659,9 +681,9 @@
         gameId: "slots",
         label: TABLE_META.slots.label,
         venueKey: "slots",
-        x: 640,
-        y: 148,
-        radius: 80
+        x: 660,
+        y: 174,
+        radius: 58
       },
       {
         id: "roulette",
@@ -669,9 +691,9 @@
         gameId: "roulette",
         label: TABLE_META.roulette.label,
         venueKey: "roulette",
-        x: 806,
-        y: 152,
-        radius: 92
+        x: 790,
+        y: 164,
+        radius: 64
       },
       {
         id: "wall-darts",
@@ -679,9 +701,9 @@
         gameId: "darts",
         label: TABLE_META.darts.label,
         venueKey: "darts",
-        x: 738,
-        y: 154,
-        radius: 86
+        x: 884,
+        y: 156,
+        radius: 58
       },
       {
         id: "stage",
@@ -690,7 +712,7 @@
         venueKey: "stage",
         x: 860,
         y: 150,
-        radius: 92
+        radius: 78
       },
       {
         id: "bartender-shop",
@@ -698,7 +720,7 @@
         label: "Garçom",
         venueKey: "shop",
         x: 302,
-        y: 139,
+        y: 156,
         radius: 92
       },
       {
@@ -744,6 +766,14 @@
     profileName: document.querySelector("[data-profile-name]"),
     profileRole: document.querySelector("[data-profile-role]"),
     profileMotto: document.querySelector("[data-profile-motto]"),
+    splashPlayerBadge: document.querySelector("[data-splash-player-badge]"),
+    splashPlayerAvatar: document.querySelector("[data-splash-player-avatar]"),
+    splashPlayerKicker: document.querySelector("[data-splash-player-kicker]"),
+    splashPlayerName: document.querySelector("[data-splash-player-name]"),
+    splashPlayerNote: document.querySelector("[data-splash-player-note]"),
+    splashEntryRoad: document.querySelector("[data-splash-entry-road]"),
+    splashEntryTitle: document.querySelector("[data-splash-entry-title]"),
+    splashEntryNote: document.querySelector("[data-splash-entry-note]"),
     statCoins: document.querySelector("[data-stat-coins]"),
     statWins: document.querySelector("[data-stat-wins]"),
     statLosses: document.querySelector("[data-stat-losses]"),
@@ -822,7 +852,8 @@
   const images = {
     exterior: new Image(),
     interior: new Image(),
-    bartenderTorso: new Image()
+    bartenderTorso: new Image(),
+    stageSinger: new Image()
   };
 
   const runtime = {
@@ -835,6 +866,8 @@
     exteriorTraffic: [],
     npcBubbleTimer: 0,
     npcBubbles: [],
+    streetBubbles: [],
+    streetBubbleTimer: 0,
     singerBursts: [],
     activeGame: null,
     pvpPollTimer: 0,
@@ -1037,7 +1070,8 @@
     return Promise.all([
       loadImage(images.exterior, "./assets/pubpaid-exterior-v3.png"),
       loadImage(images.interior, "./assets/pubpaid-interior-v5.png"),
-      loadImage(images.bartenderTorso, "./assets/pubpaid-bartender-counter-v1.png")
+      loadImage(images.bartenderTorso, "./assets/pubpaid-bartender-counter-v1.png"),
+      loadImage(images.stageSinger, "./assets/pubpaid-stage-singer-v1.png")
     ]);
   }
 
@@ -1596,6 +1630,7 @@
     updateExteriorWalkers(delta);
     updateExteriorTraffic(delta);
     updateNpcBubbles(delta);
+    updateStreetBubbles(delta);
     updateSingerBursts(delta);
     updateTrafficAudio(delta, now);
 
@@ -2057,16 +2092,16 @@
     const offsets = {
       pool: { x: 0, y: 56 },
       // A mesa de damas fica mais acessivel parando pelo corredor central de baixo.
-      checkers: { x: 0, y: 104 },
-      chess: { x: 0, y: 104 },
-      cards21: { x: 0, y: 62 },
+      checkers: { x: 0, y: 96 },
+      chess: { x: 0, y: 94 },
+      cards21: { x: 0, y: 70 },
       poker: { x: 0, y: 62 },
-      dicecups: { x: 0, y: 58 },
-      slots: { x: 0, y: 58 },
-      roulette: { x: -36, y: 76 },
-      "wall-darts": { x: -34, y: 82 },
-      stage: { x: -54, y: 36 },
-      "bartender-shop": { x: 0, y: 66 },
+      truco: { x: 0, y: 72 },
+      dicecups: { x: 0, y: 70 },
+      slots: { x: 0, y: 78 },
+      roulette: { x: -18, y: 76 },
+      "wall-darts": { x: -12, y: 88 },
+      "bartender-shop": { x: 0, y: 74 },
       "waiter-tips": { x: 0, y: 72 },
       jukebox: { x: -40, y: 34 },
       exit: { x: 0, y: 44 }
@@ -2136,16 +2171,17 @@
   function getInteractionClickArea(interaction) {
     const explicitAreas = {
       pool: { x: 36, y: 66, w: 182, h: 166 },
-      checkers: { x: 60, y: 196, w: 188, h: 192 },
-      chess: { x: 148, y: 196, w: 190, h: 192 },
-      cards21: { x: 218, y: 396, w: 176, h: 160 },
+      checkers: { x: 54, y: 236, w: 272, h: 164 },
+      chess: { x: 24, y: 442, w: 308, h: 182 },
+      cards21: { x: 226, y: 410, w: 138, h: 108 },
       poker: { x: 354, y: 418, w: 146, h: 122 },
-      dicecups: { x: 690, y: 176, w: 242, h: 174 },
-      slots: { x: 520, y: 58, w: 280, h: 166 },
-      roulette: { x: 742, y: 64, w: 170, h: 168 },
-      "wall-darts": { x: 668, y: 86, w: 144, h: 144 },
-      stage: { x: 796, y: 74, w: 128, h: 136 },
-      "bartender-shop": { x: 266, y: 70, w: 82, h: 112 },
+      truco: { x: 592, y: 404, w: 150, h: 112 },
+      dicecups: { x: 684, y: 208, w: 226, h: 126 },
+      slots: { x: 618, y: 36, w: 110, h: 238 },
+      roulette: { x: 730, y: 92, w: 132, h: 132 },
+      "wall-darts": { x: 836, y: 104, w: 98, h: 102 },
+      stage: { x: 818, y: 96, w: 88, h: 130 },
+      "bartender-shop": { x: 266, y: 88, w: 82, h: 114 },
       "waiter-tips": { x: 744, y: 78, w: 94, h: 116 },
       jukebox: { x: 798, y: 436, w: 118, h: 126 },
       "front-door": { x: 392, y: 338, w: 176, h: 154 },
@@ -2191,6 +2227,7 @@
       drawExteriorStreetLife(now);
       drawExteriorTraffic();
       drawExteriorWalkers();
+      drawStreetBubbles();
       drawInteractionMarkers(now);
     }
     drawPlayerLabel();
@@ -2631,7 +2668,12 @@
         maxX: 370,
         speed: 28,
         facing: "right",
-        archetype: "street"
+        archetype: "street",
+        lines: [
+          "Esse pub acende e a rua esquece da hora.",
+          "Falaram que hoje a calçada está mais animada que o salão.",
+          "Eu só parei pra olhar a porta e já fiquei."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-b",
@@ -2642,7 +2684,12 @@
         speed: 23,
         facing: "left",
         archetype: "lounge",
-        prop: "bag"
+        prop: "bag",
+        lines: [
+          "Tem gente entrando séria e saindo amiga do porteiro.",
+          "A rua comenta mais besteira que mesa de jogo.",
+          "Se a luz da fachada bate, ninguém passa reto."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-c",
@@ -2653,7 +2700,12 @@
         speed: 31,
         facing: "right",
         archetype: "cowboy",
-        prop: "hat"
+        prop: "hat",
+        lines: [
+          "Disseram que lá dentro já tem discussão sobre roleta.",
+          "Pub bom é o que faz a rua parar pra fofocar.",
+          "Ainda nem entrei e já ouvi três histórias diferentes."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-d",
@@ -2663,7 +2715,12 @@
         maxX: 922,
         speed: 19,
         facing: "left",
-        archetype: "neon"
+        archetype: "neon",
+        lines: [
+          "O povo da calçada sempre sabe quem perdeu primeiro.",
+          "Essa entrada parece cutscene de jogo antigo.",
+          "Hoje a rua está falando sozinha."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-kid-a",
@@ -2674,7 +2731,12 @@
         speed: 35,
         facing: "right",
         archetype: "neon",
-        prop: "kid"
+        prop: "kid",
+        lines: [
+          "Olha as luzes!",
+          "Quero ver o bar de novo.",
+          "A porta brilhou!"
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-elder-a",
@@ -2685,7 +2747,12 @@
         speed: 16,
         facing: "right",
         archetype: "street",
-        prop: "cane"
+        prop: "cane",
+        lines: [
+          "No meu tempo bar bom começava na calçada mesmo.",
+          "A rua decide se o lugar presta antes do primeiro gole.",
+          "Esse povo fala alto, mas eu gosto."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-elder-b",
@@ -2696,7 +2763,12 @@
         speed: 15,
         facing: "left",
         archetype: "lounge",
-        prop: "cane"
+        prop: "cane",
+        lines: [
+          "Parece que a noite resolveu ficar por aqui.",
+          "A fachada já convence mais que muita propaganda.",
+          "A rua está parecendo corredor de boato."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-mom",
@@ -2707,7 +2779,12 @@
         speed: 22,
         facing: "left",
         archetype: "lounge",
-        prop: "bag"
+        prop: "bag",
+        lines: [
+          "Eu disse que era só passar, mas parei pra olhar.",
+          "Toda rua ganha assunto quando esse pub acende.",
+          "Tem alguém ali dentro cantando ou é impressão minha?"
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-kid-b",
@@ -2718,7 +2795,12 @@
         speed: 38,
         facing: "left",
         archetype: "street",
-        prop: "kid"
+        prop: "kid",
+        lines: [
+          "Olha o brilho da porta!",
+          "Tem jogo lá dentro?",
+          "A calçada está divertida hoje."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-dog-handler",
@@ -2729,7 +2811,12 @@
         speed: 24,
         facing: "right",
         archetype: "cowboy",
-        prop: "leash"
+        prop: "leash",
+        lines: [
+          "Até meu cachorro desacelerou pra olhar essa entrada.",
+          "Quando a rua para, o pub já venceu metade da noite.",
+          "Tem lugar que convida sem precisar falar nada."
+        ]
       }),
       createExteriorWalker({
         id: "front-door-security",
@@ -2741,7 +2828,12 @@
         facing: "right",
         archetype: "street",
         prop: "security",
-        behavior: "fixed"
+        behavior: "fixed",
+        lines: [
+          "Fila tranquila, noite barulhenta.",
+          "Quem entra sorrindo sai contando história.",
+          "A porta hoje está chamando gente sem esforço."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-night-kid",
@@ -2752,7 +2844,12 @@
         speed: 42,
         facing: "left",
         archetype: "neon",
-        prop: "kid"
+        prop: "kid",
+        lines: [
+          "Corre não, eu quero ver a fachada!",
+          "Esse lugar parece fase secreta.",
+          "A rua está acesa demais pra ir embora cedo."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-elder-couple",
@@ -2763,7 +2860,12 @@
         speed: 17,
         facing: "right",
         archetype: "lounge",
-        prop: "cane"
+        prop: "cane",
+        lines: [
+          "Casal que fofoca junto atravessa a rua mais devagar.",
+          "Esse pub já virou assunto do quarteirão.",
+          "A gente só ia olhar e já está comentando a noite."
+        ]
       }),
       createExteriorWalker({
         id: "front-walker-pub-runner",
@@ -2774,7 +2876,12 @@
         speed: 34,
         facing: "left",
         archetype: "cowboy",
-        prop: "hat"
+        prop: "hat",
+        lines: [
+          "Quem corre demais perde a melhor parte da calçada.",
+          "Esse bar está com cara de história ruim e boa ao mesmo tempo.",
+          "Se a rua está assim, imagina o salão."
+        ]
       })
     ];
   }
@@ -2793,7 +2900,8 @@
       walkClock: 0,
       pause: randomBetween(0.2, 1.8),
       prop: config.prop || "",
-      behavior: config.behavior || "patrol"
+      behavior: config.behavior || "patrol",
+      lines: Array.isArray(config.lines) ? config.lines : []
     };
   }
 
@@ -2951,9 +3059,25 @@
     runtime.npcBubbles = runtime.npcBubbles.slice(-6);
   }
 
+  function pushStreetBubble(walkerId, text, life = 4.2) {
+    if (!text) return;
+    runtime.streetBubbles.push({
+      id: `${walkerId}-${Date.now()}-${Math.round(Math.random() * 999)}`,
+      walkerId,
+      text,
+      life
+    });
+    runtime.streetBubbles = runtime.streetBubbles.slice(-8);
+  }
+
   function pickNpcLine(npc) {
     if (!npc || !Array.isArray(npc.lines) || !npc.lines.length) return "";
     return npc.lines[Math.floor(Math.random() * npc.lines.length)] || "";
+  }
+
+  function pickWalkerLine(walker) {
+    if (!walker || !Array.isArray(walker.lines) || !walker.lines.length) return "";
+    return walker.lines[Math.floor(Math.random() * walker.lines.length)] || "";
   }
 
   function primeNpcBubbles() {
@@ -2963,6 +3087,16 @@
       const npc = findNpcById(npcId);
       const text = pickNpcLine(npc);
       if (text) pushNpcBubble(npcId, text, 4.8);
+    });
+  }
+
+  function primeStreetBubbles() {
+    if (runtime.scene !== "exterior" || !runtime.exteriorWalkers.length) return;
+    runtime.streetBubbles = [];
+    ["front-walker-a", "front-walker-mom", "front-door-security"].forEach((walkerId) => {
+      const walker = runtime.exteriorWalkers.find((entry) => entry.id === walkerId);
+      const text = pickWalkerLine(walker);
+      if (text) pushStreetBubble(walkerId, text, 4.8);
     });
   }
 
@@ -3018,6 +3152,7 @@
 
   function updateExteriorWalkers(delta) {
     if (runtime.scene !== "exterior" || !runtime.exteriorWalkers.length) return;
+    runtime.streetBubbleTimer -= delta;
     runtime.exteriorWalkers.forEach((walker) => {
       if (walker.behavior === "fixed") {
         walker.walkFrame = 0;
@@ -3047,6 +3182,25 @@
         walker.pause = randomBetween(0.6, 2.1);
       }
     });
+
+    if (runtime.streetBubbleTimer <= 0) {
+      runtime.streetBubbleTimer = randomBetween(1.8, 3.4);
+      spawnStreetBubble();
+      if (Math.random() > 0.66) spawnStreetBubble();
+    }
+  }
+
+  function spawnStreetBubble() {
+    if (!runtime.exteriorWalkers.length || runtime.scene !== "exterior") return;
+    const busyWalkers = runtime.streetBubbles.map((bubble) => bubble.walkerId);
+    const available = runtime.exteriorWalkers.filter(
+      (walker) => !busyWalkers.includes(walker.id) && Array.isArray(walker.lines) && walker.lines.length
+    );
+    const pool = available.length ? available : runtime.exteriorWalkers;
+    const walker = pool[Math.floor(Math.random() * pool.length)];
+    const text = pickWalkerLine(walker);
+    if (!text) return;
+    pushStreetBubble(walker.id, text, randomBetween(3.8, 5.6));
   }
 
   function updateExteriorTraffic(delta) {
@@ -3419,6 +3573,15 @@
       .filter((bubble) => bubble.life > 0);
   }
 
+  function updateStreetBubbles(delta) {
+    runtime.streetBubbles = runtime.streetBubbles
+      .map((bubble) => ({
+        ...bubble,
+        life: bubble.life - delta
+      }))
+      .filter((bubble) => bubble.life > 0);
+  }
+
   function drawInteriorNpcs() {
     if (runtime.scene !== "interior") return;
 
@@ -3509,59 +3672,80 @@
   function drawStageSinger(now) {
     if (runtime.scene !== "interior") return;
 
-    const sway = Math.sin(now / 320) * 1.6;
-    const micPulse = (Math.sin(now / 210) + 1) / 2;
-    const x = 860;
-    const y = 154;
+    const sway = Math.sin(now / 250) * 2.2;
+    const x = 862;
+    const y = 150;
 
     sceneCtx.save();
-
     sceneCtx.fillStyle = "rgba(0, 0, 0, 0.22)";
     sceneCtx.beginPath();
-    sceneCtx.ellipse(x, y + 20, 24, 8, 0, 0, Math.PI * 2);
+    sceneCtx.ellipse(x, y + 24, 22, 8, 0, 0, Math.PI * 2);
     sceneCtx.fill();
+    sceneCtx.restore();
 
-    sceneCtx.fillStyle = "#f0c7a4";
-    sceneCtx.fillRect(x - 7, y - 24 + sway, 14, 14);
-    sceneCtx.fillStyle = "#ffddea";
-    sceneCtx.fillRect(x - 3, y - 18 + sway, 2, 2);
-    sceneCtx.fillRect(x + 1, y - 18 + sway, 2, 2);
+    if (images.stageSinger?.naturalWidth) {
+      sceneCtx.drawImage(images.stageSinger, x - 32, y - 48 + sway, 64, 96);
+      return;
+    }
 
+    sceneCtx.save();
     sceneCtx.fillStyle = "#ff84c3";
-    sceneCtx.fillRect(x - 11, y - 30 + sway, 22, 8);
-    sceneCtx.fillRect(x - 9, y - 22 + sway, 18, 4);
-    sceneCtx.fillStyle = "#6f2249";
-    sceneCtx.fillRect(x - 13, y - 12, 26, 24);
-    sceneCtx.fillRect(x - 9, y + 12, 8, 12);
-    sceneCtx.fillRect(x + 1, y + 12, 8, 12);
-    sceneCtx.fillStyle = "#ffb1d8";
-    sceneCtx.fillRect(x - 5, y - 6, 10, 10);
-    sceneCtx.fillStyle = "#ffe7f1";
-    sceneCtx.fillRect(x - 4, y - 5, 3, 3);
-
+    sceneCtx.fillRect(x - 14, y - 20 + sway, 28, 56);
     sceneCtx.fillStyle = "#f0c7a4";
-    sceneCtx.fillRect(x - 16, y - 8, 4, 14);
-    sceneCtx.fillRect(x + 12, y - 8, 4, 14);
-    sceneCtx.fillRect(x - 8, y + 24, 4, 12);
-    sceneCtx.fillRect(x + 4, y + 24, 4, 12);
-
-    sceneCtx.fillStyle = "#11131b";
-    sceneCtx.fillRect(x - 10, y + 36, 7, 4);
-    sceneCtx.fillRect(x + 3, y + 36, 7, 4);
-
+    sceneCtx.fillRect(x - 12, y - 12 + sway, 24, 16);
+    sceneCtx.fillStyle = "#7a2d58";
+    sceneCtx.fillRect(x - 14, y + 4 + sway, 28, 32);
     sceneCtx.fillStyle = "#d8f6ff";
-    sceneCtx.fillRect(x - 19, y - 19, 3, 16);
-    sceneCtx.fillStyle = `rgba(255, 232, 180, ${0.45 + micPulse * 0.3})`;
-    sceneCtx.fillRect(x - 20, y - 22, 5, 5);
-
-    sceneCtx.fillStyle = `rgba(255, 124, 194, ${0.2 + micPulse * 0.2})`;
-    sceneCtx.fillRect(x - 25, y - 28, 10, 2);
-    sceneCtx.fillRect(x - 28, y - 24, 8, 2);
-
+    sceneCtx.fillRect(x + 18, y - 16 + sway, 4, 28);
+    sceneCtx.fillStyle = "#f5e7c4";
+    sceneCtx.fillRect(x + 15, y - 22 + sway, 10, 8);
     sceneCtx.restore();
   }
 
+  function drawStreetBubbles() {
+    if (runtime.scene !== "exterior" || !runtime.streetBubbles.length) return;
+    let stackY = -999;
+
+    runtime.streetBubbles.forEach((bubble) => {
+      const walker = runtime.exteriorWalkers.find((entry) => entry.id === bubble.walkerId);
+      if (!walker) return;
+
+      const alpha = Math.max(0, Math.min(1, bubble.life / 0.6, 1));
+      sceneCtx.save();
+      sceneCtx.globalAlpha = Math.min(0.96, bubble.life > 0.8 ? 0.96 : bubble.life / 0.8);
+      sceneCtx.font = "12px Chakra Petch";
+      const width = Math.min(228, Math.ceil(sceneCtx.measureText(bubble.text).width) + 18);
+      let bubbleY = walker.y - 78;
+      if (bubbleY > stackY - 24) bubbleY = stackY - 28;
+      stackY = bubbleY;
+      sceneCtx.fillStyle = "rgba(8, 9, 20, 0.9)";
+      sceneCtx.strokeStyle = alpha > 0.4 ? "rgba(255, 202, 107, 0.58)" : "rgba(255,255,255,0.24)";
+      sceneCtx.lineWidth = 1;
+      sceneCtx.fillRect(walker.x - width / 2, bubbleY, width, 22);
+      sceneCtx.strokeRect(walker.x - width / 2, bubbleY, width, 22);
+      sceneCtx.beginPath();
+      sceneCtx.moveTo(walker.x - 5, bubbleY + 22);
+      sceneCtx.lineTo(walker.x + 3, bubbleY + 22);
+      sceneCtx.lineTo(walker.x - 1, bubbleY + 28);
+      sceneCtx.closePath();
+      sceneCtx.fill();
+      sceneCtx.stroke();
+      sceneCtx.fillStyle = "#f7f2d5";
+      sceneCtx.fillText(bubble.text, walker.x - width / 2 + 9, bubbleY + 15);
+      sceneCtx.restore();
+    });
+  }
+
   function updateSingerBursts(delta) {
+    if (runtime.scene === "interior" && Math.random() < delta * 0.95) {
+      runtime.singerBursts.push({
+        x: 838 + Math.random() * 18,
+        y: 110 + Math.random() * 14,
+        life: 1.15
+      });
+      runtime.singerBursts = runtime.singerBursts.slice(-6);
+    }
+
     runtime.singerBursts = runtime.singerBursts
       .map((burst) => ({
         ...burst,
@@ -3856,8 +4040,51 @@
     setText(refs.statBest, formatCoins(state.wallet.bestWin));
 
     drawAvatarPreview();
+    renderSplashIdentity();
     renderProfileLoadout();
     syncCashierState();
+  }
+
+  function renderSplashIdentity() {
+    const hasGoogle = hasGoogleSession();
+    const hasAvatar = hasAvatarProfile();
+    const splashBadge = refs.splashPlayerBadge;
+    const avatarHost = refs.splashPlayerAvatar;
+    if (splashBadge) {
+      splashBadge.hidden = !hasGoogle;
+    }
+
+    if (avatarHost) {
+      const photo = String(state.profile.googlePicture || "").trim();
+      const palette = PALETTES[normalizeArchetype(state.profile.archetype)] || PALETTES.neon;
+      avatarHost.style.backgroundImage = photo ? `url("${photo.replace(/"/g, '\\"')}")` : "";
+      avatarHost.style.backgroundColor = palette.background;
+    }
+
+    setText(refs.splashPlayerKicker, hasAvatar ? "avatar reconhecido" : hasGoogle ? "google conectado" : "visitante na rua");
+    setText(
+      refs.splashPlayerName,
+      hasGoogle ? String(state.profile.name || state.profile.googleEmail || "Jogador Google").slice(0, 28) : "Visitante da calçada"
+    );
+    setText(
+      refs.splashPlayerNote,
+      hasAvatar
+        ? "Sua conta já apareceu na fachada. A porta agora chama você para entrar."
+        : hasGoogle
+          ? "Seu rosto já apareceu na entrada. Falta montar o avatar para o PubPaid liberar geral."
+          : "Conecte o Google para a porta reconhecer você."
+    );
+
+    setText(refs.splashEntryRoad, hasAvatar ? "porta liberada" : hasGoogle ? "google na porta" : "veja a estrada");
+    setText(refs.splashEntryTitle, hasAvatar ? "Enter gamer" : hasGoogle ? "Monte o avatar" : "Entrada principal");
+    setText(
+      refs.splashEntryNote,
+      hasAvatar
+        ? "Seu avatar já está na noite. Entre no bar quando quiser."
+        : hasGoogle
+          ? "O login foi reconhecido. Agora finalize o personagem para destravar o salão."
+          : "Primeiro conheça a fachada. Depois entre no bar."
+    );
   }
 
   function syncCashierState() {
@@ -4381,7 +4608,7 @@
     syncGameModeUi();
   }
 
-  function enterGameExperience({ skipChecks = false, announce = true } = {}) {
+  function enterGameExperience({ skipChecks = false, announce = true, targetScene = "interior" } = {}) {
     if (!skipChecks && !hasGoogleSession()) {
       runtime.profileEntryMode = true;
       focusProfileAccess("Entre com Google para liberar o acesso ao PubPaid.");
@@ -4397,7 +4624,11 @@
     runtime.demoMode = false;
     runtime.gameMode = true;
     runtime.nightPanelOpen = false;
-    if (runtime.scene !== "interior") enterInterior();
+    if (targetScene === "exterior") {
+      if (runtime.scene !== "exterior") enterExterior();
+    } else if (runtime.scene !== "interior") {
+      enterInterior();
+    }
 
     syncGameModeUi();
     renderAll();
@@ -4407,7 +4638,12 @@
     if (fullscreenRequest?.catch) fullscreenRequest.catch(() => {});
 
     if (announce) {
-      setWorldMessage("Portas abertas. O PubPaid tomou a tela inteira.", 2600);
+      setWorldMessage(
+        targetScene === "exterior"
+          ? "Google confirmado. Você caiu na estrada da entrada do PubPaid."
+          : "Portas abertas. Você entrou no salão do PubPaid.",
+        2600
+      );
     }
     return true;
   }
@@ -4471,22 +4707,22 @@
 
     runtime.profileEntryMode = true;
     runtime.demoMode = false;
-    enterGameExperience({ skipChecks: true, announce: false });
+    enterGameExperience({ skipChecks: true, announce: false, targetScene: "exterior" });
 
     if (hasAvatarProfile()) {
       if (announce) {
-        setWorldMessage("Google conferido. O PubPaid já abriu em tela cheia.", 3200);
+        setWorldMessage("Google conferido. Seu personagem já está na estrada da entrada do pub.", 3200);
       }
       return true;
     }
 
     if (openProfileIfNeeded) {
       openProfileModal({ entryMode: true });
-      setText(refs.profileFeedback, "Google conectado. O salão já abriu em tela cheia. Agora finalize o avatar.");
+      setText(refs.profileFeedback, "Google conectado. Agora finalize o avatar para aparecer na entrada do PubPaid.");
     }
 
     if (announce) {
-      setWorldMessage("Google conectado. O PubPaid abriu em tela cheia e aguarda seu avatar.", 3200);
+      setWorldMessage("Google conectado. Agora monte o avatar para ir para a estrada da entrada do pub.", 3200);
     }
     return true;
   }
@@ -5671,12 +5907,12 @@
     renderAll();
 
     if (shouldEnterGameAfterProfile) {
-      enterGameExperience({ skipChecks: true, announce: false });
+      enterGameExperience({ skipChecks: true, announce: false, targetScene: "exterior" });
     }
 
     setWorldMessage(
       shouldEnterGameAfterProfile
-        ? "Avatar salvo. O PubPaid abriu em tela cheia e o salão já reconheceu você."
+        ? "Avatar salvo. Você apareceu na estrada da entrada e já pode ir até a porta do pub."
         : firstEntry
           ? "Personagem salvo com Google. Créditos grátis zerados: gere um QR no caixa para depositar."
           : "Seu personagem foi atualizado e o salão já reconheceu você.",
@@ -5714,6 +5950,8 @@
     clearPlayerWalkPath();
     runtime.prompt = null;
     runtime.npcBubbles = [];
+    runtime.streetBubbleTimer = 0.8;
+    primeStreetBubbles();
   }
 
   function openDoorDecision() {
@@ -5741,8 +5979,8 @@
     }
 
     if (choice === "retreat") {
-      openBadEndingModal();
-      setWorldMessage("Você arregou na porta e a vassoura chegou primeiro.", 2600);
+      enterExterior();
+      setWorldMessage("Você saiu do pub e voltou para a rua da entrada.", 2400);
     }
   }
 
@@ -5874,16 +6112,16 @@
     runtime.prompt = interaction;
     renderSceneHud();
 
-    if (interaction.type === "game") {
-      openGameLobby(interaction.gameId);
-      setWorldMessage(`Atalho rápido: ${TABLE_META[interaction.gameId].label} já está aberta.`, 2200);
-      return;
-    }
-
     if (interaction.type === "stage") {
       grantSingerCharm();
       if (!runtime.audio.enabled) toggleMusic(true);
       setWorldMessage("Atalho rapido: voce foi ao palco e a cantora respondeu com um beijinho.", 2200);
+      return;
+    }
+
+    if (interaction.type === "game") {
+      openGameLobby(interaction.gameId);
+      setWorldMessage(`Atalho rápido: ${TABLE_META[interaction.gameId].label} já está aberta.`, 2200);
       return;
     }
 
@@ -6828,7 +7066,7 @@
           <p>${escapeHtml(game.opponent.bio)}</p>
           ${game.activeDrink ? `<p class="pubpaid-feedback">A bebida pode dar boa sorte em ${Math.round(game.activeDrink.goodChance * 100)}% ou azar em ${Math.round(game.activeDrink.badChance * 100)}% da rodada.</p>` : ""}
           <div class="pubpaid-stake-row">${stakes}</div>
-          <p class="pubpaid-feedback">${escapeHtml(trainingMode ? "Modo demo ativo: a mesa vale treino, nao desconta saldo e deixa voce testar as mecanicas." : "Toda mesa agora consome saldo real da sua carteira aprovada.")}</p>
+          <p class="pubpaid-feedback">${escapeHtml(trainingMode ? "Esta mesa abriu em modo de visita: voce pode conhecer as mecanicas sem mexer no saldo." : "Esta mesa usa o saldo real ja liberado na sua carteira aprovada.")}</p>
           <div class="pubpaid-card-actions">
             <button class="pubpaid-card-button" type="button" data-start-game>${escapeHtml(startLabel)}</button>
             <button class="pubpaid-card-button" type="button" data-close-finished>Voltar ao salao</button>
@@ -7031,7 +7269,7 @@
     game.screen = "finished";
     game.result = resolved.result;
     game.summary = trainingMode
-      ? `${resolved.summary} Rodada em modo demo, sem desconto real no saldo.`
+      ? `${resolved.summary} Rodada em modo de visita, sem mexer no saldo real da carteira.`
       : resolved.summary;
     game.fortuneNote = resolved.fortuneNote;
 

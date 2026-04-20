@@ -6507,6 +6507,110 @@ input[type="range"] {
   line-height: 1.45;
 }
 
+.election-success-modal[hidden] {
+  display: none !important;
+}
+
+.election-success-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100051;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 14, 28, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.election-success-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.election-success-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 560px);
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.15rem 1.15rem 1rem;
+  border-radius: 28px;
+  border: 1px solid rgba(146, 220, 255, 0.2);
+  background:
+    radial-gradient(circle at top right, rgba(138, 214, 255, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(8, 33, 68, 0.98), rgba(7, 24, 48, 0.99));
+  box-shadow: 0 30px 70px rgba(3, 10, 20, 0.42);
+  color: #eef8ff;
+}
+
+.election-success-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eef8ff;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.election-success-dialog h3,
+.election-success-dialog .panel-label,
+.election-success-dialog strong {
+  color: #eef8ff;
+}
+
+.election-success-lead,
+.election-success-note {
+  margin: 0;
+  color: rgba(233, 244, 255, 0.9);
+  line-height: 1.55;
+}
+
+.election-success-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.election-success-meta article {
+  padding: 0.85rem 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(146, 220, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.election-success-meta span {
+  display: block;
+  color: rgba(228, 241, 255, 0.74);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.election-success-meta strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.election-success-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+@media (max-width: 720px) {
+  .election-success-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
 .election-vote-form input:focus,
 .election-vote-form textarea:focus {
   outline: 2px solid rgba(164, 73, 40, 0.24);

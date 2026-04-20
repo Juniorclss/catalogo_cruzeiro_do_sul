@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T11:31:05.532Z",
+  "lastUpdatedAt": "2026-04-20T12:33:17.490Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2090,6 +2090,36 @@
       "source": "chat",
       "rawRequest": "versao desktop, na hero tem que trazer a foto e a manchete resumida dos destaques de cada tipo de assunto do dia. ele ainda ta rodando grid de fotos aleatorias resolva",
       "summary": "Home desktop: trocar hero com rotacao aleatoria por destaques do dia com foto e manchete resumida por editoria",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-ajustar-splash-de-entrada-do-pubpaid-com-movimento-na-estrada-avatar-apos-google",
+      "createdAt": "2026-04-20T12:20:50.858Z",
+      "updatedAt": "2026-04-20T12:20:50.858Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "essa e a entrada do jogo, vc ja poem aquela parte de movimentação de estrada ai, e assim que a pessoa loga no google aparece o avatar, ai aparece tambem enter gamer na porta, e veja que vc temum card em cima do outro ali, erro de design",
+      "summary": "Ajustar splash de entrada do PubPaid com movimento na estrada, avatar apos Google, CTA Enter gamer na porta e correção de sobreposição de cards",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-corrigir-fluxo-de-votacao-da-area-de-eleicoes-com-google-confirmacao-e-popup-fin",
+      "createdAt": "2026-04-20T12:33:17.490Z",
+      "updatedAt": "2026-04-20T12:33:17.490Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "corrija a votação ela nao abre, deveria aperta o botão de votar, anbrir o google, autenticar o voto com google, depois tem certeza, e ai sim, ou nao, ai memoriza, e abre o pop up agradeçendo a participoação e pedindo pra acompanhar as parciais semaais e os graficos de todo periodo",
+      "summary": "Corrigir fluxo de votacao da area de eleicoes com Google, confirmacao e popup final",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

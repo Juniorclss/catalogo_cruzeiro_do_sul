@@ -68,6 +68,8 @@ const heroDailyNewsSummary = document.querySelector("[data-hero-daily-summary]")
 const heroTopicCards = [...document.querySelectorAll("[data-hero-topic-card]")];
 const heroOfficeStatusNodes = [...document.querySelectorAll("[data-hero-office-status]")];
 const heroOfficeBubble = document.querySelector("[data-hero-office-bubble]");
+const heroTopicTrack = document.querySelector("[data-hero-topic-track]");
+const heroTopicDots = document.querySelector("[data-hero-topic-dots]");
 const archiveBrowserLaunchers = [...document.querySelectorAll("[data-open-archive-browser]")];
 const insidersTypedNodes = [...document.querySelectorAll("[data-insiders-typed]")];
 const insidersBootScene = document.querySelector("[data-insiders-boot-scene]");
@@ -133,11 +135,13 @@ const supporterPaymentState = {
 const heroTourismRotation = {
   photoIndex: 0,
   activeSlideIndex: 0,
+  activeTopicIndex: 0,
   statusIndex: 0,
   bubbleIndex: 0,
   timerId: 0,
   bubbleTimerId: 0,
-  statusTimerId: 0
+  statusTimerId: 0,
+  topicTimerId: 0
 };
 const heroDesktopBackdropMedia =
   typeof window !== "undefined" && typeof window.matchMedia === "function"
@@ -3232,6 +3236,85 @@ const renderHeroDesktopHighlights = (items = []) => {
       photoNode.style.backgroundSize = "cover";
     }
   });
+
+  heroTourismRotation.activeTopicIndex = 0;
+  syncHeroDesktopCarousel(0);
+  mountHeroDesktopCarouselDots(safeItems.length);
+};
+
+const syncHeroDesktopCarousel = (index = 0) => {
+  if (!heroTopicTrack || !heroTopicCards.length) {
+    return;
+  }
+
+  const visibleCards = heroTopicCards.filter((card) => !card.hidden);
+  if (!visibleCards.length) {
+    heroTopicTrack.style.transform = "translate3d(0, 0, 0)";
+    return;
+  }
+
+  const safeIndex = ((Number(index) % visibleCards.length) + visibleCards.length) % visibleCards.length;
+  heroTourismRotation.activeTopicIndex = safeIndex;
+  heroTopicTrack.style.transform = `translate3d(-${safeIndex * 100}%, 0, 0)`;
+
+  visibleCards.forEach((card, cardIndex) => {
+    card.classList.toggle("is-current", cardIndex === safeIndex);
+  });
+
+  if (heroTopicDots) {
+    [...heroTopicDots.children].forEach((dot, dotIndex) => {
+      dot.classList.toggle("is-active", dotIndex === safeIndex);
+      dot.setAttribute("aria-pressed", dotIndex === safeIndex ? "true" : "false");
+    });
+  }
+};
+
+const mountHeroDesktopCarouselDots = (count = 0) => {
+  if (!heroTopicDots) {
+    return;
+  }
+
+  const safeCount = Math.max(0, Number(count) || 0);
+  heroTopicDots.innerHTML = "";
+
+  if (safeCount <= 1) {
+    heroTopicDots.hidden = true;
+    return;
+  }
+
+  heroTopicDots.hidden = false;
+  for (let index = 0; index < safeCount; index += 1) {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "hero-topic-dot";
+    dot.setAttribute("aria-label", `Abrir destaque ${index + 1}`);
+    dot.setAttribute("aria-pressed", index === 0 ? "true" : "false");
+    dot.addEventListener("click", () => {
+      syncHeroDesktopCarousel(index);
+      restartHeroDesktopCarouselTimer();
+    });
+    heroTopicDots.appendChild(dot);
+  }
+};
+
+const restartHeroDesktopCarouselTimer = () => {
+  if (heroTourismRotation.topicTimerId) {
+    window.clearInterval(heroTourismRotation.topicTimerId);
+    heroTourismRotation.topicTimerId = 0;
+  }
+
+  if (!heroTopicTrack) {
+    return;
+  }
+
+  const visibleCards = heroTopicCards.filter((card) => !card.hidden);
+  if (visibleCards.length <= 1) {
+    return;
+  }
+
+  heroTourismRotation.topicTimerId = window.setInterval(() => {
+    syncHeroDesktopCarousel(heroTourismRotation.activeTopicIndex + 1);
+  }, 4800);
 };
 
 const paintHeroTourismBackdrop = (slideNode, photo) => {
@@ -3340,8 +3423,13 @@ const initializeHeroTourismHero = () => {
     window.clearInterval(heroTourismRotation.bubbleTimerId);
   }
 
+  if (heroTourismRotation.topicTimerId) {
+    window.clearInterval(heroTourismRotation.topicTimerId);
+  }
+
   heroTourismRotation.photoIndex = 0;
   heroTourismRotation.activeSlideIndex = 0;
+  heroTourismRotation.activeTopicIndex = 0;
   heroTourismRotation.statusIndex = 0;
   heroTourismRotation.bubbleIndex = 0;
   renderHeroDesktopHighlights(dailyPool);
@@ -3384,6 +3472,8 @@ const initializeHeroTourismHero = () => {
       rotateHeroOfficeBubble(heroTourismRotation.bubbleIndex);
     }, 3600);
   }
+
+  restartHeroDesktopCarouselTimer();
 };
 
 const openArchiveBrowser = (seedQuery = "") => {
@@ -5078,6 +5168,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   const electionVotesKey = "catalogo_election_votes_by_office_v1";
   const electionUserVotesKey = "catalogo_election_user_votes_v1";
   const electionOpinionSummaryKey = "catalogo_election_opinion_summary_v1";
+  const electionLastVoteKey = "catalogo_election_last_vote_v1";
   const electionVoterIdKey = "catalogo_election_voter_id_v1";
   const electionVoterProfileKey = "catalogo_election_voter_profile_v1";
   const electionCycle = String(window.ELECTIONS_DATA.cycle || "").toLowerCase();
@@ -5135,6 +5226,105 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     electionVoteToastTimer = window.setTimeout(() => {
       toast.classList.remove("is-visible");
     }, 5000);
+  };
+
+  const writeElectionLastVote = (payload = {}) => {
+    writeElectionStorage(electionLastVoteKey, {
+      ...payload,
+      savedAt: new Date().toISOString()
+    });
+  };
+
+  const readElectionLastVote = () => safeParseJson(electionLastVoteKey, {});
+
+  const ensureElectionVoteSuccessModal = () => {
+    let modal = document.querySelector("#catalogoElectionVoteSuccessModal");
+    if (!modal) {
+      modal = document.createElement("section");
+      modal.id = "catalogoElectionVoteSuccessModal";
+      modal.className = "election-success-modal";
+      modal.hidden = true;
+      modal.innerHTML = `
+        <div class="election-success-backdrop" data-election-success-close></div>
+        <article class="election-success-dialog" role="dialog" aria-modal="true" aria-labelledby="electionSuccessTitle">
+          <button class="election-success-close" type="button" data-election-success-close aria-label="Fechar">×</button>
+          <p class="panel-label">Participacao confirmada</p>
+          <h3 id="electionSuccessTitle">Obrigado por participar.</h3>
+          <p class="election-success-lead" data-election-success-message>
+            Seu voto entrou na memoria semanal desta leitura eleitoral.
+          </p>
+          <div class="election-success-meta">
+            <article>
+              <span>Cargo</span>
+              <strong data-election-success-office>Governador</strong>
+            </article>
+            <article>
+              <span>Escolha registrada</span>
+              <strong data-election-success-candidate>Nome do candidato</strong>
+            </article>
+            <article>
+              <span>Cidade informada</span>
+              <strong data-election-success-city>Rio Branco</strong>
+            </article>
+          </div>
+          <p class="election-success-note">
+            Continue acompanhando as parciais semanais e os graficos de todo o periodo para ver como o humor do eleitorado evolui.
+          </p>
+          <div class="election-success-actions">
+            <button class="solid-button" type="button" data-election-success-follow>Acompanhar parciais e graficos</button>
+            <button class="outline-button" type="button" data-election-success-close>Fechar</button>
+          </div>
+        </article>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    if (modal.dataset.bound === "1") {
+      return modal;
+    }
+
+    modal.dataset.bound = "1";
+    const close = () => {
+      modal.hidden = true;
+      document.body.classList.remove("election-vote-open");
+    };
+
+    modal.addEventListener("click", (event) => {
+      if (
+        event.target === modal ||
+        event.target?.matches?.(".election-success-backdrop, [data-election-success-close]")
+      ) {
+        close();
+      }
+    });
+
+    modal.querySelectorAll("[data-election-success-close]").forEach((button) => {
+      button.addEventListener("click", close);
+    });
+
+    modal.querySelector("[data-election-success-follow]")?.addEventListener("click", () => {
+      close();
+      document.querySelector("#elections")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !modal.hidden) {
+        close();
+      }
+    });
+
+    return modal;
+  };
+
+  const showElectionVoteSuccessModal = ({ officeLabel = "", candidateName = "", city = "" } = {}) => {
+    const modal = ensureElectionVoteSuccessModal();
+    modal.querySelector("[data-election-success-office]").textContent = officeLabel || "Cargo";
+    modal.querySelector("[data-election-success-candidate]").textContent = candidateName || "Candidato";
+    modal.querySelector("[data-election-success-city]").textContent = city || "Cidade informada";
+    modal.querySelector("[data-election-success-message]").textContent =
+      `Voto autenticado neste dispositivo e confirmado para ${candidateName || "o candidato"} em ${officeLabel || "um cargo"}${city ? `, com cidade ${city}` : ""}.`;
+    modal.hidden = false;
+    document.body.classList.add("election-vote-open");
   };
 
   electionFilters.forEach((button) => {
@@ -5572,17 +5762,18 @@ if (window.ELECTIONS_DATA?.offices?.length) {
         return;
       }
 
-      if (!getCatalogoGoogleAuthUser()?.email) {
+      const office = getElectionOffice(electionVoteModalState.officeId);
+      const candidate = office?.candidates?.find((item) => item.id === electionVoteModalState.candidateId);
+      const voteConfirmed = window.confirm(
+        `Tem certeza que deseja confirmar seu voto em ${candidate?.name || "este candidato"} para ${office?.label || "este cargo"}${city ? `, com cidade ${city}` : ""}?`
+      );
+
+      if (!voteConfirmed) {
         setFeedbackState(
           feedback,
-          window.CatalogoGoogleAuth?.isEnabled?.()
-            ? "Clique no botao Google acima para entrar antes de votar. Depois volte aqui e confirme o voto."
-            : "Login Google ainda nao esta configurado no servidor, entao o voto fica bloqueado para evitar duplicidade.",
-          "is-error"
+          "Voto cancelado antes do envio. Se quiser, revise os dados e confirme novamente.",
+          ""
         );
-        modal.querySelector("[data-google-auth-card]")?.scrollIntoView({ behavior: "smooth", block: "center" });
-        modal.querySelector("[data-google-auth-button]")?.focus?.();
-        window.CatalogoGoogleAuth?.promptSignIn?.();
         return;
       }
 
@@ -5604,8 +5795,20 @@ if (window.ELECTIONS_DATA?.offices?.length) {
         } catch (_error) {
           // segue sem bloquear o voto
         }
+        writeElectionLastVote({
+          officeId: electionVoteModalState.officeId,
+          officeLabel: office?.label || "",
+          candidateId: electionVoteModalState.candidateId,
+          candidateName: candidate?.name || "",
+          city
+        });
         closeModal({ reset: true });
-        showElectionVoteToast("Acompanhe semanalmente e volte para ver a pontuacao.");
+        showElectionVoteSuccessModal({
+          officeLabel: office?.label || "",
+          candidateName: candidate?.name || "",
+          city
+        });
+        showElectionVoteToast("Obrigado pela participacao. Acompanhe as parciais semanais e os graficos.");
       } catch (error) {
         setFeedbackState(
           feedback,
@@ -5637,6 +5840,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     const modal = ensureElectionVoteModal();
     const form = modal.querySelector(".election-vote-form");
     const profile = getElectionVoterProfile();
+    const lastVote = readElectionLastVote();
 
     electionVoteModalState = {
       officeId,
@@ -5645,7 +5849,9 @@ if (window.ELECTIONS_DATA?.offices?.length) {
 
     modal.querySelector("#electionVoteTitle").textContent = `Votar em ${candidate.name}`;
     modal.querySelector("[data-election-vote-lead], #electionVoteLead").textContent =
-      `Seu voto para ${office.label} pede login Google e cidade obrigatoria. Cada dispositivo registra um voto por cargo a cada semana.`;
+      lastVote?.candidateName && lastVote?.officeLabel
+        ? `Seu ultimo voto salvo foi em ${lastVote.candidateName} para ${lastVote.officeLabel}. Agora o voto para ${office.label} pede cidade obrigatoria e confirmacao final neste dispositivo.`
+        : `Seu voto para ${office.label} pede cidade obrigatoria e confirmacao final. Cada dispositivo registra um voto por cargo a cada semana.`;
 
     if (form) {
       const cityInput = form.elements.city || form.querySelector("[name='city']");
@@ -5662,26 +5868,12 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     setFeedbackState(modal.querySelector("[data-election-vote-feedback], #electionVoteFeedback"), "", "");
     modal.hidden = false;
     document.body.classList.add("election-vote-open");
-    window.CatalogoGoogleAuth?.refresh?.();
-    if (!getCatalogoGoogleAuthUser()?.email) {
-      setFeedbackState(
-        modal.querySelector("[data-election-vote-feedback], #electionVoteFeedback"),
-        window.CatalogoGoogleAuth?.isEnabled?.()
-          ? "Entre com Google neste painel antes de confirmar o voto."
-          : "Login Google ainda nao configurado no servidor; o voto so libera quando a autenticacao estiver ativa.",
-        "is-error"
-      );
-      window.CatalogoGoogleAuth?.promptSignIn?.();
-    }
+    const authCard = modal.querySelector("[data-google-auth-card]");
+    if (authCard) authCard.hidden = true;
     window.setTimeout(() => {
       const cityInput = form?.elements?.city || form?.querySelector?.("[name='city']");
-      const authButton = modal.querySelector("[data-google-auth-button]");
-      if (getCatalogoGoogleAuthUser()?.email) {
-        cityInput?.focus();
-        cityInput?.select?.();
-      } else {
-        authButton?.focus?.();
-      }
+      cityInput?.focus();
+      cityInput?.select?.();
     }, 20);
   };
 
@@ -5879,7 +6071,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
           data-candidate="${candidate.id}"
           ${hasVoteInOffice ? "disabled" : ""}
         >
-          ${isSelected ? "Voto registrado" : hasVoteInOffice ? "Voto já usado neste cargo" : "Votar com cidade"}
+          ${isSelected ? "Voto registrado" : hasVoteInOffice ? "Voto já usado neste cargo" : "Votar neste dispositivo"}
         </button>
       </footer>
     `;
@@ -5910,7 +6102,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       const currentWeekTotal = Number(currentWeek?.totalVotes || currentWeek?.total || 0);
       electionResultsMeta.textContent = selectedCandidateId
         ? `Seu voto neste cargo ja foi registrado nesta semana. Total atual: ${totalVotes} voto${totalVotes === 1 ? "" : "s"}${currentWeekTotal ? ` • semana corrente: ${currentWeekTotal}` : ""}. Cidade foi coletada e as observacoes ajudam a ler o clima eleitoral.`
-        : `Escolha uma opcao para ${office.label}. A cidade e obrigatoria; nome, partido e observacao continuam opcionais. O bloqueio de voto vale por semana.`;
+        : `Escolha uma opcao para ${office.label}. A cidade e obrigatoria; nome, partido e observacao continuam opcionais. O bloqueio de voto vale por semana neste dispositivo.`;
     }
 
     electionResultsBars.innerHTML = "";

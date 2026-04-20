@@ -4126,14 +4126,9 @@ function getElectionPublicSnapshot(voterId = "") {
 }
 
 function recordElectionVote(payload = {}, req = null) {
-  const authUser = readCatalogoAuthSession(req);
-  if (!authUser?.email || !authUser?.sub) {
-    return { ok: false, status: 401, message: "Entre com Google para registrar voto e evitar duplicidade semanal." };
-  }
-
   const safeOfficeId = String(payload.officeId || "").trim();
   const safeCandidateId = String(payload.candidateId || "").trim();
-  const safeVoterId = safeString(authUser.sub || authUser.email, 120);
+  const safeVoterId = safeString(payload.voterId || payload.deviceId || payload.visitorId, 120);
   const office = getElectionOffice(safeOfficeId);
   const tracking = buildTrackingMeta(req, payload);
   const currentFingerprints = buildWeeklyDeviceFingerprints(tracking);
@@ -4217,8 +4212,8 @@ function recordElectionVote(payload = {}, req = null) {
     ip: tracking.ip,
     browser: tracking.browser,
     deviceType: tracking.deviceType,
-    googleEmail: safeString(authUser.email, 160),
-    googleSub: safeString(authUser.sub, 160),
+    googleEmail: "",
+    googleSub: "",
     visitorId: tracking.visitorId || tracking.cookieVisitorId,
     sessionId: tracking.sessionId || tracking.cookieSessionId,
     weekKey: currentWeekKey,

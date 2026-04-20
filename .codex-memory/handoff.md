@@ -1,9 +1,9 @@
 # Handoff
 
-Updated: 2026-04-20T11:08:46.915Z
+Updated: 2026-04-20T12:33:17.523Z
 
-PubPaid recebeu novo bitmap exterior v3, reforco de rua em frente ao bar com mais carros, motos, NPCs e props, e modo demo convertido em treino sem desconto de saldo.
+Fluxo de votacao da home foi reforcado em script.js e styles.css: clique em votar abre modal, Google continua obrigatorio, entrou confirmacao 'tem certeza?', persistencia local do ultimo voto e popup final de agradecimento com CTA para acompanhar parciais semanais e graficos do periodo.
 
 ## Next
 
-- Fazer validacao visual da cena externa e decidir se ja segue para commit e deploy.
+- Conferir visualmente a experiencia completa em navegador real e ajustar copy/scroll se necessario.
