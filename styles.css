@@ -6470,6 +6470,43 @@ input[type="range"] {
   color: #a53c3c;
 }
 
+.election-vote-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 100050;
+  display: grid;
+  gap: 0.22rem;
+  width: min(420px, calc(100vw - 28px));
+  padding: 0.95rem 1rem;
+  border-radius: 22px;
+  border: 1px solid rgba(146, 220, 255, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(138, 214, 255, 0.18), transparent 28%),
+    linear-gradient(180deg, rgba(8, 33, 68, 0.98), rgba(7, 24, 48, 0.98));
+  box-shadow: 0 24px 54px rgba(3, 10, 20, 0.34);
+  color: #eef8ff;
+  transform: translate(-50%, 18px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.election-vote-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.election-vote-toast strong {
+  font-size: 0.96rem;
+}
+
+.election-vote-toast span {
+  color: rgba(228, 241, 255, 0.88);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
 .election-vote-form input:focus,
 .election-vote-form textarea:focus {
   outline: 2px solid rgba(164, 73, 40, 0.24);
@@ -21903,65 +21940,123 @@ body.fx-lite .insiders-command-stage .robot-squad .robot-shadow {
 }
 
 @media (max-width: 760px) {
-  .founders-banner-strip {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+  .founders-shell {
+    overflow: hidden;
+    padding: 1.05rem;
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at top, rgba(255, 220, 149, 0.22), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(98, 159, 232, 0.18), transparent 34%),
+      linear-gradient(180deg, rgba(255, 250, 241, 0.98), rgba(240, 233, 220, 0.96));
+  }
+
+  .founders-shell .section-header {
+    gap: 0.5rem;
   }
 
   .founders-summary {
-    align-items: flex-start;
-    gap: 0.45rem;
-    margin-bottom: 1rem;
+    display: grid;
+    gap: 0.35rem;
+    margin: 0.75rem 0 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(46, 89, 150, 0.1);
+    background:
+      radial-gradient(circle at top right, rgba(255, 225, 170, 0.24), transparent 32%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(249, 242, 230, 0.92));
+    box-shadow: 0 16px 34px rgba(16, 35, 60, 0.08);
   }
 
   .founders-summary strong {
-    font-size: 1.02rem;
-    line-height: 1.2;
+    font-size: 1.08rem;
+    line-height: 1.18;
+  }
+
+  .founders-banner-strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(78%, 1fr);
+    gap: 0.8rem;
+    margin: 0 0 1rem;
+    padding-bottom: 0.2rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .founders-banner-strip::-webkit-scrollbar {
+    display: none;
   }
 
   .founder-banner-card {
-    min-height: auto;
-    padding: 0.9rem;
-    border-radius: 18px;
+    scroll-snap-align: start;
+    min-height: 220px;
+    padding: 1rem 0.95rem;
+    border-radius: 24px;
+    box-shadow: 0 18px 42px rgba(16, 35, 60, 0.1);
+  }
+
+  .founder-banner-card span {
+    margin-bottom: 0.55rem;
+    font-size: 0.64rem;
+  }
+
+  .founder-banner-card img {
+    width: min(220px, 100%);
+    max-height: 92px;
   }
 
   .founder-banner-copy {
-    min-height: auto;
+    align-content: end;
+    min-height: 124px;
   }
 
   .founder-banner-copy strong {
-    font-size: 1.1rem;
-    line-height: 1.08;
+    font-size: 1.24rem;
+    line-height: 1.04;
   }
 
   .founder-banner-copy p {
     font-size: 0.84rem;
-    line-height: 1.35;
-  }
-
-  .founder-banner-card img {
-    width: min(240px, 100%);
-    max-height: 84px;
+    line-height: 1.42;
   }
 
   .founders-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.85rem;
   }
 
   .founder-card {
-    padding: 0.92rem 0.95rem;
-    border-radius: 16px;
+    position: relative;
+    padding: 1rem 1rem 0.98rem 1.2rem;
+    border-radius: 22px;
+    border: 1px solid rgba(53, 96, 154, 0.12);
+    background:
+      radial-gradient(circle at top right, rgba(99, 162, 231, 0.12), transparent 26%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 239, 227, 0.94));
+  }
+
+  .founder-card::before {
+    content: "";
+    position: absolute;
+    left: 0.78rem;
+    top: 1rem;
+    bottom: 1rem;
+    width: 4px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #f0c66f, #5f9ae8);
   }
 
   .founder-card strong {
-    font-size: 0.94rem;
-    line-height: 1.25;
+    font-size: 1rem;
+    line-height: 1.24;
   }
 
   .founder-card p,
   .founder-card span {
     font-size: 0.84rem;
+    line-height: 1.45;
   }
 }
 

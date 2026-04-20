@@ -58,6 +58,7 @@ const footerChatSend = document.querySelector("#footer-chat-send");
 const heroTourismShell = document.querySelector(".hero-newsroom-shell");
 const heroInsidersShell = document.querySelector(".hero-insiders-shell");
 const heroTourismSlides = [...document.querySelectorAll("[data-hero-tourism-slide]")];
+const heroTourismKicker = document.querySelector("[data-hero-tourism-kicker]");
 const heroTourismTitle = document.querySelector("[data-hero-tourism-title]");
 const heroTourismNote = document.querySelector("[data-hero-tourism-note]");
 const heroDailyNewsCard = document.querySelector("[data-hero-daily-link]");
@@ -3147,12 +3148,21 @@ const setHeroTourismMeta = (photo) => {
     return;
   }
 
+  if (heroTourismKicker) {
+    heroTourismKicker.textContent = photo.articleCategory || photo.title || "Area em destaque";
+  }
+
   if (heroTourismTitle) {
-    heroTourismTitle.textContent = photo.title || photo.articleCategory || "Area em destaque";
+    heroTourismTitle.textContent =
+      photo.articleTitle || photo.title || "Notícia principal em destaque";
   }
 
   if (heroTourismNote) {
-    heroTourismNote.textContent = photo.note || photo.sourceName || "";
+    heroTourismNote.textContent =
+      truncateCopy(
+        photo.articleSummary || photo.note || photo.sourceName || "Resumo da notícia principal da área selecionada.",
+        180
+      );
   }
 
   if (heroDailyNewsCard) {
@@ -3353,10 +3363,6 @@ const initializeHeroTourismHero = () => {
 
   if (!shouldUseSolidHeroShell() && dailyPool.length > 1) {
     heroTourismRotation.timerId = window.setInterval(() => {
-      if (heroDesktopBackdropMedia?.matches) {
-        return;
-      }
-
       const currentPool = getHeroTourismDailyPool();
       const nextPhotoIndex = (heroTourismRotation.photoIndex + 1) % currentPool.length;
       renderHeroTourismBackground(nextPhotoIndex);
@@ -5058,6 +5064,7 @@ document.addEventListener("click", (event) => {
 if (window.ELECTIONS_DATA?.offices?.length) {
   const electionGrid = document.querySelector(".elections-grid");
   const electionFilters = [...document.querySelectorAll(".election-filter[data-office]")];
+  const staticElectionVoteButtons = [...document.querySelectorAll("[data-static-vote][data-static-candidate]")];
   const electionResultsTitle = document.querySelector("#election-results-title");
   const electionResultsMeta = document.querySelector("#election-results-meta");
   const electionResultsBars = document.querySelector("#election-results-bars");
@@ -5105,6 +5112,30 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   let electionSpoBridgePayload = null;
   let electionVoteModal = document.querySelector("#electionVoteModal");
   let electionVoteModalState = null;
+  let electionVoteToastTimer = 0;
+
+  const showElectionVoteToast = (message = "Acompanhe semanalmente as parciais.") => {
+    let toast = document.querySelector("#catalogoElectionVoteToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "catalogoElectionVoteToast";
+      toast.className = "election-vote-toast";
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+      document.body.appendChild(toast);
+    }
+
+    toast.innerHTML = `<strong>Obrigado por votar.</strong><span>${escapeHtml(message)}</span>`;
+    toast.classList.add("is-visible");
+
+    if (electionVoteToastTimer) {
+      window.clearTimeout(electionVoteToastTimer);
+    }
+
+    electionVoteToastTimer = window.setTimeout(() => {
+      toast.classList.remove("is-visible");
+    }, 5000);
+  };
 
   electionFilters.forEach((button) => {
     const officeId = String(button.dataset.office || "").trim();
@@ -5574,6 +5605,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
           // segue sem bloquear o voto
         }
         closeModal({ reset: true });
+        showElectionVoteToast("Acompanhe semanalmente e volte para ver a pontuacao.");
       } catch (error) {
         setFeedbackState(
           feedback,
@@ -5952,6 +5984,17 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     const officeId = button.dataset.office;
     const candidateId = button.dataset.candidate;
     openElectionVoteModal(officeId, candidateId);
+  });
+
+  staticElectionVoteButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const officeId = String(button.dataset.staticVote || "").trim();
+      const candidateId = String(button.dataset.staticCandidate || "").trim();
+      if (!officeId || !candidateId) {
+        return;
+      }
+      openElectionVoteModal(officeId, candidateId);
+    });
   });
 
   window.addEventListener("storage", (event) => {
