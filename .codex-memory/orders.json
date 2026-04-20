@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T11:15:37.536Z",
+  "lastUpdatedAt": "2026-04-20T11:18:56.806Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2030,6 +2030,21 @@
       "source": "chat",
       "rawRequest": "a ordem e menu, depois hero com noticias principais e destakes do dia, depois o resto termine e deploy",
       "summary": "Reordenar a home para menu > hero com noticias principais e destaques do dia > restante e preparar deploy",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-polir-visual-da-home-mobile-apos-deploy-mantendo-ordem-menu-hero-resto",
+      "createdAt": "2026-04-20T11:18:56.806Z",
+      "updatedAt": "2026-04-20T11:18:56.806Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "faça",
+      "summary": "Polir visual da home mobile apos deploy, mantendo ordem menu > hero > resto",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],
