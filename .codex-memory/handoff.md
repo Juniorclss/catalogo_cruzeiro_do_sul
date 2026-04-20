@@ -1,10 +1,10 @@
 # Handoff
 
-Updated: 2026-04-20T02:28:21.688Z
+Updated: 2026-04-20T05:23:02.058Z
 
-Retomada a ordem de recuperar PubPaid/escritorios no topo da home e alinhar o azul da hero com a referencia escura. agentes-newsroom-hero.css ganhou gradientes mais profundos na hero desktop, no painel lateral e na faixa inferior; mobile-home-final.css passou a forcar a exibicao de Jogo PubPaid + escritorios principais no nav mobile e a escurecer a faixa/painel da hero.
+Corrigida regressao da home lavada de branco: os blocos azuis de body.editorial-home em solid-surfaces.css tinham sido removidos e foram restaurados; index.html atualizou o cache-bust para 20260420solidbluehomefix. Validacao local GET / retornou 200 com hasSolidFix=True e hasEditorialHome=True.
 
 ## Next
 
-- Checar no navegador real do usuario se a hero deixou de ficar lavada e se os botoes de escritorio reapareceram no topo; se faltar algum atalho
-- ajustar a prioridade do grid mobile.
+- Se o usuario ainda vir branco
+- investigar cache do navegador/CDN/deploy e confirmar se o arquivo publicado contem body.editorial-home.

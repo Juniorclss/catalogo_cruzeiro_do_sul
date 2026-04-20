@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T02:39:15.133Z",
+  "lastUpdatedAt": "2026-04-20T05:22:52.125Z",
   "orders": [
     {
       "id": "2026-04-19-google-auth-pix-qr-sem-chave-e-pubpaid-sem-creditos-gratis",
@@ -1573,6 +1573,21 @@
       "source": "chat",
       "rawRequest": "quero os sprois maioores os baloes de fala mais visiveis e que um nao cubra o outro chame os agentes de imagem e edicção e todos os especializados pra ageita isso depois faça deploy; troque o video do cafe cruzeiro por foto estatica; crie a div abaixo da hero com escritorios e entrar no jogo",
       "summary": "Aumentar sprites e legibilidade da marcha Insiders, trocar video do Cafe por foto estatica e publicar faixa abaixo da hero com escritorios e entrar no jogo",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-restaurar-home-azul-em-solid-surfaces-css-apos-regressao-branca",
+      "createdAt": "2026-04-20T05:22:52.125Z",
+      "updatedAt": "2026-04-20T05:22:52.125Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Usuario informou que a home voltou a ficar lavada de branco depois de pedir correcao; restaurar o estado azul de solid-surfaces.css que estava perfeito no modo anonimo.",
+      "summary": "Restaurar home azul em solid-surfaces.css apos regressao branca",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

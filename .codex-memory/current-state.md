@@ -1,16 +1,16 @@
 # Current State
 
-Updated: 2026-04-20T02:28:21.640Z
+Updated: 2026-04-20T05:22:56.723Z
 
 ## Active Goal
 
-- Hero e topo da home recuperados
+- Home azul restaurada
 
 ## Summary
 
-A hero desktop foi puxada para um azul escuro mais consistente com a referencia, a faixa inferior azul da abertura foi escurecida e o mobile voltou a priorizar Jogo PubPaid + links dos escritorios no topo sem sumir por nth-child.
+solid-surfaces.css recebeu de volta os overrides body.editorial-home da versao azul validada no anonimo; index.html agora usa cache-bust 20260420solidbluehomefix.
 
 ## Next
 
-- Validar no navegador real se o azul da hero/faixa bate com a referencia escura e se os botoes de Escritorio
-- Arte e Ninjas reapareceram no aparelho do usuario.
+- Usuario deve fazer refresh forte no navegador/deploy; se ainda aparecer branco
+- checar cache/CDN ou screenshots reais.
