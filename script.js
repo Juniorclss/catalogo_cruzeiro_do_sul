@@ -70,6 +70,8 @@ const heroOfficeStatusNodes = [...document.querySelectorAll("[data-hero-office-s
 const heroOfficeBubble = document.querySelector("[data-hero-office-bubble]");
 const heroTopicTrack = document.querySelector("[data-hero-topic-track]");
 const heroTopicDots = document.querySelector("[data-hero-topic-dots]");
+let heroDesktopHighlightItems = [];
+const cadernoCards = [...document.querySelectorAll(".cadernos-grid .caderno-card")];
 const archiveBrowserLaunchers = [...document.querySelectorAll("[data-open-archive-browser]")];
 const insidersTypedNodes = [...document.querySelectorAll("[data-insiders-typed]")];
 const insidersBootScene = document.querySelector("[data-insiders-boot-scene]");
@@ -2866,14 +2868,8 @@ const hashHeroTourismSeed = (value = "") => {
   return hash >>> 0;
 };
 
-const buildDailyOrderedHeroItems = (items = [], seedKey = "") =>
-  [...(Array.isArray(items) ? items : [])]
-    .map((item, index) => ({
-      item,
-      rank: hashHeroTourismSeed(`${seedKey}:${index}:${item?.file || item?.proxyUrl || item?.title || ""}`)
-    }))
-    .sort((left, right) => left.rank - right.rank)
-    .map((entry) => entry.item);
+const buildDailyOrderedHeroItems = (items = []) =>
+  [...(Array.isArray(items) ? items : [])];
 
 const getHeroDailyArticleFocus = (article = {}) => {
   const manualFocus = resolveArticleImageFocus(article, "").trim();
@@ -3193,6 +3189,7 @@ const renderHeroDesktopHighlights = (items = []) => {
   }
 
   const safeItems = Array.isArray(items) ? items.filter(Boolean).slice(0, heroTopicCards.length) : [];
+  heroDesktopHighlightItems = safeItems;
 
   heroTopicCards.forEach((card, index) => {
     const item = safeItems[index];
@@ -3256,6 +3253,11 @@ const syncHeroDesktopCarousel = (index = 0) => {
   const safeIndex = ((Number(index) % visibleCards.length) + visibleCards.length) % visibleCards.length;
   heroTourismRotation.activeTopicIndex = safeIndex;
   heroTopicTrack.style.transform = `translate3d(-${safeIndex * 100}%, 0, 0)`;
+
+  const activeItem = heroDesktopHighlightItems[safeIndex];
+  if (activeItem) {
+    setHeroTourismMeta(activeItem);
+  }
 
   visibleCards.forEach((card, cardIndex) => {
     card.classList.toggle("is-current", cardIndex === safeIndex);
@@ -3335,7 +3337,8 @@ const paintHeroTourismBackdrop = (slideNode, photo) => {
     }
 
     slideNode.style.backgroundImage = `
-      linear-gradient(180deg, rgba(6, 16, 29, 0.08), rgba(6, 16, 29, 0.24)),
+      linear-gradient(180deg, rgba(7, 18, 36, 0.14), rgba(7, 18, 36, 0.34)),
+      linear-gradient(90deg, rgba(10, 23, 45, 0.4), rgba(10, 23, 45, 0.08) 40%, rgba(10, 23, 45, 0.48)),
       url("${resolvedUrl}")
     `;
     slideNode.style.backgroundPosition = photo.focusPosition || "center 44%";
@@ -3452,6 +3455,10 @@ const initializeHeroTourismHero = () => {
   if (!shouldUseSolidHeroShell() && dailyPool.length > 1) {
     heroTourismRotation.timerId = window.setInterval(() => {
       const currentPool = getHeroTourismDailyPool();
+      if (!currentPool.length) {
+        return;
+      }
+
       const nextPhotoIndex = (heroTourismRotation.photoIndex + 1) % currentPool.length;
       renderHeroTourismBackground(nextPhotoIndex);
     }, heroTourismRotationIntervalMs);
@@ -4557,6 +4564,53 @@ const dedupeNewsItems = (items = []) => {
   });
 };
 
+const cadernoCategoryPriority = {
+  educacao: ["educacao"],
+  "prefeitura e acoes": ["prefeitura", "politica", "cotidiano", "saude"],
+  social: ["social", "saude", "cotidiano"],
+  "utilidade publica": ["servicos", "cotidiano", "saude", "prefeitura"]
+};
+
+const pickCadernoArticlesByPriority = (items = [], priorities = [], count = 2) => {
+  const normalizedItems = dedupeNewsItems(items).map((item) => normalizeRuntimeArticle(item));
+  const selected = [];
+  const seen = new Set();
+
+  priorities.forEach((priority) => {
+    normalizedItems.forEach((item) => {
+      if (selected.length >= count) {
+        return;
+      }
+
+      const key = getRadarArticleKey(item);
+      if (seen.has(key) || item.categoryKey !== priority) {
+        return;
+      }
+
+      seen.add(key);
+      selected.push(item);
+    });
+  });
+
+  if (selected.length < count) {
+    normalizedItems.forEach((item) => {
+      if (selected.length >= count) {
+        return;
+      }
+
+      const key = getRadarArticleKey(item);
+      if (seen.has(key)) {
+        return;
+      }
+
+      seen.add(key);
+      selected.push(item);
+    });
+  }
+
+  return selected.slice(0, count);
+};
+
 const writeOfflineStorage = (key, value) => {
   const serialized = JSON.stringify(value);
   const storages = [];
@@ -4619,6 +4673,31 @@ const readOfflineStorage = (key) => {
   }
 };
 
+const topicFeedClientCache = new Map();
+
+const fetchTopicFeedCached = async (topic, limit = 4) => {
+  const normalizedTopic = normalizeText(topic);
+  const safeLimit = Math.max(1, Number(limit) || 4);
+  const cacheKey = `${normalizedTopic}:${safeLimit}`;
+
+  if (!topicFeedClientCache.has(cacheKey)) {
+    topicFeedClientCache.set(
+      cacheKey,
+      requestApiJson(`/api/topic-feed?topic=${encodeURIComponent(normalizedTopic)}&limit=${safeLimit}`, {
+        method: "GET"
+      })
+        .then((payload) =>
+          Array.isArray(payload?.items)
+            ? payload.items.map((item) => normalizeRuntimeArticle(item))
+            : []
+        )
+        .catch(() => [])
+    );
+  }
+
+  return topicFeedClientCache.get(cacheKey) || [];
+};
+
 const persistOfflineNewsCache = (items = []) => {
   const normalizedItems = dedupeNewsItems(items).slice(0, 180);
 
@@ -4643,6 +4722,93 @@ const persistOfflineArticle = (article) => {
     ? dedupeNewsItems([normalizedArticle, ...cachedItems])
     : [normalizedArticle];
   writeOfflineStorage(offlineNewsCacheKey, mergedItems.slice(0, 180));
+};
+
+const applyCadernoStoryArticle = (storyNode, article, { preserveHref = false } = {}) => {
+  if (!storyNode || !article) {
+    return;
+  }
+
+  const titleNode = storyNode.querySelector("strong");
+  const metaNode = storyNode.querySelector("small");
+  const thumbNode = storyNode.querySelector(".mini-thumb");
+
+  if (!preserveHref && article.slug) {
+    const href = `./noticia.html?slug=${encodeURIComponent(article.slug)}`;
+    storyNode.setAttribute("href", href);
+    applyArticleLinkAttrs(storyNode, href);
+  }
+
+  if (titleNode) {
+    titleNode.textContent = truncateCopy(article.title || "Notícia em destaque", 96);
+  }
+
+  if (metaNode) {
+    metaNode.textContent = formatMosaicSourceLabel(article);
+  }
+
+  if (thumbNode) {
+    thumbNode.dataset.topic = getThumbTopic(thumbNode, article);
+    applyThumbImage(thumbNode, article);
+  }
+};
+
+const hydrateCadernoCards = async (items = []) => {
+  if (!cadernoCards.length) {
+    return;
+  }
+
+  const normalizedItems = dedupeNewsItems(items);
+  const cardTasks = cadernoCards.map(async (card) => {
+    const kicker = normalizeText(card.querySelector(".card-kicker")?.textContent || "");
+    const stories = [...card.querySelectorAll(".mini-story")];
+
+    if (!stories.length) {
+      return;
+    }
+
+    if (cadernoCategoryPriority[kicker]) {
+      const articles = pickCadernoArticlesByPriority(
+        normalizedItems,
+        cadernoCategoryPriority[kicker],
+        stories.length
+      );
+
+      stories.forEach((storyNode, index) => {
+        applyCadernoStoryArticle(storyNode, articles[index]);
+      });
+      return;
+    }
+
+    if (kicker === "games" || kicker === "animes") {
+      const topic = kicker === "games" ? "games" : "kids";
+      const topicItems = await fetchTopicFeedCached(topic, 6);
+      const filteredItems =
+        kicker === "animes"
+          ? topicItems.filter((item) =>
+              /anime|animacao|animation|cartoon/i.test(
+                [item.category, item.sourceName, item.title].join(" ")
+              )
+            )
+          : topicItems;
+
+      stories.forEach((storyNode, index) => {
+        applyCadernoStoryArticle(storyNode, filteredItems[index] || topicItems[index], {
+          preserveHref: true
+        });
+      });
+      return;
+    }
+
+    stories.forEach((storyNode) => {
+      const thumbNode = storyNode.querySelector(".mini-thumb");
+      if (thumbNode) {
+        thumbNode.classList.add("has-photo");
+      }
+    });
+  });
+
+  await Promise.all(cardTasks);
 };
 
 const syncNewsDataset = (runtimeItems = []) => {
@@ -4938,6 +5104,7 @@ const hydrateStaticMediaSurfaces = () => {
   if (window.NEWS_MAP) {
     hydrateStaticThumbs(window.NEWS_MAP);
     hydrateSocialCards(window.NEWS_DATA || []);
+    hydrateCadernoCards(window.NEWS_DATA || []);
   }
 
 };
@@ -5158,6 +5325,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   const electionResultsTitle = document.querySelector("#election-results-title");
   const electionResultsMeta = document.querySelector("#election-results-meta");
   const electionResultsBars = document.querySelector("#election-results-bars");
+  const electionResultsOfficeButtons = document.querySelector("#election-results-office-buttons");
   const electionHeatTitle = document.querySelector("#election-heat-title");
   const electionHeatMeta = document.querySelector("#election-heat-meta");
   const electionHeatGrid = document.querySelector("#election-heat-grid");
@@ -5204,6 +5372,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   let electionVoteModal = document.querySelector("#electionVoteModal");
   let electionVoteModalState = null;
   let electionVoteToastTimer = 0;
+  let activeElectionResultsOfficeId = "";
 
   const showElectionVoteToast = (message = "Acompanhe semanalmente as parciais.") => {
     let toast = document.querySelector("#catalogoElectionVoteToast");
@@ -5346,6 +5515,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
         button.classList.contains("is-active") &&
         availableElectionOfficeIds.has(String(button.dataset.office || "").trim())
     )?.dataset.office || electionOffices[0]?.id;
+  activeElectionResultsOfficeId = activeElectionOfficeId || electionOffices[0]?.id || "";
 
   if (!electionOffices.length || !activeElectionOfficeId) {
     if (electionGrid) {
@@ -5406,6 +5576,9 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   const getElectionOffice = (officeId = activeElectionOfficeId) =>
     electionOffices.find((office) => office.id === officeId) || electionOffices[0];
 
+  const getElectionResultsOffice = (officeId = activeElectionResultsOfficeId || activeElectionOfficeId) =>
+    getElectionOffice(officeId);
+
   const getElectionVotes = () => remoteElectionVotes || safeParseJson(electionVotesKey, {});
 
   const getElectionUserVotes = () =>
@@ -5414,6 +5587,120 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   const getElectionOpinionSummary = () =>
     remoteElectionOpinionSummary || safeParseJson(electionOpinionSummaryKey, {});
   const getElectionWeeklyTrend = () => remoteElectionWeeklyTrend || [];
+
+  const cloneElectionData = (value, fallback) => {
+    try {
+      return JSON.parse(JSON.stringify(value ?? fallback));
+    } catch (_error) {
+      return fallback;
+    }
+  };
+
+  const getElectionClientWeekKey = () => {
+    const now = new Date();
+    const utc = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const weekday = utc.getUTCDay() || 7;
+    utc.setUTCDate(utc.getUTCDate() + 4 - weekday);
+    const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((utc - yearStart) / 86400000) + 1) / 7);
+    return `${utc.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+  };
+
+  const analyzeLocalElectionObservation = (value = "") => {
+    const text = normalizeText(value);
+    if (!text) {
+      return { label: "equilibrado", bucket: "neutralCount" };
+    }
+
+    const positivePattern = /\b(apoio|bom|boa|forte|melhor|aprovo|preparado|competente|confio|reeleicao|continuidade|favoravel)\b/;
+    const negativePattern = /\b(ruim|fraco|fraca|desgaste|rejeicao|rejeição|critica|critico|pessimo|péssimo|contra|troca|mudanca|mudança|nao voto)\b/;
+
+    if (positivePattern.test(text) && !negativePattern.test(text)) {
+      return { label: "favor e aprovacao", bucket: "positiveCount" };
+    }
+
+    if (negativePattern.test(text) && !positivePattern.test(text)) {
+      return { label: "pressao e critica", bucket: "negativeCount" };
+    }
+
+    return { label: "equilibrado", bucket: "neutralCount" };
+  };
+
+  const applyLocalElectionVoteFallback = (officeId, candidateId, voterMeta = {}) => {
+    const nextVotes = cloneElectionData(getElectionVotes(), {});
+    const nextUserVotes = cloneElectionData(getElectionUserVotes(), {});
+    const nextOpinionSummary = cloneElectionData(getElectionOpinionSummary(), {});
+    const nextWeeklyTrend = cloneElectionData(getElectionWeeklyTrend(), []);
+    const office = getElectionOffice(officeId);
+    const candidate = office?.candidates?.find((item) => item.id === candidateId);
+    const city = String(voterMeta.city || "").trim();
+    const observation = String(voterMeta.observation || "").trim();
+    const weekKey = getElectionClientWeekKey();
+    const opinion = analyzeLocalElectionObservation(observation);
+
+    nextVotes[officeId] = nextVotes[officeId] || {};
+    nextVotes[officeId][candidateId] = Number(nextVotes[officeId][candidateId] || 0) + 1;
+    nextUserVotes[officeId] = candidateId;
+
+    const officeBucket = nextOpinionSummary[officeId] || { totalComments: 0, candidates: [] };
+    officeBucket.candidates = Array.isArray(officeBucket.candidates) ? officeBucket.candidates : [];
+    let candidateBucket = officeBucket.candidates.find((item) => item.candidateId === candidateId);
+
+    if (!candidateBucket) {
+      candidateBucket = {
+        candidateId,
+        candidateName: candidate?.name || "Nome em leitura",
+        candidateParty: candidate?.party || "",
+        totalVotes: 0,
+        commentCount: 0,
+        positiveCount: 0,
+        neutralCount: 0,
+        negativeCount: 0,
+        topCity: city || "",
+        moodLabel: "amostra inicial"
+      };
+      officeBucket.candidates.push(candidateBucket);
+    }
+
+    candidateBucket.totalVotes = Number(candidateBucket.totalVotes || 0) + 1;
+    if (observation) {
+      officeBucket.totalComments = Number(officeBucket.totalComments || 0) + 1;
+      candidateBucket.commentCount = Number(candidateBucket.commentCount || 0) + 1;
+      candidateBucket[opinion.bucket] = Number(candidateBucket[opinion.bucket] || 0) + 1;
+      candidateBucket.moodLabel = opinion.label;
+    }
+    if (city) {
+      candidateBucket.topCity = city;
+    }
+    nextOpinionSummary[officeId] = officeBucket;
+
+    const existingWeek = nextWeeklyTrend.find((item) => item.weekKey === weekKey);
+    if (existingWeek) {
+      existingWeek.totalVotes = Number(existingWeek.totalVotes || existingWeek.total || 0) + 1;
+      existingWeek.total = existingWeek.totalVotes;
+    } else {
+      nextWeeklyTrend.push({ weekKey, totalVotes: 1, total: 1 });
+    }
+
+    remoteElectionVotes = nextVotes;
+    remoteElectionUserVotes = nextUserVotes;
+    remoteElectionOpinionSummary = nextOpinionSummary;
+    remoteElectionWeeklyTrend = nextWeeklyTrend;
+    writeElectionStorage(electionVotesKey, nextVotes);
+    writeElectionStorage(electionUserVotesKey, nextUserVotes);
+    writeElectionStorage(electionOpinionSummaryKey, nextOpinionSummary);
+    renderElectionOffice(officeId);
+
+    return {
+      ok: true,
+      alreadyVoted: false,
+      localFallback: true,
+      votes: nextVotes,
+      userVotes: nextUserVotes,
+      opinionSummary: nextOpinionSummary,
+      weeklyTrend: nextWeeklyTrend
+    };
+  };
 
   const getOfficeVotes = (officeId) => {
     const votes = getElectionVotes();
@@ -5706,6 +5993,8 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     const closeModal = ({ reset = false } = {}) => {
       modal.hidden = true;
       document.body.classList.remove("election-vote-open");
+      modal.querySelector("[data-election-vote-confirm-panel]")?.setAttribute("hidden", "");
+      delete modal.dataset.confirmReady;
       if (reset) {
         modal.querySelector(".election-vote-form")?.reset();
         setFeedbackState(
@@ -5724,18 +6013,41 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     }
 
     modal.dataset.voteModalBound = "1";
+    const confirmPanel = ensureElectionVoteConfirmPanel(modal);
+
+    const setConfirmPanelVisible = (visible, payload = {}) => {
+      if (!confirmPanel) {
+        return;
+      }
+
+      confirmPanel.hidden = !visible;
+      if (!visible) {
+        delete modal.dataset.confirmReady;
+        return;
+      }
+
+      modal.dataset.confirmReady = "1";
+      confirmPanel.querySelector("[data-election-vote-confirm-title]").textContent =
+        `Confirmar voto em ${payload.candidateName || "candidato"}?`;
+      confirmPanel.querySelector("[data-election-vote-confirm-text]").textContent =
+        `Você vai computar sua preferência para ${payload.officeLabel || "este cargo"} em ${payload.candidateName || "um nome"}${payload.city ? `, com cidade ${payload.city}` : ""}.`;
+    };
 
     modal.addEventListener("click", (event) => {
       if (
         event.target === modal ||
         event.target?.matches?.(".election-vote-modal-backdrop, [data-election-vote-close], [data-close-election-vote]")
       ) {
+        setConfirmPanelVisible(false);
         closeModal();
       }
     });
 
     modal.querySelectorAll("[data-close-election-vote], [data-election-vote-close]").forEach((button) => {
-      button.addEventListener("click", () => closeModal());
+      button.addEventListener("click", () => {
+        setConfirmPanelVisible(false);
+        closeModal();
+      });
     });
 
     modal.querySelector(".election-vote-form")?.addEventListener("submit", async (event) => {
@@ -5764,25 +6076,58 @@ if (window.ELECTIONS_DATA?.offices?.length) {
 
       const office = getElectionOffice(electionVoteModalState.officeId);
       const candidate = office?.candidates?.find((item) => item.id === electionVoteModalState.candidateId);
-      const voteConfirmed = window.confirm(
-        `Tem certeza que deseja confirmar seu voto em ${candidate?.name || "este candidato"} para ${office?.label || "este cargo"}${city ? `, com cidade ${city}` : ""}?`
-      );
-
-      if (!voteConfirmed) {
+      const confirmationText = `Confirmar voto em ${candidate?.name || "este candidato"} para ${office?.label || "este cargo"}${city ? `, com cidade ${city}` : ""}?`;
+      if (typeof window.confirm === "function" && !window.confirm(confirmationText)) {
         setFeedbackState(
           feedback,
-          "Voto cancelado antes do envio. Se quiser, revise os dados e confirme novamente.",
+          "Voto revisado. Você pode ajustar os dados antes de confirmar.",
           ""
         );
         return;
       }
 
+      confirmPanel?.querySelector("[data-election-vote-confirm-submit]")?.click();
+    });
+
+    confirmPanel?.querySelector("[data-election-vote-confirm-cancel]")?.addEventListener("click", () => {
+      setConfirmPanelVisible(false);
+      setFeedbackState(
+        modal.querySelector("[data-election-vote-feedback], #electionVoteFeedback"),
+        "Você pode revisar a cidade e os detalhes antes de confirmar.",
+        ""
+      );
+    });
+
+    confirmPanel?.querySelector("[data-election-vote-confirm-submit]")?.addEventListener("click", async () => {
+      if (!electionVoteModalState) {
+        return;
+      }
+
+      const form = modal.querySelector(".election-vote-form");
+      const cityInput = form?.elements?.city || form?.querySelector?.("[name='city']");
+      const nameInput = form?.elements?.voterName || form?.elements?.name || form?.querySelector?.("[name='voterName'], [name='name']");
+      const partyInput = form?.elements?.voterParty || form?.elements?.party || form?.querySelector?.("[name='voterParty'], [name='party']");
+      const commentInput = form?.elements?.comment || form?.elements?.observation || form?.querySelector?.("[name='comment'], [name='observation']");
+      const city = String(cityInput?.value || "").trim();
+      const name = String(nameInput?.value || "").trim();
+      const party = String(partyInput?.value || "").trim();
+      const observation = String(commentInput?.value || "").trim();
+      const feedback = modal.querySelector("[data-election-vote-feedback], #electionVoteFeedback");
+      const submitButton = modal.querySelector("[data-election-vote-submit], #electionVoteSubmitButton");
+      const confirmSubmitButton = confirmPanel.querySelector("[data-election-vote-confirm-submit]");
+      const office = getElectionOffice(electionVoteModalState.officeId);
+      const candidate = office?.candidates?.find((item) => item.id === electionVoteModalState.candidateId);
+
       submitButton.disabled = true;
       submitButton.textContent = "Registrando...";
+      if (confirmSubmitButton) {
+        confirmSubmitButton.disabled = true;
+        confirmSubmitButton.textContent = "Computando...";
+      }
       setFeedbackState(feedback, "", "");
 
       try {
-        await submitElectionVote(electionVoteModalState.officeId, electionVoteModalState.candidateId, {
+        const submitResult = await submitElectionVote(electionVoteModalState.officeId, electionVoteModalState.candidateId, {
           city,
           name,
           party,
@@ -5802,13 +6147,19 @@ if (window.ELECTIONS_DATA?.offices?.length) {
           candidateName: candidate?.name || "",
           city
         });
+        activeElectionResultsOfficeId = electionVoteModalState.officeId;
+        renderElectionResultsOfficeButtons();
         closeModal({ reset: true });
         showElectionVoteSuccessModal({
           officeLabel: office?.label || "",
           candidateName: candidate?.name || "",
           city
         });
-        showElectionVoteToast("Obrigado pela participacao. Acompanhe as parciais semanais e os graficos.");
+        showElectionVoteToast(
+          submitResult?.localFallback
+            ? "Backend oscilando: voto salvo neste dispositivo e placar atualizado localmente."
+            : "Obrigado pela participacao. Acompanhe as parciais semanais e os graficos."
+        );
       } catch (error) {
         setFeedbackState(
           feedback,
@@ -5818,6 +6169,11 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Confirmar voto";
+        if (confirmSubmitButton) {
+          confirmSubmitButton.disabled = false;
+          confirmSubmitButton.textContent = "Sim, confirmar voto";
+        }
+        setConfirmPanelVisible(false);
       }
     });
 
@@ -5866,6 +6222,8 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     }
 
     setFeedbackState(modal.querySelector("[data-election-vote-feedback], #electionVoteFeedback"), "", "");
+    modal.querySelector("[data-election-vote-confirm-panel]")?.setAttribute("hidden", "");
+    delete modal.dataset.confirmReady;
     modal.hidden = false;
     document.body.classList.add("election-vote-open");
     const authCard = modal.querySelector("[data-google-auth-card]");
@@ -5875,6 +6233,59 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       cityInput?.focus();
       cityInput?.select?.();
     }, 20);
+  };
+
+  const ensureElectionVoteConfirmPanel = (modal) => {
+    if (!modal) {
+      return null;
+    }
+
+    let panel = modal.querySelector("[data-election-vote-confirm-panel]");
+    if (panel) {
+      return panel;
+    }
+
+    panel = document.createElement("section");
+    panel.className = "election-vote-confirm-panel";
+    panel.setAttribute("data-election-vote-confirm-panel", "");
+    panel.hidden = true;
+    panel.innerHTML = `
+      <div class="election-vote-confirm-copy">
+        <span class="panel-label">Confirmar voto</span>
+        <strong data-election-vote-confirm-title>Você confirma este voto?</strong>
+        <p data-election-vote-confirm-text>
+          Revise o cargo, o candidato e a cidade antes de confirmar.
+        </p>
+      </div>
+      <div class="election-vote-confirm-actions">
+        <button class="outline-button" type="button" data-election-vote-confirm-cancel>Revisar</button>
+        <button class="solid-button" type="button" data-election-vote-confirm-submit>Sim, confirmar voto</button>
+      </div>
+    `;
+
+    modal.querySelector(".election-vote-form")?.appendChild(panel);
+    return panel;
+  };
+
+  const renderElectionResultsOfficeButtons = () => {
+    if (!electionResultsOfficeButtons) {
+      return;
+    }
+
+    const selectedOfficeId = activeElectionResultsOfficeId || activeElectionOfficeId;
+    electionResultsOfficeButtons.innerHTML = electionOffices
+      .map(
+        (office) => `
+          <button
+            class="election-office-button${selectedOfficeId === office.id ? " active" : ""}"
+            type="button"
+            data-election-results-office="${escapeHtml(office.id)}"
+          >
+            Preferência para ${escapeHtml(office.label)}
+          </button>
+        `
+      )
+      .join("");
   };
 
   window.openElectionVoteModal = openElectionVoteModal;
@@ -5905,7 +6316,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
 
     if (userVotes[officeId]) {
       renderElectionOffice(officeId);
-      return;
+      return { ok: true, alreadyVoted: true, localOnly: true };
     }
 
     if (!city) {
@@ -5940,12 +6351,16 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       renderElectionOffice(officeId);
       return;
     } catch (error) {
-      throw new Error(
-        String(
+      applyLocalElectionVoteFallback(officeId, candidateId, voterMeta);
+      return {
+        ok: true,
+        alreadyVoted: false,
+        localFallback: true,
+        message: String(
           error?.message ||
-            "O backend de coleta nao respondeu agora. O voto nao foi salvo, entao vale tentar novamente."
+            "O backend oscilou, mas o voto foi salvo localmente neste dispositivo."
         )
-      );
+      };
     }
   };
 
@@ -6029,6 +6444,11 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       candidate.politicalPositionShort || candidate.politicalPosition || ""
     ).trim();
     const scoreTotal = Number(candidate.score?.total || 0);
+    const voteStatusText = isSelected
+      ? "Seu voto para este cargo ja foi confirmado nesta semana."
+      : hasVoteInOffice
+        ? "Este dispositivo ja usou o voto semanal neste cargo."
+        : "Cada dispositivo pode registrar um voto por cargo a cada semana.";
     const highlights = Array.isArray(candidate.achievements) && candidate.achievements.length
       ? candidate.achievements.slice(0, 3)
       : Array.isArray(candidate.proposals) && candidate.proposals.length
@@ -6073,6 +6493,9 @@ if (window.ELECTIONS_DATA?.offices?.length) {
         >
           ${isSelected ? "Voto registrado" : hasVoteInOffice ? "Voto já usado neste cargo" : "Votar neste dispositivo"}
         </button>
+        <p class="candidate-vote-status${isSelected ? " is-success" : hasVoteInOffice ? " is-locked" : ""}">
+          ${escapeHtml(voteStatusText)}
+        </p>
       </footer>
     `;
 
@@ -6092,6 +6515,8 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       0
     );
     const selectedCandidateId = getUserOfficeVote(office.id);
+    activeElectionResultsOfficeId = office.id;
+    renderElectionResultsOfficeButtons();
 
     if (electionResultsTitle) {
       electionResultsTitle.textContent = `Preferência para ${office.label}`;
@@ -6101,7 +6526,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       const currentWeek = getElectionWeeklyTrend()[getElectionWeeklyTrend().length - 1] || null;
       const currentWeekTotal = Number(currentWeek?.totalVotes || currentWeek?.total || 0);
       electionResultsMeta.textContent = selectedCandidateId
-        ? `Seu voto neste cargo ja foi registrado nesta semana. Total atual: ${totalVotes} voto${totalVotes === 1 ? "" : "s"}${currentWeekTotal ? ` • semana corrente: ${currentWeekTotal}` : ""}. Cidade foi coletada e as observacoes ajudam a ler o clima eleitoral.`
+        ? `Seu voto neste cargo ja foi registrado nesta semana. Total atual: ${totalVotes} voto${totalVotes === 1 ? "" : "s"}${currentWeekTotal ? ` • semana corrente: ${currentWeekTotal}` : ""}. Para trocar de nome, so na proxima rodada semanal deste dispositivo.`
         : `Escolha uma opcao para ${office.label}. A cidade e obrigatoria; nome, partido e observacao continuam opcionais. O bloqueio de voto vale por semana neste dispositivo.`;
     }
 
@@ -6157,7 +6582,7 @@ if (window.ELECTIONS_DATA?.offices?.length) {
       electionGrid.appendChild(buildCandidateCard(office, candidate));
     });
 
-    renderElectionResults(office);
+    renderElectionResults(getElectionResultsOffice(activeElectionResultsOfficeId || office.id));
     registerInteractivePanels(electionGrid);
   };
 
@@ -6176,6 +6601,20 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     const officeId = button.dataset.office;
     const candidateId = button.dataset.candidate;
     openElectionVoteModal(officeId, candidateId);
+  });
+
+  electionResultsOfficeButtons?.addEventListener("click", (event) => {
+    const button =
+      event.target instanceof Element
+        ? event.target.closest("[data-election-results-office]")
+        : null;
+    const officeId = String(button?.getAttribute("data-election-results-office") || "").trim();
+    if (!officeId) {
+      return;
+    }
+
+    activeElectionResultsOfficeId = officeId;
+    renderElectionResults(getElectionResultsOffice(officeId));
   });
 
   staticElectionVoteButtons.forEach((button) => {

@@ -2855,9 +2855,13 @@ function collectImageCandidatesFromMarkup(markup, baseUrl) {
     /data-large-file=["']([^"']+)["']/gi,
     /data-medium-file=["']([^"']+)["']/gi,
     /data-original=["']([^"']+)["']/gi,
+    /data-lazy-src=["']([^"']+)["']/gi,
+    /data-lazy-original=["']([^"']+)["']/gi,
+    /data-srcset=["']([^"']+)["']/gi,
     /data-src=["']([^"']+)["']/gi,
     /<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/gi,
     /<img[^>]+src=["']([^"']+)["']/gi,
+    /<video[^>]+poster=["']([^"']+)["']/gi,
     /<enclosure[^>]+url=["']([^"']+)["']/gi
   ];
 
@@ -2935,6 +2939,41 @@ function extractBestSourceImage(html, baseUrl) {
     const resolved = resolveFeedAssetUrl(baseUrl, contentMatch[1]);
     if (resolved) {
       candidates.push(resolved);
+    }
+  });
+
+  const jsonLdBlocks = rawHtml.match(/<script[^>]+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi) || [];
+  jsonLdBlocks.forEach((block) => {
+    const jsonText = block
+      .replace(/^<script[^>]*>/i, "")
+      .replace(/<\/script>$/i, "")
+      .trim();
+
+    if (!jsonText) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(jsonText);
+      const queue = Array.isArray(parsed) ? parsed : [parsed];
+
+      queue.forEach((entry) => {
+        const imageField = entry?.image;
+        const values = Array.isArray(imageField)
+          ? imageField
+          : imageField && typeof imageField === "object"
+            ? [imageField.url, imageField.contentUrl]
+            : [imageField];
+
+        values.forEach((value) => {
+          const resolved = resolveFeedAssetUrl(baseUrl, value);
+          if (resolved) {
+            candidates.push(resolved);
+          }
+        });
+      });
+    } catch (_error) {
+      // Ignora JSON-LD invalido da fonte.
     }
   });
 

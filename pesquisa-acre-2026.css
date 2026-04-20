@@ -1180,11 +1180,13 @@ body::after {
 
 .poll-rating-scale label:has(input:checked),
 .poll-option-card:has(input:checked) {
-  border-color: rgba(84, 127, 165, 0.7);
+  border-color: rgba(113, 196, 255, 0.78);
   background:
-    linear-gradient(180deg, rgba(84, 127, 165, 0.12), rgba(84, 127, 165, 0.05)),
-    rgba(255, 255, 255, 0.88);
-  box-shadow: inset 0 0 0 1px rgba(84, 127, 165, 0.14);
+    radial-gradient(circle at top right, rgba(133, 214, 255, 0.2), transparent 34%),
+    linear-gradient(180deg, rgba(36, 96, 154, 0.95), rgba(19, 66, 118, 0.98));
+  box-shadow:
+    0 16px 34px rgba(7, 29, 58, 0.24),
+    inset 0 0 0 1px rgba(164, 227, 255, 0.16);
 }
 
 .poll-option-grid {
@@ -1206,6 +1208,26 @@ body::after {
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
 }
 
+.poll-option-card::after {
+  content: "\2713";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ff6b6b, #d91f35);
+  color: #fff6f6;
+  font-size: 0.98rem;
+  font-weight: 900;
+  box-shadow: 0 14px 24px rgba(185, 22, 44, 0.26);
+  opacity: 0;
+  transform: scale(0.72);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
 .poll-option-card strong {
   font-size: 1rem;
 }
@@ -1214,6 +1236,16 @@ body::after {
   color: var(--text-soft);
   font-size: 0.84rem;
   line-height: 1.55;
+}
+
+.poll-option-card:has(input:checked) strong,
+.poll-option-card:has(input:checked) span {
+  color: #f2f9ff;
+}
+
+.poll-option-card:has(input:checked)::after {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .poll-actions {

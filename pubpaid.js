@@ -797,6 +797,9 @@
     touchActionButtons: Array.from(document.querySelectorAll("[data-touch-action]")),
     venueCards: Array.from(document.querySelectorAll("[data-venue-card]")),
     topActions: document.querySelector(".pubpaid-top-actions"),
+    topMenu: document.querySelector("[data-top-menu]"),
+    topMenuToggle: document.querySelector("[data-top-menu-toggle]"),
+    topMenuPanel: document.querySelector("[data-top-menu-panel]"),
     profileModal: document.querySelector("[data-profile-modal]"),
     profileForm: document.querySelector("[data-profile-form]"),
     profileFeedback: document.querySelector("[data-profile-feedback]"),
@@ -1020,6 +1023,7 @@
       runtime.npcs = createInteriorNpcs();
       runtime.exteriorWalkers = createExteriorWalkers();
       runtime.exteriorTraffic = createExteriorTraffic();
+      closeTopMenu();
       resetScenePosition();
       fillProfileForm();
       renderAll();
@@ -1251,8 +1255,23 @@
   function handleClick(event) {
     ensureMusicPlayback();
 
+    const topMenuToggle = event.target.closest("[data-top-menu-toggle]");
+    if (topMenuToggle) {
+      toggleTopMenu();
+      return;
+    }
+
+    if (
+      refs.topMenu &&
+      refs.topMenu.classList.contains("is-open") &&
+      !event.target.closest("[data-top-menu]")
+    ) {
+      closeTopMenu();
+    }
+
     const enterGameTrigger = event.target.closest("[data-enter-game]");
     if (enterGameTrigger) {
+      closeTopMenu();
       enterGameExperience();
       return;
     }
@@ -1265,6 +1284,7 @@
 
     const exitGameTrigger = event.target.closest("[data-exit-game]");
     if (exitGameTrigger) {
+      closeTopMenu();
       exitGameExperience();
       return;
     }
@@ -1277,24 +1297,28 @@
 
     const profileTrigger = event.target.closest("[data-open-profile]");
     if (profileTrigger) {
+      closeTopMenu();
       openProfileModal();
       return;
     }
 
     const audioTrigger = event.target.closest("[data-audio-toggle]");
     if (audioTrigger) {
+      closeTopMenu();
       toggleMusic();
       return;
     }
 
     const tutorialTrigger = event.target.closest("[data-open-tutorial]");
     if (tutorialTrigger) {
+      closeTopMenu();
       openTutorialModal();
       return;
     }
 
     const resetTrigger = event.target.closest("[data-reset-demo]");
     if (resetTrigger) {
+      closeTopMenu();
       resetDemo();
       return;
     }
@@ -3342,14 +3366,11 @@
     sceneCtx.strokeStyle = `rgba(255, 214, 122, ${0.48 + entryPulse * 0.18})`;
     sceneCtx.strokeRect(444, 406, 72, 36);
 
-    sceneCtx.fillStyle = "rgba(10, 8, 18, 0.82)";
+    sceneCtx.fillStyle = "rgba(10, 8, 18, 0.46)";
     sceneCtx.fillRect(404, 360, 152, 26);
-    sceneCtx.strokeStyle = "rgba(112, 235, 255, 0.6)";
+    sceneCtx.strokeStyle = "rgba(112, 235, 255, 0.34)";
     sceneCtx.lineWidth = 2;
     sceneCtx.strokeRect(404, 360, 152, 26);
-    sceneCtx.fillStyle = "#f7f2d5";
-    sceneCtx.font = "12px Chakra Petch";
-    sceneCtx.fillText("Entrada principal", 420, 377);
 
     sceneCtx.fillStyle = "rgba(0,0,0,0.24)";
     sceneCtx.fillRect(146, 560, 104, 24);
@@ -9879,6 +9900,14 @@
     if (!game || game.id !== "slots" || game.screen !== "playing") return;
     const slots = game.tableState;
     if (slots.phase === "spinning") return;
+    if (slots.phase === "settled") {
+      if (slots.round >= slots.maxRounds) return;
+      slots.round += 1;
+      slots.phase = "ready";
+      slots.reels = ["star", "bar", "cherry"];
+      slots.lastMatch = "";
+      slots.payoutLabel = `Placar atual: ${slots.playerRounds} x ${slots.houseRounds}.`;
+    }
 
     slots.phase = "spinning";
     slots.message = "A alavanca desceu e a maquina esta correndo.";
@@ -11019,6 +11048,29 @@
     if (!node) return;
     const text = String(value || "");
     if (node.textContent !== text) node.textContent = text;
+  }
+
+  function openTopMenu() {
+    if (!refs.topMenu || !refs.topMenuToggle || !refs.topMenuPanel) return;
+    refs.topMenu.classList.add("is-open");
+    refs.topMenuToggle.setAttribute("aria-expanded", "true");
+    refs.topMenuPanel.hidden = false;
+  }
+
+  function closeTopMenu() {
+    if (!refs.topMenu || !refs.topMenuToggle || !refs.topMenuPanel) return;
+    refs.topMenu.classList.remove("is-open");
+    refs.topMenuToggle.setAttribute("aria-expanded", "false");
+    refs.topMenuPanel.hidden = true;
+  }
+
+  function toggleTopMenu() {
+    if (!refs.topMenu) return;
+    if (refs.topMenu.classList.contains("is-open")) {
+      closeTopMenu();
+      return;
+    }
+    openTopMenu();
   }
 
   function escapeHtml(value) {

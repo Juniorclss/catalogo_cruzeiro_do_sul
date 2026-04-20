@@ -265,6 +265,52 @@ canvas {
   gap: 10px;
 }
 
+.pubpaid-top-menu {
+  position: relative;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pubpaid-top-menu-toggle {
+  min-width: 160px;
+}
+
+.pubpaid-top-menu-toggle::after {
+  content: "▾";
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.pubpaid-top-menu.is-open .pubpaid-top-menu-toggle::after {
+  content: "▴";
+}
+
+.pubpaid-top-menu-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 35;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100vw - 32px));
+  padding: 12px;
+  border: var(--pub-border);
+  border-radius: var(--pub-radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 32%),
+    linear-gradient(135deg, rgba(16, 33, 66, 0.96), rgba(35, 16, 55, 0.96)),
+    rgba(10, 9, 24, 0.96);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+}
+
+.pubpaid-top-menu-panel[hidden] {
+  display: none;
+}
+
+.pubpaid-top-menu-panel .pubpaid-chip-button {
+  width: 100%;
+}
+
 .pubpaid-enter-chip {
   gap: 10px;
   border-color: rgba(255, 150, 150, 0.32) !important;
@@ -1229,6 +1275,7 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
 .pubpaid-google-card,
 .pubpaid-cashier-card {
   display: grid;
+  align-content: start;
   gap: 10px;
   margin-top: 16px;
   padding: 14px;
@@ -1239,8 +1286,8 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
 }
 
 .pubpaid-google-card {
-  grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
-  align-items: center;
+  grid-template-columns: 1fr;
+  align-items: stretch;
   gap: 14px;
 }
 
@@ -1252,7 +1299,9 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
 }
 
 .pubpaid-google-actions {
-  align-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-content: stretch;
+  align-items: stretch;
 }
 
 .pubpaid-google-card span,
@@ -1272,6 +1321,8 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
 .pubpaid-cashier-card strong {
   color: var(--pub-text);
   font-size: 18px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .pubpaid-google-card p,
@@ -1285,15 +1336,9 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
   min-height: 40px;
 }
 
-.pubpaid-google-actions .pubpaid-button {
+.pubpaid-google-actions .pubpaid-button,
+.pubpaid-google-actions .pubpaid-google-button {
   width: 100%;
-}
-
-@media (max-width: 780px) {
-  .pubpaid-google-card {
-    grid-template-columns: 1fr;
-    align-items: stretch;
-  }
 }
 
 .pubpaid-cashier-card label {
@@ -4657,6 +4702,20 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
     align-items: stretch;
   }
 
+  .pubpaid-top-menu {
+    justify-content: stretch;
+  }
+
+  .pubpaid-top-menu-toggle {
+    width: 100%;
+  }
+
+  .pubpaid-top-menu-panel {
+    left: 0;
+    right: auto;
+    width: min(100%, 360px);
+  }
+
   .pubpaid-profile-head {
     grid-template-columns: 1fr;
   }
@@ -4747,7 +4806,7 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
     justify-content: flex-start;
   }
 
-  body.pubpaid-page.pubpaid-in-game .pubpaid-top-actions .pubpaid-chip-button {
+  body.pubpaid-page.pubpaid-in-game .pubpaid-top-menu-panel .pubpaid-chip-button {
     flex: 1 1 148px;
   }
 

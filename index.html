@@ -66,7 +66,7 @@
   <link rel="stylesheet" href="sala-redacao-real.css?v=20260414q" />
   <link rel="stylesheet" href="photo-layout-fix.css?v=20260411ab" />
   <link rel="stylesheet" href="newspaper-gradient-balance.css?v=20260411r" />
-  <link rel="stylesheet" href="agentes-newsroom-hero.css?v=20260420hero-navrestore" />
+  <link rel="stylesheet" href="agentes-newsroom-hero.css?v=20260420hero-bgrestore" />
   <link rel="stylesheet" href="startup-experience.css?v=20260420founderpopup-once" />
   <link rel="stylesheet" href="./insiders-crowd-march.css?v=20260420a" />
   <link rel="stylesheet" href="pro-design.css?v=20260414c" />
@@ -1590,13 +1590,13 @@
           </div>
 
           <div class="election-controls reveal">
-            <button class="election-filter is-active" data-office="governador">Governador</button>
-            <button class="election-filter" data-office="senador">Senador</button>
-            <button class="election-filter" data-office="deputado-federal">Dep. Federal</button>
-            <button class="election-filter" data-office="deputado-estadual">Dep. Estadual</button>
+            <button class="election-filter is-active" type="button" data-office="governador">Governador</button>
+            <button class="election-filter" type="button" data-office="senador">Senador</button>
+            <button class="election-filter" type="button" data-office="deputado-federal">Dep. Federal</button>
+            <button class="election-filter" type="button" data-office="deputado-estadual">Dep. Estadual</button>
           </div>
 
-          <div class="elections-grid reveal">
+          <div class="elections-grid reveal" id="election-candidates">
             <!-- Rendered via script.js -->
             <div class="feed-empty">Preparando lista de candidatos...</div>
           </div>
@@ -1719,6 +1719,7 @@
 
             </div>
 
+            <div class="election-office-grid" id="election-results-office-buttons" aria-label="Acompanhar preferencias por cargo"></div>
             <h3 id="election-results-title">Preferência de Leitores</h3>
             <p class="election-results-meta" id="election-results-meta">
               Escolha um cargo para ver candidatos e resultados.
@@ -3116,7 +3117,7 @@
     <script defer src="./sidebar-data.js?v=20260413a"></script>
   <script defer src="runtime-config.js?v=20260415d"></script>
     <script defer src="./site-google-auth.js?v=20260420voteauthfix"></script>
-    <script defer src="./script.js?v=20260420voteauthfix"></script>
+    <script defer src="./script.js?v=20260420hero-bgrestore"></script>
     <script defer src="./insiders-crowd-march.js?v=20260420a"></script>
     <script defer src="./news-photo-fix.js?v=20260415c"></script>
     <script defer src="./social-rss.js?v=20260413a"></script>

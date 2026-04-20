@@ -61,29 +61,37 @@
           <a href="./index.html">Home</a>
         </nav>
 
-        <div class="pubpaid-top-actions">
-          <button class="pubpaid-chip-button pubpaid-enter-chip" type="button" data-enter-game>
-            <span class="pubpaid-enter-chip-icon" aria-hidden="true"></span>
-            <span>Entrar no game</span>
+        <div class="pubpaid-top-actions pubpaid-top-menu" data-top-menu>
+          <button
+            class="pubpaid-chip-button pubpaid-top-menu-toggle"
+            type="button"
+            data-top-menu-toggle
+            aria-expanded="false"
+            aria-controls="pubpaid-top-menu-panel"
+          >
+            Menu do pub
           </button>
-          <button class="pubpaid-chip-button" type="button" data-exit-game hidden>
-            Sair do game
-          </button>
-          <button class="pubpaid-chip-button" type="button" data-open-tutorial>
-            Guia da noite
-          </button>
-          <button class="pubpaid-chip-button" type="button" data-audio-toggle>
-            Musica de bar: off
-          </button>
-          <button class="pubpaid-chip-button" type="button" data-open-profile>
-            Abrir personagem
-          </button>
-          <a class="pubpaid-chip-button" href="./index.html">
-            Editor Chefe do Jornal
-          </a>
-          <button class="pubpaid-chip-button danger" type="button" data-reset-demo>
-            Limpar sessão local
-          </button>
+          <div class="pubpaid-top-menu-panel" id="pubpaid-top-menu-panel" data-top-menu-panel hidden>
+            <button class="pubpaid-chip-button pubpaid-enter-chip" type="button" data-enter-game>
+              <span class="pubpaid-enter-chip-icon" aria-hidden="true"></span>
+              <span>Entrar no game</span>
+            </button>
+            <button class="pubpaid-chip-button" type="button" data-exit-game hidden>
+              Sair do game
+            </button>
+            <button class="pubpaid-chip-button" type="button" data-open-tutorial>
+              Guia da noite
+            </button>
+            <button class="pubpaid-chip-button" type="button" data-audio-toggle>
+              Musica de bar: off
+            </button>
+            <button class="pubpaid-chip-button" type="button" data-open-profile>
+              Abrir personagem
+            </button>
+            <button class="pubpaid-chip-button danger" type="button" data-reset-demo>
+              Limpar sessão local
+            </button>
+          </div>
         </div>
       </header>
 
@@ -591,9 +599,6 @@
             <p class="pubpaid-eyebrow">seu nome na noite</p>
             <h2>Monte o seu personagem com Google. Créditos grátis foram zerados.</h2>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="profile">
-            Fechar
-          </button>
         </div>
 
         <form class="pubpaid-form" data-profile-form>
@@ -653,9 +658,6 @@
               Escolha a mesa, sinta o clima e veja até onde a noite vai.
             </p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="game">
-            Fechar
-          </button>
         </div>
 
         <div class="pubpaid-game-host" data-game-host></div>
@@ -674,9 +676,6 @@
               personagem com um visual mais forte ou abra uma mesa direto do balcão.
             </p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="shop">
-            Fechar
-          </button>
         </div>
 
         <div class="pubpaid-game-host" data-shop-host></div>
@@ -694,9 +693,6 @@
               Ele fica perto da cadeira do balcão, vende bebidas, libera upgrades visuais e abre mesas rápidas.
             </p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="waiter">
-            Fechar
-          </button>
         </div>
         <div class="pubpaid-waiter-dialog">
           <div class="pubpaid-waiter-avatar" aria-hidden="true">
@@ -732,9 +728,6 @@
               Troque a faixa direto na jukebox e deixe o clima do pub mais rápido, mais pesado ou mais calmo.
             </p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="jukebox">
-            Fechar
-          </button>
         </div>
 
         <div class="pubpaid-game-host" data-jukebox-host></div>
@@ -750,9 +743,6 @@
             <h2>Entrada do PubPaid</h2>
             <p class="pubpaid-modal-copy">Daqui você só decide se entra no salão ou volta para a rua.</p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="door">
-            Fechar
-          </button>
         </div>
 
         <div class="pubpaid-door-actions">
@@ -778,9 +768,6 @@
               Se ela te acerta, voce perde 1 credito.
             </p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="bad-ending">
-            Fechar
-          </button>
         </div>
 
         <canvas
@@ -818,9 +805,6 @@
               Ela abre a noite dançando, chama você para entender o clima do pub e puxa o começo da rodada.
             </p>
           </div>
-          <button class="pubpaid-close" type="button" data-close-modal="tutorial">
-            Fechar
-          </button>
         </div>
 
         <div class="pubpaid-tutorial-layout">

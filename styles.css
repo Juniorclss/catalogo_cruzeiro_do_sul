@@ -4604,8 +4604,72 @@ body.site-loaded .page-shell {
   gap: 1rem;
 }
 
+.editorial-home .split-layout {
+  background:
+    radial-gradient(circle at top left, rgba(235, 154, 87, 0.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(196, 110, 66, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(255, 249, 241, 0.98), rgba(249, 239, 228, 0.96)) !important;
+  border-color: rgba(122, 70, 42, 0.14);
+}
+
+.editorial-home .split-layout .section-heading::before {
+  background:
+    linear-gradient(120deg, rgba(235, 154, 87, 0.14), rgba(255, 255, 255, 0)),
+    linear-gradient(300deg, rgba(120, 74, 54, 0.08), rgba(255, 255, 255, 0));
+}
+
+.editorial-home .split-layout .section-heading p {
+  color: rgba(88, 61, 44, 0.82);
+}
+
+.editorial-home .split-layout .desmonte-card {
+  background:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 244, 236, 0.95)) !important;
+  border-color: rgba(140, 91, 61, 0.14);
+  box-shadow:
+    0 18px 34px rgba(109, 67, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.editorial-home .split-layout .desmonte-card h3 {
+  color: #5a311f;
+}
+
+.editorial-home .split-layout .desmonte-card p,
+.editorial-home .split-layout .desmonte-card li {
+  color: rgba(92, 66, 50, 0.88);
+}
+
+.editorial-home .split-layout .desmonte-card .case-status {
+  background: rgba(168, 101, 60, 0.12);
+  color: #8d4f2b;
+  border: 1px solid rgba(168, 101, 60, 0.18);
+}
+
 .desmonte-card.emphasis {
   background: linear-gradient(150deg, rgba(224, 180, 93, 0.28), rgba(255, 255, 255, 0.76));
+}
+
+.editorial-home .desmonte-card.emphasis {
+  background:
+    radial-gradient(circle at top right, rgba(255, 220, 168, 0.24), transparent 30%),
+    linear-gradient(155deg, rgba(122, 66, 41, 0.97), rgba(173, 98, 58, 0.92)) !important;
+  border-color: rgba(122, 66, 41, 0.22);
+  box-shadow:
+    0 24px 42px rgba(107, 58, 35, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.editorial-home .desmonte-card.emphasis h3,
+.editorial-home .desmonte-card.emphasis p,
+.editorial-home .desmonte-card.emphasis li,
+.editorial-home .desmonte-card.emphasis .case-status {
+  color: #fff7ef;
+}
+
+.editorial-home .desmonte-card.emphasis .case-status {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 241, 227, 0.24);
 }
 
 .desmonte-card ul,
@@ -5951,16 +6015,36 @@ input[type="range"] {
   background: linear-gradient(135deg, var(--copper), var(--copper-soft));
   color: white;
   border-color: transparent;
+  box-shadow: 0 16px 30px rgba(181, 82, 58, 0.22);
 }
 
 .vote-button:disabled {
   cursor: not-allowed;
   opacity: 0.78;
   transform: none;
+  background: rgba(25, 50, 79, 0.12);
+  color: rgba(25, 50, 79, 0.82);
 }
 
 .vote-button:disabled:hover {
   transform: none;
+}
+
+.candidate-vote-status {
+  margin: -0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.candidate-vote-status.is-success {
+  color: #1f7c53;
+  font-weight: 700;
+}
+
+.candidate-vote-status.is-locked {
+  color: #8b5b25;
+  font-weight: 700;
 }
 
 .election-results {
@@ -6663,6 +6747,16 @@ input[type="range"] {
 
   .election-spo-news-actions {
     flex-direction: column;
+  }
+
+  .vote-button {
+    min-height: 50px;
+    font-size: 0.92rem;
+    font-weight: 800;
+  }
+
+  .candidate-vote-status {
+    font-size: 0.82rem;
   }
 }
 
@@ -8121,6 +8215,41 @@ input[type="range"] {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
+}
+
+@media (min-width: 1041px) {
+  .editorial-home .elections-shell {
+    grid-column: 2 / 4;
+    padding: 1.35rem 1.4rem 1.45rem;
+  }
+
+  .editorial-home .elections-shell .section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+    align-items: start;
+    gap: 1rem 1.6rem;
+  }
+
+  .editorial-home .elections-shell .section-heading p {
+    max-width: none;
+    justify-self: stretch;
+    text-align: right;
+  }
+
+  .editorial-home .elections-shell .election-controls {
+    justify-content: flex-start;
+    gap: 0.8rem;
+  }
+
+  .editorial-home .elections-grid {
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+    gap: 1.1rem;
+    align-items: stretch;
+  }
+
+  .editorial-home .elections-grid .candidate-card {
+    min-height: 100%;
+  }
 }
 
 
@@ -14437,6 +14566,11 @@ input[type="range"] {
   margin-top: 1rem;
 }
 
+#election-results-office-buttons.election-office-grid {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  margin: 0 0 1rem;
+}
+
 .elections-shell #election-candidates.election-hidden-loader,
 .elections-shell #election-candidates[hidden] {
   display: none !important;
@@ -14588,6 +14722,40 @@ input[type="range"] {
   cursor: not-allowed;
   background: rgba(16, 35, 60, 0.16);
   color: rgba(16, 35, 60, 0.55);
+}
+
+.election-vote-confirm-panel {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.9rem;
+  padding: 0.95rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(16, 35, 60, 0.1);
+  background:
+    radial-gradient(circle at top right, rgba(224, 180, 93, 0.14), transparent 26%),
+    rgba(255, 255, 255, 0.78);
+}
+
+.election-vote-confirm-copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.election-vote-confirm-copy strong {
+  color: var(--navy);
+  font-size: 1rem;
+}
+
+.election-vote-confirm-copy p {
+  margin: 0;
+  color: rgba(16, 35, 60, 0.72);
+  line-height: 1.5;
+}
+
+.election-vote-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
 }
 
 .election-result-bar {
@@ -15329,28 +15497,30 @@ body {
 
 /* Final palette cleanup: remove legacy beige overrides and keep a single cool editorial theme. */
 :root {
-  --bg: #ffffff;
-  --paper: #ffffff;
-  --paper-strong: #ffffff;
-  --surface-soft: #f2f2f2;
-  --surface-card: #f2f2f2;
-  --surface-card-strong: #f2f2f2;
-  --ink: #17304c;
-  --muted: #5f7186;
-  --navy: #1e3a5f;
-  --navy-soft: #315781;
-  --copper: #4a90e2;
-  --copper-soft: #76aceb;
-  --gold: #9fc4f2;
-  --sage: #d9e6f7;
-  --line: rgba(30, 58, 95, 0.12);
-  --line-strong: rgba(30, 58, 95, 0.22);
+  --bg: #f4efe7;
+  --paper: #f7f2ea;
+  --paper-strong: #fbf7f0;
+  --surface-soft: #ede5d8;
+  --surface-card: #f3ede3;
+  --surface-card-strong: #fcf8f2;
+  --ink: #1d2734;
+  --muted: #5f6978;
+  --navy: #19324f;
+  --navy-soft: #355273;
+  --copper: #b5523a;
+  --copper-soft: #d47b52;
+  --gold: #d0a15a;
+  --sage: #d8d2c7;
+  --line: rgba(25, 50, 79, 0.1);
+  --line-strong: rgba(25, 50, 79, 0.18);
 }
 
 html,
 body {
-  background: #ffffff !important;
-  background-image: none !important;
+  background: #f4efe7 !important;
+  background-image:
+    radial-gradient(circle at top left, rgba(181, 82, 58, 0.06), transparent 22%),
+    linear-gradient(180deg, #faf6ef 0%, #f4efe7 100%) !important;
 }
 
 .logo-splash-noise,
@@ -17562,7 +17732,7 @@ a {
 
 .cadernos-shell.section-block {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(250, 246, 238, 0.94)) !important;
+    linear-gradient(180deg, rgba(251, 247, 240, 0.98), rgba(243, 235, 224, 0.96)) !important;
 }
 
 .caderno-card {
@@ -17572,19 +17742,19 @@ a {
 }
 
 .caderno-card:nth-child(1) {
-  background: linear-gradient(160deg, rgba(255, 246, 156, 0.98), rgba(255, 236, 124, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(241, 226, 175, 0.98), rgba(221, 194, 127, 0.94)) !important;
 }
 
 .caderno-card:nth-child(2) {
-  background: linear-gradient(160deg, rgba(255, 209, 155, 0.98), rgba(255, 172, 120, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(235, 203, 174, 0.98), rgba(208, 158, 118, 0.94)) !important;
 }
 
 .caderno-card:nth-child(3) {
-  background: linear-gradient(160deg, rgba(170, 245, 221, 0.98), rgba(118, 224, 190, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(199, 220, 205, 0.98), rgba(146, 183, 168, 0.94)) !important;
 }
 
 .caderno-card:nth-child(4) {
-  background: linear-gradient(160deg, rgba(187, 224, 255, 0.98), rgba(132, 190, 245, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(205, 220, 235, 0.98), rgba(150, 177, 205, 0.94)) !important;
 }
 
 .caderno-card::after {
@@ -17606,9 +17776,9 @@ a {
 
 #social.section-block {
   background:
-    radial-gradient(circle at top left, rgba(255, 132, 96, 0.12), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(192, 110, 255, 0.14), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 242, 255, 0.94)) !important;
+    radial-gradient(circle at top left, rgba(181, 82, 58, 0.08), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(53, 82, 115, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(250, 246, 239, 0.98), rgba(241, 235, 227, 0.96)) !important;
 }
 
 .social-card {
@@ -17616,49 +17786,71 @@ a {
 }
 
 .social-card:nth-child(1) {
-  background: linear-gradient(160deg, rgba(255, 241, 179, 0.98), rgba(255, 214, 115, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(237, 223, 185, 0.98), rgba(217, 186, 121, 0.94)) !important;
 }
 
 .social-card:nth-child(2) {
-  background: linear-gradient(160deg, rgba(252, 210, 255, 0.98), rgba(214, 160, 255, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(228, 213, 226, 0.98), rgba(185, 153, 186, 0.94)) !important;
 }
 
 .social-card:nth-child(3) {
-  background: linear-gradient(160deg, rgba(180, 235, 255, 0.98), rgba(118, 201, 255, 0.94)) !important;
+  background: linear-gradient(160deg, rgba(212, 224, 235, 0.98), rgba(156, 182, 208, 0.94)) !important;
 }
 
 .social-card:nth-child(4) {
-  background: linear-gradient(160deg, rgba(255, 206, 211, 0.98), rgba(255, 149, 177, 0.92)) !important;
+  background: linear-gradient(160deg, rgba(234, 210, 210, 0.98), rgba(197, 154, 156, 0.92)) !important;
 }
 
 .social-card:nth-child(5) {
-  background: linear-gradient(160deg, rgba(203, 255, 214, 0.98), rgba(149, 240, 172, 0.92)) !important;
+  background: linear-gradient(160deg, rgba(215, 229, 213, 0.98), rgba(161, 188, 160, 0.92)) !important;
 }
 
 .social-card:nth-child(6) {
-  background: linear-gradient(160deg, rgba(213, 230, 255, 0.98), rgba(161, 186, 255, 0.92)) !important;
+  background: linear-gradient(160deg, rgba(221, 227, 235, 0.98), rgba(171, 183, 206, 0.92)) !important;
 }
 
 .social-card.wide {
   background:
-    radial-gradient(circle at top right, rgba(126, 247, 255, 0.16), transparent 26%),
-    linear-gradient(145deg, rgba(13, 28, 47, 0.98), rgba(33, 62, 108, 0.92)) !important;
+    radial-gradient(circle at top right, rgba(208, 161, 90, 0.12), transparent 26%),
+    linear-gradient(145deg, rgba(20, 34, 52, 0.98), rgba(32, 52, 77, 0.92)) !important;
 }
 
 #entretenimento.section-block {
   background:
-    radial-gradient(circle at top left, rgba(255, 121, 198, 0.12), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(76, 201, 240, 0.12), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 244, 255, 0.95)) !important;
+    radial-gradient(circle at top left, rgba(208, 161, 90, 0.1), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(53, 82, 115, 0.16), transparent 30%),
+    linear-gradient(180deg, rgba(25, 50, 79, 0.98), rgba(19, 40, 66, 0.99)) !important;
+  border-color: rgba(212, 223, 232, 0.14) !important;
 }
 
 .entertainment-section {
   background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(247, 242, 255, 0.94)) !important;
+    linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06)) !important;
+  border-color: rgba(202, 224, 248, 0.14) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 34px rgba(9, 31, 59, 0.16) !important;
+}
+
+#entretenimento .section-heading h2,
+#entretenimento .section-heading .eyebrow,
+#entretenimento .section-heading p,
+#entretenimento .section-label h3,
+#entretenimento .section-label .icon {
+  color: #f4f8ff !important;
+}
+
+#entretenimento .section-heading h2 {
+  text-shadow: 0 10px 28px rgba(5, 18, 35, 0.3);
+}
+
+#entretenimento .section-heading p,
+#entretenimento .section-label h3 {
+  opacity: 0.96;
 }
 
 .movie-card {
-  background: linear-gradient(145deg, rgba(18, 29, 51, 0.98), rgba(32, 53, 87, 0.92)) !important;
+  background: linear-gradient(145deg, rgba(24, 35, 52, 0.98), rgba(42, 55, 74, 0.92)) !important;
   color: #f6fbff !important;
 }
 
@@ -17670,24 +17862,47 @@ a {
 }
 
 .theater-card {
-  background: linear-gradient(145deg, rgba(255, 248, 233, 0.98), rgba(255, 231, 191, 0.94)) !important;
+  background: linear-gradient(145deg, rgba(249, 240, 225, 0.98), rgba(236, 219, 188, 0.94)) !important;
+  color: #2c3f57 !important;
+}
+
+.theater-card h4,
+.theater-card .theater-info,
+.theater-card .theater-desc,
+.theater-card .venue,
+.theater-card .dates,
+.theater-card .meta-chip {
+  color: inherit !important;
 }
 
 #trending.section-block {
   background:
-    radial-gradient(circle at top left, rgba(255, 83, 83, 0.14), transparent 22%),
-    radial-gradient(circle at bottom right, rgba(110, 225, 255, 0.16), transparent 26%),
-    linear-gradient(180deg, rgba(12, 24, 44, 0.02), rgba(255, 255, 255, 0.98)) !important;
+    radial-gradient(circle at top left, rgba(181, 82, 58, 0.1), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(53, 82, 115, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(247, 242, 234, 0.98), rgba(241, 236, 228, 0.98)) !important;
 }
 
 .trending-card {
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(240, 247, 255, 0.94)) !important;
+  background: linear-gradient(165deg, rgba(252, 248, 242, 0.98), rgba(240, 233, 223, 0.96)) !important;
+}
+
+#trending .trending-card h3 {
+  color: #1f3655 !important;
+}
+
+#trending .trending-card p,
+#trending .trending-card .engagement span {
+  color: rgba(39, 63, 95, 0.92) !important;
+}
+
+#trending .trending-card .engagement {
+  border-top-color: rgba(31, 54, 85, 0.14) !important;
 }
 
 .trending-card.main {
   background:
-    radial-gradient(circle at top right, rgba(255, 120, 88, 0.18), transparent 26%),
-    linear-gradient(160deg, rgba(15, 28, 52, 0.98), rgba(31, 61, 110, 0.92)) !important;
+    radial-gradient(circle at top right, rgba(212, 123, 82, 0.14), transparent 26%),
+    linear-gradient(160deg, rgba(23, 38, 58, 0.98), rgba(31, 52, 82, 0.94)) !important;
 }
 
 .trending-card.main .influencer-buzz-copy h3,
@@ -17706,9 +17921,9 @@ a {
 
 #monthly.section-block {
   background:
-    radial-gradient(circle at top right, rgba(255, 132, 96, 0.12), transparent 24%),
-    radial-gradient(circle at bottom left, rgba(126, 247, 255, 0.12), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 255, 0.95)) !important;
+    radial-gradient(circle at top right, rgba(181, 82, 58, 0.08), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(53, 82, 115, 0.08), transparent 24%),
+    linear-gradient(180deg, rgba(250, 246, 239, 0.98), rgba(242, 236, 228, 0.96)) !important;
 }
 
 .month-card:nth-child(1) {

@@ -5,9 +5,6 @@
   const CONSENT_BANNER_ID = "catalogo-cookie-consent";
   const READY_FALLBACK_MS = 6800;
   const OPEN_DELAY_MS = 260;
-  const THANKS_SCREEN_MS = 5000;
-  const THANKS_SCREEN_MS_COMPACT = 3600;
-  const THANKS_SCREEN_MS_PHONE = 6800;
   const CONSENT_KEY = "catalogo_lgpd_consent_v1";
   const CONSENT_COOKIE = "catalogo_tracking_consent";
   const COOKIE_MAX_AGE_DAYS = 180;
@@ -16,17 +13,6 @@
   const LEGACY_WELCOME_ACCEPT_KEYS = [
     "catalogo_terms_welcome_accepted_v1",
     "catalogo_terms_welcome_accepted_v2"
-  ];
-  const FOUNDERS_CAFE_IMAGE_SRC = "./assets/founders-cafe-pack-static.jpg";
-  const FOUNDERS_GRUPO_AS_LOGO_SRC = "./assets/founders-grupo-as-logo.jpeg";
-  const FOUNDERS_GEANE_LOGO_SRC = "./assets/founders-geane-logo.png";
-  const FOUNDERS_RECOMMENCER_LOGO_SRC = "./assets/founders-recommencer-logo.svg";
-  const FOUNDERS_OPENING_STEPS = [
-    "Abrindo noticias atuais do Vale do Jurua.",
-    "Atualizando manchetes de politica, servico e cidade.",
-    "Lendo fontes monitoradas e checando resumos.",
-    "Montando radar local, agenda e destaques do dia.",
-    "Conferindo capas, editorias e atalhos do portal."
   ];
 
   function ready(callback) {
@@ -684,7 +670,6 @@
           </div>
           ${buildWelcomeCopyMarkup({ phone })}
         </div>
-        ${buildFounderThanksMarkup()}
       </article>
     `;
 
@@ -807,19 +792,7 @@
           rememberWelcomeAcceptedThisSession();
           rememberWelcomeAcceptedThisBrowserSession();
           dispatchConsent(true);
-          modal.classList.add("is-thanking");
-          const stopFounderOpening = startFounderOpening(modal);
-          modal.__stopFounderOpening = stopFounderOpening;
-
-          const thanksDuration = modal.classList.contains("is-phone")
-            ? THANKS_SCREEN_MS_PHONE
-            : modal.classList.contains("is-compact")
-              ? THANKS_SCREEN_MS_COMPACT
-              : THANKS_SCREEN_MS;
-
-          window.setTimeout(() => {
-            closeWelcomeModal(modal);
-          }, thanksDuration);
+          closeWelcomeModal(modal);
         });
 
         window.setTimeout(() => {
