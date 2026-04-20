@@ -2607,6 +2607,43 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
   color: var(--pub-muted);
 }
 
+.pubpaid-pool-mobile-controls {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.pubpaid-pool-mobile-card {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.pubpaid-pool-mobile-card span {
+  display: block;
+  color: var(--pub-cyan);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.pubpaid-pool-mobile-card small {
+  color: var(--pub-muted);
+  line-height: 1.5;
+}
+
+.pubpaid-pool-mobile-card input[type="range"] {
+  width: 100%;
+}
+
+.pubpaid-pool-charge-button {
+  width: 100%;
+  min-height: 48px;
+}
+
 .pubpaid-pool-meta,
 .pubpaid-pool-side,
 .pubpaid-result-panel,
@@ -4311,6 +4348,11 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
 
   body.pubpaid-page.pubpaid-in-game .pubpaid-top-actions .pubpaid-chip-button {
     flex: 1 1 148px;
+  }
+
+  .pubpaid-pool-mobile-controls {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 }
 

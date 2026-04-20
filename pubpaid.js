@@ -767,6 +767,8 @@
       canvas: null,
       ctx: null,
       meter: null,
+      angleSlider: null,
+      chargeButton: null,
       pointerInside: false
     },
     player: {
@@ -5554,6 +5556,20 @@
             <span>segure para carregar</span>
             <span>solte para bater</span>
           </div>
+          <div class="pubpaid-pool-mobile-controls">
+            <label class="pubpaid-pool-mobile-card">
+              <span>Mira mobile</span>
+              <input type="range" min="0" max="359" step="1" value="${escapeHtml(String(getPoolAimDegrees(pool)))}" data-pool-angle-slider />
+              <small>Ajuste o angulo da branca no dedo.</small>
+            </label>
+            <div class="pubpaid-pool-mobile-card">
+              <span>Força mobile</span>
+              <button class="pubpaid-card-button pubpaid-pool-charge-button" type="button" data-pool-charge-button>
+                Segure para carregar, solte para bater
+              </button>
+              <small>Primeiro mire. Depois segure o botão e solte na força certa.</small>
+            </div>
+          </div>
         </section>
 
         <section class="pubpaid-pool-side">
@@ -5688,12 +5704,24 @@
     runtime.poolRefs.ctx = canvas?.getContext("2d") || null;
     if (runtime.poolRefs.ctx) runtime.poolRefs.ctx.imageSmoothingEnabled = false;
     runtime.poolRefs.meter = refs.gameHost.querySelector("[data-pool-meter-fill]");
+    runtime.poolRefs.angleSlider = refs.gameHost.querySelector("[data-pool-angle-slider]");
+    runtime.poolRefs.chargeButton = refs.gameHost.querySelector("[data-pool-charge-button]");
 
     if (!canvas) return;
     canvas.addEventListener("pointermove", handlePoolPointerMove);
     canvas.addEventListener("pointerdown", handlePoolPointerDown);
     canvas.addEventListener("pointerup", handlePoolPointerUp);
     canvas.addEventListener("pointerleave", handlePoolPointerLeave);
+
+    if (runtime.poolRefs.angleSlider) {
+      runtime.poolRefs.angleSlider.addEventListener("input", handlePoolMobileAngleInput);
+    }
+    if (runtime.poolRefs.chargeButton) {
+      runtime.poolRefs.chargeButton.addEventListener("pointerdown", handlePoolMobileChargeStart);
+      runtime.poolRefs.chargeButton.addEventListener("pointerup", handlePoolMobileChargeEnd);
+      runtime.poolRefs.chargeButton.addEventListener("pointercancel", handlePoolMobileChargeCancel);
+      runtime.poolRefs.chargeButton.addEventListener("pointerleave", handlePoolMobileChargeLeave);
+    }
   }
 
   function clearPoolRefs(removeCanvasListeners) {
@@ -5703,11 +5731,76 @@
       runtime.poolRefs.canvas.removeEventListener("pointerup", handlePoolPointerUp);
       runtime.poolRefs.canvas.removeEventListener("pointerleave", handlePoolPointerLeave);
     }
+    if (runtime.poolRefs.angleSlider) {
+      runtime.poolRefs.angleSlider.removeEventListener("input", handlePoolMobileAngleInput);
+    }
+    if (runtime.poolRefs.chargeButton) {
+      runtime.poolRefs.chargeButton.removeEventListener("pointerdown", handlePoolMobileChargeStart);
+      runtime.poolRefs.chargeButton.removeEventListener("pointerup", handlePoolMobileChargeEnd);
+      runtime.poolRefs.chargeButton.removeEventListener("pointercancel", handlePoolMobileChargeCancel);
+      runtime.poolRefs.chargeButton.removeEventListener("pointerleave", handlePoolMobileChargeLeave);
+    }
 
     runtime.poolRefs.canvas = null;
     runtime.poolRefs.ctx = null;
     runtime.poolRefs.meter = null;
+    runtime.poolRefs.angleSlider = null;
+    runtime.poolRefs.chargeButton = null;
     runtime.poolRefs.pointerInside = false;
+  }
+
+  function setPoolAimByDegrees(pool, degrees) {
+    const cue = getCueBall(pool);
+    if (!cue || cue.pocketed) return;
+    const radians = (Number(degrees || 0) * Math.PI) / 180;
+    const distance = 160;
+    pool.aimX = cue.x + Math.cos(radians) * distance;
+    pool.aimY = cue.y + Math.sin(radians) * distance;
+  }
+
+  function handlePoolMobileAngleInput(event) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "pool" || game.screen !== "playing") return;
+    const pool = game.tableState;
+    if (pool.turn !== "player" || pool.phase !== "aim") return;
+    setPoolAimByDegrees(pool, clampInteger(event.target?.value, getPoolAimDegrees(pool)));
+    updatePoolHud();
+    drawPoolTable();
+  }
+
+  function handlePoolMobileChargeStart(event) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "pool" || game.screen !== "playing") return;
+    const pool = game.tableState;
+    if (pool.turn !== "player" || pool.phase !== "aim") return;
+    const cue = getCueBall(pool);
+    if (!cue || cue.pocketed) return;
+    event.preventDefault();
+    pool.charging = true;
+    pool.chargeStartedAt = performance.now();
+  }
+
+  function handlePoolMobileChargeEnd(event) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "pool" || game.screen !== "playing") return;
+    const pool = game.tableState;
+    if (!pool.charging || pool.turn !== "player" || pool.phase !== "aim") return;
+    event.preventDefault();
+    shootPoolCue(pool, "player");
+  }
+
+  function handlePoolMobileChargeCancel() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "pool" || game.screen !== "playing") return;
+    const pool = game.tableState;
+    pool.charging = false;
+    pool.charge = 0;
+    updatePoolHud();
+  }
+
+  function handlePoolMobileChargeLeave(event) {
+    if (window.matchMedia && !window.matchMedia("(max-width: 900px)").matches) return;
+    handlePoolMobileChargeEnd(event);
   }
 
   function handlePoolPointerMove(event) {
@@ -6167,6 +6260,15 @@
     if (botPocketed) botPocketed.textContent = `${pool.botPocketed} bolas derrubadas`;
     if (runtime.poolRefs.meter) {
       runtime.poolRefs.meter.style.width = `${Math.round(pool.charge * 100)}%`;
+    }
+    if (runtime.poolRefs.angleSlider && document.activeElement !== runtime.poolRefs.angleSlider) {
+      runtime.poolRefs.angleSlider.value = String(getPoolAimDegrees(pool));
+    }
+    if (runtime.poolRefs.chargeButton) {
+      runtime.poolRefs.chargeButton.textContent = pool.charging
+        ? `Solte para bater (${Math.round(pool.charge * 100)}%)`
+        : "Segure para carregar, solte para bater";
+      runtime.poolRefs.chargeButton.disabled = !(pool.turn === "player" && pool.phase === "aim");
     }
   }
 
