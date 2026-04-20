@@ -808,7 +808,7 @@ function summarizePubpaidWithdrawal(item = {}) {
 async function creditPubpaidWallet(user, credits, meta = {}) {
   const amount = Math.max(0, Math.floor(Number(credits || 0)));
   if (!amount) return null;
-  const wallets = await readStore("pubpaidWallets", []);
+  const wallets = ensureArrayItems(await readStore("pubpaidWallets", []));
   const walletKey = getPubpaidWalletKey(user);
   const index = wallets.findIndex((item) => item.walletKey === walletKey);
   const now = nowIso();
@@ -840,7 +840,7 @@ async function creditPubpaidWallet(user, credits, meta = {}) {
 }
 
 async function getOrCreatePubpaidWallet(user) {
-  const wallets = await readStore("pubpaidWallets", []);
+  const wallets = ensureArrayItems(await readStore("pubpaidWallets", []));
   const walletKey = getPubpaidWalletKey(user);
   const existing = wallets.find((item) => item.walletKey === walletKey);
   if (existing) return existing;
@@ -862,13 +862,19 @@ async function getOrCreatePubpaidWallet(user) {
 }
 
 async function updatePubpaidWallet(walletKey, updater) {
-  const wallets = await readStore("pubpaidWallets", []);
+  const wallets = ensureArrayItems(await readStore("pubpaidWallets", []));
   const index = wallets.findIndex((item) => item.walletKey === walletKey);
   if (index < 0) return null;
   const next = updater(wallets[index]);
   wallets[index] = { ...next, updatedAt: nowIso() };
   await writeStore("pubpaidWallets", wallets);
   return wallets[index];
+}
+
+function ensureArrayItems(value) {
+  if (Array.isArray(value)) return value;
+  if (value === null || value === undefined) return [];
+  return [value];
 }
 
 function stripHtml(text) {
@@ -1853,8 +1859,8 @@ app.get("/api/pubpaid/account", async (req, res) => {
   }
 
   const wallet = await getOrCreatePubpaidWallet(authUser);
-  const deposits = await readStore("pubpaidDeposits", []);
-  const withdrawals = await readStore("pubpaidWithdrawals", []);
+  const deposits = ensureArrayItems(await readStore("pubpaidDeposits", []));
+  const withdrawals = ensureArrayItems(await readStore("pubpaidWithdrawals", []));
   const walletKey = getPubpaidWalletKey(authUser);
   const pendingDeposits = (Array.isArray(deposits) ? deposits : []).filter(
     (item) => item.walletKey === walletKey && isPubpaidPendingStatus(item?.payment?.status || item?.status)
@@ -1896,7 +1902,7 @@ app.post("/api/pubpaid/withdrawals", async (req, res) => {
   }
 
   const walletKey = getPubpaidWalletKey(authUser);
-  const withdrawals = await readStore("pubpaidWithdrawals", []);
+  const withdrawals = ensureArrayItems(await readStore("pubpaidWithdrawals", []));
   const item = {
     id: buildId("pubwd"),
     type: "pubpaid-retirada",
@@ -2364,7 +2370,7 @@ app.post("/api/admin/pubpaid/deposits/review", async (req, res) => {
   const approve = safeString(req.body?.decision || req.body?.status, 40).toLowerCase() === "approve";
   if (!id) return res.status(400).json({ ok: false, error: "ID do deposito ausente." });
 
-  const deposits = await readStore("pubpaidDeposits", []);
+  const deposits = ensureArrayItems(await readStore("pubpaidDeposits", []));
   const index = deposits.findIndex((item) => String(item?.id || "") === id);
   if (index < 0) return res.status(404).json({ ok: false, error: "Deposito PubPaid nao encontrado." });
   const current = deposits[index];
@@ -2400,7 +2406,7 @@ app.post("/api/admin/pubpaid/withdrawals/review", async (req, res) => {
   const id = safeString(req.body?.id, 80);
   if (!id) return res.status(400).json({ ok: false, error: "ID da retirada ausente." });
 
-  const withdrawals = await readStore("pubpaidWithdrawals", []);
+  const withdrawals = ensureArrayItems(await readStore("pubpaidWithdrawals", []));
   const index = withdrawals.findIndex((item) => String(item?.id || "") === id);
   if (index < 0) return res.status(404).json({ ok: false, error: "Retirada PubPaid nao encontrada." });
   const approve = safeString(req.body?.decision || req.body?.status, 40).toLowerCase() === "approve";

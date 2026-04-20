@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T06:12:22.686Z",
+  "lastUpdatedAt": "2026-04-20T06:20:02.054Z",
   "orders": [
     {
       "id": "2026-04-19-google-auth-pix-qr-sem-chave-e-pubpaid-sem-creditos-gratis",
@@ -1738,6 +1738,21 @@
       "source": "chat",
       "rawRequest": "Dashboard caiu de novo com 505; fiz deposito e nao deu para confirmar os creditos. Depois mudar 'avisa' para 'Confirmar meu deposito'.",
       "summary": "Corrigir dashboard PubPaid 505 e botao Confirmar meu deposito",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-testar-deposito-fake-r5-e-corrigir-input-do-nome-do-depositante",
+      "createdAt": "2026-04-20T06:20:02.054Z",
+      "updatedAt": "2026-04-20T06:20:02.054Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Fazer um deposito fake de 5 reais, ver se aparece para validar e descobrir por que nem todas as letras entram no campo de confirmacao do nome do depositante.",
+      "summary": "Testar deposito fake R$5 e corrigir input do nome do depositante",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

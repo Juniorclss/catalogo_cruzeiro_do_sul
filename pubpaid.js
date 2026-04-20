@@ -983,6 +983,13 @@
     startMusic();
   }
 
+  function isTypingField(target) {
+    if (!(target instanceof HTMLElement)) return false;
+    if (target.isContentEditable) return true;
+    const tagName = String(target.tagName || "").toUpperCase();
+    return tagName === "INPUT" || tagName === "TEXTAREA" || tagName === "SELECT";
+  }
+
   function handleKeyDown(event) {
     if (event.repeat) return;
     ensureMusicPlayback();
@@ -1016,6 +1023,10 @@
       } else if (runtime.gameMode) {
         exitGameExperience();
       }
+      return;
+    }
+
+    if (isTypingField(event.target)) {
       return;
     }
 
@@ -1066,6 +1077,9 @@
   }
 
   function handleKeyUp(event) {
+    if (isTypingField(event.target)) {
+      return;
+    }
     const direction = keyToDirection(event.key);
     if (direction) {
       runtime.keys.delete(direction);
