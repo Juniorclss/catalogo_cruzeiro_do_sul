@@ -1,10 +1,9 @@
 # Handoff
 
-Updated: 2026-04-20T09:51:18.546Z
+Updated: 2026-04-20T10:33:31.914Z
 
-A homenagem dos fundadores voltou: o CSS do estado is-thanking estava zerando a opacidade do .catalogo-welcome-card inteiro, escondendo a propria tela de agradecimento. Agora apenas .catalogo-welcome-visual e .catalogo-welcome-copy saem da cena, mantendo .catalogo-founder-thanks visivel.
+Home com hero editorial por área em andamento/ajustada no script; PubPaid com rua externa mais movimentada, mais carros/motos, crianças, idosos e cachorros encostados no pub.
 
 ## Next
 
-- Conferir no navegador real a sequencia completa do popup: consentimento
-- tela dos fundadores e fechamento automatico no desktop/mobile.
+- Abrir validação visual local da home e do PubPaid para calibrar enquadramento da hero e densidade dos NPCs/veículos.

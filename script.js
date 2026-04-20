@@ -142,45 +142,6 @@ const heroDesktopBackdropMedia =
     ? window.matchMedia("(min-width: 1041px)")
     : null;
 const shouldUseSolidHeroShell = () => !heroDesktopBackdropMedia?.matches;
-const heroTourismPhotoPool = [
-  { file: "Cidade de Cruzeiro do Sul.jpg", title: "Panorama do centro", note: "vista ampla da cidade" },
-  { file: "Cruzeiro do Sul - Acre (3800379687).jpg", title: "Cidade em foco", note: "recorte urbano do municipio" },
-  { file: "Cruzeiro do Sul - Acre (3800380231).jpg", title: "Bairro e circulacao", note: "camada viva do centro" },
-  { file: "Cruzeiro do Sul - Acre (3800380961).jpg", title: "Ritmo da cidade", note: "ruas e fachadas locais" },
-  { file: "Cruzeiro do Sul - Acre (3800381599).jpg", title: "Vista do vale", note: "cidade cercada de verde" },
-  { file: "Cruzeiro do Sul - Acre (3800381885).jpg", title: "Janela do Jurua", note: "paisagem e movimento local" },
-  { file: "Cruzeiro do Sul - Acre (3800382621).jpg", title: "Momento urbano", note: "arquitetura e vida diaria" },
-  { file: "Cruzeiro do Sul - Acre (3800382979).jpg", title: "Cruzeiro em detalhe", note: "mais um recorte turistico" },
-  { file: "Cruzeiro do Sul - Acre (3800383521).jpg", title: "Centro historico", note: "fachadas e eixo central" },
-  { file: "Cruzeiro do Sul - Acre (3800384851).jpg", title: "Caminho da cidade", note: "bairro, luz e profundidade" },
-  { file: "Cruzeiro do Sul - Acre (3800387275).jpg", title: "Cidade e horizonte", note: "mais abertura para a paisagem" },
-  { file: "Cruzeiro do Sul - Acre (3800388779).jpg", title: "Vale do Jurua", note: "respiro visual da regiao" },
-  { file: "Cruzeiro do Sul - Acre (3800389269).jpg", title: "Quadra urbana", note: "clima turistico do municipio" },
-  { file: "Cruzeiro do Sul - Acre (3800390087).jpg", title: "Vertical da cidade", note: "enquadramento de referencia" },
-  { file: "Cruzeiro do Sul - Acre (3800390785).jpg", title: "Rua e paisagem", note: "movimento do cotidiano local" },
-  { file: "Cruzeiro do Sul - Acre (3800393509).jpg", title: "Cruzeiro do Sul aberta", note: "camadas da cidade no vale" },
-  { file: "Cruzeiro do Sul - Acre (3801204086).jpg", title: "Postal principal", note: "cidade vista de longe" },
-  { file: "Cruzeiro do Sul - Acre (3801204374).jpg", title: "Recorte turistico", note: "cidade com atmosfera de viagem" },
-  { file: "Cruzeiro do Sul - Acre (3801207912).jpg", title: "Linha do horizonte", note: "panorama urbano do Acre" },
-  { file: "Cruzeiro do Sul - Acre (3801208338).jpg", title: "Cidade no fim do dia", note: "cores e relevo do municipio" },
-  { file: "Cruzeiro do Sul - Acre (3801209660).jpg", title: "Vista aberta do centro", note: "paisagem para leitura rapida" },
-  { file: "Cruzeiro do Sul - Acre (3801210260).jpg", title: "Cruzeiro em camadas", note: "profundidade entre ruas e vale" },
-  { file: "Cruzeiro do Sul - Acre (3801211190).jpg", title: "Mais uma janela local", note: "cidade, ceu e volume" },
-  { file: "PanoCZS.jpg", title: "Panorama maior", note: "recorte largo do municipio" },
-  { file: "CZS-AC-BRA.jpg", title: "Cruzeiro vista ampla", note: "postal contemporaneo da cidade" },
-  { file: "DowntownCZS-AC-BRA.jpg", title: "Downtown CZS", note: "miolo urbano com cara de cartao postal" },
-  { file: "DowntownCZS-AC-BRA2.jpg", title: "Centro em destaque", note: "fachadas, vias e movimento" },
-  { file: "Cruzeiro do Sul Acre.jpg", title: "Vista turistica", note: "panorama para abrir a home" },
-  { file: "Cruzeiro do Sul-Acre, Brasil.jpg", title: "Acre em foco", note: "cidade aberta para turismo e memoria" },
-  { file: "CruzeirodoSul-AC-BRA.jpg", title: "Faixa panoramica", note: "leitura horizontal da cidade" },
-  { file: "Cruzeiro do Sul - Acre.jpg", title: "Vista aerea da cidade", note: "postal atual de Cruzeiro do Sul" },
-  { file: "Cruzeiro do Sul-Acre.jpg", title: "Cruzeiro do Sul aberta", note: "mais um angulo aereo contemporaneo" },
-  { file: "Vista parcial Cruzeiro do Sul AC.jpg", title: "Vista parcial do municipio", note: "quadro urbano vindo do acervo local" },
-  { file: "Ponte 15 de novembro, Cruzeiro do Sul (AC).tif", title: "Memoria da ponte 15", note: "arquivo historico da cidade" },
-  { file: "Ponte 17 de novembro, Cruzeiro do Sul (AC).tif", title: "Memoria da ponte 17", note: "arquivo historico do municipio" },
-  { file: "Cruzeiro do Sul (Acre), Fundo Correio da Manhã - 2.tif", title: "Arquivo do centro", note: "imagem historica de Cruzeiro do Sul" },
-  { file: "Cruzeiro do Sul (Acre), Fundo Correio da Manhã - 3.tif", title: "Arquivo do vale", note: "memoria visual da cidade no passado" }
-];
 const heroOfficeBubblePool = [
   "Atualizando destaques da cidade",
   "Resumo local em revisão",
@@ -194,6 +155,16 @@ const heroOfficeStatusGroups = [
   ["Agenda da cidade", "Contexto local", "Publicação no ar"],
   ["Movimento da região", "Apuração ativa", "Destaques confirmados"]
 ];
+const mobileHomeLeadMedia =
+  typeof window !== "undefined" && typeof window.matchMedia === "function"
+    ? window.matchMedia("(max-width: 740px)")
+    : null;
+const mobileHomeDomState = {
+  initialized: false,
+  menuDropdown: null,
+  movedNodes: [],
+  placeHolders: new Map()
+};
 let lastArchiveBrowserOpenAt = 0;
 
 const clearLiveTickerRuntime = () => {
@@ -2557,16 +2528,42 @@ const resolveApiBases = () => {
       : "";
   const localHostPattern = /^(localhost|127(?:\.\d{1,3}){3})$/i;
   const isLocalHttp = window.location.protocol.startsWith("http") && localHostPattern.test(window.location.hostname);
+  const isFileMode = window.location.protocol === "file:";
+  const currentOrigin = String(window.location.origin || "").trim().replace(/\/$/, "");
+  const isLocalLikeBase = (value) => {
+    const normalized = String(value || "").trim().replace(/\/$/, "");
+
+    if (!normalized) {
+      return false;
+    }
+
+    try {
+      const parsed = new URL(normalized);
+      return localHostPattern.test(parsed.hostname);
+    } catch (_error) {
+      return false;
+    }
+  };
+
+  if (!isFileMode && !isLocalHttp) {
+    addBase(currentOrigin);
+  }
 
   if (isLocalHttp && window.location.port !== "3000") {
     localBaseCandidates.forEach(addBase);
   }
 
-  configuredBases.forEach(addBase);
-  addBase(configuredBase);
+  configuredBases.forEach((base) => {
+    if (isFileMode || isLocalHttp || base === currentOrigin || isLocalLikeBase(base)) {
+      addBase(base);
+    }
+  });
+  if (isFileMode || isLocalHttp || configuredBase === currentOrigin || isLocalLikeBase(configuredBase)) {
+    addBase(configuredBase);
+  }
 
   if (window.location.protocol.startsWith("http")) {
-    addBase(window.location.origin);
+    addBase(currentOrigin);
   } else {
     localBaseCandidates.forEach(addBase);
   }
@@ -2695,14 +2692,6 @@ const copyTextToClipboard = async (value = "") => {
   return copied;
 };
 
-const buildCommonsTourismPhotoUrl = (fileName = "", width = 1200) => {
-  const encodedName = encodeURIComponent(String(fileName || "").trim());
-  return `https://images.weserv.nl/?url=commons.wikimedia.org/wiki/Special:FilePath/${encodedName}&w=${width}&output=jpg`;
-};
-
-const buildCommonsTourismFallbackUrl = (fileName = "") =>
-  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(String(fileName || "").trim())}`;
-
 const heroTourismDailyPoolState = {
   dayKey: "",
   items: []
@@ -2735,6 +2724,112 @@ const heroDailyThemeOrder = [
   "social",
   "cotidiano"
 ];
+const heroDailyAreaLabels = {
+  politica: "Politica",
+  prefeitura: "Prefeitura",
+  policia: "Policia",
+  saude: "Saude",
+  educacao: "Educacao",
+  esporte: "Esporte",
+  negocios: "Negocios",
+  cultura: "Cultura",
+  social: "Social",
+  cotidiano: "Cotidiano",
+  comunidade: "Comunidade",
+  servicos: "Servicos",
+  entretenimento: "Entretenimento",
+  games: "Games",
+  infantil: "Infantil",
+  estudantes: "Estudantil",
+  acre: "Acre",
+  trending: "Trending"
+};
+
+const ensureMobileHomeLeadLayout = () => {
+  if (!document.body.classList.contains("editorial-home")) {
+    return;
+  }
+
+  const isMobile = mobileHomeLeadMedia?.matches;
+  const siteHeaderStack = document.querySelector(".site-header-stack");
+  const masthead = document.querySelector(".masthead");
+  const mainNav = document.querySelector(".main-nav");
+  const mainLayout = document.querySelector(".main-layout");
+  const heroShell = document.querySelector(".hero-newsroom-shell.hero-restored-shell");
+  const officePlayStrip = document.querySelector(".office-play-strip");
+
+  if (!siteHeaderStack || !masthead || !mainNav || !mainLayout || !heroShell) {
+    return;
+  }
+
+  const moveAfterHero = [
+    document.querySelector(".device-version-notice"),
+    document.querySelector(".top-construction-yard"),
+    document.querySelector(".ticker-live-shell"),
+    document.querySelector(".header-services-strip")
+  ].filter(Boolean);
+
+  if (isMobile) {
+    if (!mobileHomeDomState.menuDropdown) {
+      const dropdown = document.createElement("details");
+      dropdown.className = "mobile-main-nav-dropdown";
+      dropdown.setAttribute("aria-label", "Menu principal do portal");
+      dropdown.innerHTML = `<summary>Menu do portal</summary>`;
+      mobileHomeDomState.menuDropdown = dropdown;
+    }
+
+    if (!mobileHomeDomState.initialized) {
+      mobileHomeDomState.placeHolders.set(
+        mainNav,
+        (() => {
+          const marker = document.createComment("mobile-main-nav-placeholder");
+          mainNav.parentNode?.insertBefore(marker, mainNav);
+          return marker;
+        })()
+      );
+
+      moveAfterHero.forEach((node) => {
+        const marker = document.createComment(`mobile-home-placeholder-${node.className || node.tagName}`);
+        node.parentNode?.insertBefore(marker, node);
+        mobileHomeDomState.placeHolders.set(node, marker);
+      });
+
+      mobileHomeDomState.movedNodes = moveAfterHero;
+      mobileHomeDomState.initialized = true;
+    }
+
+    if (!mobileHomeDomState.menuDropdown.contains(mainNav)) {
+      mobileHomeDomState.menuDropdown.appendChild(mainNav);
+    }
+
+    if (!masthead.contains(mobileHomeDomState.menuDropdown)) {
+      masthead.appendChild(mobileHomeDomState.menuDropdown);
+    }
+
+    const anchorNode = officePlayStrip || heroShell.nextSibling;
+    moveAfterHero.forEach((node) => {
+      if (node.parentNode !== mainLayout) {
+        mainLayout.insertBefore(node, anchorNode);
+      }
+    });
+    return;
+  }
+
+  if (mobileHomeDomState.menuDropdown && mobileHomeDomState.menuDropdown.contains(mainNav)) {
+    const placeholder = mobileHomeDomState.placeHolders.get(mainNav);
+    if (placeholder?.parentNode) {
+      placeholder.parentNode.insertBefore(mainNav, placeholder.nextSibling);
+    }
+    mobileHomeDomState.menuDropdown.remove();
+  }
+
+  mobileHomeDomState.movedNodes.forEach((node) => {
+    const placeholder = mobileHomeDomState.placeHolders.get(node);
+    if (placeholder?.parentNode) {
+      placeholder.parentNode.insertBefore(node, placeholder.nextSibling);
+    }
+  });
+};
 const heroDailyPersonFocusPattern =
   /\b(presidente|governador|governadora|prefeito|prefeita|senador|senadora|deputado|deputada|vereador|vereadora|delegado|delegada|secretario|secretaria|ministro|ministra|professor|professora|aluno|aluna|estudante|atleta|jogador|jogadora|cantor|cantora|artista|influencer|criador|criadora|empresario|empresaria|medico|medica|familia|mulher|homem|pessoa|equipe|time|colegio|posse|reuniao|entrevista)\b/;
 
@@ -2792,10 +2887,58 @@ const getHeroDailyArticleFocus = (article = {}) => {
 const buildHeroArticleHref = (article = {}) =>
   article.slug ? `./noticia.html?slug=${encodeURIComponent(article.slug)}` : article.sourceUrl || "#radar";
 
+const getHeroAreaKey = (article = {}) => {
+  const categoryKey = normalizeText(article.categoryKey || article.category || "");
+  const haystack = normalizeText(
+    [article.title, article.lede, article.summary, article.category, article.sourceName, article.sourceLabel].join(" ")
+  );
+
+  if (/(prefeitura|municipio|municipal|secretaria)/.test(categoryKey) || /\b(prefeitura|secretaria|municipal|bocalom)\b/.test(haystack)) {
+    return "prefeitura";
+  }
+  if (/(politica|eleic|govern|senad|deput|veread)/.test(categoryKey) || /\b(eleic|governador|senador|deputad|vereador|politic|partido|aleac)\b/.test(haystack)) {
+    return "politica";
+  }
+  if (/(policia|seguranca|segurança)/.test(categoryKey) || /\b(policia|delegacia|operacao|prisao|homicidio|seguranca)\b/.test(haystack)) {
+    return "policia";
+  }
+  if (/(saude|saúde)/.test(categoryKey) || /\b(saude|hospital|ubs|vacina|medic|atendimento)\b/.test(haystack)) {
+    return "saude";
+  }
+  if (/(educacao|educação|estudo|study)/.test(categoryKey) || /\b(escola|enem|vestibular|aluno|estudante|ifac|educacao)\b/.test(haystack)) {
+    return "educacao";
+  }
+  if (/(esporte|sports)/.test(categoryKey) || /\b(futebol|campeonato|partida|esporte|atleta|time)\b/.test(haystack)) {
+    return "esporte";
+  }
+  if (/(negocios|negócios|economia|comercio|comércio)/.test(categoryKey) || /\b(comercio|empresa|negocio|feira|mercado|empreendedor)\b/.test(haystack)) {
+    return "negocios";
+  }
+  if (/(cultura|arte|evento|agenda)/.test(categoryKey) || /\b(show|teatro|cultura|festival|oficina|agenda)\b/.test(haystack)) {
+    return "cultura";
+  }
+  if (/(social|festa|celebridade)/.test(categoryKey) || /\b(festa|social|aniversario|casamento|ensaio)\b/.test(haystack)) {
+    return "social";
+  }
+  if (/(games|jogos)/.test(categoryKey)) {
+    return "games";
+  }
+  if (/(kids|infantil)/.test(categoryKey)) {
+    return "infantil";
+  }
+  if (/(study|estud)/.test(categoryKey)) {
+    return "estudantes";
+  }
+  if (/(trending|buzz|viral)/.test(categoryKey)) {
+    return "trending";
+  }
+  return categoryKey || "cotidiano";
+};
+
 const buildHeroTourismRuntimePool = () => {
   const articles = Array.isArray(window.NEWS_DATA) ? sortRadarArticles(window.NEWS_DATA) : [];
   const seenImages = new Set();
-  const seenThemes = new Set();
+  const seenAreas = new Set();
   const todayKey = getHeroTourismDayKey();
   const normalizedArticles = articles
     .map((article) => normalizeRuntimeArticle(article))
@@ -2818,30 +2961,31 @@ const buildHeroTourismRuntimePool = () => {
 
   return sourceArticles
     .filter((article) => {
-      const themeKey = article.categoryKey || normalizeText(article.category);
+      const areaKey = getHeroAreaKey(article);
       const imageUrl = sanitizeImageUrl(getArticleDisplayImageUrl(article, "hero"));
       const imageKey = String(imageUrl || "").trim();
-      if (!themeKey || seenThemes.has(themeKey) || !imageKey || seenImages.has(imageKey)) {
+      if (!areaKey || seenAreas.has(areaKey) || !imageKey || seenImages.has(imageKey)) {
         return false;
       }
 
-      seenThemes.add(themeKey);
+      seenAreas.add(areaKey);
       seenImages.add(imageKey);
       return true;
     })
     .map((article) => {
+      const areaKey = getHeroAreaKey(article);
       const imageUrl = sanitizeImageUrl(getArticleDisplayImageUrl(article, "hero"));
       return {
-        title: article.category || "Panorama local",
+        title: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
         note: truncateCopy(article.sourceName || article.sourceLabel || "Fonte local", 46),
         proxyUrl: imageUrl,
         fallbackUrl: imageUrl,
         focusPosition: getHeroDailyArticleFocus(article),
         articleTitle: article.title || "Notícia em destaque",
-        articleCategory: article.category || "Destaque",
+        articleCategory: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
         articleSummary: truncateCopy(article.lede || article.summary || "Resumo da notícia em destaque.", 168),
         articleHref: buildHeroArticleHref(article),
-        themeKey: article.categoryKey || normalizeText(article.category),
+        themeKey: areaKey,
         sourceName: article.sourceName || "Fonte local"
       };
     })
@@ -2862,6 +3006,7 @@ const buildHeroTourismRuntimePool = () => {
 
 const buildHeroTourismFallbackPool = () => {
   const articles = Array.isArray(window.NEWS_DATA) ? sortRadarArticles(window.NEWS_DATA) : [];
+  const seenAreas = new Set();
   const normalizedArticles = articles
     .map((article) => normalizeRuntimeArticle(article))
     .filter((article) => {
@@ -2877,32 +3022,36 @@ const buildHeroTourismFallbackPool = () => {
         .join(" ");
       return heroTourismLocalPattern.test(haystack);
     });
-  const dayKey = getHeroTourismDayKey();
-  const fallbackArticles = buildDailyOrderedHeroItems(
-    normalizedArticles.slice(0, heroTourismDailyTarget * 3),
-    `${dayKey}:fallback-articles`
-  );
-  const fallbackPhotos = buildDailyOrderedHeroItems(heroTourismPhotoPool, `${dayKey}:fallback-photos`);
-
-  return fallbackPhotos.map((photo, index) => {
-    const article = fallbackArticles[index % Math.max(fallbackArticles.length, 1)] || null;
-    const title = article?.category || photo.title || "Panorama local";
-    const summaryText = article?.lede || article?.summary || photo.note || "Resumo da notícia em destaque.";
-
-    return {
-      title,
-      note: truncateCopy(article?.sourceName || article?.sourceLabel || photo.note || "Fonte local", 46),
-      proxyUrl: buildCommonsTourismPhotoUrl(photo.file, 1200),
-      fallbackUrl: buildCommonsTourismFallbackUrl(photo.file),
-      focusPosition: article ? getHeroDailyArticleFocus(article) : "",
-      articleTitle: article?.title || photo.title || "Notícia em destaque",
-      articleCategory: article?.category || "Destaque do dia",
-      articleSummary: truncateCopy(summaryText, 168),
-      articleHref: article ? buildHeroArticleHref(article) : "#radar",
-      themeKey: article?.categoryKey || normalizeText(article?.category || photo.title || "destaque"),
-      sourceName: article?.sourceName || photo.note || "Acervo local"
-    };
-  });
+  return buildDailyOrderedHeroItems(
+    normalizedArticles.slice(0, heroTourismDailyTarget * 4),
+    `${getHeroTourismDayKey()}:fallback-areas`
+  )
+    .filter((article) => {
+      const areaKey = getHeroAreaKey(article);
+      const imageUrl = sanitizeImageUrl(getArticleDisplayImageUrl(article, "hero"));
+      if (!areaKey || !imageUrl || seenAreas.has(areaKey)) {
+        return false;
+      }
+      seenAreas.add(areaKey);
+      return true;
+    })
+    .map((article) => {
+      const areaKey = getHeroAreaKey(article);
+      const imageUrl = sanitizeImageUrl(getArticleDisplayImageUrl(article, "hero"));
+      return {
+        title: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
+        note: truncateCopy(article.sourceName || article.sourceLabel || "Fonte local", 46),
+        proxyUrl: imageUrl,
+        fallbackUrl: imageUrl,
+        focusPosition: getHeroDailyArticleFocus(article),
+        articleTitle: article.title || "Notícia em destaque",
+        articleCategory: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
+        articleSummary: truncateCopy(article.lede || article.summary || "Resumo da notícia em destaque.", 168),
+        articleHref: buildHeroArticleHref(article),
+        themeKey: areaKey,
+        sourceName: article.sourceName || "Fonte local"
+      };
+    });
 };
 
 const buildHeroTourismDailyPool = () => {
@@ -2996,7 +3145,7 @@ const setHeroTourismMeta = (photo) => {
   }
 
   if (heroTourismTitle) {
-    heroTourismTitle.textContent = photo.title || photo.articleCategory || "Panorama local";
+    heroTourismTitle.textContent = photo.title || photo.articleCategory || "Area em destaque";
   }
 
   if (heroTourismNote) {
@@ -3008,7 +3157,7 @@ const setHeroTourismMeta = (photo) => {
   }
 
   if (heroDailyNewsCategory) {
-    heroDailyNewsCategory.textContent = photo.articleCategory || "Destaque do dia";
+    heroDailyNewsCategory.textContent = photo.articleCategory || "Area em destaque";
   }
 
   if (heroDailyNewsTitle) {
@@ -3017,7 +3166,7 @@ const setHeroTourismMeta = (photo) => {
 
   if (heroDailyNewsSummary) {
     heroDailyNewsSummary.textContent =
-      photo.articleSummary || photo.note || "Resumo da notícia principal selecionada por tema.";
+      photo.articleSummary || photo.note || "Resumo da notícia principal selecionada para esta editoria.";
   }
 };
 
@@ -4740,6 +4889,7 @@ const applyArticleLinkAttrs = (linkNode, href) => {
 };
 
 const initialMergedNews = syncNewsDataset(initialStaticNews);
+ensureMobileHomeLeadLayout();
 hydrateMosaicHero(initialMergedNews);
 hydrateStaticMediaSurfaces();
 initializeHeroTourismHero();
@@ -4758,6 +4908,17 @@ attachArchiveBrowserLaunchers();
 initializeInsidersArmy();
 initializeInsidersBootScreen();
 initializeInsidersHeroScene();
+if (mobileHomeLeadMedia) {
+  const handleMobileHomeLeadChange = () => {
+    ensureMobileHomeLeadLayout();
+  };
+
+  if (typeof mobileHomeLeadMedia.addEventListener === "function") {
+    mobileHomeLeadMedia.addEventListener("change", handleMobileHomeLeadChange);
+  } else if (typeof mobileHomeLeadMedia.addListener === "function") {
+    mobileHomeLeadMedia.addListener(handleMobileHomeLeadChange);
+  }
+}
 
 const articleCardSelector = [".news-card", ".archive-card", ".mosaic-item"].join(", ");
 const cardInteractiveSelector = "a, button, input, select, textarea, label, summary";

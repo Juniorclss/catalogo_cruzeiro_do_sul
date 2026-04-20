@@ -1503,9 +1503,12 @@ body.catalogo-lock-scroll {
   font-size: 0.74rem;
 }
 
-.catalogo-welcome.is-phone.is-thanking .catalogo-welcome-card {
+.catalogo-welcome.is-phone.is-thanking .catalogo-welcome-visual,
+.catalogo-welcome.is-phone.is-thanking .catalogo-welcome-copy {
   opacity: 0;
-  transform: scale(0.88) translateY(-10px);
+  transform: scale(0.9) translateY(-10px);
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
 }
 
 @media (max-width: 520px) {

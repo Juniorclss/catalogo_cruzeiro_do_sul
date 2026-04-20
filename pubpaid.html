@@ -66,9 +66,6 @@
             <span class="pubpaid-enter-chip-icon" aria-hidden="true"></span>
             <span>Entrar no game</span>
           </button>
-          <button class="pubpaid-chip-button" type="button" data-toggle-night-panel hidden>
-            Painel da noite
-          </button>
           <button class="pubpaid-chip-button" type="button" data-exit-game hidden>
             Sair do game
           </button>
@@ -81,9 +78,9 @@
           <button class="pubpaid-chip-button" type="button" data-open-profile>
             Abrir personagem
           </button>
-          <button class="pubpaid-chip-button" type="button" data-open-editor-chief-call>
-            Editor Chefe Call
-          </button>
+          <a class="pubpaid-chip-button" href="./index.html">
+            Editor Chefe do Jornal
+          </a>
           <button class="pubpaid-chip-button danger" type="button" data-reset-demo>
             Limpar sessão local
           </button>
@@ -101,7 +98,7 @@
             <div class="pubpaid-world-flags" aria-label="Assinatura da experiencia">
               <span>entrada oficial</span>
               <span>login google</span>
-              <span>modo demo</span>
+              <span>visita guiada</span>
               <span>salão em tela cheia</span>
             </div>
 
@@ -110,7 +107,7 @@
                 <span class="pubpaid-splash-kicker">bitmap de entrada</span>
                 <strong data-google-auth-status>Entre com Google para jogar</strong>
                 <p data-google-auth-email>
-                  Google libera personagem, saldo, depósito e histórico. Sem Google você entra só no modo demo.
+                  Google libera personagem, saldo, deposito e historico. Sem Google voce pode conhecer o salao em visita guiada antes de entrar com a conta.
                 </p>
               </div>
               <div class="pubpaid-splash-actions">
@@ -392,13 +389,13 @@
               </div>
               <label>
                 <span>Solicitar saque</span>
-                <select data-pubpaid-withdraw-amount>
-                  <option value="5">5 creditos</option>
-                  <option value="10" selected>10 creditos</option>
-                  <option value="20">20 creditos</option>
-                  <option value="50">50 creditos</option>
-                  <option value="100">100 creditos</option>
-                </select>
+                <input
+                  type="text"
+                  inputmode="decimal"
+                  data-pubpaid-withdraw-amount
+                  value="10,00"
+                  placeholder="Ex: 6,70"
+                />
               </label>
               <div class="pubpaid-cashier-actions">
                 <button class="pubpaid-button outline" type="button" data-pubpaid-request-withdrawal>
@@ -467,6 +464,15 @@
                 <strong>Poker da Mesa Redonda</strong>
                 <span>Segure cartas, troque uma vez e feche a melhor mão da rodada.</span>
               </article>
+              <article data-venue-card="truco">
+                <div class="pubpaid-venue-icon pubpaid-venue-21" aria-hidden="true">
+                  <span class="card card-a">J</span>
+                  <span class="card card-b">♣</span>
+                  <span class="chip"></span>
+                </div>
+                <strong>Truco Paulista</strong>
+                <span>Vira aberta, manilha móvel e três vazas rápidas contra a casa.</span>
+              </article>
               <article data-venue-card="dicecups">
                 <div class="pubpaid-venue-icon pubpaid-venue-dicecups" aria-hidden="true">
                   <span class="cup cup-a"></span>
@@ -493,15 +499,6 @@
                 </div>
                 <strong>Roleta Alta</strong>
                 <span>Roleta em série curta: gira, sai o número e vence quem fechar mais alto mais vezes.</span>
-              </article>
-              <article data-venue-card="wallroulette">
-                <div class="pubpaid-venue-roulette" aria-hidden="true">
-                  <span class="pubpaid-venue-roulette-wheel"></span>
-                  <span class="pubpaid-venue-roulette-ball"></span>
-                  <span class="pubpaid-venue-roulette-pointer"></span>
-                </div>
-                <strong>Roleta da parede</strong>
-                <span>Atalho direto para girar a roleta nova pendurada no salão.</span>
               </article>
               <article data-venue-card="darts">
                 <div class="pubpaid-venue-icon pubpaid-venue-darts" aria-hidden="true">
@@ -587,6 +584,7 @@
               <option value="checkers">Damas Pixel</option>
               <option value="cards21">21 do Bar</option>
               <option value="poker">Poker da Mesa Redonda</option>
+              <option value="truco">Truco Paulista</option>
               <option value="dicecups">Copos e Dados</option>
               <option value="slots">Caça-Níqueis Neon</option>
               <option value="roulette">Roleta Alta</option>
@@ -680,6 +678,7 @@
             </p>
             <div class="pubpaid-waiter-actions">
               <button class="pubpaid-card-button" type="button" data-waiter-open-shop>Abrir bebidas e upgrades</button>
+              <button class="pubpaid-card-button" type="button" data-open-table="truco">Mesa de truco</button>
               <button class="pubpaid-card-button" type="button" data-open-table="dicecups">Mesa de copos</button>
               <button class="pubpaid-card-button" type="button" data-open-table="roulette">Roleta alta</button>
             </div>

@@ -5221,6 +5221,10 @@ function normalizePubpaidAmount(value, fallback = 10) {
   return PUBPAID_ALLOWED_AMOUNTS.includes(parsed) ? parsed : fallback;
 }
 
+function normalizePubpaidMoney(value, fallback = 0) {
+  return Number(parseCurrency(value, fallback).toFixed(2));
+}
+
 function readMergedPubpaidArray(primaryFile, legacyFile) {
   const primary = readJson(primaryFile, []);
   const legacy = readJson(legacyFile, []);
@@ -5254,18 +5258,15 @@ function writePubpaidArrayCompat(primaryFile, legacyFile, items = []) {
 }
 
 function normalizePubpaidWalletRecord(item = {}) {
-  const coerceInt = (value) => {
-    const parsed = Number.parseInt(String(value ?? 0), 10);
-    return Number.isFinite(parsed) ? parsed : 0;
-  };
-  const lockedLegacy = item.locked === true ? coerceInt(item.balance || item.balanceCoins || 0) : 0;
+  const coerceMoney = (value) => normalizePubpaidMoney(value, 0);
+  const lockedLegacy = item.locked === true ? coerceMoney(item.balance || item.balanceCoins || 0) : 0;
   return {
     ...item,
-    balanceCoins: coerceInt(item.balanceCoins ?? item.balance ?? 0),
-    lockedWithdrawalCoins: coerceInt(item.lockedWithdrawalCoins ?? lockedLegacy),
-    totalApprovedDeposits: coerceInt(item.totalApprovedDeposits ?? item.depositsApproved ?? 0),
-    totalApprovedWithdrawals: coerceInt(item.totalApprovedWithdrawals ?? item.withdrawalsApproved ?? 0),
-    locked: Boolean(item.locked ?? (coerceInt(item.lockedWithdrawalCoins ?? 0) > 0))
+    balanceCoins: coerceMoney(item.balanceCoins ?? item.balance ?? 0),
+    lockedWithdrawalCoins: coerceMoney(item.lockedWithdrawalCoins ?? lockedLegacy),
+    totalApprovedDeposits: coerceMoney(item.totalApprovedDeposits ?? item.depositsApproved ?? 0),
+    totalApprovedWithdrawals: coerceMoney(item.totalApprovedWithdrawals ?? item.withdrawalsApproved ?? 0),
+    locked: Boolean(item.locked ?? (coerceMoney(item.lockedWithdrawalCoins ?? 0) > 0))
   };
 }
 
@@ -5301,10 +5302,10 @@ function getPubpaidWallet(authUser = {}, { createIfMissing = true } = {}) {
         id: safeString(walletRecord.id || "", 120) || createRecordId("pubwallet"),
         walletKey: key,
         user: publicAuthUser(authUser),
-        balanceCoins: clampInteger(walletRecord.balanceCoins ?? walletRecord.balance),
-        lockedWithdrawalCoins: clampInteger(walletRecord.lockedWithdrawalCoins ?? walletRecord.locked),
-        totalApprovedDeposits: clampInteger(walletRecord.totalApprovedDeposits ?? walletRecord.approvedDeposits),
-        totalApprovedWithdrawals: clampInteger(walletRecord.totalApprovedWithdrawals ?? walletRecord.approvedWithdrawals),
+        balanceCoins: normalizePubpaidMoney(walletRecord.balanceCoins ?? walletRecord.balance),
+        lockedWithdrawalCoins: normalizePubpaidMoney(walletRecord.lockedWithdrawalCoins ?? walletRecord.locked),
+        totalApprovedDeposits: normalizePubpaidMoney(walletRecord.totalApprovedDeposits ?? walletRecord.approvedDeposits),
+        totalApprovedWithdrawals: normalizePubpaidMoney(walletRecord.totalApprovedWithdrawals ?? walletRecord.approvedWithdrawals),
         createdAt: safeString(walletRecord.createdAt || "", 40),
         updatedAt: safeString(walletRecord.updatedAt || "", 40)
       }
@@ -5362,10 +5363,10 @@ function updatePubpaidWallet(authUser = {}, updater = null) {
   const next = typeof updater === "function" ? updater({ ...current }) || current : current;
   next.user = publicAuthUser(authUser);
   next.walletKey = key;
-  next.balanceCoins = Math.max(0, clampInteger(next.balanceCoins));
-  next.lockedWithdrawalCoins = Math.max(0, clampInteger(next.lockedWithdrawalCoins));
-  next.totalApprovedDeposits = Math.max(0, clampInteger(next.totalApprovedDeposits));
-  next.totalApprovedWithdrawals = Math.max(0, clampInteger(next.totalApprovedWithdrawals));
+  next.balanceCoins = Math.max(0, normalizePubpaidMoney(next.balanceCoins));
+  next.lockedWithdrawalCoins = Math.max(0, normalizePubpaidMoney(next.lockedWithdrawalCoins));
+  next.totalApprovedDeposits = Math.max(0, normalizePubpaidMoney(next.totalApprovedDeposits));
+  next.totalApprovedWithdrawals = Math.max(0, normalizePubpaidMoney(next.totalApprovedWithdrawals));
   next.updatedAt = new Date().toISOString();
   savePubpaidWalletStore({
     ...wallets,
@@ -5407,10 +5408,10 @@ function buildPubpaidAccountPayload(authUser = {}) {
     user: publicAuthUser(authUser),
     wallet: wallet
       ? {
-          balanceCoins: clampInteger(wallet.balanceCoins),
-          lockedWithdrawalCoins: clampInteger(wallet.lockedWithdrawalCoins),
-          totalApprovedDeposits: clampInteger(wallet.totalApprovedDeposits),
-          totalApprovedWithdrawals: clampInteger(wallet.totalApprovedWithdrawals),
+          balanceCoins: normalizePubpaidMoney(wallet.balanceCoins),
+          lockedWithdrawalCoins: normalizePubpaidMoney(wallet.lockedWithdrawalCoins),
+          totalApprovedDeposits: normalizePubpaidMoney(wallet.totalApprovedDeposits),
+          totalApprovedWithdrawals: normalizePubpaidMoney(wallet.totalApprovedWithdrawals),
           createdAt: wallet.createdAt || "",
           updatedAt: wallet.updatedAt || ""
         }
@@ -5854,10 +5855,10 @@ function buildPubpaidAdminPayload() {
     email: item?.user?.email || "",
     name: item?.user?.name || "",
     walletKey: item.walletKey || "",
-    balanceCoins: clampInteger(item.balanceCoins),
-    lockedWithdrawalCoins: clampInteger(item.lockedWithdrawalCoins),
-    totalApprovedDeposits: clampInteger(item.totalApprovedDeposits),
-    totalApprovedWithdrawals: clampInteger(item.totalApprovedWithdrawals)
+    balanceCoins: normalizePubpaidMoney(item.balanceCoins),
+    lockedWithdrawalCoins: normalizePubpaidMoney(item.lockedWithdrawalCoins),
+    totalApprovedDeposits: normalizePubpaidMoney(item.totalApprovedDeposits),
+    totalApprovedWithdrawals: normalizePubpaidMoney(item.totalApprovedWithdrawals)
   }));
 
   return {
@@ -6894,22 +6895,7 @@ async function handleApi(req, res, pathname, searchParams) {
 
     if (rivalWaiting) {
       store.waiting = store.waiting.filter((entry) => entry.id !== rivalWaiting.id);
-      store.matches.push({
-        id: createRecordId("pvp"),
-        gameId,
-        stake,
-        status: "active",
-        createdAt: new Date().toISOString(),
-        startedAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        playerOne: rivalWaiting.player,
-        playerTwo: player,
-        board: createCheckersPvPBoard(),
-        turn: "playerOne",
-        winner: "",
-        resultSummary: "",
-        moveCount: 0,
-      });
+      store.matches.push(createPubpaidPvpMatch(gameId, stake, rivalWaiting.player, player));
     } else {
       store.waiting.push({
         id: createRecordId("pvpw"),
@@ -7038,6 +7024,402 @@ async function handleApi(req, res, pathname, searchParams) {
     return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, "checkers"));
   }
 
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/cards21/action") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para jogar a mesa PvP." });
+    }
+    const body = await parseBody(req);
+    const matchId = cleanShortText(body.matchId || "", 120);
+    const action = cleanShortText(body.action || "", 20).toLowerCase();
+    if (!matchId) {
+      return sendJson(res, 400, { ok: false, error: "Informe a mesa PvP." });
+    }
+    if (!["hit", "stand"].includes(action)) {
+      return sendJson(res, 400, { ok: false, error: "Acao invalida para a mesa do 21." });
+    }
+
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    const matchIndex = store.matches.findIndex((entry) => entry?.id === matchId && entry?.gameId === "cards21");
+    if (matchIndex < 0) {
+      return sendJson(res, 404, { ok: false, error: "Mesa PvP nao encontrada." });
+    }
+    const match = store.matches[matchIndex];
+    const walletKey = getPubpaidWalletKey(authUser);
+    const seat = match?.playerOne?.walletKey === walletKey ? "playerOne" : match?.playerTwo?.walletKey === walletKey ? "playerTwo" : "";
+    if (!seat) {
+      return sendJson(res, 403, { ok: false, error: "Essa mesa pertence a outros jogadores." });
+    }
+    if (match.status !== "active") {
+      return sendJson(res, 400, { ok: false, error: "Essa mesa PvP nao esta mais ativa." });
+    }
+    if (match.turn !== seat) {
+      return sendJson(res, 409, { ok: false, error: "Espere a vez do outro jogador." });
+    }
+
+    const cardsState = match?.cardsState || createCards21PvPState();
+    const stateKey = getCards21SeatStateKey(seat);
+    const cardsKey = getCards21SeatCardsKey(seat);
+    const rivalSeat = seat === "playerOne" ? "playerTwo" : "playerOne";
+    const rivalStateKey = getCards21SeatStateKey(rivalSeat);
+    if (!stateKey || !cardsKey || cardsState[stateKey] !== "active") {
+      return sendJson(res, 400, { ok: false, error: "Sua mao nessa mesa ja foi encerrada." });
+    }
+
+    let resultSummary = "";
+    let winner = "";
+    let finished = false;
+
+    if (action === "hit") {
+      cardsState[cardsKey] = [...(Array.isArray(cardsState[cardsKey]) ? cardsState[cardsKey] : []), drawPubpaid21Card(cardsState)];
+      const total = sumPubpaid21Cards(cardsState[cardsKey]);
+      if (total > 21) {
+        cardsState[stateKey] = "busted";
+        finished = true;
+        winner = rivalSeat;
+        resultSummary =
+          rivalSeat === "playerOne"
+            ? `${match?.playerTwo?.name || "Jogador 2"} estourou em ${total}. ${match?.playerOne?.name || "Jogador 1"} levou a mesa do 21.`
+            : `${match?.playerOne?.name || "Jogador 1"} estourou em ${total}. ${match?.playerTwo?.name || "Jogador 2"} levou a mesa do 21.`;
+      } else if (total === 21) {
+        cardsState[stateKey] = "stood";
+        resultSummary = `${seat === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} travou em 21 e passou a vez.`;
+      } else {
+        resultSummary = `${seat === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} comprou e foi para ${total}.`;
+      }
+    } else {
+      cardsState[stateKey] = "stood";
+      resultSummary = `${seat === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} parou a mao.`;
+    }
+
+    const bothClosed = cardsState.playerOneState !== "active" && cardsState.playerTwoState !== "active";
+    if (!finished && bothClosed) {
+      const resolution = resolveCards21PvpMatch({ ...match, cardsState });
+      finished = true;
+      winner = resolution.winner;
+      resultSummary = resolution.resultSummary;
+    }
+
+    let nextTurn = rivalSeat;
+    if (!finished) {
+      if (cardsState[rivalStateKey] !== "active") {
+        nextTurn = seat;
+      }
+      resultSummary = `${resultSummary} ${nextTurn === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} responde agora.`;
+    }
+
+    store.matches[matchIndex] = {
+      ...match,
+      cardsState,
+      turn: nextTurn,
+      winner,
+      resultSummary,
+      moveCount: clampInteger(match.moveCount) + 1,
+      status: finished ? "finished" : "active",
+      finishedAt: finished ? new Date().toISOString() : "",
+      updatedAt: new Date().toISOString(),
+    };
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, "cards21"));
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/poker/draw") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para jogar a mesa PvP." });
+    }
+    const body = await parseBody(req);
+    const matchId = cleanShortText(body.matchId || "", 120);
+    if (!matchId) {
+      return sendJson(res, 400, { ok: false, error: "Informe a mesa PvP." });
+    }
+
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    const matchIndex = store.matches.findIndex((entry) => entry?.id === matchId && entry?.gameId === "poker");
+    if (matchIndex < 0) {
+      return sendJson(res, 404, { ok: false, error: "Mesa PvP nao encontrada." });
+    }
+    const match = store.matches[matchIndex];
+    const walletKey = getPubpaidWalletKey(authUser);
+    const seat = match?.playerOne?.walletKey === walletKey ? "playerOne" : match?.playerTwo?.walletKey === walletKey ? "playerTwo" : "";
+    if (!seat) {
+      return sendJson(res, 403, { ok: false, error: "Essa mesa pertence a outros jogadores." });
+    }
+    if (match.status !== "active") {
+      return sendJson(res, 400, { ok: false, error: "Essa mesa PvP nao esta mais ativa." });
+    }
+    if (match.turn !== seat) {
+      return sendJson(res, 409, { ok: false, error: "Espere a vez do outro jogador." });
+    }
+
+    const pokerState = match?.pokerState || createPokerPvPState();
+    const cardsKey = seat === "playerOne" ? "playerOneCards" : "playerTwoCards";
+    const heldKey = seat === "playerOne" ? "playerOneHeld" : "playerTwoHeld";
+    const drawUsedKey = seat === "playerOne" ? "playerOneDrawUsed" : "playerTwoDrawUsed";
+    const rivalDrawUsedKey = seat === "playerOne" ? "playerTwoDrawUsed" : "playerOneDrawUsed";
+    if (pokerState[drawUsedKey]) {
+      return sendJson(res, 400, { ok: false, error: "Sua troca dessa mesa ja foi usada." });
+    }
+
+    const heldRaw = Array.isArray(body.held) ? body.held.slice(0, 5) : [];
+    const held = Array.from({ length: 5 }, (_, index) => Boolean(heldRaw[index]));
+    pokerState[heldKey] = held;
+    pokerState[cardsKey] = (Array.isArray(pokerState[cardsKey]) ? pokerState[cardsKey] : []).map((card, index) =>
+      held[index] ? card : drawPokerPvpCards(pokerState.deck, 1)[0] || card
+    );
+    pokerState[drawUsedKey] = true;
+
+    let nextTurn = seat === "playerOne" ? "playerTwo" : "playerOne";
+    let winner = "";
+    let finished = false;
+    let resultSummary = `${seat === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} trocou as cartas e passou a vez.`;
+
+    if (pokerState[rivalDrawUsedKey]) {
+      const playerOneHand = evaluatePokerPvpHand(pokerState.playerOneCards);
+      const playerTwoHand = evaluatePokerPvpHand(pokerState.playerTwoCards);
+      const result = comparePokerPvpHands(playerOneHand, playerTwoHand);
+      finished = true;
+      if (result > 0) {
+        winner = "playerOne";
+        resultSummary = `${match?.playerOne?.name || "Jogador 1"} mostrou ${playerOneHand.label} e venceu ${match?.playerTwo?.name || "Jogador 2"} com ${playerTwoHand.label}.`;
+      } else if (result < 0) {
+        winner = "playerTwo";
+        resultSummary = `${match?.playerTwo?.name || "Jogador 2"} mostrou ${playerTwoHand.label} e venceu ${match?.playerOne?.name || "Jogador 1"} com ${playerOneHand.label}.`;
+      } else {
+        resultSummary = `As duas maos fecharam em ${playerOneHand.label}. A mesa de poker empatou.`;
+      }
+    } else {
+      resultSummary = `${resultSummary} ${nextTurn === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} troca agora.`;
+    }
+
+    store.matches[matchIndex] = {
+      ...match,
+      pokerState,
+      turn: nextTurn,
+      winner,
+      resultSummary,
+      moveCount: clampInteger(match.moveCount) + 1,
+      status: finished ? "finished" : "active",
+      finishedAt: finished ? new Date().toISOString() : "",
+      updatedAt: new Date().toISOString(),
+    };
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, "poker"));
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/darts/throw") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para jogar a mesa PvP." });
+    }
+    const body = await parseBody(req);
+    const matchId = cleanShortText(body.matchId || "", 120);
+    const aimX = clampDartsAimValue(body.aimX, 50);
+    const aimY = clampDartsAimValue(body.aimY, 50);
+    if (!matchId) {
+      return sendJson(res, 400, { ok: false, error: "Informe a mesa PvP." });
+    }
+    if (aimX < 8 || aimX > 92 || aimY < 8 || aimY > 92) {
+      return sendJson(res, 400, { ok: false, error: "A mira dos dardos precisa ficar dentro do alvo." });
+    }
+
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    const matchIndex = store.matches.findIndex((entry) => entry?.id === matchId && entry?.gameId === "darts");
+    if (matchIndex < 0) {
+      return sendJson(res, 404, { ok: false, error: "Mesa PvP nao encontrada." });
+    }
+    const match = store.matches[matchIndex];
+    const walletKey = getPubpaidWalletKey(authUser);
+    const seat = match?.playerOne?.walletKey === walletKey ? "playerOne" : match?.playerTwo?.walletKey === walletKey ? "playerTwo" : "";
+    if (!seat) {
+      return sendJson(res, 403, { ok: false, error: "Essa mesa pertence a outros jogadores." });
+    }
+    if (match.status !== "active") {
+      return sendJson(res, 400, { ok: false, error: "Essa mesa PvP nao esta mais ativa." });
+    }
+    if (match.turn !== seat) {
+      return sendJson(res, 409, { ok: false, error: "Espere a vez do outro jogador." });
+    }
+
+    const dartsState = match?.dartsState || createDartsPvPState();
+    const throwKey = seat === "playerOne" ? "playerOneThrow" : "playerTwoThrow";
+    const lastKey = seat === "playerOne" ? "lastPlayerOne" : "lastPlayerTwo";
+    const aimXKey = seat === "playerOne" ? "playerOneAimX" : "playerTwoAimX";
+    const aimYKey = seat === "playerOne" ? "playerOneAimY" : "playerTwoAimY";
+    const rivalThrowKey = seat === "playerOne" ? "playerTwoThrow" : "playerOneThrow";
+    if (dartsState[throwKey]) {
+      return sendJson(res, 400, { ok: false, error: "Seu arremesso dessa rodada ja foi enviado." });
+    }
+
+    const throwResult = rollDartsPvpThrow(aimX, aimY);
+    dartsState[throwKey] = throwResult;
+    dartsState[lastKey] = throwResult;
+    dartsState[aimXKey] = aimX;
+    dartsState[aimYKey] = aimY;
+
+    let nextTurn = seat === "playerOne" ? "playerTwo" : "playerOne";
+    let winner = "";
+    let finished = false;
+    let resultSummary = `${seat === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} mirou em ${throwResult.targetLabel} e caiu em ${throwResult.label} (${throwResult.score}).`;
+
+    if (dartsState[rivalThrowKey]) {
+      const playerOneThrow = dartsState.playerOneThrow;
+      const playerTwoThrow = dartsState.playerTwoThrow;
+      dartsState.playerOneScore += clampInteger(playerOneThrow.score);
+      dartsState.playerTwoScore += clampInteger(playerTwoThrow.score);
+      if (playerOneThrow.score > playerTwoThrow.score) {
+        resultSummary = `${match?.playerOne?.name || "Jogador 1"} levou a rodada dos dardos por ${playerOneThrow.score} a ${playerTwoThrow.score}.`;
+      } else if (playerTwoThrow.score > playerOneThrow.score) {
+        resultSummary = `${match?.playerTwo?.name || "Jogador 2"} levou a rodada dos dardos por ${playerTwoThrow.score} a ${playerOneThrow.score}.`;
+      } else {
+        resultSummary = `A rodada de dardos empatou em ${playerOneThrow.score}.`;
+      }
+      dartsState.history.push({
+        round: dartsState.round,
+        playerOne: playerOneThrow.score,
+        playerTwo: playerTwoThrow.score,
+      });
+      dartsState.playerOneThrow = null;
+      dartsState.playerTwoThrow = null;
+
+      if (dartsState.round >= dartsState.maxRounds) {
+        finished = true;
+        if (dartsState.playerOneScore > dartsState.playerTwoScore) {
+          winner = "playerOne";
+          resultSummary = `${match?.playerOne?.name || "Jogador 1"} venceu os dardos por ${dartsState.playerOneScore} a ${dartsState.playerTwoScore}.`;
+        } else if (dartsState.playerTwoScore > dartsState.playerOneScore) {
+          winner = "playerTwo";
+          resultSummary = `${match?.playerTwo?.name || "Jogador 2"} venceu os dardos por ${dartsState.playerTwoScore} a ${dartsState.playerOneScore}.`;
+        } else {
+          resultSummary = `Os dardos fecharam empatados em ${dartsState.playerOneScore} a ${dartsState.playerTwoScore}.`;
+        }
+      } else {
+        dartsState.round += 1;
+        nextTurn = "playerOne";
+        resultSummary = `${resultSummary} Nova rodada aberta no alvo. ${match?.playerOne?.name || "Jogador 1"} mira primeiro.`;
+      }
+    } else {
+      resultSummary = `${resultSummary} ${nextTurn === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} responde agora.`;
+    }
+
+    store.matches[matchIndex] = {
+      ...match,
+      dartsState,
+      turn: nextTurn,
+      winner,
+      resultSummary,
+      moveCount: clampInteger(match.moveCount) + 1,
+      status: finished ? "finished" : "active",
+      finishedAt: finished ? new Date().toISOString() : "",
+      updatedAt: new Date().toISOString(),
+    };
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, "darts"));
+  }
+
+  if (req.method === "POST" && pathname === "/api/pubpaid/pvp/dicecups/guess") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser) {
+      return sendJson(res, 401, { ok: false, error: "Entre com Google para jogar a mesa PvP." });
+    }
+    const body = await parseBody(req);
+    const matchId = cleanShortText(body.matchId || "", 120);
+    const guess = clampInteger(body.guess);
+    if (!matchId) {
+      return sendJson(res, 400, { ok: false, error: "Informe a mesa PvP." });
+    }
+    if (guess < 2 || guess > 12) {
+      return sendJson(res, 400, { ok: false, error: "Escolha uma soma valida entre 2 e 12." });
+    }
+
+    let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    const matchIndex = store.matches.findIndex((entry) => entry?.id === matchId && entry?.gameId === "dicecups");
+    if (matchIndex < 0) {
+      return sendJson(res, 404, { ok: false, error: "Mesa PvP nao encontrada." });
+    }
+    const match = store.matches[matchIndex];
+    const walletKey = getPubpaidWalletKey(authUser);
+    const seat = match?.playerOne?.walletKey === walletKey ? "playerOne" : match?.playerTwo?.walletKey === walletKey ? "playerTwo" : "";
+    if (!seat) {
+      return sendJson(res, 403, { ok: false, error: "Essa mesa pertence a outros jogadores." });
+    }
+    if (match.status !== "active") {
+      return sendJson(res, 400, { ok: false, error: "Essa mesa PvP nao esta mais ativa." });
+    }
+    if (match.turn !== seat) {
+      return sendJson(res, 409, { ok: false, error: "Espere a vez do outro jogador." });
+    }
+
+    const diceState = match?.diceState || createDicecupsPvPState();
+    const guessKey = seat === "playerOne" ? "playerOneGuess" : "playerTwoGuess";
+    const rivalGuessKey = seat === "playerOne" ? "playerTwoGuess" : "playerOneGuess";
+    if (clampInteger(diceState[guessKey]) > 0) {
+      return sendJson(res, 400, { ok: false, error: "Seu palpite dessa rodada ja foi enviado." });
+    }
+
+    diceState[guessKey] = guess;
+    let nextTurn = seat === "playerOne" ? "playerTwo" : "playerOne";
+    let winner = "";
+    let finished = false;
+    let resultSummary = `${seat === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} cobriu a soma ${guess}.`;
+
+    if (clampInteger(diceState[rivalGuessKey]) > 0) {
+      diceState.dice = [1 + Math.floor(Math.random() * 6), 1 + Math.floor(Math.random() * 6)];
+      diceState.total = diceState.dice[0] + diceState.dice[1];
+      const playerOneDiff = Math.abs(clampInteger(diceState.playerOneGuess) - diceState.total);
+      const playerTwoDiff = Math.abs(clampInteger(diceState.playerTwoGuess) - diceState.total);
+      if (playerOneDiff < playerTwoDiff) {
+        diceState.playerOneScore += 1;
+        resultSummary = `${match?.playerOne?.name || "Jogador 1"} leu melhor os copos e venceu a soma ${diceState.total}.`;
+      } else if (playerTwoDiff < playerOneDiff) {
+        diceState.playerTwoScore += 1;
+        resultSummary = `${match?.playerTwo?.name || "Jogador 2"} leu melhor os copos e venceu a soma ${diceState.total}.`;
+      } else {
+        resultSummary = `Os dois ficaram na mesma distancia da soma ${diceState.total}.`;
+      }
+      diceState.history.push({
+        round: diceState.round,
+        playerOne: diceState.playerOneGuess,
+        playerTwo: diceState.playerTwoGuess,
+        total: diceState.total,
+      });
+      if (diceState.round >= diceState.maxRounds) {
+        finished = true;
+        if (diceState.playerOneScore > diceState.playerTwoScore) {
+          winner = "playerOne";
+          resultSummary = `${match?.playerOne?.name || "Jogador 1"} venceu os copos por ${diceState.playerOneScore} a ${diceState.playerTwoScore}.`;
+        } else if (diceState.playerTwoScore > diceState.playerOneScore) {
+          winner = "playerTwo";
+          resultSummary = `${match?.playerTwo?.name || "Jogador 2"} venceu os copos por ${diceState.playerTwoScore} a ${diceState.playerOneScore}.`;
+        } else {
+          resultSummary = `Os copos fecharam empatados em ${diceState.playerOneScore} a ${diceState.playerTwoScore}.`;
+        }
+      } else {
+        diceState.round += 1;
+        diceState.playerOneGuess = 0;
+        diceState.playerTwoGuess = 0;
+        nextTurn = "playerOne";
+        resultSummary = `${resultSummary} Nova rodada aberta. ${match?.playerOne?.name || "Jogador 1"} escolhe primeiro.`;
+      }
+    } else {
+      resultSummary = `${resultSummary} ${nextTurn === "playerOne" ? match?.playerOne?.name || "Jogador 1" : match?.playerTwo?.name || "Jogador 2"} responde agora.`;
+    }
+
+    store.matches[matchIndex] = {
+      ...match,
+      diceState,
+      turn: nextTurn,
+      winner,
+      resultSummary,
+      moveCount: clampInteger(match.moveCount) + 1,
+      status: finished ? "finished" : "active",
+      finishedAt: finished ? new Date().toISOString() : "",
+      updatedAt: new Date().toISOString(),
+    };
+    store = writePubpaidPvpStore(store);
+    return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, "dicecups"));
+  }
+
   if (req.method === "POST" && pathname === "/api/pubpaid/deposits") {
     const authUser = readCatalogoAuthSession(req);
     if (!authUser) {
@@ -7106,7 +7488,13 @@ async function handleApi(req, res, pathname, searchParams) {
     }
 
     const body = await parseBody(req);
-    const amount = normalizePubpaidAmount(body.amount, 10);
+    const amount = normalizePubpaidMoney(body.amount, 0);
+    if (amount <= 0) {
+      return sendJson(res, 400, {
+        ok: false,
+        error: "Informe um valor valido para a retirada."
+      });
+    }
     const wallet = getPubpaidWallet(authUser);
     if (!wallet) {
       return sendJson(res, 400, {
@@ -7115,7 +7503,7 @@ async function handleApi(req, res, pathname, searchParams) {
       });
     }
 
-    if (clampInteger(wallet.balanceCoins) < amount) {
+    if (normalizePubpaidMoney(wallet.balanceCoins) + 0.0001 < amount) {
       return sendJson(res, 400, {
         ok: false,
         error: "Saldo insuficiente para solicitar esse saque."
@@ -7131,7 +7519,7 @@ async function handleApi(req, res, pathname, searchParams) {
       user: publicAuthUser(authUser),
       walletKey: wallet.walletKey,
       amount: Number(amount.toFixed(2)),
-      creditsRequested: Math.floor(amount),
+      creditsRequested: Number(amount.toFixed(2)),
       status: "aguardando-confirmacao-saque",
       payment: {
         method: "pix-manual",
@@ -7151,8 +7539,8 @@ async function handleApi(req, res, pathname, searchParams) {
 
     updatePubpaidWallet(authUser, (current) => ({
       ...current,
-      balanceCoins: Math.max(0, clampInteger(current.balanceCoins) - amount),
-      lockedWithdrawalCoins: clampInteger(current.lockedWithdrawalCoins) + amount
+      balanceCoins: Math.max(0, normalizePubpaidMoney(current.balanceCoins) - amount),
+      lockedWithdrawalCoins: normalizePubpaidMoney(current.lockedWithdrawalCoins) + amount
     }));
 
     await appendCanonicalPubpaidItem("withdrawals", nextItem);
@@ -7279,10 +7667,10 @@ async function handleApi(req, res, pathname, searchParams) {
       player: item?.user?.name || "",
       email: item?.user?.email || "",
       walletKey: item.walletKey || "",
-      balanceCoins: clampInteger(item.balanceCoins),
-      lockedWithdrawalCoins: clampInteger(item.lockedWithdrawalCoins),
-      totalApprovedDeposits: clampInteger(item.totalApprovedDeposits),
-      totalApprovedWithdrawals: clampInteger(item.totalApprovedWithdrawals)
+      balanceCoins: normalizePubpaidMoney(item.balanceCoins),
+      lockedWithdrawalCoins: normalizePubpaidMoney(item.lockedWithdrawalCoins),
+      totalApprovedDeposits: normalizePubpaidMoney(item.totalApprovedDeposits),
+      totalApprovedWithdrawals: normalizePubpaidMoney(item.totalApprovedWithdrawals)
     }));
     return sendCsv(res, 200, toCsv(rows) || "updatedAt,player,email,walletKey,balanceCoins,lockedWithdrawalCoins,totalApprovedDeposits,totalApprovedWithdrawals\n", "pubpaid_carteiras.csv");
   }
@@ -7709,7 +8097,7 @@ function buildPubpaidAdminPayload() {
   };
 }
 
-const PUBPAID_PVP_ENABLED_GAMES = new Set(["checkers"]);
+const PUBPAID_PVP_ENABLED_GAMES = new Set(["checkers", "cards21", "poker", "darts", "dicecups"]);
 const PUBPAID_PVP_WAIT_MS = 1000 * 60 * 15;
 const PUBPAID_PVP_MATCH_MS = 1000 * 60 * 60 * 6;
 
@@ -7777,6 +8165,352 @@ function createCheckersPvPBoard() {
     }
   }
   return board;
+}
+
+function drawPubpaid21Card(stateCards) {
+  const deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 11];
+  const value = deck[Math.floor(Math.random() * deck.length)];
+  stateCards.drawCount = clampInteger(stateCards.drawCount) + 1;
+  return value;
+}
+
+function sumPubpaid21Cards(cards = []) {
+  let total = (Array.isArray(cards) ? cards : []).reduce((sum, card) => sum + clampInteger(card), 0);
+  let aces = (Array.isArray(cards) ? cards : []).filter((card) => clampInteger(card) === 11).length;
+  while (total > 21 && aces > 0) {
+    total -= 10;
+    aces -= 1;
+  }
+  return total;
+}
+
+function createCards21PvPState() {
+  const cardsState = {
+    drawCount: 0,
+    playerOneCards: [],
+    playerTwoCards: [],
+    playerOneState: "active",
+    playerTwoState: "active",
+  };
+  cardsState.playerOneCards.push(drawPubpaid21Card(cardsState));
+  cardsState.playerOneCards.push(drawPubpaid21Card(cardsState));
+  cardsState.playerTwoCards.push(drawPubpaid21Card(cardsState));
+  cardsState.playerTwoCards.push(drawPubpaid21Card(cardsState));
+  return cardsState;
+}
+
+function createPokerPvpDeck() {
+  const suits = ["hearts", "diamonds", "clubs", "spades"];
+  const ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const deck = [];
+  suits.forEach((suit) => {
+    ranks.forEach((rank) => deck.push({ suit, rank }));
+  });
+  for (let index = deck.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    const temp = deck[index];
+    deck[index] = deck[swapIndex];
+    deck[swapIndex] = temp;
+  }
+  return deck;
+}
+
+function drawPokerPvpCards(deck, count) {
+  const cards = [];
+  for (let index = 0; index < count; index += 1) {
+    const card = deck.pop();
+    if (card) cards.push(card);
+  }
+  return cards;
+}
+
+function createPokerPvPState() {
+  const deck = createPokerPvpDeck();
+  return {
+    deck,
+    playerOneCards: drawPokerPvpCards(deck, 5),
+    playerTwoCards: drawPokerPvpCards(deck, 5),
+    playerOneHeld: [false, false, false, false, false],
+    playerTwoHeld: [false, false, false, false, false],
+    playerOneDrawUsed: false,
+    playerTwoDrawUsed: false,
+  };
+}
+
+function countPokerPvpRanks(cards = []) {
+  const counts = new Map();
+  cards.forEach((card) => counts.set(card.rank, (counts.get(card.rank) || 0) + 1));
+  return counts;
+}
+
+function isPokerPvpStraight(uniqueRanks = []) {
+  if (uniqueRanks.length !== 5) return false;
+  for (let index = 0; index < uniqueRanks.length - 1; index += 1) {
+    if (uniqueRanks[index] - 1 !== uniqueRanks[index + 1]) {
+      return uniqueRanks.join(",") === "14,5,4,3,2";
+    }
+  }
+  return true;
+}
+
+function evaluatePokerPvpHand(cards = []) {
+  const sorted = cards.slice().sort((a, b) => b.rank - a.rank);
+  const ranks = sorted.map((card) => card.rank);
+  const suits = sorted.map((card) => card.suit);
+  const counts = Array.from(countPokerPvpRanks(sorted).entries()).sort((a, b) => b[1] - a[1] || b[0] - a[0]);
+  const uniqueRanks = Array.from(new Set(ranks)).sort((a, b) => b - a);
+  const flush = suits.every((suit) => suit === suits[0]);
+  const straight = isPokerPvpStraight(uniqueRanks);
+
+  if (flush && straight) {
+    return { score: 8, label: "straight flush", tiebreak: [uniqueRanks[0] === 14 && uniqueRanks[1] === 5 ? 5 : uniqueRanks[0]] };
+  }
+  if (counts[0]?.[1] === 4) {
+    return { score: 7, label: "quadra", tiebreak: [counts[0][0], counts[1][0]] };
+  }
+  if (counts[0]?.[1] === 3 && counts[1]?.[1] === 2) {
+    return { score: 6, label: "full house", tiebreak: [counts[0][0], counts[1][0]] };
+  }
+  if (flush) {
+    return { score: 5, label: "flush", tiebreak: uniqueRanks };
+  }
+  if (straight) {
+    return { score: 4, label: "sequência", tiebreak: [uniqueRanks[0] === 14 && uniqueRanks[1] === 5 ? 5 : uniqueRanks[0]] };
+  }
+  if (counts[0]?.[1] === 3) {
+    return { score: 3, label: "trinca", tiebreak: [counts[0][0], ...uniqueRanks.filter((rank) => rank !== counts[0][0])] };
+  }
+  if (counts[0]?.[1] === 2 && counts[1]?.[1] === 2) {
+    const pairs = counts.filter((entry) => entry[1] === 2).map((entry) => entry[0]).sort((a, b) => b - a);
+    const kicker = uniqueRanks.find((rank) => !pairs.includes(rank)) || 0;
+    return { score: 2, label: "dois pares", tiebreak: [...pairs, kicker] };
+  }
+  if (counts[0]?.[1] === 2) {
+    return { score: 1, label: "par", tiebreak: [counts[0][0], ...uniqueRanks.filter((rank) => rank !== counts[0][0])] };
+  }
+  return { score: 0, label: "carta alta", tiebreak: uniqueRanks };
+}
+
+function comparePokerPvpHands(a, b) {
+  if (a.score !== b.score) return a.score > b.score ? 1 : -1;
+  const maxLength = Math.max(a.tiebreak.length, b.tiebreak.length);
+  for (let index = 0; index < maxLength; index += 1) {
+    const left = a.tiebreak[index] || 0;
+    const right = b.tiebreak[index] || 0;
+    if (left !== right) return left > right ? 1 : -1;
+  }
+  return 0;
+}
+
+function createDartsPvPState() {
+  return {
+    round: 1,
+    maxRounds: 3,
+    playerOneScore: 0,
+    playerTwoScore: 0,
+    playerOneThrow: null,
+    playerTwoThrow: null,
+    lastPlayerOne: null,
+    lastPlayerTwo: null,
+    playerOneAimX: 50,
+    playerOneAimY: 50,
+    playerTwoAimX: 50,
+    playerTwoAimY: 50,
+    history: [],
+  };
+}
+
+function createDicecupsPvPState() {
+  return {
+    round: 1,
+    maxRounds: 3,
+    playerOneScore: 0,
+    playerTwoScore: 0,
+    playerOneGuess: 0,
+    playerTwoGuess: 0,
+    dice: [0, 0],
+    total: 0,
+    history: [],
+  };
+}
+
+function clampDartsAimValue(value, fallback = 50) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return fallback;
+  return Math.max(0, Math.min(100, numeric));
+}
+
+function getDartboardScoreFromPoint(x, y) {
+  const dx = clampDartsAimValue(x, 50) - 50;
+  const dy = clampDartsAimValue(y, 50) - 50;
+  const distance = Math.hypot(dx, dy);
+  if (distance > 48) {
+    return { score: 0, ring: "miss", number: 0, multiplier: 0, label: "fora do alvo" };
+  }
+  if (distance <= 4.2) {
+    return { score: 50, ring: "bull", number: 25, multiplier: 2, label: "bull 50" };
+  }
+  if (distance <= 8.4) {
+    return { score: 25, ring: "outerBull", number: 25, multiplier: 1, label: "outer bull 25" };
+  }
+  const order = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+  const angle = (Math.atan2(dx, -dy) * 180) / Math.PI;
+  const normalizedAngle = (angle + 360 + 9) % 360;
+  const number = order[Math.floor(normalizedAngle / 18) % order.length];
+  if (distance >= 38.5 && distance <= 48) {
+    return { score: number * 2, ring: "double", number, multiplier: 2, label: `double ${number}` };
+  }
+  if (distance >= 24.5 && distance <= 30.5) {
+    return { score: number * 3, ring: "triple", number, multiplier: 3, label: `triple ${number}` };
+  }
+  return { score: number, ring: "single", number, multiplier: 1, label: `single ${number}` };
+}
+
+function getDartAimDifficulty(target) {
+  if (!target || target.ring === "miss") return 0.9;
+  if (target.ring === "bull") return 1.45;
+  if (target.ring === "outerBull") return 1.2;
+  if (target.ring === "triple" || target.ring === "double") return 1.15;
+  return 0.82;
+}
+
+function randomDartSpread(range) {
+  return (Math.random() * 2 - 1) * range + (Math.random() * 2 - 1) * range * 0.55;
+}
+
+function rollDartsPvpThrow(aimX, aimY) {
+  const target = getDartboardScoreFromPoint(aimX, aimY);
+  const difficulty = getDartAimDifficulty(target);
+  const spread = Math.max(4, 8 + difficulty * 8);
+  const finalX = clampDartsAimValue(aimX + randomDartSpread(spread), 50);
+  const finalY = clampDartsAimValue(aimY + randomDartSpread(spread), 50);
+  const outcome = getDartboardScoreFromPoint(finalX, finalY);
+  return {
+    aimX: clampDartsAimValue(aimX, 50),
+    aimY: clampDartsAimValue(aimY, 50),
+    targetLabel: target.label,
+    score: outcome.score,
+    ring: outcome.ring,
+    number: outcome.number,
+    multiplier: outcome.multiplier,
+    label: outcome.label,
+    x: finalX,
+    y: finalY,
+  };
+}
+
+function getCards21SeatStateKey(seat = "") {
+  return seat === "playerOne" ? "playerOneState" : seat === "playerTwo" ? "playerTwoState" : "";
+}
+
+function getCards21SeatCardsKey(seat = "") {
+  return seat === "playerOne" ? "playerOneCards" : seat === "playerTwo" ? "playerTwoCards" : "";
+}
+
+function createPubpaidPvpMatch(gameId, stake, playerOne, playerTwo) {
+  const match = {
+    id: createRecordId("pvp"),
+    gameId,
+    stake,
+    status: "active",
+    createdAt: new Date().toISOString(),
+    startedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    playerOne,
+    playerTwo,
+    winner: "",
+    resultSummary: "",
+    moveCount: 0,
+  };
+
+  if (gameId === "checkers") {
+    return {
+      ...match,
+      board: createCheckersPvPBoard(),
+      turn: "playerOne",
+    };
+  }
+
+  if (gameId === "cards21") {
+    return {
+      ...match,
+      turn: "playerOne",
+      cardsState: createCards21PvPState(),
+      resultSummary: `${playerOne?.name || "Jogador 1"} compra ou para primeiro.`,
+    };
+  }
+
+  if (gameId === "poker") {
+    return {
+      ...match,
+      turn: "playerOne",
+      pokerState: createPokerPvPState(),
+      resultSummary: `${playerOne?.name || "Jogador 1"} segura cartas e troca primeiro.`,
+    };
+  }
+
+  if (gameId === "darts") {
+    return {
+      ...match,
+      turn: "playerOne",
+      dartsState: createDartsPvPState(),
+      resultSummary: `${playerOne?.name || "Jogador 1"} mira primeiro no alvo.`,
+    };
+  }
+
+  if (gameId === "dicecups") {
+    return {
+      ...match,
+      turn: "playerOne",
+      diceState: createDicecupsPvPState(),
+      resultSummary: `${playerOne?.name || "Jogador 1"} escolhe a soma primeiro.`,
+    };
+  }
+
+  return match;
+}
+
+function resolveCards21PvpMatch(match) {
+  const cardsState = match?.cardsState || createCards21PvPState();
+  const playerOneTotal = sumPubpaid21Cards(cardsState.playerOneCards);
+  const playerTwoTotal = sumPubpaid21Cards(cardsState.playerTwoCards);
+  const playerOneLive = playerOneTotal <= 21;
+  const playerTwoLive = playerTwoTotal <= 21;
+
+  if (!playerOneLive && !playerTwoLive) {
+    return {
+      winner: "",
+      resultSummary: "As duas maos estouraram. A mesa devolveu a entrada.",
+    };
+  }
+  if (!playerOneLive) {
+    return {
+      winner: "playerTwo",
+      resultSummary: `${match?.playerOne?.name || "Jogador 1"} estourou. ${match?.playerTwo?.name || "Jogador 2"} levou a mesa do 21.`,
+    };
+  }
+  if (!playerTwoLive) {
+    return {
+      winner: "playerOne",
+      resultSummary: `${match?.playerTwo?.name || "Jogador 2"} estourou. ${match?.playerOne?.name || "Jogador 1"} levou a mesa do 21.`,
+    };
+  }
+  if (playerOneTotal > playerTwoTotal) {
+    return {
+      winner: "playerOne",
+      resultSummary: `${match?.playerOne?.name || "Jogador 1"} travou melhor em ${playerOneTotal} e venceu o 21.`,
+    };
+  }
+  if (playerTwoTotal > playerOneTotal) {
+    return {
+      winner: "playerTwo",
+      resultSummary: `${match?.playerTwo?.name || "Jogador 2"} travou melhor em ${playerTwoTotal} e venceu o 21.`,
+    };
+  }
+  return {
+    winner: "",
+    resultSummary: `As duas maos fecharam em ${playerOneTotal}. A mesa devolveu a entrada.`,
+  };
 }
 
 function getPvpCheckersOwner(piece = "") {

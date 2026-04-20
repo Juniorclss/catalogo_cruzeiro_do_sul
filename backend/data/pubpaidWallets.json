@@ -1,0 +1,21 @@
+[
+  {
+    "id": "pubwallet_de5523d1307df3fb",
+    "walletKey": "email:teste.pubpaid@example.com",
+    "user": {
+      "sub": "fake-sub",
+      "email": "teste.pubpaid@example.com",
+      "name": "Jogador Teste",
+      "givenName": "Jogador",
+      "familyName": "Teste",
+      "picture": ""
+    },
+    "balance": 5,
+    "depositsApproved": 5,
+    "withdrawalsApproved": 0,
+    "locked": false,
+    "createdAt": "2026-04-20T06:19:50.782Z",
+    "updatedAt": "2026-04-20T06:19:50.782Z",
+    "lastDepositId": "pubdep_fake_r5_test"
+  }
+]

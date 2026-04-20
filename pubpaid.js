@@ -74,13 +74,22 @@
       shortLabel: "21",
       description: "Cartas, leitura de risco e aquela dúvida entre pedir mais uma ou parar.",
       sceneCopy: "As cartas já estão na mesa. Agora é você quem decide até onde vai.",
-      stakes: DEMO_STAKES
+      stakes: DEMO_STAKES,
+      pvp: true
     },
     poker: {
       label: "Poker da Mesa Redonda",
       shortLabel: "poker",
       description: "Draw poker em rodada curta: segure as cartas certas, troque o resto e veja quem fechou a melhor mão.",
       sceneCopy: "A mesa de poker está pronta. Escolha o que segurar, puxe novas cartas e dispute a melhor combinação.",
+      stakes: DEMO_STAKES,
+      pvp: true
+    },
+    truco: {
+      label: "Truco Paulista",
+      shortLabel: "truco",
+      description: "Três vazas, vira aberta e manilha móvel num duelo rápido contra a casa.",
+      sceneCopy: "A vira já caiu na mesa. Leia a manilha, escolha a carta certa e tente fechar duas das três vazas.",
       stakes: DEMO_STAKES
     },
     dicecups: {
@@ -88,7 +97,8 @@
       shortLabel: "copos",
       description: "Uma mesa para blefe, leitura de clima e um pouco de ousadia.",
       sceneCopy: "Os copos escondem a resposta. Confie no seu palpite e veja no que dá.",
-      stakes: DEMO_STAKES
+      stakes: DEMO_STAKES,
+      pvp: true
     },
     slots: {
       label: "Caça-Níqueis Neon",
@@ -108,9 +118,10 @@
     darts: {
       label: "Dardos de Parede",
       shortLabel: "dardos",
-      description: "Alvo na parede, três arremessos por rodada e disputa direta de precisão contra a casa.",
-      sceneCopy: "O alvo está preso na parede. Escolha o risco do arremesso e tente fechar mais pontos.",
-      stakes: DEMO_STAKES
+      description: "Mire no eixo X e Y do alvo oficial, aceite o desvio do braço e tente fechar mais pontos no tabuleiro real.",
+      sceneCopy: "O alvo está preso na parede. Mire com precisão lateral e vertical, porque acertar o centro aqui é raro.",
+      stakes: DEMO_STAKES,
+      pvp: true
     }
   };
 
@@ -134,6 +145,11 @@
       name: "Otto River",
       archetype: "street",
       bio: "Joga fechado, segura cartas fortes e quase nunca entrega a leitura da mão."
+    },
+    truco: {
+      name: "Bia Manilha",
+      archetype: "lounge",
+      bio: "Conta a vaza pelo olhar e adora crescer quando a vira ajuda."
     },
     dicecups: {
       name: "Maya Cups",
@@ -532,6 +548,16 @@
         radius: 82
       },
       {
+        id: "truco",
+        type: "game",
+        gameId: "truco",
+        label: TABLE_META.truco.label,
+        venueKey: "truco",
+        x: 546,
+        y: 494,
+        radius: 82
+      },
+      {
         id: "dicecups",
         type: "game",
         gameId: "dicecups",
@@ -560,16 +586,6 @@
         x: 764,
         y: 510,
         radius: 84
-      },
-      {
-        id: "wall-roulette",
-        type: "game",
-        gameId: "roulette",
-        label: "Roleta da parede",
-        venueKey: "wallroulette",
-        x: 612,
-        y: 108,
-        radius: 82
       },
       {
         id: "wall-darts",
@@ -729,6 +745,8 @@
     notes: [],
     noteTimer: 0,
     npcs: [],
+    exteriorWalkers: [],
+    exteriorTraffic: [],
     npcBubbleTimer: 0,
     npcBubbles: [],
     singerBursts: [],
@@ -786,7 +804,9 @@
       ctx: null,
       timer: null,
       step: 0,
-      currentTrackIndex: 0
+      currentTrackIndex: 0,
+      trafficTimer: 0,
+      trafficCooldown: randomBetween(1.6, 3.8)
     }
   };
 
@@ -879,6 +899,8 @@
   function init() {
     preloadImages().then(() => {
       runtime.npcs = createInteriorNpcs();
+      runtime.exteriorWalkers = createExteriorWalkers();
+      runtime.exteriorTraffic = createExteriorTraffic();
       resetScenePosition();
       fillProfileForm();
       renderAll();
@@ -1210,8 +1232,18 @@
     }
 
     if (event.target.closest("[data-start-game]")) {
-      if (runtime.activeGame?.id === "checkers" && TABLE_META.checkers.pvp) {
-        void startCheckersPvpFlow();
+      if (runtime.activeGame?.multiplayer?.enabled) {
+        if (runtime.activeGame.id === "checkers") {
+          void startCheckersPvpFlow();
+        } else if (runtime.activeGame.id === "cards21") {
+          void startCards21PvpFlow();
+        } else if (runtime.activeGame.id === "dicecups") {
+          void startDicecupsPvpFlow();
+        } else if (runtime.activeGame.id === "poker") {
+          void startPokerPvpFlow();
+        } else if (runtime.activeGame.id === "darts") {
+          void startDartsPvpFlow();
+        }
       } else {
         startActiveGame();
       }
@@ -1285,6 +1317,12 @@
 
     if (event.target.closest("[data-poker-draw]")) {
       handlePokerDraw();
+      return;
+    }
+
+    const trucoPlay = event.target.closest("[data-truco-play]");
+    if (trucoPlay) {
+      handleTrucoPlay(clampInteger(trucoPlay.dataset.trucoPlay));
       return;
     }
 
@@ -1460,8 +1498,11 @@
   function updateScene(delta, now) {
     updateStageNotes(delta);
     updateInteriorNpcs(delta);
+    updateExteriorWalkers(delta);
+    updateExteriorTraffic(delta);
     updateNpcBubbles(delta);
     updateSingerBursts(delta);
+    updateTrafficAudio(delta, now);
 
     if (
       !refs.tutorialModal.hidden ||
@@ -2005,16 +2046,23 @@
       sceneCtx.fillRect(0, 0, WORLD.width, WORLD.height);
     }
 
-    drawInteriorLights(now);
-    drawDanceCouples(now);
-    drawInteractionMarkers(now);
-    drawInteriorNpcs();
-    drawStageNotes();
-    drawNpcBubbles();
-    drawSingerBursts();
+    if (runtime.scene === "interior") {
+      drawInteriorLights(now);
+      drawDanceCouples(now);
+      drawInteractionMarkers(now);
+      drawInteriorNpcs();
+      drawStageNotes();
+      drawNpcBubbles();
+      drawSingerBursts();
+      drawBarBartender(now);
+    } else {
+      drawExteriorStreetLife(now);
+      drawExteriorTraffic();
+      drawExteriorWalkers();
+      drawInteractionMarkers(now);
+    }
     drawPlayerLabel();
     drawPlayerSprite(sceneCtx, runtime.player.x - 14, runtime.player.y - 42, 2, runtime.player.facing, runtime.player.walkFrame, getPlayerPalette(), true);
-    drawBarBartender(now);
   }
 
   function drawInteriorLights(now) {
@@ -2441,6 +2489,235 @@
     }));
   }
 
+  function createExteriorWalkers() {
+    return [
+      createExteriorWalker({
+        id: "front-walker-a",
+        x: 96,
+        y: 612,
+        minX: 86,
+        maxX: 370,
+        speed: 28,
+        facing: "right",
+        archetype: "street"
+      }),
+      createExteriorWalker({
+        id: "front-walker-b",
+        x: 324,
+        y: 604,
+        minX: 122,
+        maxX: 426,
+        speed: 23,
+        facing: "left",
+        archetype: "lounge",
+        prop: "bag"
+      }),
+      createExteriorWalker({
+        id: "front-walker-c",
+        x: 640,
+        y: 600,
+        minX: 560,
+        maxX: 912,
+        speed: 31,
+        facing: "right",
+        archetype: "cowboy",
+        prop: "hat"
+      }),
+      createExteriorWalker({
+        id: "front-walker-d",
+        x: 900,
+        y: 616,
+        minX: 602,
+        maxX: 922,
+        speed: 19,
+        facing: "left",
+        archetype: "neon"
+      }),
+      createExteriorWalker({
+        id: "front-walker-kid-a",
+        x: 148,
+        y: 584,
+        minX: 104,
+        maxX: 338,
+        speed: 35,
+        facing: "right",
+        archetype: "neon",
+        prop: "kid"
+      }),
+      createExteriorWalker({
+        id: "front-walker-elder-a",
+        x: 248,
+        y: 596,
+        minX: 132,
+        maxX: 404,
+        speed: 16,
+        facing: "right",
+        archetype: "street",
+        prop: "cane"
+      }),
+      createExteriorWalker({
+        id: "front-walker-elder-b",
+        x: 742,
+        y: 586,
+        minX: 622,
+        maxX: 900,
+        speed: 15,
+        facing: "left",
+        archetype: "lounge",
+        prop: "cane"
+      }),
+      createExteriorWalker({
+        id: "front-walker-mom",
+        x: 824,
+        y: 574,
+        minX: 644,
+        maxX: 904,
+        speed: 22,
+        facing: "left",
+        archetype: "lounge",
+        prop: "bag"
+      }),
+      createExteriorWalker({
+        id: "front-walker-kid-b",
+        x: 856,
+        y: 566,
+        minX: 700,
+        maxX: 912,
+        speed: 38,
+        facing: "left",
+        archetype: "street",
+        prop: "kid"
+      }),
+      createExteriorWalker({
+        id: "front-walker-dog-handler",
+        x: 560,
+        y: 610,
+        minX: 482,
+        maxX: 786,
+        speed: 24,
+        facing: "right",
+        archetype: "cowboy",
+        prop: "leash"
+      })
+    ];
+  }
+
+  function createExteriorWalker(config) {
+    return {
+      id: config.id,
+      x: config.x,
+      y: config.y,
+      minX: config.minX,
+      maxX: config.maxX,
+      speed: config.speed,
+      facing: config.facing,
+      archetype: config.archetype,
+      walkFrame: 0,
+      walkClock: 0,
+      pause: randomBetween(0.2, 1.8),
+      prop: config.prop || ""
+    };
+  }
+
+  function createExteriorTraffic() {
+    return [
+      createTrafficVehicle({
+        id: "road-car-a",
+        kind: "car",
+        x: -240,
+        y: 508,
+        speed: 132,
+        dir: 1,
+        length: 78,
+        color: "#ff625e"
+      }),
+      createTrafficVehicle({
+        id: "road-car-b",
+        kind: "car",
+        x: 1180,
+        y: 458,
+        speed: 156,
+        dir: -1,
+        length: 86,
+        color: "#70ebff"
+      }),
+      createTrafficVehicle({
+        id: "road-car-c",
+        kind: "car",
+        x: -340,
+        y: 548,
+        speed: 146,
+        dir: 1,
+        length: 84,
+        color: "#ff9c62"
+      }),
+      createTrafficVehicle({
+        id: "road-car-d",
+        kind: "car",
+        x: 1260,
+        y: 432,
+        speed: 164,
+        dir: -1,
+        length: 90,
+        color: "#9d8cff"
+      }),
+      createTrafficVehicle({
+        id: "road-bike-a",
+        kind: "moto",
+        x: -180,
+        y: 614,
+        speed: 168,
+        dir: 1,
+        length: 46,
+        color: "#ffd166"
+      }),
+      createTrafficVehicle({
+        id: "road-bike-b",
+        kind: "moto",
+        x: 1140,
+        y: 592,
+        speed: 182,
+        dir: -1,
+        length: 46,
+        color: "#80e092"
+      }),
+      createTrafficVehicle({
+        id: "road-bike-c",
+        kind: "moto",
+        x: -280,
+        y: 572,
+        speed: 194,
+        dir: 1,
+        length: 48,
+        color: "#ff62bd"
+      }),
+      createTrafficVehicle({
+        id: "road-bike-d",
+        kind: "moto",
+        x: 1320,
+        y: 520,
+        speed: 188,
+        dir: -1,
+        length: 48,
+        color: "#70ebff"
+      })
+    ];
+  }
+
+  function createTrafficVehicle(config) {
+    return {
+      id: config.id,
+      kind: config.kind,
+      x: config.x,
+      y: config.y,
+      speed: config.speed,
+      dir: config.dir,
+      length: config.length,
+      color: config.color,
+      wait: randomBetween(0.2, 2.4)
+    };
+  }
+
   function findNpcById(npcId) {
     return runtime.npcs.find((npc) => npc.id === npcId) || null;
   }
@@ -2516,6 +2793,240 @@
       runtime.npcBubbleTimer = randomBetween(2.6, 4.8);
       spawnNpcBubble();
     }
+  }
+
+  function updateExteriorWalkers(delta) {
+    if (runtime.scene !== "exterior" || !runtime.exteriorWalkers.length) return;
+    runtime.exteriorWalkers.forEach((walker) => {
+      walker.pause -= delta;
+      if (walker.pause > 0) {
+        walker.walkFrame = 0;
+        walker.walkClock = 0;
+        return;
+      }
+      const direction = walker.facing === "right" ? 1 : -1;
+      walker.x += direction * walker.speed * delta;
+      walker.walkClock += delta;
+      if (walker.walkClock >= 0.18) {
+        walker.walkClock = 0;
+        walker.walkFrame = (walker.walkFrame + 1) % 2;
+      }
+      if (walker.x >= walker.maxX) {
+        walker.x = walker.maxX;
+        walker.facing = "left";
+        walker.pause = randomBetween(0.6, 2.1);
+      } else if (walker.x <= walker.minX) {
+        walker.x = walker.minX;
+        walker.facing = "right";
+        walker.pause = randomBetween(0.6, 2.1);
+      }
+    });
+  }
+
+  function updateExteriorTraffic(delta) {
+    if (runtime.scene !== "exterior" || !runtime.exteriorTraffic.length) return;
+    runtime.exteriorTraffic.forEach((vehicle) => {
+      if (vehicle.wait > 0) {
+        vehicle.wait -= delta;
+        return;
+      }
+      vehicle.x += vehicle.speed * vehicle.dir * delta;
+      if (vehicle.dir > 0 && vehicle.x > WORLD.width + 220) {
+        vehicle.x = -240 - Math.random() * 240;
+        vehicle.wait = randomBetween(1.2, 4.1);
+      } else if (vehicle.dir < 0 && vehicle.x < -240) {
+        vehicle.x = WORLD.width + 220 + Math.random() * 240;
+        vehicle.wait = randomBetween(1.2, 4.1);
+      }
+    });
+  }
+
+  function drawExteriorWalkers() {
+    if (runtime.scene !== "exterior" || !runtime.exteriorWalkers.length) return;
+    runtime.exteriorWalkers
+      .slice()
+      .sort((a, b) => a.y - b.y)
+      .forEach((walker) => {
+        drawPlayerSprite(
+          sceneCtx,
+          walker.x - 14,
+          walker.y - 42,
+          2,
+          walker.facing,
+          walker.walkFrame,
+          PALETTES[walker.archetype] || PALETTES.street,
+          false
+        );
+        drawExteriorWalkerProp(walker);
+      });
+  }
+
+  function drawExteriorWalkerProp(walker) {
+    if (!walker?.prop) return;
+    sceneCtx.save();
+
+    if (walker.prop === "bag") {
+      sceneCtx.fillStyle = "#ffca6b";
+      sceneCtx.fillRect(walker.x + 8, walker.y - 18, 7, 8);
+      sceneCtx.fillStyle = "#7c5522";
+      sceneCtx.fillRect(walker.x + 9, walker.y - 20, 5, 2);
+    } else if (walker.prop === "hat") {
+      sceneCtx.fillStyle = "#c39254";
+      sceneCtx.fillRect(walker.x + 6, walker.y - 36, 12, 3);
+      sceneCtx.fillRect(walker.x + 8, walker.y - 40, 8, 5);
+    } else if (walker.prop === "kid") {
+      sceneCtx.fillStyle = "#ffd89f";
+      sceneCtx.fillRect(walker.x + 7, walker.y - 26, 8, 8);
+      sceneCtx.fillStyle = "#70ebff";
+      sceneCtx.fillRect(walker.x + 6, walker.y - 17, 10, 8);
+      sceneCtx.fillStyle = "#1a1323";
+      sceneCtx.fillRect(walker.x + 8, walker.y - 9, 3, 6);
+      sceneCtx.fillRect(walker.x + 12, walker.y - 9, 3, 6);
+    } else if (walker.prop === "cane") {
+      sceneCtx.fillStyle = "#d8b47b";
+      sceneCtx.fillRect(walker.x + (walker.facing === "left" ? 4 : 20), walker.y - 18, 2, 18);
+      sceneCtx.fillRect(walker.x + (walker.facing === "left" ? 2 : 18), walker.y - 18, 6, 2);
+    } else if (walker.prop === "leash") {
+      const startX = walker.x + (walker.facing === "left" ? 2 : 20);
+      sceneCtx.strokeStyle = "rgba(255, 242, 202, 0.72)";
+      sceneCtx.lineWidth = 1;
+      sceneCtx.beginPath();
+      sceneCtx.moveTo(startX, walker.y - 10);
+      sceneCtx.lineTo(startX + (walker.facing === "left" ? -18 : 18), walker.y - 4);
+      sceneCtx.stroke();
+    }
+
+    sceneCtx.restore();
+  }
+
+  function drawExteriorStreetLife(now) {
+    if (runtime.scene !== "exterior") return;
+
+    const drunkBob = Math.sin(now / 430) * 2;
+    const dogTail = Math.sin(now / 210) * 4;
+
+    sceneCtx.save();
+
+    sceneCtx.fillStyle = "rgba(0,0,0,0.24)";
+    sceneCtx.fillRect(146, 560, 104, 24);
+    sceneCtx.fillRect(736, 560, 120, 26);
+
+    sceneCtx.fillStyle = "#2a1c27";
+    sceneCtx.fillRect(154, 516, 20, 42);
+    sceneCtx.fillRect(176, 526, 26, 32);
+    sceneCtx.fillStyle = "#f0c79f";
+    sceneCtx.fillRect(158, 508 + drunkBob, 10, 10);
+    sceneCtx.fillStyle = "#8b5cff";
+    sceneCtx.fillRect(156, 520, 14, 16);
+    sceneCtx.fillStyle = "#ffca6b";
+    sceneCtx.fillRect(198, 520, 6, 18);
+    sceneCtx.fillRect(202, 514, 2, 5);
+
+    sceneCtx.fillStyle = "#3d2a1f";
+    sceneCtx.fillRect(748, 520, 28, 16);
+    sceneCtx.fillRect(776, 524, 22, 12);
+    sceneCtx.fillStyle = "#7a5135";
+    sceneCtx.fillRect(804, 522, 18, 14);
+    sceneCtx.fillStyle = "#d3a97a";
+    sceneCtx.fillRect(754, 512, 12, 9);
+    sceneCtx.fillRect(782, 516, 11, 9);
+    sceneCtx.fillRect(808, 514, 10, 8);
+
+    sceneCtx.fillStyle = "#1d151f";
+    sceneCtx.fillRect(674, 540, 28, 12);
+    sceneCtx.fillRect(700, 546, 14, 8);
+    sceneCtx.fillStyle = "#8a6a52";
+    sceneCtx.fillRect(680, 534, 12, 9);
+    sceneCtx.fillRect(696 + dogTail * 0.15, 542, 10, 3);
+    sceneCtx.fillStyle = "#ffca6b";
+    sceneCtx.fillRect(708, 538, 3, 3);
+
+    sceneCtx.fillStyle = "#241722";
+    sceneCtx.fillRect(612, 548, 24, 10);
+    sceneCtx.fillRect(632, 552, 10, 7);
+    sceneCtx.fillStyle = "#7f5d49";
+    sceneCtx.fillRect(618, 542, 9, 8);
+    sceneCtx.fillRect(638 + dogTail * 0.12, 548, 7, 3);
+
+    sceneCtx.restore();
+  }
+
+  function drawExteriorTraffic() {
+    if (runtime.scene !== "exterior" || !runtime.exteriorTraffic.length) return;
+    runtime.exteriorTraffic
+      .slice()
+      .sort((a, b) => a.y - b.y)
+      .forEach((vehicle) => {
+        if (vehicle.wait > 0) return;
+        if (vehicle.kind === "moto") {
+          drawExteriorMotorbike(vehicle);
+        } else {
+          drawExteriorCar(vehicle);
+        }
+      });
+  }
+
+  function drawExteriorCar(vehicle) {
+    const x = vehicle.x;
+    const y = vehicle.y;
+    const width = vehicle.length;
+    const height = 28;
+    const front = vehicle.dir > 0 ? x + width : x;
+    sceneCtx.save();
+    if (vehicle.dir < 0) {
+      sceneCtx.translate(x + width / 2, y + height / 2);
+      sceneCtx.scale(-1, 1);
+      sceneCtx.translate(-(x + width / 2), -(y + height / 2));
+    }
+    sceneCtx.fillStyle = "rgba(0,0,0,0.18)";
+    sceneCtx.beginPath();
+    sceneCtx.ellipse(x + width / 2, y + height + 8, width * 0.52, 8, 0, 0, Math.PI * 2);
+    sceneCtx.fill();
+    sceneCtx.fillStyle = vehicle.color;
+    sceneCtx.fillRect(x + 4, y + 8, width - 8, height - 8);
+    sceneCtx.fillRect(x + 18, y, width - 36, 14);
+    sceneCtx.fillStyle = "#101420";
+    sceneCtx.fillRect(x + 22, y + 2, width - 44, 10);
+    sceneCtx.fillStyle = "#f7f2d5";
+    sceneCtx.fillRect(front - 6, y + 12, 4, 5);
+    sceneCtx.fillStyle = "#ff7a59";
+    sceneCtx.fillRect(vehicle.dir > 0 ? x + 2 : x + width - 6, y + 12, 4, 5);
+    sceneCtx.fillStyle = "#0f1118";
+    sceneCtx.fillRect(x + 12, y + height - 6, 12, 6);
+    sceneCtx.fillRect(x + width - 24, y + height - 6, 12, 6);
+    sceneCtx.restore();
+  }
+
+  function drawExteriorMotorbike(vehicle) {
+    const x = vehicle.x;
+    const y = vehicle.y;
+    const length = vehicle.length;
+    sceneCtx.save();
+    if (vehicle.dir < 0) {
+      sceneCtx.translate(x + length / 2, y + 12);
+      sceneCtx.scale(-1, 1);
+      sceneCtx.translate(-(x + length / 2), -(y + 12));
+    }
+    sceneCtx.fillStyle = "rgba(0,0,0,0.18)";
+    sceneCtx.beginPath();
+    sceneCtx.ellipse(x + length / 2, y + 24, 22, 6, 0, 0, Math.PI * 2);
+    sceneCtx.fill();
+    sceneCtx.fillStyle = "#0f1118";
+    sceneCtx.beginPath();
+    sceneCtx.arc(x + 10, y + 18, 6, 0, Math.PI * 2);
+    sceneCtx.arc(x + length - 10, y + 18, 6, 0, Math.PI * 2);
+    sceneCtx.fill();
+    sceneCtx.fillStyle = vehicle.color;
+    sceneCtx.fillRect(x + 10, y + 8, length - 20, 5);
+    sceneCtx.fillRect(x + 16, y + 3, 14, 7);
+    sceneCtx.fillStyle = "#f4c59f";
+    sceneCtx.fillRect(x + 24, y - 7, 6, 10);
+    sceneCtx.fillStyle = "#1f2330";
+    sceneCtx.fillRect(x + 20, y - 1, 16, 6);
+    sceneCtx.fillRect(x + length - 16, y + 2, 3, 8);
+    sceneCtx.fillStyle = "#f7f2d5";
+    sceneCtx.fillRect(x + length - 10, y + 8, 3, 3);
+    sceneCtx.restore();
   }
 
   function spawnNpcBubble() {
@@ -2923,8 +3434,8 @@
 
     if (!walletReady && refs.withdrawFeedback) {
       refs.withdrawFeedback.textContent = runtime.demoMode
-        ? "Modo demo não libera depósito nem retirada."
-        : "A retirada só abre para conta Google identificada.";
+        ? "A visita guiada nao libera deposito nem retirada."
+        : "A retirada so abre para conta Google identificada.";
     }
   }
 
@@ -3408,7 +3919,7 @@
   function syncGameModeUi() {
     const inGame = Boolean(runtime.gameMode);
     document.body.classList.toggle("pubpaid-in-game", inGame);
-    document.body.classList.toggle("pubpaid-night-panel-open", inGame && Boolean(runtime.nightPanelOpen));
+    document.body.classList.toggle("pubpaid-night-panel-open", false);
 
     refs.enterGameButtons.forEach((button) => {
       button.hidden = inGame;
@@ -3419,23 +3930,14 @@
     });
 
     refs.toggleGamePanelButtons.forEach((button) => {
-      button.hidden = !inGame;
-      button.textContent = runtime.nightPanelOpen ? "Fechar menu" : "Menu do jogo";
-      button.setAttribute("aria-expanded", runtime.nightPanelOpen ? "true" : "false");
+      button.hidden = true;
+      button.textContent = "Menu do jogo";
+      button.setAttribute("aria-expanded", "false");
     });
   }
 
   function toggleNightPanel(forceState) {
-    if (!runtime.gameMode) {
-      runtime.nightPanelOpen = false;
-      syncGameModeUi();
-      return;
-    }
-
-    runtime.nightPanelOpen =
-      typeof forceState === "boolean"
-        ? forceState
-        : !runtime.nightPanelOpen;
+    runtime.nightPanelOpen = false;
     syncGameModeUi();
   }
 
@@ -3488,7 +3990,7 @@
     syncGameModeUi();
     renderAll();
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setWorldMessage("Modo demo ligado. Explore o salão em tela cheia antes de conectar sua conta Google.", 3200);
+    setWorldMessage("Visita guiada ativa. Explore o salao em tela cheia antes de conectar sua conta Google.", 3200);
     return true;
   }
 
@@ -3667,12 +4169,12 @@
     `;
   }
 
-  function getCheckersPvpSeatPlayer(match, seat) {
+  function getPvpSeatPlayer(match, seat) {
     if (!match || !seat) return null;
     return seat === "playerOne" ? match.playerOne : match.playerTwo;
   }
 
-  function getCheckersPvpOpponent(match, seat) {
+  function getPvpOpponent(match, seat) {
     if (!match || !seat) return null;
     return seat === "playerOne" ? match.playerTwo : match.playerOne;
   }
@@ -3706,19 +4208,29 @@
   function startPvpPolling() {
     clearPvpPoll();
     const game = runtime.activeGame;
-    if (!game || game.id !== "checkers" || !game.multiplayer) return;
+    if (!game || !game.multiplayer) return;
     runtime.pvpPollTimer = window.setTimeout(() => {
-      void refreshCheckersPvpState();
+      if (game.id === "checkers") {
+        void refreshCheckersPvpState();
+      } else if (game.id === "cards21") {
+        void refreshCards21PvpState();
+      } else if (game.id === "dicecups") {
+        void refreshDicecupsPvpState();
+      } else if (game.id === "poker") {
+        void refreshPokerPvpState();
+      } else if (game.id === "darts") {
+        void refreshDartsPvpState();
+      }
     }, PUBPAID_PVP_POLL_MS);
   }
 
-  async function leaveCheckersPvp(game = runtime.activeGame) {
+  async function leaveActivePvpGame(game = runtime.activeGame) {
     if (!game?.multiplayer?.enabled) return;
     clearPvpPoll();
     try {
       await requestApiJson("/api/pubpaid/pvp/leave", {
         method: "POST",
-        body: JSON.stringify({ gameId: "checkers" })
+        body: JSON.stringify({ gameId: game.id })
       });
     } catch (_error) {
       // best effort
@@ -3728,7 +4240,7 @@
   function hydrateCheckersPvpGame(match, seat) {
     const game = runtime.activeGame;
     if (!game || game.id !== "checkers") return;
-    const opponent = getCheckersPvpOpponent(match, seat);
+    const opponent = getPvpOpponent(match, seat);
     game.multiplayer = {
       ...(game.multiplayer || {}),
       enabled: true,
@@ -3748,7 +4260,7 @@
     if (!game.multiplayer.stakeLocked) {
       game.startedAt = match?.startedAt || new Date().toISOString();
       game.houseFee = 0;
-      game.payout = game.stake * 2;
+      game.payout = getMatchWinnerPayout(game.stake);
       state.wallet.coins -= game.stake;
       game.multiplayer.stakeLocked = true;
     }
@@ -3776,6 +4288,72 @@
     startPvpPolling();
   }
 
+  function hydrateCards21PvpGame(match, seat) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "cards21") return;
+    const opponent = getPvpOpponent(match, seat);
+    const cardsState = match?.cardsState || {};
+    const playerCards = Array.isArray(seat === "playerOne" ? cardsState.playerOneCards : cardsState.playerTwoCards)
+      ? (seat === "playerOne" ? cardsState.playerOneCards : cardsState.playerTwoCards).slice()
+      : [];
+    const opponentCards = Array.isArray(seat === "playerOne" ? cardsState.playerTwoCards : cardsState.playerOneCards)
+      ? (seat === "playerOne" ? cardsState.playerTwoCards : cardsState.playerOneCards).slice()
+      : [];
+    const playerState = seat === "playerOne" ? cardsState.playerOneState : cardsState.playerTwoState;
+    const opponentState = seat === "playerOne" ? cardsState.playerTwoState : cardsState.playerOneState;
+
+    game.multiplayer = {
+      ...(game.multiplayer || {}),
+      enabled: true,
+      state: match?.status || "active",
+      matchId: match?.id || "",
+      seat,
+      waiting: false,
+      stakeLocked: Boolean(game.multiplayer?.stakeLocked),
+      settled: Boolean(game.multiplayer?.settled),
+    };
+    game.opponent = {
+      ...(opponent || HOUSE_OPPONENTS.cards21),
+      name: opponent?.name || "Rival",
+      bio: opponent?.name ? "Conectado na mesma mesa de 21." : HOUSE_OPPONENTS.cards21.bio,
+      archetype: opponent?.archetype || HOUSE_OPPONENTS.cards21.archetype
+    };
+    if (!game.multiplayer.stakeLocked) {
+      game.startedAt = match?.startedAt || new Date().toISOString();
+      game.houseFee = 0;
+      game.payout = getMatchWinnerPayout(game.stake);
+      state.wallet.coins -= game.stake;
+      game.multiplayer.stakeLocked = true;
+    }
+    game.screen = "playing";
+    game.tableState = {
+      phase: match?.status === "finished" ? "finished" : match?.turn === seat ? "player" : "opponent",
+      playerCards,
+      botCards: opponentCards,
+      drawCount: clampInteger(cardsState.drawCount),
+      message:
+        match?.resultSummary ||
+        (match?.turn === seat ? "Sua vez. Compre ou pare." : `${game.opponent.name} está decidindo a mão.`),
+      playerState: playerState || "active",
+      botState: opponentState || "active",
+      multiplayer: true,
+    };
+    saveState();
+    renderAll();
+    if (match?.status === "finished" && !game.multiplayer.settled) {
+      const result = !match?.winner ? "tie" : match?.winner === seat ? "win" : "loss";
+      game.multiplayer.settled = true;
+      finalizeGame(
+        result,
+        match?.resultSummary ||
+          (result === "win" ? "Você venceu a mesa PvP." : result === "loss" ? "O rival venceu a mesa PvP." : "A mesa empatou.")
+      );
+      return;
+    }
+    renderGameModal();
+    startPvpPolling();
+  }
+
   function applyCheckersPvpState(payload) {
     const game = runtime.activeGame;
     if (!game || game.id !== "checkers" || !game.multiplayer) return;
@@ -3796,6 +4374,26 @@
     renderGameModal();
   }
 
+  function applyCards21PvpState(payload) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "cards21" || !game.multiplayer) return;
+    game.multiplayer.state = payload?.state || "idle";
+    game.multiplayer.matchId = payload?.match?.id || "";
+    game.multiplayer.seat = payload?.seat || "";
+    game.multiplayer.waiting = payload?.state === "waiting";
+    if (payload?.state === "waiting") {
+      game.feedback = "Lobby aberto. A mesa vai subir assim que outro jogador entrar na mesma aposta.";
+      renderGameModal();
+      startPvpPolling();
+      return;
+    }
+    if (payload?.match && payload?.seat) {
+      hydrateCards21PvpGame(payload.match, payload.seat);
+      return;
+    }
+    renderGameModal();
+  }
+
   async function refreshCheckersPvpState() {
     clearPvpPoll();
     const game = runtime.activeGame;
@@ -3803,6 +4401,19 @@
     try {
       const payload = await requestApiJson("/api/pubpaid/pvp/state?gameId=checkers", { method: "GET" });
       applyCheckersPvpState(payload);
+    } catch (error) {
+      game.feedback = String(error?.message || "Não consegui atualizar a mesa PvP.");
+      renderGameModal();
+    }
+  }
+
+  async function refreshCards21PvpState() {
+    clearPvpPoll();
+    const game = runtime.activeGame;
+    if (!game || game.id !== "cards21" || !game.multiplayer?.enabled) return;
+    try {
+      const payload = await requestApiJson("/api/pubpaid/pvp/state?gameId=cards21", { method: "GET" });
+      applyCards21PvpState(payload);
     } catch (error) {
       game.feedback = String(error?.message || "Não consegui atualizar a mesa PvP.");
       renderGameModal();
@@ -3831,6 +4442,28 @@
     applyCheckersPvpState(payload);
   }
 
+  async function startCards21PvpFlow() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "cards21") return;
+    if (state.wallet.coins < game.stake) {
+      game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
+      renderGameModal();
+      return;
+    }
+    await ensurePubpaidServerSession();
+    game.feedback = "Entrando na fila PvP da mesa de 21...";
+    renderGameModal();
+    const payload = await requestApiJson("/api/pubpaid/pvp/join", {
+      method: "POST",
+      body: JSON.stringify({
+        gameId: "cards21",
+        stake: game.stake,
+        profile: getProfileSnapshot()
+      })
+    });
+    applyCards21PvpState(payload);
+  }
+
   async function submitCheckersPvpMove(move) {
     const game = runtime.activeGame;
     if (!game?.multiplayer?.matchId) return;
@@ -3849,6 +4482,423 @@
     applyCheckersPvpState(payload);
   }
 
+  async function submitCards21PvpAction(action) {
+    const game = runtime.activeGame;
+    if (!game?.multiplayer?.matchId) return;
+    const payload = await requestApiJson("/api/pubpaid/pvp/cards21/action", {
+      method: "POST",
+      body: JSON.stringify({
+        matchId: game.multiplayer.matchId,
+        action
+      })
+    });
+    applyCards21PvpState(payload);
+  }
+
+  function hydrateDicecupsPvpGame(match, seat) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "dicecups") return;
+    const opponent = getPvpOpponent(match, seat);
+    const diceState = match?.diceState || {};
+    game.multiplayer = {
+      ...(game.multiplayer || {}),
+      enabled: true,
+      state: match?.status || "active",
+      matchId: match?.id || "",
+      seat,
+      waiting: false,
+      stakeLocked: Boolean(game.multiplayer?.stakeLocked),
+      settled: Boolean(game.multiplayer?.settled),
+    };
+    game.opponent = {
+      ...(opponent || HOUSE_OPPONENTS.dicecups),
+      name: opponent?.name || "Rival",
+      bio: opponent?.name ? "Conectado na mesma mesa de copos." : HOUSE_OPPONENTS.dicecups.bio,
+      archetype: opponent?.archetype || HOUSE_OPPONENTS.dicecups.archetype
+    };
+    if (!game.multiplayer.stakeLocked) {
+      game.startedAt = match?.startedAt || new Date().toISOString();
+      game.houseFee = 0;
+      game.payout = getMatchWinnerPayout(game.stake);
+      state.wallet.coins -= game.stake;
+      game.multiplayer.stakeLocked = true;
+    }
+    game.screen = "playing";
+    game.tableState = {
+      round: clampInteger(diceState.round) || 1,
+      playerScore: clampInteger(seat === "playerOne" ? diceState.playerOneScore : diceState.playerTwoScore),
+      botScore: clampInteger(seat === "playerOne" ? diceState.playerTwoScore : diceState.playerOneScore),
+      phase: match?.status === "finished" ? "reveal" : match?.turn === seat ? "guess" : "rolling",
+      playerGuess: clampInteger(seat === "playerOne" ? diceState.playerOneGuess : diceState.playerTwoGuess),
+      botGuess: clampInteger(seat === "playerOne" ? diceState.playerTwoGuess : diceState.playerOneGuess),
+      dice: Array.isArray(diceState.dice) ? diceState.dice.slice(0, 2) : [0, 0],
+      total: clampInteger(diceState.total),
+      rollSeed: 0,
+      message:
+        match?.resultSummary ||
+        (match?.turn === seat ? "Escolha a soma escondida sob os copos." : `${game.opponent.name} está lendo a mesa.`),
+      multiplayer: true,
+    };
+    saveState();
+    renderAll();
+    if (match?.status === "finished" && !game.multiplayer.settled) {
+      const result = !match?.winner ? "tie" : match?.winner === seat ? "win" : "loss";
+      game.multiplayer.settled = true;
+      finalizeGame(
+        result,
+        match?.resultSummary ||
+          (result === "win" ? "Você venceu a mesa PvP." : result === "loss" ? "O rival venceu a mesa PvP." : "A mesa empatou.")
+      );
+      return;
+    }
+    renderGameModal();
+    startPvpPolling();
+  }
+
+  function applyDicecupsPvpState(payload) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "dicecups" || !game.multiplayer) return;
+    game.multiplayer.state = payload?.state || "idle";
+    game.multiplayer.matchId = payload?.match?.id || "";
+    game.multiplayer.seat = payload?.seat || "";
+    game.multiplayer.waiting = payload?.state === "waiting";
+    if (payload?.state === "waiting") {
+      game.feedback = "Lobby aberto. A mesa vai subir assim que outro jogador entrar na mesma aposta.";
+      renderGameModal();
+      startPvpPolling();
+      return;
+    }
+    if (payload?.match && payload?.seat) {
+      hydrateDicecupsPvpGame(payload.match, payload.seat);
+      return;
+    }
+    renderGameModal();
+  }
+
+  async function refreshDicecupsPvpState() {
+    clearPvpPoll();
+    const game = runtime.activeGame;
+    if (!game || game.id !== "dicecups" || !game.multiplayer?.enabled) return;
+    try {
+      const payload = await requestApiJson("/api/pubpaid/pvp/state?gameId=dicecups", { method: "GET" });
+      applyDicecupsPvpState(payload);
+    } catch (error) {
+      game.feedback = String(error?.message || "Não consegui atualizar a mesa PvP.");
+      renderGameModal();
+    }
+  }
+
+  async function startDicecupsPvpFlow() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "dicecups") return;
+    if (state.wallet.coins < game.stake) {
+      game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
+      renderGameModal();
+      return;
+    }
+    await ensurePubpaidServerSession();
+    game.feedback = "Entrando na fila PvP da mesa de copos...";
+    renderGameModal();
+    const payload = await requestApiJson("/api/pubpaid/pvp/join", {
+      method: "POST",
+      body: JSON.stringify({
+        gameId: "dicecups",
+        stake: game.stake,
+        profile: getProfileSnapshot()
+      })
+    });
+    applyDicecupsPvpState(payload);
+  }
+
+  async function submitDicecupsPvpGuess(guess) {
+    const game = runtime.activeGame;
+    if (!game?.multiplayer?.matchId) return;
+    const payload = await requestApiJson("/api/pubpaid/pvp/dicecups/guess", {
+      method: "POST",
+      body: JSON.stringify({
+        matchId: game.multiplayer.matchId,
+        guess
+      })
+    });
+    applyDicecupsPvpState(payload);
+  }
+
+  function hydratePokerPvpGame(match, seat) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "poker") return;
+    const opponent = getPvpOpponent(match, seat);
+    const pokerState = match?.pokerState || {};
+    const playerCards = Array.isArray(seat === "playerOne" ? pokerState.playerOneCards : pokerState.playerTwoCards)
+      ? (seat === "playerOne" ? pokerState.playerOneCards : pokerState.playerTwoCards).slice()
+      : [];
+    const opponentCards = Array.isArray(seat === "playerOne" ? pokerState.playerTwoCards : pokerState.playerOneCards)
+      ? (seat === "playerOne" ? pokerState.playerTwoCards : pokerState.playerOneCards).slice()
+      : [];
+    const held = Array.isArray(seat === "playerOne" ? pokerState.playerOneHeld : pokerState.playerTwoHeld)
+      ? (seat === "playerOne" ? pokerState.playerOneHeld : pokerState.playerTwoHeld).slice()
+      : [false, false, false, false, false];
+    const drawUsed = Boolean(seat === "playerOne" ? pokerState.playerOneDrawUsed : pokerState.playerTwoDrawUsed);
+    const opponentDrawUsed = Boolean(seat === "playerOne" ? pokerState.playerTwoDrawUsed : pokerState.playerOneDrawUsed);
+
+    game.multiplayer = {
+      ...(game.multiplayer || {}),
+      enabled: true,
+      state: match?.status || "active",
+      matchId: match?.id || "",
+      seat,
+      waiting: false,
+      stakeLocked: Boolean(game.multiplayer?.stakeLocked),
+      settled: Boolean(game.multiplayer?.settled),
+    };
+    game.opponent = {
+      ...(opponent || HOUSE_OPPONENTS.poker),
+      name: opponent?.name || "Rival",
+      bio: opponent?.name ? "Conectado na mesma mesa de poker." : HOUSE_OPPONENTS.poker.bio,
+      archetype: opponent?.archetype || HOUSE_OPPONENTS.poker.archetype
+    };
+    if (!game.multiplayer.stakeLocked) {
+      game.startedAt = match?.startedAt || new Date().toISOString();
+      game.houseFee = 0;
+      game.payout = getMatchWinnerPayout(game.stake);
+      state.wallet.coins -= game.stake;
+      game.multiplayer.stakeLocked = true;
+    }
+    game.screen = "playing";
+    game.tableState = {
+      phase: match?.status === "finished" ? "showdown" : drawUsed ? "opponent" : match?.turn === seat ? "draw" : "opponent",
+      deck: [],
+      playerCards,
+      botCards: opponentCards,
+      held,
+      drawUsed,
+      opponentDrawUsed,
+      message:
+        match?.resultSummary ||
+        (match?.turn === seat ? "Escolha as cartas que ficam e troque o resto." : `${game.opponent.name} está trocando as cartas.`),
+      multiplayer: true,
+    };
+    saveState();
+    renderAll();
+    if (match?.status === "finished" && !game.multiplayer.settled) {
+      const result = !match?.winner ? "tie" : match?.winner === seat ? "win" : "loss";
+      game.multiplayer.settled = true;
+      finalizeGame(
+        result,
+        match?.resultSummary ||
+          (result === "win" ? "Você venceu a mesa PvP." : result === "loss" ? "O rival venceu a mesa PvP." : "A mesa empatou.")
+      );
+      return;
+    }
+    renderGameModal();
+    startPvpPolling();
+  }
+
+  function applyPokerPvpState(payload) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "poker" || !game.multiplayer) return;
+    game.multiplayer.state = payload?.state || "idle";
+    game.multiplayer.matchId = payload?.match?.id || "";
+    game.multiplayer.seat = payload?.seat || "";
+    game.multiplayer.waiting = payload?.state === "waiting";
+    if (payload?.state === "waiting") {
+      game.feedback = "Lobby aberto. A mesa vai subir assim que outro jogador entrar na mesma aposta.";
+      renderGameModal();
+      startPvpPolling();
+      return;
+    }
+    if (payload?.match && payload?.seat) {
+      hydratePokerPvpGame(payload.match, payload.seat);
+      return;
+    }
+    renderGameModal();
+  }
+
+  async function refreshPokerPvpState() {
+    clearPvpPoll();
+    const game = runtime.activeGame;
+    if (!game || game.id !== "poker" || !game.multiplayer?.enabled) return;
+    try {
+      const payload = await requestApiJson("/api/pubpaid/pvp/state?gameId=poker", { method: "GET" });
+      applyPokerPvpState(payload);
+    } catch (error) {
+      game.feedback = String(error?.message || "Não consegui atualizar a mesa PvP.");
+      renderGameModal();
+    }
+  }
+
+  async function startPokerPvpFlow() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "poker") return;
+    if (state.wallet.coins < game.stake) {
+      game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
+      renderGameModal();
+      return;
+    }
+    await ensurePubpaidServerSession();
+    game.feedback = "Entrando na fila PvP da mesa de poker...";
+    renderGameModal();
+    const payload = await requestApiJson("/api/pubpaid/pvp/join", {
+      method: "POST",
+      body: JSON.stringify({
+        gameId: "poker",
+        stake: game.stake,
+        profile: getProfileSnapshot()
+      })
+    });
+    applyPokerPvpState(payload);
+  }
+
+  async function submitPokerPvpDraw(held) {
+    const game = runtime.activeGame;
+    if (!game?.multiplayer?.matchId) return;
+    const payload = await requestApiJson("/api/pubpaid/pvp/poker/draw", {
+      method: "POST",
+      body: JSON.stringify({
+        matchId: game.multiplayer.matchId,
+        held
+      })
+    });
+    applyPokerPvpState(payload);
+  }
+
+  function hydrateDartsPvpGame(match, seat) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "darts") return;
+    const opponent = getPvpOpponent(match, seat);
+    const dartsState = match?.dartsState || {};
+    game.multiplayer = {
+      ...(game.multiplayer || {}),
+      enabled: true,
+      state: match?.status || "active",
+      matchId: match?.id || "",
+      seat,
+      waiting: false,
+      stakeLocked: Boolean(game.multiplayer?.stakeLocked),
+      settled: Boolean(game.multiplayer?.settled),
+    };
+    game.opponent = {
+      ...(opponent || HOUSE_OPPONENTS.darts),
+      name: opponent?.name || "Rival",
+      bio: opponent?.name ? "Conectado no mesmo alvo de dardos." : HOUSE_OPPONENTS.darts.bio,
+      archetype: opponent?.archetype || HOUSE_OPPONENTS.darts.archetype
+    };
+    if (!game.multiplayer.stakeLocked) {
+      game.startedAt = match?.startedAt || new Date().toISOString();
+      game.houseFee = 0;
+      game.payout = getMatchWinnerPayout(game.stake);
+      state.wallet.coins -= game.stake;
+      game.multiplayer.stakeLocked = true;
+    }
+    const myLast = seat === "playerOne" ? dartsState.lastPlayerOne : dartsState.lastPlayerTwo;
+    const rivalLast = seat === "playerOne" ? dartsState.lastPlayerTwo : dartsState.lastPlayerOne;
+    game.screen = "playing";
+    game.tableState = {
+      round: clampInteger(dartsState.round) || 1,
+      maxRounds: clampInteger(dartsState.maxRounds) || 3,
+      playerScore: clampInteger(seat === "playerOne" ? dartsState.playerOneScore : dartsState.playerTwoScore),
+      botScore: clampInteger(seat === "playerOne" ? dartsState.playerTwoScore : dartsState.playerOneScore),
+      lastPlayer: myLast || null,
+      lastBot: rivalLast || null,
+      aimX: clampPercent(seat === "playerOne" ? dartsState.playerOneAimX : dartsState.playerTwoAimX, 50),
+      aimY: clampPercent(seat === "playerOne" ? dartsState.playerOneAimY : dartsState.playerTwoAimY, 50),
+      message:
+        match?.resultSummary ||
+        (match?.turn === seat ? "Ajuste a mira no eixo X/Y e solte o dardo." : `${game.opponent.name} está mirando.`),
+      history: Array.isArray(dartsState.history)
+        ? dartsState.history.map((item) => ({
+            round: item.round,
+            player: seat === "playerOne" ? item.playerOne : item.playerTwo,
+            bot: seat === "playerOne" ? item.playerTwo : item.playerOne,
+          }))
+        : [],
+      multiplayer: true,
+      phase: match?.status === "finished" ? "finished" : match?.turn === seat ? "player" : "opponent",
+    };
+    saveState();
+    renderAll();
+    if (match?.status === "finished" && !game.multiplayer.settled) {
+      const result = !match?.winner ? "tie" : match?.winner === seat ? "win" : "loss";
+      game.multiplayer.settled = true;
+      finalizeGame(
+        result,
+        match?.resultSummary ||
+          (result === "win" ? "Você venceu a mesa PvP." : result === "loss" ? "O rival venceu a mesa PvP." : "A mesa empatou.")
+      );
+      return;
+    }
+    renderGameModal();
+    startPvpPolling();
+  }
+
+  function applyDartsPvpState(payload) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "darts" || !game.multiplayer) return;
+    game.multiplayer.state = payload?.state || "idle";
+    game.multiplayer.matchId = payload?.match?.id || "";
+    game.multiplayer.seat = payload?.seat || "";
+    game.multiplayer.waiting = payload?.state === "waiting";
+    if (payload?.state === "waiting") {
+      game.feedback = "Lobby aberto. A mesa vai subir assim que outro jogador entrar na mesma aposta.";
+      renderGameModal();
+      startPvpPolling();
+      return;
+    }
+    if (payload?.match && payload?.seat) {
+      hydrateDartsPvpGame(payload.match, payload.seat);
+      return;
+    }
+    renderGameModal();
+  }
+
+  async function refreshDartsPvpState() {
+    clearPvpPoll();
+    const game = runtime.activeGame;
+    if (!game || game.id !== "darts" || !game.multiplayer?.enabled) return;
+    try {
+      const payload = await requestApiJson("/api/pubpaid/pvp/state?gameId=darts", { method: "GET" });
+      applyDartsPvpState(payload);
+    } catch (error) {
+      game.feedback = String(error?.message || "Não consegui atualizar a mesa PvP.");
+      renderGameModal();
+    }
+  }
+
+  async function startDartsPvpFlow() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "darts") return;
+    if (state.wallet.coins < game.stake) {
+      game.feedback = `Saldo insuficiente. Voce precisa de ${formatCoins(game.stake)}.`;
+      renderGameModal();
+      return;
+    }
+    await ensurePubpaidServerSession();
+    game.feedback = "Entrando na fila PvP do alvo de dardos...";
+    renderGameModal();
+    const payload = await requestApiJson("/api/pubpaid/pvp/join", {
+      method: "POST",
+      body: JSON.stringify({
+        gameId: "darts",
+        stake: game.stake,
+        profile: getProfileSnapshot()
+      })
+    });
+    applyDartsPvpState(payload);
+  }
+
+  async function submitDartsPvpThrow({ aimX, aimY }) {
+    const game = runtime.activeGame;
+    if (!game?.multiplayer?.matchId) return;
+    const payload = await requestApiJson("/api/pubpaid/pvp/darts/throw", {
+      method: "POST",
+      body: JSON.stringify({
+        matchId: game.multiplayer.matchId,
+        aimX,
+        aimY
+      })
+    });
+    applyDartsPvpState(payload);
+  }
+
   function getDepositAmount() {
     const raw = String(refs.depositAmount?.value || "").trim();
     const amount = clampInteger(raw);
@@ -3856,8 +4906,8 @@
   }
 
   function getWithdrawalAmount() {
-    const amount = clampInteger(refs.withdrawAmount?.value || 10);
-    return [5, 10, 20, 50, 100].includes(amount) ? amount : 10;
+    const amount = parseMoneyInput(refs.withdrawAmount?.value || 0);
+    return amount > 0 ? amount : null;
   }
 
   function buildDepositTxid() {
@@ -4083,7 +5133,7 @@
 
     try {
       const payload = await requestApiJson("/api/pubpaid/account", { method: "GET" });
-      state.wallet.coins = clampInteger(payload?.wallet?.balanceCoins || 0);
+      state.wallet.coins = roundMoney(payload?.wallet?.balanceCoins || 0);
       saveState();
       renderAll();
       if (refs.withdrawFeedback) {
@@ -4109,6 +5159,11 @@
     }
 
     const amount = getWithdrawalAmount();
+    if (!amount) {
+      if (refs.withdrawFeedback) refs.withdrawFeedback.textContent = "Informe um valor valido para a retirada, como 6,70.";
+      refs.withdrawAmount?.focus?.();
+      return;
+    }
     try {
       await ensurePubpaidServerSession();
       const payload = await requestApiJson("/api/pubpaid/withdrawals", {
@@ -4118,7 +5173,7 @@
           sourcePage: window.location.pathname
         })
       });
-      state.wallet.coins = clampInteger(payload?.wallet?.balanceCoins || state.wallet.coins);
+      state.wallet.coins = roundMoney(payload?.wallet?.balanceCoins || state.wallet.coins);
       saveState();
       renderAll();
       if (refs.withdrawFeedback) {
@@ -5037,6 +6092,44 @@
     oscillator.stop(when + duration + 0.03);
   }
 
+  function updateTrafficAudio(delta, now) {
+    if (!runtime.audio.enabled || runtime.scene !== "exterior") return;
+    runtime.audio.trafficTimer += delta;
+    if (runtime.audio.trafficTimer < runtime.audio.trafficCooldown) return;
+    runtime.audio.trafficTimer = 0;
+    runtime.audio.trafficCooldown = randomBetween(2.2, 5.1);
+    const motorcycles = runtime.exteriorTraffic.filter((vehicle) => vehicle.kind === "moto" && vehicle.wait <= 0);
+    const cars = runtime.exteriorTraffic.filter((vehicle) => vehicle.kind === "car" && vehicle.wait <= 0);
+    const kind = motorcycles.length && Math.sin(now / 800) > 0.18 ? "moto" : "car";
+    playTrafficPass(kind);
+  }
+
+  function playTrafficPass(kind = "car") {
+    ensureAudioContext();
+    const ctx = runtime.audio.ctx;
+    if (!ctx) return;
+    const when = ctx.currentTime + 0.02;
+    const duration = kind === "moto" ? 0.56 : 0.74;
+    const base = kind === "moto" ? 168 : 92;
+    const end = kind === "moto" ? 228 : 128;
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    oscillator.type = kind === "moto" ? "sawtooth" : "triangle";
+    oscillator.frequency.setValueAtTime(base, when);
+    oscillator.frequency.exponentialRampToValueAtTime(end, when + duration);
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(kind === "moto" ? 980 : 760, when);
+    gain.gain.setValueAtTime(0.0001, when);
+    gain.gain.linearRampToValueAtTime(kind === "moto" ? 0.02 : 0.014, when + 0.06);
+    gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
+    oscillator.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    oscillator.start(when);
+    oscillator.stop(when + duration + 0.04);
+  }
+
   function midiToFreq(midi) {
     return 440 * Math.pow(2, (midi - 69) / 12);
   }
@@ -5090,8 +6183,8 @@
       return;
     }
 
-    if (runtime.activeGame.id === "checkers" && runtime.activeGame.multiplayer?.enabled) {
-      void leaveCheckersPvp(runtime.activeGame);
+    if (runtime.activeGame.multiplayer?.enabled) {
+      void leaveActivePvpGame(runtime.activeGame);
     }
     clearGameTimer();
     clearPvpPoll();
@@ -5163,6 +6256,12 @@
 
     if (game.id === "poker") {
       refs.gameHost.innerHTML = renderPokerGame(game);
+      clearPoolRefs();
+      return;
+    }
+
+    if (game.id === "truco") {
+      refs.gameHost.innerHTML = renderTrucoGame(game);
       clearPoolRefs();
       return;
     }
@@ -5254,7 +6353,7 @@
               ${renderLobbyAvatarCard(rivalPlayer, "rival")}
             </div>
             <div class="pubpaid-stake-row">${stakes}</div>
-            <p class="pubpaid-feedback">${escapeHtml(game.feedback || "A mesa de damas agora sobe com outro jogador real.")}</p>
+            <p class="pubpaid-feedback">${escapeHtml(game.feedback || `A mesa de ${TABLE_META[game.id].shortLabel} agora sobe com outro jogador real.`)}</p>
             <div class="pubpaid-card-actions">
               <button class="pubpaid-card-button" type="button" data-start-game ${game.multiplayer?.state === "waiting" ? "disabled" : ""}>${escapeHtml(pvpStartLabel)}</button>
               <button class="pubpaid-card-button" type="button" data-close-finished>Voltar ao salao</button>
@@ -5339,8 +6438,8 @@
 
     game.feedback = "";
     game.startedAt = new Date().toISOString();
-    game.houseFee = getHouseFee(game.stake);
-    game.payout = game.stake * 2 - game.houseFee;
+    game.houseFee = roundMoney(game.stake - getMatchWinnerPayout(game.stake));
+    game.payout = getMatchWinnerPayout(game.stake);
     game.fortune = rollDrinkFortune(game.activeDrink, game.stake, getSecretLuckBoost());
     game.screen = "playing";
     state.wallet.coins -= game.stake;
@@ -5355,6 +6454,8 @@
       game.tableState = createCardsState();
     } else if (game.id === "poker") {
       game.tableState = createPokerState();
+    } else if (game.id === "truco") {
+      game.tableState = createTrucoState();
     } else if (game.id === "dicecups") {
       game.tableState = createDiceState();
     } else if (game.id === "slots") {
@@ -5450,14 +6551,18 @@
 
   function abandonActiveGame() {
     if (!runtime.activeGame || runtime.activeGame.screen !== "playing") return;
-    if (runtime.activeGame.id === "checkers" && runtime.activeGame.multiplayer?.enabled) {
-      void leaveCheckersPvp(runtime.activeGame);
+    if (runtime.activeGame.multiplayer?.enabled) {
+      void leaveActivePvpGame(runtime.activeGame);
     }
     finalizeGame("loss", "Voce levantou da mesa antes do fim da rodada.");
   }
 
   function getHouseFee(stake) {
-    return Math.max(1, Math.round(stake * 0.2));
+    return roundMoney(stake * 0.2);
+  }
+
+  function getMatchWinnerPayout(stake) {
+    return roundMoney(stake + stake * 0.8);
   }
 
   function finalizeGame(result, summary) {
@@ -6764,19 +7869,40 @@
 
   function renderCardsGame(game) {
     const cards = game.tableState;
-    const hideSecond = cards.phase === "player";
+    const isPvp = Boolean(game.multiplayer?.enabled);
+    const hideSecond = !isPvp && cards.phase === "player";
     const botTotal = sumCards(cards.botCards);
     const playerTotal = sumCards(cards.playerCards);
+    const rivalLabel = isPvp ? game.opponent.name : "Mao da casa";
+    const turnLabel = isPvp
+      ? cards.phase === "player"
+        ? "sua vez"
+        : cards.phase === "opponent"
+          ? `${game.opponent.name} decide`
+          : "mao fechada"
+      : cards.phase === "player"
+        ? "sua vez"
+        : "banca responde";
+    const tableStatus = isPvp
+      ? `${botTotal} • ${formatCards21StateLabel(cards.botState)}`
+      : hideSecond
+        ? `${cards.botCards[0]} + ?`
+        : String(botTotal);
 
     return `
       <div class="pubpaid-cards-layout">
+        <div class="pubpaid-game-chip-row">
+          <span class="pubpaid-turn-chip">${escapeHtml(turnLabel)}</span>
+          <span class="pubpaid-turn-chip">pote ${escapeHtml(formatCoins(game.payout))}</span>
+          ${isPvp ? '<span class="pubpaid-turn-chip">pvp ao vivo</span>' : ""}
+        </div>
         <section class="pubpaid-cards-table pubpaid-minigame-frame">
           <div class="pubpaid-minigame-head">
             <strong>21 do Bar</strong>
             <span>Chegue o mais perto possivel de 21 sem estourar.</span>
           </div>
           <article class="pubpaid-card-hand">
-            <strong>Mao da casa</strong>
+            <strong>${escapeHtml(rivalLabel)}</strong>
             <div class="pubpaid-card-row">
               ${cards.botCards
                 .map(
@@ -6802,7 +7928,7 @@
           </article>
           <article>
             <span>placar da mesa</span>
-            <strong>${escapeHtml(String(playerTotal))} x ${escapeHtml(hideSecond ? `${cards.botCards[0]} + ?` : String(botTotal))}</strong>
+            <strong>${escapeHtml(String(playerTotal))} x ${escapeHtml(tableStatus)}</strong>
           </article>
           <article>
             <span>pote</span>
@@ -6818,21 +7944,43 @@
     `;
   }
 
+  function formatCards21StateLabel(value) {
+    if (value === "stood") return "parou";
+    if (value === "busted") return "estourou";
+    if (value === "finished") return "fechou";
+    return "jogando";
+  }
+
   function renderPokerGame(game) {
     const poker = game.tableState;
     const reveal = poker.phase === "showdown";
+    const isPvp = Boolean(game.multiplayer?.enabled);
     const playerHand = evaluatePokerHand(poker.playerCards);
     const botHand = reveal ? evaluatePokerHand(poker.botCards) : null;
+    const turnLabel = isPvp
+      ? poker.phase === "draw"
+        ? "sua vez"
+        : poker.phase === "opponent"
+          ? `${game.opponent.name} troca`
+          : "showdown"
+      : reveal
+        ? "showdown"
+        : "sua vez";
 
     return `
       <div class="pubpaid-poker-layout">
+        <div class="pubpaid-game-chip-row">
+          <span class="pubpaid-turn-chip">${escapeHtml(turnLabel)}</span>
+          <span class="pubpaid-turn-chip">pote ${escapeHtml(formatCoins(game.payout))}</span>
+          ${isPvp ? '<span class="pubpaid-turn-chip">pvp ao vivo</span>' : ""}
+        </div>
         <section class="pubpaid-cards-table pubpaid-minigame-frame">
           <div class="pubpaid-minigame-head">
             <strong>Poker da Mesa Redonda</strong>
             <span>Segure cartas, troque uma vez e feche a melhor mão.</span>
           </div>
           <article class="pubpaid-card-hand">
-            <strong>Mao da casa</strong>
+            <strong>${escapeHtml(isPvp ? game.opponent.name : "Mao da casa")}</strong>
             <div class="pubpaid-card-row">
               ${poker.botCards.map((card, index) => renderPokerCard(card, !reveal, false, index, false)).join("")}
             </div>
@@ -6858,7 +8006,7 @@
           </article>
           <article>
             <span>mesa</span>
-            <strong>${escapeHtml(reveal && botHand ? `${playerHand.label} x ${botHand.label}` : "aguardando revelação")}</strong>
+            <strong>${escapeHtml(reveal && botHand ? `${playerHand.label} x ${botHand.label}` : isPvp ? `rival ${poker.opponentDrawUsed ? "ja trocou" : "ainda decide"}` : "aguardando revelação")}</strong>
           </article>
           <div class="pubpaid-card-actions">
             <button class="pubpaid-card-button" type="button" data-poker-draw ${poker.phase !== "draw" || poker.drawUsed ? "disabled" : ""}>Trocar cartas</button>
@@ -6870,31 +8018,13 @@
   }
 
   function renderPokerCard(card, hidden, held, index, interactive) {
-    if (hidden) {
-      return `
-        <button class="pubpaid-poker-card is-hidden" type="button" disabled>
-          <small>bar</small>
-          <strong>?</strong>
-          <small>sealed</small>
-        </button>
-      `;
-    }
-
-    const suitLabel = getPokerSuitSymbol(card.suit);
-    const rankLabel = getPokerRankLabel(card.rank);
-    const redSuit = card.suit === "hearts" || card.suit === "diamonds";
-
-    return `
-      <button
-        class="pubpaid-poker-card ${held ? "is-held" : ""} ${redSuit ? "is-red" : ""}"
-        type="button"
-        ${interactive ? `data-poker-toggle="${index}"` : "disabled"}
-      >
-        <small>${escapeHtml(suitLabel)}</small>
-        <strong>${escapeHtml(rankLabel)}</strong>
-        <small>${held ? "segura" : escapeHtml(suitLabel)}</small>
-      </button>
-    `;
+    return renderPlayingCard(card, {
+      hidden,
+      held,
+      interactive,
+      dataAttr: interactive ? `data-poker-toggle="${index}"` : "",
+      note: held ? "segura" : getSuitMeta(card?.suit).label
+    });
   }
 
   function handleCardsAction(action) {
@@ -6902,6 +8032,18 @@
     if (!game || game.id !== "cards21" || game.screen !== "playing") return;
     const cards = game.tableState;
     if (cards.phase !== "player") return;
+
+    if (game.multiplayer?.enabled) {
+      cards.message = action === "hit" ? "Comprando carta na mesa PvP..." : "Travando a mao na mesa PvP...";
+      cards.phase = "opponent";
+      renderGameModal();
+      void submitCards21PvpAction(action).catch((error) => {
+        cards.phase = "player";
+        cards.message = String(error?.message || "Nao consegui falar com a mesa PvP.");
+        renderGameModal();
+      });
+      return;
+    }
 
     if (action === "hit") {
       cards.playerCards.push(drawCardsValue(cards));
@@ -6973,6 +8115,18 @@
     if (!game || game.id !== "poker" || game.screen !== "playing") return;
     const poker = game.tableState;
     if (poker.phase !== "draw" || poker.drawUsed) return;
+
+    if (game.multiplayer?.enabled) {
+      poker.message = "Enviando a troca para a mesa PvP...";
+      poker.phase = "opponent";
+      renderGameModal();
+      void submitPokerPvpDraw(poker.held.slice()).catch((error) => {
+        poker.phase = "draw";
+        poker.message = String(error?.message || "Nao consegui falar com a mesa PvP.");
+        renderGameModal();
+      });
+      return;
+    }
 
     poker.playerCards = poker.playerCards.map((card, index) => (poker.held[index] ? card : drawPokerCards(poker.deck, 1)[0] || card));
     runPokerBotDraw(poker);
@@ -7075,13 +8229,278 @@
   }
 
   function getPokerSuitSymbol(suit) {
-    const map = {
-      hearts: "copas",
-      diamonds: "ouros",
-      clubs: "paus",
-      spades: "espadas"
+    return getSuitMeta(suit).label;
+  }
+
+  function createTrucoDeck() {
+    const suits = ["clubs", "hearts", "spades", "diamonds"];
+    const ranks = [4, 5, 6, 7, 12, 11, 13, 14, 2, 3];
+    const deck = [];
+    suits.forEach((suit) => {
+      ranks.forEach((rank) => deck.push({ suit, rank }));
+    });
+    for (let index = deck.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      const temp = deck[index];
+      deck[index] = deck[swapIndex];
+      deck[swapIndex] = temp;
+    }
+    return deck;
+  }
+
+  function drawTrucoCards(deck, count) {
+    const cards = [];
+    for (let index = 0; index < count; index += 1) {
+      const card = deck.pop();
+      if (card) cards.push(card);
+    }
+    return cards;
+  }
+
+  function getTrucoRankCycle() {
+    return [4, 5, 6, 7, 12, 11, 13, 14, 2, 3];
+  }
+
+  function getTrucoManilhaRank(viraRank) {
+    const cycle = getTrucoRankCycle();
+    const index = cycle.indexOf(clampInteger(viraRank));
+    if (index < 0) return 4;
+    return cycle[(index + 1) % cycle.length];
+  }
+
+  function getTrucoRankStrength(rank) {
+    const order = [4, 5, 6, 7, 12, 11, 13, 14, 2, 3];
+    return order.indexOf(clampInteger(rank));
+  }
+
+  function getTrucoSuitStrength(suit) {
+    const order = { diamonds: 0, spades: 1, hearts: 2, clubs: 3 };
+    return order[suit] ?? 0;
+  }
+
+  function compareTrucoCards(left, right, manilhaRank) {
+    const leftManilha = clampInteger(left?.rank) === clampInteger(manilhaRank);
+    const rightManilha = clampInteger(right?.rank) === clampInteger(manilhaRank);
+    if (leftManilha && rightManilha) {
+      const deltaSuit = getTrucoSuitStrength(left?.suit) - getTrucoSuitStrength(right?.suit);
+      return deltaSuit === 0 ? 0 : deltaSuit > 0 ? 1 : -1;
+    }
+    if (leftManilha) return 1;
+    if (rightManilha) return -1;
+    const deltaRank = getTrucoRankStrength(left?.rank) - getTrucoRankStrength(right?.rank);
+    return deltaRank === 0 ? 0 : deltaRank > 0 ? 1 : -1;
+  }
+
+  function describeTrucoCard(card, manilhaRank) {
+    if (!card) return "";
+    const meta = getSuitMeta(card.suit);
+    const base = `${getPokerRankLabel(card.rank)} ${meta.label}`;
+    return clampInteger(card.rank) === clampInteger(manilhaRank) ? `${base} (manilha)` : base;
+  }
+
+  function getTrucoHandWinner(results, initialLeader) {
+    const first = results[0];
+    const second = results[1];
+    const third = results[2];
+    if (!first) return "";
+    if (first !== "tie") {
+      if (second === first || second === "tie") return first;
+      if (!third) return "";
+      return third === "tie" ? first : third;
+    }
+    if (!second) return "";
+    if (second !== "tie") return second;
+    if (!third) return "";
+    return third === "tie" ? initialLeader : third;
+  }
+
+  function createTrucoState() {
+    const deck = createTrucoDeck();
+    const playerCards = drawTrucoCards(deck, 3);
+    const botCards = drawTrucoCards(deck, 3);
+    const vira = drawTrucoCards(deck, 1)[0] || { rank: 4, suit: "clubs" };
+    return {
+      phase: "player",
+      deck,
+      playerCards,
+      botCards,
+      vira,
+      manilhaRank: getTrucoManilhaRank(vira.rank),
+      leader: "player",
+      initialLeader: "player",
+      currentTrick: 1,
+      tableCards: { player: null, bot: null },
+      trickResults: [],
+      history: [],
+      message: "Primeira vaza aberta. Sua vez de sair no truco.",
     };
-    return map[suit] || "naipe";
+  }
+
+  function chooseTrucoBotCard(truco, responseToCard = null) {
+    const sorted = truco.botCards
+      .map((card, index) => ({ card, index }))
+      .sort((a, b) => compareTrucoCards(a.card, b.card, truco.manilhaRank));
+    if (!responseToCard) {
+      return (truco.currentTrick === 3 ? sorted[sorted.length - 1] : sorted[Math.max(0, sorted.length - 2)]) || sorted[0];
+    }
+    const winning = sorted.find((entry) => compareTrucoCards(entry.card, responseToCard, truco.manilhaRank) > 0);
+    return winning || sorted[0];
+  }
+
+  function renderTrucoGame(game) {
+    const truco = game.tableState;
+    const trickWinsPlayer = truco.trickResults.filter((item) => item === "player").length;
+    const trickWinsBot = truco.trickResults.filter((item) => item === "bot").length;
+    const turnLabel =
+      truco.phase === "player"
+        ? "sua vez"
+        : truco.phase === "opponent"
+          ? `${game.opponent.name} abre`
+          : "vaza em mesa";
+    return `
+      <div class="pubpaid-poker-layout">
+        <div class="pubpaid-game-chip-row">
+          <span class="pubpaid-turn-chip">${escapeHtml(turnLabel)}</span>
+          <span class="pubpaid-turn-chip">pote ${escapeHtml(formatCoins(game.payout))}</span>
+          <span class="pubpaid-turn-chip">manilha ${escapeHtml(getPokerRankLabel(truco.manilhaRank))}</span>
+        </div>
+        <section class="pubpaid-cards-table pubpaid-minigame-frame">
+          <div class="pubpaid-minigame-head">
+            <strong>Truco Paulista</strong>
+            <span>Melhor de três vazas com vira aberta e manilha móvel.</span>
+          </div>
+          <article class="pubpaid-card-hand">
+            <strong>Vira da rodada</strong>
+            <div class="pubpaid-card-row">
+              ${renderPlayingCard(truco.vira, { note: "vira" })}
+            </div>
+          </article>
+          <article class="pubpaid-card-hand">
+            <strong>${escapeHtml(game.opponent.name)}</strong>
+            <div class="pubpaid-card-row">
+              ${truco.tableCards.bot ? renderPlayingCard(truco.tableCards.bot, { note: "na mesa" }) : ""}
+              ${truco.botCards.map(() => renderPlayingCard(null, { hidden: true })).join("")}
+            </div>
+          </article>
+          <article class="pubpaid-card-hand">
+            <strong>Sua mão</strong>
+            <div class="pubpaid-card-row">
+              ${truco.tableCards.player ? renderPlayingCard(truco.tableCards.player, { note: "na mesa" }) : ""}
+              ${truco.playerCards
+                .map((card, index) =>
+                  renderPlayingCard(card, {
+                    interactive: truco.phase === "player",
+                    dataAttr: `data-truco-play="${index}"`,
+                    note: clampInteger(card.rank) === clampInteger(truco.manilhaRank) ? "manilha" : getPokerSuitSymbol(card.suit)
+                  })
+                )
+                .join("")}
+            </div>
+          </article>
+        </section>
+
+        <section class="pubpaid-cards-info">
+          <article>
+            <span>status</span>
+            <strong>${escapeHtml(truco.message)}</strong>
+          </article>
+          <article>
+            <span>placar das vazas</span>
+            <strong>${escapeHtml(String(trickWinsPlayer))} x ${escapeHtml(String(trickWinsBot))}</strong>
+          </article>
+          <article>
+            <span>histórico</span>
+            <strong>${escapeHtml(truco.history.length ? truco.history.map((item) => `${item.trick}ª:${item.winnerLabel}`).join(" • ") : "sem vazas fechadas")}</strong>
+          </article>
+          <div class="pubpaid-card-actions">
+            <button class="pubpaid-card-button" type="button" data-abandon-game>Sair da mesa</button>
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
+  function resolveTrucoTrick(game) {
+    const truco = game.tableState;
+    const playerCard = truco.tableCards.player;
+    const botCard = truco.tableCards.bot;
+    if (!playerCard || !botCard) return;
+    const outcome = compareTrucoCards(playerCard, botCard, truco.manilhaRank);
+    const winner = outcome > 0 ? "player" : outcome < 0 ? "bot" : "tie";
+    const winnerLabel =
+      winner === "player" ? (state.profile.name || "Voce") : winner === "bot" ? game.opponent.name : "empate";
+    truco.trickResults.push(winner);
+    truco.history.push({
+      trick: truco.currentTrick,
+      winner,
+      winnerLabel,
+      playerCard: describeTrucoCard(playerCard, truco.manilhaRank),
+      botCard: describeTrucoCard(botCard, truco.manilhaRank)
+    });
+    const handWinner = getTrucoHandWinner(truco.trickResults, truco.initialLeader);
+    if (handWinner) {
+      if (handWinner === "player") {
+        finalizeGame("win", `${state.profile.name || "Voce"} fechou o truco por ${truco.trickResults.filter((item) => item === "player").length} a ${truco.trickResults.filter((item) => item === "bot").length}.`);
+      } else {
+        finalizeGame("loss", `${game.opponent.name} fechou o truco por ${truco.trickResults.filter((item) => item === "bot").length} a ${truco.trickResults.filter((item) => item === "player").length}.`);
+      }
+      return;
+    }
+
+    truco.message = `Vaza ${truco.currentTrick}: ${winner === "tie" ? "empatou" : `${winnerLabel} levou`} com ${describeTrucoCard(winner === "player" ? playerCard : botCard, truco.manilhaRank)}.`;
+    truco.leader = winner === "tie" ? truco.leader : winner;
+    truco.currentTrick += 1;
+    truco.tableCards = { player: null, bot: null };
+    if (truco.leader === "player") {
+      truco.phase = "player";
+      truco.message = `${truco.message} Sua vez de abrir a próxima vaza.`;
+      renderGameModal();
+      return;
+    }
+    truco.phase = "opponent";
+    truco.message = `${truco.message} ${game.opponent.name} vai sair primeiro agora.`;
+    renderGameModal();
+    runtime.gameTimer = window.setTimeout(runTrucoBotLead, 820);
+  }
+
+  function runTrucoBotLead() {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "truco" || game.screen !== "playing") return;
+    const truco = game.tableState;
+    if (truco.phase !== "opponent" || truco.tableCards.bot || !truco.botCards.length) return;
+    const choice = chooseTrucoBotCard(truco);
+    if (!choice) return;
+    truco.tableCards.bot = choice.card;
+    truco.botCards.splice(choice.index, 1);
+    truco.phase = "player";
+    truco.message = `${game.opponent.name} abriu com ${describeTrucoCard(choice.card, truco.manilhaRank)}. Responda a vaza.`;
+    renderGameModal();
+  }
+
+  function handleTrucoPlay(index) {
+    const game = runtime.activeGame;
+    if (!game || game.id !== "truco" || game.screen !== "playing") return;
+    const truco = game.tableState;
+    if (truco.phase !== "player" || index < 0 || index >= truco.playerCards.length) return;
+    const [card] = truco.playerCards.splice(index, 1);
+    if (!card) return;
+    truco.tableCards.player = card;
+
+    if (truco.tableCards.bot) {
+      truco.message = `Você respondeu com ${describeTrucoCard(card, truco.manilhaRank)}.`;
+      renderGameModal();
+      resolveTrucoTrick(game);
+      return;
+    }
+
+    const choice = chooseTrucoBotCard(truco, card);
+    if (choice) {
+      truco.tableCards.bot = choice.card;
+      truco.botCards.splice(choice.index, 1);
+    }
+    truco.message = `Você saiu com ${describeTrucoCard(card, truco.manilhaRank)}. ${game.opponent.name} respondeu.`;
+    renderGameModal();
+    resolveTrucoTrick(game);
   }
 
   function createDiceState() {
@@ -7101,6 +8520,7 @@
 
   function renderDiceGame(game) {
     const dice = game.tableState;
+    const isPvp = Boolean(game.multiplayer?.enabled);
     const cupMarkup = [0, 1].map((index) => renderDiceCup(dice, index)).join("");
     const sumMarkup = renderDiceSumCup(dice);
     const rollingHint =
@@ -7114,6 +8534,7 @@
             <strong>Copos e Dados</strong>
             <span>Escolha a soma e veja quem ficou mais perto do total escondido.</span>
           </div>
+          ${isPvp ? `<div class="pubpaid-game-chip-row"><span class="pubpaid-turn-chip">${escapeHtml(dice.phase === "guess" ? "sua vez" : `${game.opponent.name} responde`)}</span><span class="pubpaid-turn-chip">pvp ao vivo</span></div>` : ""}
           <div class="pubpaid-dice-cups">
             ${cupMarkup}
             ${sumMarkup}
@@ -7239,6 +8660,18 @@
     if (!game || game.id !== "dicecups" || game.screen !== "playing") return;
     const dice = game.tableState;
     if (dice.phase !== "guess") return;
+
+    if (game.multiplayer?.enabled) {
+      dice.phase = "rolling";
+      dice.message = "Enviando seu palpite para a mesa PvP...";
+      renderGameModal();
+      void submitDicecupsPvpGuess(guess).catch((error) => {
+        dice.phase = "guess";
+        dice.message = String(error?.message || "Nao consegui falar com a mesa PvP.");
+        renderGameModal();
+      });
+      return;
+    }
 
     dice.playerGuess = guess;
     dice.botGuess = pickBotDiceGuess(guess);
@@ -7573,7 +9006,9 @@
       botScore: 0,
       lastPlayer: null,
       lastBot: null,
-      message: "Escolha a pegada do arremesso. Seguro pontua pouco; risco pode acertar o miolo.",
+      aimX: 50,
+      aimY: 50,
+      message: "Ajuste a mira horizontal e a altura. O tabuleiro oficial paga single, double, treble, outer bull 25 e bull 50.",
       history: []
     };
   }
@@ -7581,7 +9016,9 @@
   function renderDartsGame(game) {
     const darts = game.tableState || createDartsState();
     const playerName = state.profile.name || "Voce";
-    const buttonsDisabled = darts.round > darts.maxRounds ? "disabled" : "";
+    const isPvp = Boolean(game.multiplayer?.enabled);
+    const buttonsDisabled = darts.round > darts.maxRounds || darts.phase === "opponent" ? "disabled" : "";
+    const previewAim = describeDartPoint(darts.aimX, darts.aimY);
     const historyMarkup = darts.history.length
       ? darts.history
           .map(
@@ -7605,6 +9042,7 @@
             <div class="pubpaid-game-chip-row">
               <span class="pubpaid-turn-chip">${escapeHtml(playerName)} ${escapeHtml(String(darts.playerScore))}</span>
               <span class="pubpaid-turn-chip">${escapeHtml(game.opponent.name)} ${escapeHtml(String(darts.botScore))}</span>
+              ${isPvp ? '<span class="pubpaid-turn-chip">pvp ao vivo</span>' : ""}
             </div>
           </div>
           <div class="pubpaid-darts-board" aria-label="Alvo de dardos">
@@ -7612,18 +9050,34 @@
             <span class="ring ring-b"></span>
             <span class="ring ring-c"></span>
             <span class="bull"></span>
+            <span class="dart-hit aim" style="--hit-x:${escapeHtml(String(darts.aimX))}%; --hit-y:${escapeHtml(String(darts.aimY))}%"></span>
             ${darts.lastPlayer ? `<span class="dart-hit player" style="--hit-x:${escapeHtml(String(darts.lastPlayer.x))}%; --hit-y:${escapeHtml(String(darts.lastPlayer.y))}%"></span>` : ""}
             ${darts.lastBot ? `<span class="dart-hit bot" style="--hit-x:${escapeHtml(String(darts.lastBot.x))}%; --hit-y:${escapeHtml(String(darts.lastBot.y))}%"></span>` : ""}
           </div>
         </section>
         <section class="pubpaid-game-box">
-          <span class="pubpaid-game-chip">parede nova</span>
+          <span class="pubpaid-game-chip">mira manual</span>
           <h3>Dardos de Parede</h3>
           <p>${escapeHtml(darts.message)}</p>
+          <div class="pubpaid-game-chip-row">
+            <span class="pubpaid-game-chip">mira lateral ${escapeHtml(String(Math.round(darts.aimX)))}</span>
+            <span class="pubpaid-game-chip">altura ${escapeHtml(String(Math.round(darts.aimY)))}</span>
+            <span class="pubpaid-game-chip">alvo previsto ${escapeHtml(previewAim.label)}</span>
+          </div>
+          <div class="pubpaid-darts-controls">
+            <label class="pubpaid-darts-control">
+              <span>Mira lateral</span>
+              <input type="range" min="8" max="92" step="1" value="${escapeHtml(String(Math.round(darts.aimX)))}" data-darts-aim-x ${buttonsDisabled} />
+              <small>Esquerda 8 / direita 92</small>
+            </label>
+            <label class="pubpaid-darts-control">
+              <span>Altura da mira</span>
+              <input type="range" min="8" max="92" step="1" value="${escapeHtml(String(Math.round(darts.aimY)))}" data-darts-aim-y ${buttonsDisabled} />
+              <small>Topo 8 / base 92</small>
+            </label>
+          </div>
           <div class="pubpaid-stake-row">
-            <button class="pubpaid-stake-button" type="button" data-darts-throw="safe" ${buttonsDisabled}>Seguro</button>
-            <button class="pubpaid-stake-button is-active" type="button" data-darts-throw="focus" ${buttonsDisabled}>Focado</button>
-            <button class="pubpaid-stake-button" type="button" data-darts-throw="risk" ${buttonsDisabled}>Arriscado</button>
+            <button class="pubpaid-stake-button is-active" type="button" data-darts-throw ${buttonsDisabled}>Arremessar com essa mira</button>
           </div>
           <div class="pubpaid-game-chip-row">${historyMarkup}</div>
           <div class="pubpaid-card-actions">
@@ -7634,40 +9088,128 @@
     `;
   }
 
-  function rollDartThrow(style = "focus", isBot = false) {
-    const specs = {
-      safe: { base: 38, spread: 24, bull: 0.08 },
-      focus: { base: 30, spread: 35, bull: 0.14 },
-      risk: { base: 18, spread: 56, bull: 0.22 }
-    };
-    const spec = specs[style] || specs.focus;
-    const bull = Math.random() < spec.bull + (isBot ? 0.02 : 0);
-    const score = bull
-      ? 50
-      : Math.max(1, Math.min(45, Math.round(spec.base + (isBot ? 5 : 0) + Math.random() * spec.spread)));
-    const distance = bull ? Math.random() * 7 : Math.max(10, 58 - score + Math.random() * 16);
-    const angle = Math.random() * Math.PI * 2;
+  function clampPercent(value, fallback = 50) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return fallback;
+    return Math.max(0, Math.min(100, number));
+  }
+
+  function getDartsAimFromInputs() {
+    const aimXInput = refs.gameHost?.querySelector("[data-darts-aim-x]");
+    const aimYInput = refs.gameHost?.querySelector("[data-darts-aim-y]");
     return {
-      score,
-      x: Math.max(6, Math.min(94, 50 + Math.cos(angle) * distance)),
-      y: Math.max(6, Math.min(94, 50 + Math.sin(angle) * distance))
+      aimX: clampPercent(aimXInput?.value, 50),
+      aimY: clampPercent(aimYInput?.value, 50)
     };
   }
 
-  function handleDartsThrow(style = "focus") {
+  function getDartboardPointResult(x, y) {
+    const dx = clampPercent(x, 50) - 50;
+    const dy = clampPercent(y, 50) - 50;
+    const distance = Math.hypot(dx, dy);
+    if (distance > 48) {
+      return { score: 0, ring: "miss", number: 0, multiplier: 0, label: "fora do alvo" };
+    }
+    if (distance <= 4.2) {
+      return { score: 50, ring: "bull", number: 25, multiplier: 2, label: "bull 50" };
+    }
+    if (distance <= 8.4) {
+      return { score: 25, ring: "outerBull", number: 25, multiplier: 1, label: "outer bull 25" };
+    }
+    const order = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+    const angle = (Math.atan2(dx, -dy) * 180) / Math.PI;
+    const normalizedAngle = (angle + 360 + 9) % 360;
+    const number = order[Math.floor(normalizedAngle / 18) % order.length];
+    if (distance >= 38.5 && distance <= 48) {
+      return { score: number * 2, ring: "double", number, multiplier: 2, label: `double ${number}` };
+    }
+    if (distance >= 24.5 && distance <= 30.5) {
+      return { score: number * 3, ring: "triple", number, multiplier: 3, label: `triple ${number}` };
+    }
+    return { score: number, ring: "single", number, multiplier: 1, label: `single ${number}` };
+  }
+
+  function describeDartPoint(x, y) {
+    return getDartboardPointResult(x, y);
+  }
+
+  function getDartAimDifficulty(target) {
+    if (!target || target.ring === "miss") return 0.9;
+    if (target.ring === "bull") return 1.45;
+    if (target.ring === "outerBull") return 1.2;
+    if (target.ring === "triple" || target.ring === "double") return 1.15;
+    return 0.82;
+  }
+
+  function getRandomDartAim() {
+    const targets = [
+      { x: 50, y: 24 },
+      { x: 50, y: 50 },
+      { x: 67, y: 30 },
+      { x: 33, y: 30 },
+      { x: 73, y: 63 },
+      { x: 26, y: 66 }
+    ];
+    const choice = targets[Math.floor(Math.random() * targets.length)] || targets[0];
+    return {
+      aimX: clampPercent(choice.x + randomBetween(-7, 7), 50),
+      aimY: clampPercent(choice.y + randomBetween(-7, 7), 50)
+    };
+  }
+
+  function simulateDartThrow(aimX, aimY, isBot = false) {
+    const intended = getDartboardPointResult(aimX, aimY);
+    const difficulty = getDartAimDifficulty(intended);
+    const spread = Math.max(4, 8 + difficulty * 8 - (isBot ? 2 : 0));
+    const driftX = randomBetween(-spread, spread) + randomBetween(-spread * 0.55, spread * 0.55);
+    const driftY = randomBetween(-spread, spread) + randomBetween(-spread * 0.55, spread * 0.55);
+    const finalX = clampPercent(aimX + driftX, 50);
+    const finalY = clampPercent(aimY + driftY, 50);
+    const outcome = getDartboardPointResult(finalX, finalY);
+    return {
+      aimX: clampPercent(aimX, 50),
+      aimY: clampPercent(aimY, 50),
+      x: finalX,
+      y: finalY,
+      score: outcome.score,
+      ring: outcome.ring,
+      number: outcome.number,
+      multiplier: outcome.multiplier,
+      label: outcome.label
+    };
+  }
+
+  function handleDartsThrow() {
     const game = runtime.activeGame;
     if (!game || game.id !== "darts" || game.screen !== "playing") return;
     const darts = game.tableState || createDartsState();
     if (darts.round > darts.maxRounds) return;
+    const { aimX, aimY } = getDartsAimFromInputs();
+    darts.aimX = aimX;
+    darts.aimY = aimY;
 
-    const player = rollDartThrow(style, false);
-    const bot = rollDartThrow(["safe", "focus", "risk"][Math.floor(Math.random() * 3)], true);
+    if (game.multiplayer?.enabled) {
+      if (darts.phase === "opponent") return;
+      darts.phase = "opponent";
+      darts.message = `Travando a mira em ${describeDartPoint(aimX, aimY).label} e enviando para a mesa PvP...`;
+      renderGameModal();
+      void submitDartsPvpThrow({ aimX, aimY }).catch((error) => {
+        darts.phase = "player";
+        darts.message = String(error?.message || "Nao consegui falar com a mesa PvP.");
+        renderGameModal();
+      });
+      return;
+    }
+
+    const player = simulateDartThrow(aimX, aimY, false);
+    const botAim = getRandomDartAim();
+    const bot = simulateDartThrow(botAim.aimX, botAim.aimY, true);
     darts.playerScore += player.score;
     darts.botScore += bot.score;
     darts.lastPlayer = player;
     darts.lastBot = bot;
     darts.history.push({ round: darts.round, player: player.score, bot: bot.score });
-    darts.message = `${state.profile.name || "Voce"} marcou ${player.score}. ${game.opponent.name} respondeu com ${bot.score}.`;
+    darts.message = `${state.profile.name || "Voce"} caiu em ${player.label} (${player.score}). ${game.opponent.name} respondeu com ${bot.label} (${bot.score}).`;
     darts.round += 1;
 
     if (darts.round > darts.maxRounds) {
@@ -8074,7 +9616,7 @@
     const roulette = game.tableState;
 
     if (roulette.playerRounds > roulette.botRounds) {
-      game.payout = Math.max(game.stake * 2.8 - Math.round(game.stake * 0.08), game.stake * 2);
+      game.payout = getMatchWinnerPayout(game.stake);
       finalizeGame("win", `${state.profile.name || "Voce"} venceu a série da roleta PvP por ${roulette.playerRounds} a ${roulette.botRounds}.`);
       return;
     }
@@ -8298,24 +9840,67 @@
     return normalized || DEMO_STAKES[0];
   }
 
-  function renderCardChip(value, hidden) {
+  function getSuitMeta(suit = "") {
+    const map = {
+      hearts: { glyph: "♥", label: "copas", red: true },
+      diamonds: { glyph: "♦", label: "ouros", red: true },
+      clubs: { glyph: "♣", label: "paus", red: false },
+      spades: { glyph: "♠", label: "espadas", red: false }
+    };
+    return map[suit] || { glyph: "♠", label: "espadas", red: false };
+  }
+
+  function normalizeDisplayCard(cardLike) {
+    if (cardLike && typeof cardLike === "object" && "rank" in cardLike) {
+      return {
+        rank: clampInteger(cardLike.rank) || 14,
+        suit: String(cardLike.suit || "spades")
+      };
+    }
+    const numeric = clampInteger(cardLike);
+    const suitCycle = ["hearts", "diamonds", "clubs", "spades"];
+    return {
+      rank: numeric === 11 ? 14 : Math.max(2, Math.min(10, numeric || 10)),
+      suit: suitCycle[Math.abs(numeric || 0) % suitCycle.length]
+    };
+  }
+
+  function renderPlayingCard(cardLike, options = {}) {
+    const { hidden = false, held = false, interactive = false, dataAttr = "", note = "" } = options;
+    const tag = interactive ? "button" : "span";
+    const attr = interactive ? `type="button" ${dataAttr}` : "";
     if (hidden) {
       return `
-        <span class="pubpaid-card-chip is-hidden">
-          <small>bar</small>
-          <strong>?</strong>
-          <small>sealed</small>
-        </span>
+        <${tag} class="pubpaid-poker-card is-hidden" ${attr} ${interactive ? "" : ""}>
+          <span class="pubpaid-card-back"></span>
+        </${tag}>
       `;
     }
 
+    const card = normalizeDisplayCard(cardLike);
+    const rankLabel = getPokerRankLabel(card.rank);
+    const suit = getSuitMeta(card.suit);
     return `
-      <span class="pubpaid-card-chip">
-        <small>${escapeHtml(getCardTone(value))}</small>
-        <strong>${escapeHtml(getCardFace(value))}</strong>
-        <small>${escapeHtml(String(value))}</small>
-      </span>
+      <${tag} class="pubpaid-poker-card ${held ? "is-held" : ""} ${suit.red ? "is-red" : ""}" ${attr} ${interactive ? "" : ""}>
+        <span class="pubpaid-card-corner">
+          <b>${escapeHtml(rankLabel)}</b>
+          <i>${escapeHtml(suit.glyph)}</i>
+        </span>
+        <strong class="pubpaid-card-center">${escapeHtml(suit.glyph)}</strong>
+        <span class="pubpaid-card-corner is-bottom">
+          <b>${escapeHtml(rankLabel)}</b>
+          <i>${escapeHtml(suit.glyph)}</i>
+        </span>
+        ${note ? `<small class="pubpaid-card-note">${escapeHtml(note)}</small>` : ""}
+      </${tag}>
     `;
+  }
+
+  function renderCardChip(value, hidden) {
+    return renderPlayingCard(value, {
+      hidden,
+      note: hidden ? "" : `${clampInteger(typeof value === "object" ? value.value || value.rank : value)} pts`
+    });
   }
 
   function getCardFace(value) {
@@ -8364,8 +9949,30 @@
     return min + Math.random() * (max - min);
   }
 
+  function roundMoney(value) {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return 0;
+    return Math.round((amount + Number.EPSILON) * 100) / 100;
+  }
+
+  function parseMoneyInput(value, fallback = 0) {
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return roundMoney(value);
+    }
+    const normalized = String(value || "")
+      .replace(/[R$\s]/gi, "")
+      .replace(/\./g, "")
+      .replace(",", ".");
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? roundMoney(parsed) : fallback;
+  }
+
   function formatCoins(value) {
-    return `${clampInteger(value)} moedas`;
+    const amount = roundMoney(value);
+    return `${amount.toLocaleString("pt-BR", {
+      minimumFractionDigits: Number.isInteger(amount) ? 0 : 2,
+      maximumFractionDigits: 2
+    })} moedas`;
   }
 
   function formatDate(value) {

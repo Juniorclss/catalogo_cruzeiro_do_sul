@@ -27,6 +27,14 @@ function clampInteger(value, fallback = 0) {
   return Math.trunc(num);
 }
 
+function roundMoney(value, fallback = 0) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) {
+    return fallback;
+  }
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}
+
 function normalizeStatus(value, fallback = "pending") {
   const normalized = String(value || fallback).trim().toLowerCase();
   if (normalized === "approved" || normalized === "approve" || normalized === "aprovado" || normalized === "aprovar") {
@@ -70,7 +78,7 @@ function normalizeId(prefix, value, fallbackIndex) {
 }
 
 function normalizeMoney(value) {
-  return clampInteger(value, 0);
+  return roundMoney(value, 0);
 }
 
 function normalizeDeposit(item = {}, index = 0) {

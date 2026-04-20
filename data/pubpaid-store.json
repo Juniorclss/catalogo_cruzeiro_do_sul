@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-04-20T08:15:15.795Z",
+  "deposits": [
+    {
+      "id": "real-shape-1",
+      "playerId": "raiane@example.com",
+      "playerName": "RAIANE LEONCIO",
+      "amountCoins": 5,
+      "reference": "PUBTESTE123",
+      "notes": "",
+      "status": "pending",
+      "createdAt": "2026-04-20T08:15:15.795Z",
+      "reviewedAt": "",
+      "reviewedBy": "",
+      "reviewReason": ""
+    }
+  ],
+  "withdrawals": [],
+  "wallets": {
+    "raiane@example.com": {
+      "playerId": "raiane@example.com",
+      "playerName": "RAIANE LEONCIO",
+      "balanceCoins": 0,
+      "lockedWithdrawalCoins": 0,
+      "totalApprovedDeposits": 0,
+      "totalApprovedWithdrawals": 0
+    }
+  }
+}
+
+

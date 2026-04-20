@@ -1,15 +1,15 @@
 # Current State
 
-Updated: 2026-04-20T09:51:18.295Z
+Updated: 2026-04-20T10:34:58.838Z
 
 ## Active Goal
 
-- Popup com homenagem dos fundadores
+- Popup mobile simplificado + homenagem aos fundadores corrigida
 
 ## Summary
 
-startup-experience.css foi ajustado para nao apagar o card inteiro em is-thanking; agora so o conteudo do consentimento some e a apresentacao dos fundadores permanece visivel apos o aceite.
+O popup mobile de cookies foi reduzido para uma versão curta e a etapa de homenagem aos fundadores deixou de ser ocultada pelo CSS do modo phone.
 
 ## Next
 
-- Validar em navegador real se a homenagem dos fundadores aparece logo apos aceitar os cookies no desktop e no mobile.
+- Validar visualmente no mobile se a transição do aceite para a homenagem ficou no tempo e na escala certos.

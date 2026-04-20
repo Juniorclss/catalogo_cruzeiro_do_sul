@@ -184,7 +184,41 @@
     );
   }
 
-  function buildWelcomeCopyMarkup() {
+  function buildWelcomeCopyMarkup(options = {}) {
+    const phone = options.phone === true;
+    if (phone) {
+      return `
+        <p class="catalogo-welcome-kicker">Antes de entrar</p>
+        <h2 id="catalogoWelcomeTitle">Cookies e preferências</h2>
+        <p class="catalogo-welcome-lead">
+          Usamos o básico para o portal funcionar e medir carregamento nesta visita.
+        </p>
+
+        <div class="catalogo-consent-intro">
+          <strong>Resumo rápido</strong>
+          <p>É só um aceite simples para abrir o site com cookies essenciais e medição básica.</p>
+        </div>
+
+        <label class="catalogo-terms-check">
+          <input type="checkbox" id="catalogoAcceptTerms" />
+          <span>Aceito os cookies essenciais e a medição básica desta visita.</span>
+        </label>
+
+        <p class="catalogo-welcome-note">
+          A política completa continua disponível para consulta.
+        </p>
+
+        <div class="catalogo-welcome-actions">
+          <button class="catalogo-btn primary" id="catalogoAcceptButton" type="button" disabled>
+            Aceitar e continuar
+          </button>
+          <a class="catalogo-btn ghost" href="./legal.html" target="_blank" rel="noopener noreferrer">
+            Ver política
+          </a>
+        </div>
+      `;
+    }
+
     return `
       <p class="catalogo-welcome-kicker">Antes de continuar</p>
       <h2 id="catalogoWelcomeTitle">Preferencias de cookies</h2>
@@ -665,7 +699,7 @@
             <span class="catalogo-compact-dot"></span>
             <strong>Preferencias e cookies</strong>
           </div>
-          ${buildWelcomeCopyMarkup()}
+          ${buildWelcomeCopyMarkup({ phone })}
         </div>
         ${buildFounderThanksMarkup()}
       </article>

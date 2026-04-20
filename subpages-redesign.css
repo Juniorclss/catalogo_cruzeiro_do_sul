@@ -6521,6 +6521,77 @@ body.games-vr-rental-open {
   display: none !important;
 }
 
+/* 2026-04-20: polimento editorial infantil com layout mais largo e foco em fotos reais */
+.infantil-child-page .section-block,
+.infantil-child-page .students-card,
+.infantil-child-page .students-source-strip,
+.infantil-child-page .infantil-shell {
+  padding-inline: clamp(1.2rem, 2.2vw, 2rem) !important;
+}
+
+.infantil-child-page .kids-cosmos-hero {
+  grid-template-columns: minmax(0, 0.9fr) minmax(620px, 1.1fr) !important;
+}
+
+.infantil-child-page .kids-pop-character-wall {
+  grid-template-columns: minmax(0, 1.22fr) repeat(3, minmax(0, 0.82fr));
+  grid-auto-rows: minmax(190px, 1fr);
+  gap: 1rem;
+}
+
+.infantil-child-page .kids-pop-character-card:first-child {
+  grid-column: span 2;
+}
+
+.infantil-child-page .kids-real-brand-wall {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.infantil-child-page .kids-character-parade-layout {
+  grid-template-columns: minmax(360px, 0.88fr) minmax(0, 1.12fr);
+  gap: 1.15rem;
+}
+
+.infantil-child-page .kids-real-character-panel {
+  min-height: 430px;
+  padding: clamp(1.15rem, 2.2vw, 1.7rem);
+}
+
+.infantil-child-page .kids-character-grid.kids-club-crew {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.infantil-child-page .infantil-shell {
+  padding: clamp(1.2rem, 2.3vw, 2rem);
+}
+
+.infantil-child-page .infantil-hero-card {
+  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+  gap: 1.2rem;
+}
+
+.infantil-child-page .kids-real-show-grid,
+.infantil-child-page .kids-creator-grid,
+.infantil-child-page .kids-tips-grid,
+.infantil-child-page .kids-game-news-grid {
+  gap: 1rem;
+}
+
+.infantil-child-page .kids-game-news-grid {
+  grid-template-columns: minmax(0, 1.15fr) repeat(2, minmax(0, 0.925fr));
+}
+
+.infantil-child-page .kids-real-brand-card,
+.infantil-child-page .kids-real-show-card,
+.infantil-child-page .kids-news-card,
+.infantil-child-page .kids-creator-card,
+.infantil-child-page .kids-tip-card,
+.infantil-child-page .kids-character-card {
+  border-radius: 30px;
+}
+
 .infantil-child-page {
   --kids-panel: rgba(255, 255, 255, 0.88);
   --kids-cyan: #2f86d8;

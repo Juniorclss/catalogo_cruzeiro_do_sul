@@ -67,7 +67,7 @@
   <link rel="stylesheet" href="photo-layout-fix.css?v=20260411ab" />
   <link rel="stylesheet" href="newspaper-gradient-balance.css?v=20260411r" />
   <link rel="stylesheet" href="agentes-newsroom-hero.css?v=20260420hero-navrestore" />
-  <link rel="stylesheet" href="startup-experience.css?v=20260420founderpopup" />
+  <link rel="stylesheet" href="startup-experience.css?v=20260420founderpopup-once" />
   <link rel="stylesheet" href="./insiders-crowd-march.css?v=20260420a" />
   <link rel="stylesheet" href="pro-design.css?v=20260414c" />
   <link rel="stylesheet" href="news-photo-fix.css?v=20260415a" />
@@ -273,7 +273,6 @@
             <a class="outline-button" href="#entretenimento">Entretenimento</a>
             <a class="outline-button" href="./games.html">Games</a>
             <a class="outline-button" href="./animes.html">Animes</a>
-            <a class="outline-button" href="./esttiles.html">Moda</a>
             <a class="outline-button" href="#acre-destaque">Acre</a>
             <a class="outline-button" href="#trending">Trending</a>
             <a class="outline-button" href="#panorama">Panorama</a>
@@ -285,7 +284,7 @@
           </div>
 
           <details class="mobile-agent-hub" aria-label="Escritorios de agentes">
-            <summary>Jogo e escritórios</summary>
+            <summary>Jogos, moda e equipes</summary>
             <div class="mobile-agent-hub-links">
               <a class="nav-game-link" href="./pubpaid.html">
                 <span class="nav-game-link-icon" aria-hidden="true"></span>
@@ -294,7 +293,7 @@
               <a href="./escritorio.html">Escritório central</a>
               <a href="./escritorio-arte.html">Escritório de arte</a>
               <a href="./escritorio-ninjas.html">Escritório ninja</a>
-              <a href="./esttiles.html">Escritório Esttíles</a>
+              <a href="./esttiles.html">Esttíles / Moda</a>
             </div>
           </details>
 
@@ -431,9 +430,9 @@
               <a class="outline-button" href="#entretenimento">Entretenimento</a>
             </div>
             <div class="hero-tourism-meta">
-              <span class="hero-tourism-kicker">panorama local</span>
-              <strong data-hero-tourism-title>Panorama do centro</strong>
-              <small data-hero-tourism-note>vista ampla da cidade</small>
+              <span class="hero-tourism-kicker">editoria em destaque</span>
+              <strong data-hero-tourism-title>Radar local</strong>
+              <small data-hero-tourism-note>notícia principal da área selecionada</small>
             </div>
             <div class="hero-newsroom-notes" aria-label="Rotas da home">
               <span>Radar local</span>
@@ -580,9 +579,9 @@
             data-hero-daily-link
             aria-label="Abrir notícia destacada da hero"
           >
-            <span data-hero-daily-category>Destaque do dia</span>
+            <span data-hero-daily-category>Área em destaque</span>
             <strong data-hero-daily-title>Notícia em destaque</strong>
-            <small data-hero-daily-summary>Resumo da notícia principal selecionada por tema.</small>
+            <small data-hero-daily-summary>Resumo da notícia principal selecionada para esta editoria.</small>
           </a>
         </section>
         <section class="office-play-strip reveal" aria-label="Acesso rápido aos escritórios e ao jogo PubPaid">
@@ -657,6 +656,15 @@
             </nav>
 
             <article class="crossword-teaser-card">
+              <div class="crossword-teaser-hero" aria-hidden="true">
+                <span class="crossword-teaser-badge">✿</span>
+                <div class="crossword-teaser-icon">
+                  <i class="tile tile-p"></i>
+                  <i class="tile tile-r"></i>
+                  <i class="tile tile-a"></i>
+                  <i class="tile tile-x"></i>
+                </div>
+              </div>
               <p class="crossword-teaser-kicker">palavras cruzadas</p>
               <h3>Palavras da Rosa</h3>
               <p>
@@ -3084,7 +3092,7 @@
   <script defer src="photo-layout-fix.js?v=20260411ab"></script>
   <script defer src="newspaper-gradient-balance.js?v=20260411r"></script>
   <script defer src="agentes-newsroom-hero.js?v=20260413ac"></script>
-    <script defer src="startup-experience.js?v=20260420founderpopup"></script>
+    <script defer src="startup-experience.js?v=20260420founderpopup-once"></script>
   <script defer src="pro-design.js?v=20260413b"></script>
 </body>
 </html>

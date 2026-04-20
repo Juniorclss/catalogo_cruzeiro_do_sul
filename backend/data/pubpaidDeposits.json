@@ -1,0 +1,62 @@
+[
+  {
+    "id": "pubdep_meeting_test",
+    "type": "pubpaid-deposito",
+    "user": {
+      "sub": "meeting-sub",
+      "email": "meeting@test.com",
+      "name": "Meeting Test"
+    },
+    "depositorName": "Meeting User",
+    "walletKey": "meeting-sub",
+    "amount": 5,
+    "creditsRequested": 5,
+    "status": "creditos-liberados",
+    "payment": {
+      "method": "pix-qr-code",
+      "txid": "MEET505",
+      "status": "confirmado-manual",
+      "confirmationMode": "manual"
+    },
+    "reviewDeadlineAt": "2026-04-20T07:45:36.439Z",
+    "createdAt": "2026-04-20T06:45:36.439Z",
+    "reviewNote": "",
+    "reviewedAt": "2026-04-20T06:45:38.972Z",
+    "reviewedBy": "admin"
+  },
+  {
+    "id": "pubdep_fake_r5_test",
+    "type": "pubpaid-deposito",
+    "user": {
+      "sub": "fake-sub",
+      "email": "teste.pubpaid@example.com",
+      "name": "Jogador Teste",
+      "givenName": "Jogador",
+      "familyName": "Teste",
+      "picture": ""
+    },
+    "depositorName": "Ana Maria Teste",
+    "walletKey": "email:teste.pubpaid@example.com",
+    "amount": 5,
+    "creditsRequested": 5,
+    "reference": "PUBFAKE5",
+    "payment": {
+      "method": "pix-qr-code",
+      "keyVisible": false,
+      "txid": "PUBFAKE5",
+      "depositorName": "Ana Maria Teste",
+      "status": "confirmado-manual",
+      "confirmationMode": "manual"
+    },
+    "status": "creditos-liberados",
+    "reviewDeadlineAt": "2026-04-20T09:17:14.7828657Z",
+    "tracking": {
+      "pagePath": "/pubpaid.html",
+      "ip": "127.0.0.1"
+    },
+    "createdAt": "2026-04-20T06:17:14.7950735Z",
+    "reviewedAt": "2026-04-20T06:19:50.781Z",
+    "reviewedBy": "admin",
+    "reviewNote": ""
+  }
+]

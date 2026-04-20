@@ -8,6 +8,21 @@
     "http://127.0.0.1:8787"
   ];
   const normalizeBase = (value) => String(value || "").trim().replace(/\/$/, "");
+  const localHostPattern = /^(localhost|127(?:\.\d{1,3}){3})$/i;
+  const isLocalLikeBase = (value) => {
+    const normalized = normalizeBase(value);
+
+    if (!normalized) {
+      return false;
+    }
+
+    try {
+      const parsed = new URL(normalized);
+      return localHostPattern.test(parsed.hostname);
+    } catch {
+      return false;
+    }
+  };
   const addBase = (list, value) => {
     const normalized = normalizeBase(value);
     if (!normalized || list.includes(normalized)) {
@@ -17,30 +32,46 @@
   };
   const bases = [];
   const presetBase = normalizeBase(window.CATALOGO_API_BASE);
+  const isLocalHttp = location.protocol.startsWith("http") && localHostPattern.test(location.hostname);
+  const isFileMode = location.protocol === "file:";
+  const currentOrigin = normalizeBase(location.origin);
+  const canUseCrossOriginSavedBase = isFileMode || isLocalHttp;
 
-  if (presetBase) {
-    addBase(bases, presetBase);
-  }
-
+  let savedBase = "";
   try {
-    const saved = localStorage.getItem("catalogo_api_base");
-    if (saved) {
-      addBase(bases, saved);
-    }
+    savedBase = normalizeBase(localStorage.getItem("catalogo_api_base"));
   } catch {
     // ignore
   }
 
-  const localHostPattern = /^(localhost|127(?:\.\d{1,3}){3})$/i;
-  const isLocalHttp = location.protocol.startsWith("http") && localHostPattern.test(location.hostname);
+  if (!canUseCrossOriginSavedBase && savedBase && savedBase !== currentOrigin && !isLocalLikeBase(savedBase)) {
+    try {
+      localStorage.removeItem("catalogo_api_base");
+    } catch {
+      // ignore
+    }
+    savedBase = "";
+  }
 
-  if (location.protocol === "file:") {
+  if (!isFileMode && !isLocalHttp) {
+    addBase(bases, currentOrigin);
+  }
+
+  if (presetBase && (canUseCrossOriginSavedBase || presetBase === currentOrigin || isLocalLikeBase(presetBase))) {
+    addBase(bases, presetBase);
+  }
+
+  if (savedBase && (canUseCrossOriginSavedBase || savedBase === currentOrigin || isLocalLikeBase(savedBase))) {
+    addBase(bases, savedBase);
+  }
+
+  if (isFileMode) {
     DEFAULT_LOCAL_API_BASES.forEach((base) => addBase(bases, base));
   } else if (isLocalHttp && location.port !== "3000") {
     DEFAULT_LOCAL_API_BASES.forEach((base) => addBase(bases, base));
-    addBase(bases, location.origin);
+    addBase(bases, currentOrigin);
   } else {
-    addBase(bases, location.origin);
+    addBase(bases, currentOrigin);
     if (isLocalHttp) {
       DEFAULT_LOCAL_API_BASES.forEach((base) => addBase(bases, base));
     }
