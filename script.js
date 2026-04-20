@@ -5493,9 +5493,6 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   const electionHeatMeta = document.querySelector("#election-heat-meta");
   const electionHeatGrid = document.querySelector("#election-heat-grid");
   const electionDisclaimer = document.querySelector("#election-disclaimer");
-  const electionSpoMeta = document.querySelector("#election-spo-meta");
-  const electionSpoGrid = document.querySelector("#electionSpoGrid");
-  const electionSpoNews = document.querySelector("#electionSpoNews");
   const electionVotesKey = "catalogo_election_votes_by_office_v1";
   const electionUserVotesKey = "catalogo_election_user_votes_v1";
   const electionOpinionSummaryKey = "catalogo_election_opinion_summary_v1";
@@ -5531,7 +5528,6 @@ if (window.ELECTIONS_DATA?.offices?.length) {
   let remoteElectionUserVotes = null;
   let remoteElectionOpinionSummary = null;
   let remoteElectionWeeklyTrend = null;
-  let electionSpoBridgePayload = null;
   let electionVoteModal = document.querySelector("#electionVoteModal");
   let electionVoteModalState = null;
   let electionVoteToastTimer = 0;
@@ -5891,134 +5887,6 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     }
 
     return Math.max(6, Math.min(100, Math.round((value / total) * 100)));
-  };
-
-  const formatElectionSpoDate = (value = "") => {
-    if (!value) {
-      return "Sem atualização";
-    }
-
-    const parsed = new Date(value);
-    if (Number.isNaN(parsed.getTime())) {
-      return String(value);
-    }
-
-    return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(parsed);
-  };
-
-  const renderElectionSpoBridge = (office) => {
-    if (!electionSpoGrid || !electionSpoNews) {
-      return;
-    }
-
-    const payload = electionSpoBridgePayload;
-    const poll = payload?.poll || {};
-    const newsItems = Array.isArray(payload?.journal?.items) ? payload.journal.items : [];
-    const cards = [];
-
-    if (poll.leadVote?.label) {
-      cards.push({
-        kicker: "Voto mais citado",
-        title: poll.leadVote.label,
-        detail: `${poll.leadVote.percent || 0}% na SPO`
-      });
-    }
-
-    if (poll.topPriority?.label) {
-      cards.push({
-        kicker: "Prioridade do eleitor",
-        title: poll.topPriority.label,
-        detail: `${poll.topPriority.total || 0} menções na coleta`
-      });
-    }
-
-    if (poll.topDirection?.label) {
-      cards.push({
-        kicker: "Rumo percebido",
-        title: poll.topDirection.label,
-        detail: `${poll.topDirection.total || 0} respostas`
-      });
-    }
-
-    if (poll.desiredCycle?.label) {
-      cards.push({
-        kicker: "Desejo de ciclo",
-        title: poll.desiredCycle.label,
-        detail: `${poll.desiredCycle.total || 0} respostas`
-      });
-    }
-
-    if (!cards.length) {
-      electionSpoGrid.innerHTML = `
-        <article class="election-spo-card is-empty">
-          <strong>Sem sinal suficiente ainda.</strong>
-          <p>A SPO ainda não reuniu massa para devolver leitura forte ao jornal.</p>
-        </article>
-      `;
-    } else {
-      electionSpoGrid.innerHTML = cards
-        .slice(0, 4)
-        .map(
-          (card) => `
-            <article class="election-spo-card">
-              <span>${escapeHtml(card.kicker)}</span>
-              <strong>${escapeHtml(card.title)}</strong>
-              <p>${escapeHtml(card.detail)}</p>
-            </article>
-          `
-        )
-        .join("");
-    }
-
-    if (electionSpoMeta) {
-      if (poll.totalResponses) {
-        electionSpoMeta.textContent = `${poll.totalResponses} respostas na SPO • ${newsItems.length} matérias cruzadas • atualizado em ${formatElectionSpoDate(
-          poll.updatedAt || payload.updatedAt
-        )}.`;
-      } else {
-        electionSpoMeta.textContent = "A pesquisa pública ainda está reunindo base para alimentar o jornal.";
-      }
-    }
-
-    if (!newsItems.length) {
-      electionSpoNews.innerHTML = `
-        <article class="election-spo-news-card is-empty">
-          <strong>O jornal ainda não devolveu pautas cruzadas.</strong>
-        </article>
-      `;
-      return;
-    }
-
-    electionSpoNews.innerHTML = newsItems
-      .map(
-        (item) => `
-          <article class="election-spo-news-card">
-            <span>${escapeHtml(item.category || "Política")} • ${escapeHtml(item.sourceName || "Fonte local")}</span>
-            <strong>${escapeHtml(item.title || "Atualização política")}</strong>
-            <p>${escapeHtml(item.summary || "Sem resumo disponível.")}</p>
-            <div class="election-spo-news-actions">
-              <a href="${escapeHtml(item.localUrl || item.sourceUrl || "#")}">Abrir no jornal</a>
-              <a href="${escapeHtml(item.sourceUrl || item.localUrl || "#")}" target="_blank" rel="noreferrer">Ver fonte</a>
-            </div>
-          </article>
-        `
-      )
-      .join("");
-  };
-
-  const loadElectionSpoBridge = async () => {
-    try {
-      electionSpoBridgePayload = await requestApiJson("/api/pesquisa-acre-2026/bridge", { method: "GET" });
-    } catch (_error) {
-      electionSpoBridgePayload = null;
-    }
-
-    renderElectionSpoBridge(getElectionOffice(activeElectionOfficeId));
   };
 
   const renderElectionHeat = (office) => {
@@ -6715,7 +6583,6 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     }
 
     renderElectionHeat(office);
-    renderElectionSpoBridge(office);
   };
 
   const renderElectionOffice = (officeId = activeElectionOfficeId) => {
@@ -6797,11 +6664,10 @@ if (window.ELECTIONS_DATA?.offices?.length) {
     }
   });
 
-  renderElectionOffice(activeElectionOfficeId);
-  hydrateElectionVotes();
-  loadElectionSpoBridge();
+    renderElectionOffice(activeElectionOfficeId);
+    hydrateElectionVotes();
+    }
   }
-}
 
 const buildAgentWhatsappUrl = ({ name = "", email = "", subject = "", message = "" }) => {
   const lines = ["Olá, segue uma mensagem enviada pelo Catalogo Cruzeiro do Sul.", ""];

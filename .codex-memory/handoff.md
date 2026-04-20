@@ -1,10 +1,9 @@
 # Handoff
 
-Updated: 2026-04-20T22:25:42.587Z
+Updated: 2026-04-20T23:28:42.511Z
 
-Rodada de reuniao geral no PubPaid: pesquisa de padroes mobile concluida com apoio de agentes; pubpaid.html/pubpaid.css/pubpaid.js receberam menu mobile em icone, overlay de rotacao com atalhos para carteira/historico, quick access no bloco do perfil e canvas com ajuste por devicePixelRatio. Deposito/saque nao tiveram a logica alterada.
+Home eleitoral sem cruzamento SPO x Jornal; agora existe um bloco simples de pesquisa do portal. A SPO foi restaurada para a versao completa anterior usando o commit 44b5785 em pesquisa-acre-2026.html/js/css.
 
 ## Next
 
-- Abrir o PubPaid em navegador/celular real para calibrar HUD
-- controles touch e ergonomia do caixa Pix no mobile.
+- Testar visual e fluxo real da home para a SPO e confirmar se o usuario quer mais limpeza na pagina da SPO restaurada.

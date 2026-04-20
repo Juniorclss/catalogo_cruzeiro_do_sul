@@ -1,22 +1,22 @@
 ﻿:root {
-  --bg: #edf2f7;
-  --paper: rgba(246, 249, 252, 0.96);
-  --paper-strong: rgba(255, 255, 255, 0.99);
-  --surface-soft: rgba(233, 240, 247, 0.92);
-  --surface-card: rgba(247, 250, 253, 0.9);
-  --surface-card-strong: rgba(255, 255, 255, 0.97);
-  --ink: #162031;
-  --muted: #5b697d;
-  --navy: #0f2742;
-  --navy-soft: #2b4c72;
-  --copper: #c54032;
-  --copper-soft: #e15a3f;
-  --gold: #f4b84d;
-  --sage: #7f99b6;
-  --line: rgba(15, 39, 66, 0.11);
-  --line-strong: rgba(15, 39, 66, 0.2);
-  --shadow: 0 24px 56px rgba(11, 29, 52, 0.1);
-  --shadow-strong: 0 28px 68px rgba(11, 29, 52, 0.15);
+  --bg: #edf1f5;
+  --paper: rgba(247, 249, 252, 0.98);
+  --paper-strong: rgba(255, 255, 255, 0.995);
+  --surface-soft: rgba(236, 241, 246, 0.94);
+  --surface-card: rgba(250, 252, 253, 0.94);
+  --surface-card-strong: rgba(255, 255, 255, 0.985);
+  --ink: #172233;
+  --muted: #58677a;
+  --navy: #17314f;
+  --navy-soft: #2c4b6c;
+  --copper: #c56d3f;
+  --copper-soft: #a9542d;
+  --gold: #dfb06b;
+  --sage: #7e93ad;
+  --line: rgba(23, 49, 79, 0.1);
+  --line-strong: rgba(23, 49, 79, 0.18);
+  --shadow: 0 22px 52px rgba(13, 28, 47, 0.08);
+  --shadow-strong: 0 28px 64px rgba(13, 28, 47, 0.12);
   --radius-xl: 32px;
   --radius-lg: 24px;
   --radius-md: 18px;
@@ -37,9 +37,9 @@ body {
   color: var(--ink);
   font-family: "Inter", sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(197, 64, 50, 0.08), transparent 18%),
-    radial-gradient(circle at top right, rgba(43, 76, 114, 0.08), transparent 24%),
-    linear-gradient(180deg, #f6f8fb 0%, #edf2f7 56%, #e6edf5 100%);
+    radial-gradient(circle at top left, rgba(197, 109, 63, 0.08), transparent 18%),
+    radial-gradient(circle at top right, rgba(44, 75, 108, 0.08), transparent 24%),
+    linear-gradient(180deg, #f8fafc 0%, #edf1f5 54%, #e6ebf0 100%);
 }
 
 html body.fx-lite {
@@ -2183,8 +2183,8 @@ body.site-loaded .page-shell {
   gap: 0.45rem;
   padding: 0.38rem 0.7rem;
   border-radius: 999px;
-  border: 1px solid rgba(16, 35, 60, 0.08);
-  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(23, 49, 79, 0.12);
+  background: rgba(250, 244, 236, 0.92);
   color: var(--navy);
   font-size: 0.7rem;
   font-weight: 800;
@@ -2270,10 +2270,10 @@ body.site-loaded .page-shell {
   min-height: 3rem;
   padding: 0.78rem 0.95rem;
   border-radius: 18px;
-  border: 1px solid rgba(16, 35, 60, 0.08);
+  border: 1px solid rgba(23, 49, 79, 0.1);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 248, 239, 0.82));
-  box-shadow: 0 14px 28px rgba(16, 35, 60, 0.08);
+    linear-gradient(135deg, rgba(252, 249, 244, 0.98), rgba(243, 235, 223, 0.86));
+  box-shadow: 0 14px 28px rgba(14, 28, 45, 0.07);
   white-space: nowrap;
 }
 
@@ -2317,7 +2317,7 @@ body.site-loaded .page-shell {
 }
 
 .ticker-chip-text {
-  color: rgba(16, 35, 60, 0.78);
+  color: rgba(23, 49, 79, 0.82);
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -3770,7 +3770,7 @@ body.site-loaded .page-shell {
 
 .archive-shell {
   background:
-    linear-gradient(180deg, rgba(250, 245, 238, 0.96), rgba(238, 229, 216, 0.92)),
+    linear-gradient(180deg, rgba(249, 246, 241, 0.96), rgba(239, 233, 225, 0.92)),
     var(--paper);
 }
 
@@ -3809,7 +3809,8 @@ body.site-loaded .page-shell {
 .archive-card.tall {
   min-height: 320px;
   background:
-    linear-gradient(160deg, rgba(16, 35, 60, 0.96), rgba(25, 54, 91, 0.92)),
+    radial-gradient(circle at top right, rgba(223, 176, 107, 0.12), transparent 28%),
+    linear-gradient(160deg, rgba(22, 42, 66, 0.98), rgba(20, 37, 58, 0.96)),
     rgba(255, 255, 255, 0.62);
   color: #fff6eb;
 }
@@ -6217,7 +6218,7 @@ input[type="range"] {
   background: linear-gradient(90deg, #c95a45, #ef8b74);
 }
 
-.election-spo-bridge {
+.election-journal-poll {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
@@ -6229,31 +6230,30 @@ input[type="range"] {
     linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(245, 249, 253, 0.9));
 }
 
-.election-spo-head {
+.election-journal-poll-head {
   display: grid;
   gap: 0.35rem;
 }
 
-.election-spo-head h4 {
+.election-journal-poll-head h4 {
   margin: 0;
   color: var(--navy);
   font-family: "Outfit", sans-serif;
   font-size: 1.1rem;
 }
 
-.election-spo-head p {
+.election-journal-poll-head p {
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
 }
 
-.election-spo-grid {
+.election-journal-poll-body {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.85rem;
 }
 
-.election-spo-card {
+.election-journal-poll-card {
   display: grid;
   gap: 0.45rem;
   padding: 0.95rem;
@@ -6263,12 +6263,7 @@ input[type="range"] {
   box-shadow: 0 16px 24px rgba(16, 35, 60, 0.06);
 }
 
-.election-spo-card.is-empty {
-  grid-column: 1 / -1;
-  text-align: center;
-}
-
-.election-spo-card span {
+.election-journal-poll-card span {
   color: #5d7898;
   font-size: 0.74rem;
   font-weight: 800;
@@ -6276,61 +6271,24 @@ input[type="range"] {
   text-transform: uppercase;
 }
 
-.election-spo-card strong {
+.election-journal-poll-card strong {
   color: var(--navy);
   font-size: 1rem;
 }
 
-.election-spo-card p {
+.election-journal-poll-card p {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
 }
 
-.election-spo-news {
-  display: grid;
-  gap: 0.85rem;
-}
-
-.election-spo-news-card {
-  display: grid;
-  gap: 0.52rem;
-  padding: 1rem;
-  border-radius: 20px;
-  border: 1px solid rgba(16, 35, 60, 0.08);
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.election-spo-news-card.is-empty {
-  text-align: center;
-}
-
-.election-spo-news-card span {
-  color: #5d7898;
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.election-spo-news-card strong {
-  color: var(--navy);
-  font-size: 1rem;
-}
-
-.election-spo-news-card p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.56;
-}
-
-.election-spo-news-actions {
+.election-journal-poll-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
 }
 
-.election-spo-news-actions a {
+.election-journal-poll-actions a {
   display: inline-flex;
   align-items: center;
   min-height: 38px;
@@ -6720,7 +6678,7 @@ input[type="range"] {
 @media (max-width: 720px) {
   .election-heat-grid,
   .election-vote-form-grid,
-  .election-spo-grid {
+  .election-journal-poll-body {
     grid-template-columns: 1fr;
   }
 
@@ -6741,11 +6699,11 @@ input[type="range"] {
 
   .election-vote-actions .solid-button,
   .election-vote-actions .outline-button,
-  .election-spo-news-actions a {
+  .election-journal-poll-actions a {
     width: 100%;
   }
 
-  .election-spo-news-actions {
+  .election-journal-poll-actions {
     flex-direction: column;
   }
 

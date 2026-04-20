@@ -1,16 +1,16 @@
 # Current State
 
-Updated: 2026-04-20T22:25:42.637Z
+Updated: 2026-04-20T23:28:42.494Z
 
 ## Active Goal
 
-- PubPaid mobile-first com caixa preservado
+- Pesquisa eleitoral separada de novo
 
 ## Summary
 
-Reuniao geral fechou padroes mobile para o PubPaid. O jogo agora reforca landscape, tem atalhos mobile para carteira/caixa/historico, overlay de rotacao com acesso ao caixa e canvas ajustado para telas de alta densidade sem mexer na logica de deposito/saque.
+A camada eleitoral da home voltou a mostrar uma chamada simples do jornal, sem a ponte SPO x Jornal. A pagina pesquisa-acre-2026 foi restaurada do commit 44b5785 para recuperar a rotina completa anterior da SPO.
 
 ## Next
 
-- Validar visualmente o PubPaid no celular ou em viewport responsivo real e decidir a proxima rodada: HUD ainda mais enxuto
-- joystick analogico ou hotspots maiores por mesa.
+- Validar no navegador se o botão da pesquisa da home abre corretamente e se a SPO antiga carrega o formulario
+- resumo e consulta administrativa.

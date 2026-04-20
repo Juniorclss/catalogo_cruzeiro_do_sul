@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T21:11:31.283Z",
+  "lastUpdatedAt": "2026-04-20T23:28:42.328Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2240,6 +2240,21 @@
       "source": "chat",
       "rawRequest": "ola nesse ambiente vamos trabalhar so o jogo ok? pub paid, primeira coisa, vamos força a orientação pra ficar diferente no mobile ou seja orizontal, e o menus vão ser simplificados e escondidos em um icone menu, ou seja no mobile quero um conceito mais clean, que tal controle na tela, ? no mobile",
       "summary": "Ajustar PubPaid mobile para landscape, menu em icone e controles touch mais clean",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-separar-de-novo-a-pesquisa-simples-do-jornal-e-restaurar-a-spo-completa",
+      "createdAt": "2026-04-20T23:28:42.328Z",
+      "updatedAt": "2026-04-20T23:28:42.328Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "PESQUISA ELEITORAL SAO 2 , UMA EA SPO, E VC SUMIO COM ELA, A OUTRA E A DO PORTAL, QUE O BOTÃO N FUNCIONA. ...... AGORA ENTENDEMOS PORQUE NEH? VOLTE A PESQUISA SIMPLES PRO JORNAL NA CAMADA ELETORAL, E TIRE ELA DA SPO, E TRANSFORME A SPO NUMA ROTINA COMPLETA COMO ERA ANTES, BUSQUE DA SUA MEMORIA O QUE VC FEZ FOI TROCAR A POSIÇÃO DAS PESQUISAS E SUMIR COM UMA",
+      "summary": "Separar de novo a pesquisa simples do jornal e restaurar a SPO completa",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

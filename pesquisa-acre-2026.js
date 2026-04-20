@@ -1,28 +1,33 @@
+"use strict";
+
 (() => {
-  const officeTabs = document.getElementById("pollOfficeTabs");
-  const officeBadge = document.getElementById("pollOfficeBadge");
-  const officeTitle = document.getElementById("pollOfficeTitle");
-  const officeSummary = document.getElementById("pollOfficeSummary");
-  const officeScope = document.getElementById("pollOfficeScope");
-  const officeRule = document.getElementById("pollOfficeRule");
-  const updatedAt = document.getElementById("pollUpdatedAt");
-  const feedback = document.getElementById("pollFeedback");
-  const candidateGrid = document.getElementById("pollCandidateGrid");
-  const resultsTitle = document.getElementById("pollResultsTitle");
-  const resultsNote = document.getElementById("pollResultsNote");
-  const resultsList = document.getElementById("pollResultsList");
-
-  const DEVICE_KEY = "catalogo_election_device_id_v2";
-  const state = {
-    offices: [],
-    activeOfficeId: "",
-    votes: {},
-    userVotes: {},
-    deviceId: "",
-    busyCandidateId: ""
-  };
-
+  const form = document.getElementById("acrePollForm");
+  const submitButton = document.getElementById("submitButton");
+  const formFeedback = document.getElementById("formFeedback");
+  const summaryCard = document.querySelector(".poll-summary");
+  const summaryTotal = document.getElementById("summaryTotal");
+  const summaryAverage = document.getElementById("summaryAverage");
+  const summaryUpdatedAt = document.getElementById("summaryUpdatedAt");
+  const bridgeUpdatedAt = document.getElementById("bridgeUpdatedAt");
+  const voteBars = document.getElementById("voteBars");
+  const priorityBars = document.getElementById("priorityBars");
+  const stateDirectionBars = document.getElementById("stateDirectionBars");
+  const desiredCycleBars = document.getElementById("desiredCycleBars");
+  const rejectionBars = document.getElementById("rejectionBars");
+  const voteCertaintyBars = document.getElementById("voteCertaintyBars");
+  const locationCloud = document.getElementById("locationCloud");
+  const candidateProfiles = document.getElementById("candidateProfiles");
+  const pollBridgeSignals = document.getElementById("pollBridgeSignals");
+  const pollBridgeNews = document.getElementById("pollBridgeNews");
   const numberFormatter = new Intl.NumberFormat("pt-BR");
+  const decimalFormatter = new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  });
+  const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short"
+  });
 
   function escapeHtml(value) {
     return String(value || "")
@@ -33,6 +38,23 @@
       .replace(/'/g, "&#39;");
   }
 
+  function setFeedback(element, message, state = "") {
+    if (!element) return;
+    element.textContent = message || "";
+    if (state) {
+      element.dataset.state = state;
+    } else {
+      delete element.dataset.state;
+    }
+  }
+
+  function formatDateTime(value) {
+    if (!value) return "Sem atualização";
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return String(value);
+    return dateFormatter.format(parsed);
+  }
+
   async function readJson(response) {
     try {
       return await response.json();
@@ -41,315 +63,345 @@
     }
   }
 
-  function getDeviceId() {
+  function collectClientMeta() {
+    const resolvedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    return {
+      sourcePage: location.pathname,
+      pageTitle: document.title,
+      referrer: document.referrer || "",
+      language: navigator.language || "",
+      timezone: resolvedTimeZone,
+      screen: window.screen ? `${window.screen.width}x${window.screen.height}` : "",
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
+      platform: navigator.platform || ""
+    };
+  }
+
+  function getGoogleUser() {
     try {
-      const saved = window.localStorage.getItem(DEVICE_KEY);
-      if (saved) return saved;
-      const next = `device-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-      window.localStorage.setItem(DEVICE_KEY, next);
-      return next;
+      return window.CatalogoGoogleAuth?.getUser?.() || null;
     } catch (_error) {
-      return `device-fallback-${Math.random().toString(36).slice(2, 10)}`;
+      return null;
     }
   }
 
-  function currentOffice() {
-    return state.offices.find((office) => office.id === state.activeOfficeId) || null;
-  }
+  function renderBarList(container, items, tone, emptyMessage) {
+    if (!container) return;
 
-  function buildInitials(name = "") {
-    return String(name || "")
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part.charAt(0))
-      .join("")
-      .toUpperCase();
-  }
+    if (!Array.isArray(items) || !items.length) {
+      container.innerHTML = `<p class="poll-empty">${escapeHtml(emptyMessage)}</p>`;
+      return;
+    }
 
-  function setFeedback(kind, title, text) {
-    if (!feedback) return;
-    feedback.hidden = false;
-    feedback.className = `poll-feedback is-${kind}`;
-    feedback.innerHTML = `<strong>${escapeHtml(title)}</strong><p>${escapeHtml(text)}</p>`;
-  }
-
-  function clearFeedback() {
-    if (!feedback) return;
-    feedback.hidden = true;
-    feedback.className = "poll-feedback";
-    feedback.innerHTML = "";
-  }
-
-  function renderOfficeTabs() {
-    if (!officeTabs) return;
-    officeTabs.innerHTML = state.offices
+    container.innerHTML = items
       .map(
-        (office) => `
-          <button
-            type="button"
-            class="poll-office-tab"
-            data-office-tab="${escapeHtml(office.id)}"
-            aria-selected="${office.id === state.activeOfficeId ? "true" : "false"}"
-            role="tab"
-          >
-            ${escapeHtml(office.label)}
-          </button>
+        (item) => `
+          <div class="poll-bar-row" data-tone="${escapeHtml(tone)}">
+            <div class="poll-bar-meta">
+              <strong>${escapeHtml(item.label)}</strong>
+              <span>${numberFormatter.format(item.total || 0)} • ${decimalFormatter.format(item.percent || 0)}%</span>
+            </div>
+            <div class="poll-bar-track">
+              <span style="width:${Math.max(0, Math.min(100, Number(item.percent || 0)))}%"></span>
+            </div>
+          </div>
         `
       )
       .join("");
   }
 
-  function renderOfficePanel() {
-    const office = currentOffice();
-    if (!office) return;
-    if (officeBadge) officeBadge.textContent = office.badge || office.label || "Cargo";
-    if (officeTitle) officeTitle.textContent = office.label || "Cargo";
-    if (officeSummary) {
-      officeSummary.textContent =
-        office.summary || "Escolha um nome abaixo para registrar o voto neste cargo.";
-    }
-    if (officeScope) {
-      officeScope.textContent = office.scope === "federal" ? "Escopo federal" : "Escopo estadual";
-    }
-    if (officeRule) {
-      officeRule.textContent = "1 voto por dispositivo neste cargo";
-    }
-  }
+  function renderLocationCloud(items) {
+    if (!locationCloud) return;
 
-  function renderCandidates() {
-    const office = currentOffice();
-    if (!candidateGrid || !office) return;
-    const currentVote = state.userVotes?.[office.id] || "";
-    const candidates = Array.isArray(office.candidates) ? office.candidates : [];
-
-    if (!candidates.length) {
-      candidateGrid.innerHTML = `<p class="poll-empty">Nenhum nome disponível neste cargo.</p>`;
+    if (!Array.isArray(items) || !items.length) {
+      locationCloud.innerHTML = `<span class="poll-empty-chip">Aguardando distribuição</span>`;
       return;
     }
 
-    candidateGrid.innerHTML = candidates
-      .map((candidate) => {
-        const alreadyVoted = currentVote === candidate.id;
-        const isBusy = state.busyCandidateId === candidate.id;
-        const buttonLabel = alreadyVoted
-          ? "Você já votou"
-          : isBusy
-            ? "Registrando..."
-            : "Votar neste nome";
-
-        return `
-          <article class="poll-candidate-card${alreadyVoted ? " is-voted" : ""}">
-            <div class="poll-candidate-head">
-              <div class="poll-candidate-avatar">
-                ${
-                  candidate.imageUrl
-                    ? `<img src="${escapeHtml(candidate.imageUrl)}" alt="${escapeHtml(candidate.name)}" loading="lazy" />`
-                    : `<span>${escapeHtml(buildInitials(candidate.name))}</span>`
-                }
-              </div>
-              <div>
-                <h3>${escapeHtml(candidate.name)}</h3>
-                <p class="poll-candidate-role">${escapeHtml(candidate.role || office.label)}</p>
-              </div>
-            </div>
-            <span class="poll-candidate-party">${escapeHtml(candidate.party || "Sem partido")}</span>
-            <p class="poll-candidate-summary">
-              ${escapeHtml(candidate.historySummary || candidate.currentPosition || "Perfil em acompanhamento.")}
-            </p>
-            <p class="poll-candidate-foot">
-              ${escapeHtml(candidate.currentPosition || "Nome monitorado nesta rodada semanal.")}
-            </p>
-            <button
-              type="button"
-              class="poll-vote-button"
-              data-vote-button="${escapeHtml(candidate.id)}"
-              ${alreadyVoted || isBusy ? "disabled" : ""}
-            >
-              ${escapeHtml(buttonLabel)}
-            </button>
-          </article>
-        `;
-      })
+    locationCloud.innerHTML = items
+      .map(
+        (item) =>
+          `<span>${escapeHtml(item.label)} • ${numberFormatter.format(item.total || 0)}</span>`
+      )
       .join("");
   }
 
-  function renderResults() {
-    const office = currentOffice();
-    if (!office || !resultsList) return;
+  function renderCandidateProfiles(items) {
+    if (!candidateProfiles) return;
 
-    const officeVotes = state.votes?.[office.id] || {};
-    const rows = (Array.isArray(office.candidates) ? office.candidates : [])
-      .map((candidate) => ({
-        candidate,
-        total: Number(officeVotes[candidate.id] || 0)
-      }))
-      .sort((left, right) => right.total - left.total || left.candidate.name.localeCompare(right.candidate.name, "pt-BR"));
-
-    const totalVotes = rows.reduce((sum, row) => sum + row.total, 0);
-    if (resultsTitle) {
-      resultsTitle.textContent = office.label ? `Parcial para ${office.label}` : "Resultado parcial";
-    }
-    if (resultsNote) {
-      resultsNote.textContent = totalVotes
-        ? `${numberFormatter.format(totalVotes)} voto(s) computado(s) nesta semana`
-        : "Sem votos registrados por enquanto.";
-    }
-
-    if (!totalVotes) {
-      resultsList.innerHTML = `<p class="poll-empty">Sem votos registrados por enquanto.</p>`;
+    if (!Array.isArray(items) || !items.length) {
+      candidateProfiles.innerHTML = `<p class="poll-empty">Os perfis aparecem quando houver massa de respostas.</p>`;
       return;
     }
 
-    resultsList.innerHTML = rows
-      .map((row) => {
-        const percent = totalVotes ? (row.total / totalVotes) * 100 : 0;
-        return `
-          <article class="poll-result-row">
-            <div class="poll-result-meta">
-              <strong>${escapeHtml(row.candidate.name)}</strong>
-              <span>${numberFormatter.format(row.total)} voto(s) • ${percent.toFixed(1).replace(".", ",")}%</span>
-            </div>
-            <div class="poll-result-bar">
-              <span style="width:${Math.max(0, Math.min(100, percent))}%"></span>
-            </div>
+    candidateProfiles.innerHTML = items
+      .map(
+        (item) => `
+          <article class="poll-insight-card">
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${numberFormatter.format(item.total || 0)} respostas • ${decimalFormatter.format(item.percent || 0)}%</span>
+            <p>Prioridade mais comum: <b>${escapeHtml(item.topPriority || "Sem leitura")}</b></p>
+            <p>Desejo dominante: <b>${escapeHtml(item.desiredCycle || "Sem leitura")}</b></p>
+            <p>Firmeza do voto: <b>${escapeHtml(item.voteCertainty || "Sem leitura")}</b></p>
+            <p>Satisfação média do grupo: <b>${decimalFormatter.format(item.avgSatisfaction || 0)}</b></p>
           </article>
-        `;
-      })
+        `
+      )
       .join("");
   }
 
-  function renderAll() {
-    renderOfficeTabs();
-    renderOfficePanel();
-    renderCandidates();
-    renderResults();
-  }
+  function renderBridgeSignals(poll = {}) {
+    if (!pollBridgeSignals) return;
 
-  async function loadConfig() {
-    const response = await fetch("/api/elections/acre", { headers: { Accept: "application/json" } });
-    const payload = await readJson(response);
-    if (!response.ok || !Array.isArray(payload.offices)) {
-      throw new Error(payload.error || "Falha ao carregar os cargos.");
+    const cards = [];
+    if (poll.leadVote?.label) {
+      cards.push({
+        label: "Voto mais citado",
+        title: poll.leadVote.label,
+        meta: `${numberFormatter.format(poll.leadVote.total || 0)} respostas • ${decimalFormatter.format(poll.leadVote.percent || 0)}%`,
+        tone: "vote"
+      });
     }
-    state.offices = payload.offices;
-    state.activeOfficeId = state.activeOfficeId || payload.offices[0]?.id || "";
-    if (updatedAt) {
-      updatedAt.textContent = payload.updatedAt
-        ? `Atualizado em ${payload.updatedAt}`
-        : "Painel carregado";
+    if (poll.topPriority?.label) {
+      cards.push({
+        label: "Prioridade dominante",
+        title: poll.topPriority.label,
+        meta: `${numberFormatter.format(poll.topPriority.total || 0)} menções`,
+        tone: "priority"
+      });
     }
-  }
-
-  async function loadVotes() {
-    const response = await fetch(`/api/elections/votes?voterId=${encodeURIComponent(state.deviceId)}`, {
-      headers: { Accept: "application/json" }
-    });
-    const payload = await readJson(response);
-    if (!response.ok) {
-      throw new Error(payload.message || payload.error || "Falha ao carregar os votos.");
+    if (poll.topDirection?.label) {
+      cards.push({
+        label: "Rumo percebido",
+        title: poll.topDirection.label,
+        meta: `${numberFormatter.format(poll.topDirection.total || 0)} respostas`,
+        tone: "direction"
+      });
     }
-    state.votes = payload.votes || {};
-    state.userVotes = payload.userVotes || {};
-  }
+    if (poll.desiredCycle?.label) {
+      cards.push({
+        label: "Desejo de ciclo",
+        title: poll.desiredCycle.label,
+        meta: `${numberFormatter.format(poll.desiredCycle.total || 0)} respostas`,
+        tone: "cycle"
+      });
+    }
 
-  async function handleVote(candidateId) {
-    const office = currentOffice();
-    const candidate = office?.candidates?.find((item) => item.id === candidateId);
-    if (!office || !candidate) return;
-
-    const userVote = state.userVotes?.[office.id];
-    if (userVote) {
-      setFeedback("warn", "Este dispositivo já votou.", "Esse cargo já está bloqueado neste navegador.");
-      renderCandidates();
+    if (!cards.length) {
+      pollBridgeSignals.innerHTML = `<p class="poll-empty">A leitura cruzada aparece assim que os dados forem carregados.</p>`;
       return;
     }
 
-    const confirmed = window.confirm(`Confirmar voto em ${candidate.name} para ${office.label}?`);
-    if (!confirmed) return;
+    pollBridgeSignals.innerHTML = cards
+      .map(
+        (card) => `
+          <article class="poll-bridge-signal" data-tone="${escapeHtml(card.tone)}">
+            <span>${escapeHtml(card.label)}</span>
+            <strong>${escapeHtml(card.title)}</strong>
+            <small>${escapeHtml(card.meta)}</small>
+          </article>
+        `
+      )
+      .join("");
+  }
 
-    state.busyCandidateId = candidate.id;
-    renderCandidates();
-    clearFeedback();
+  function renderBridgeNews(items = []) {
+    if (!pollBridgeNews) return;
+
+    if (!Array.isArray(items) || !items.length) {
+      pollBridgeNews.innerHTML = `<p class="poll-empty">As matérias ligadas ao clima político entram aqui.</p>`;
+      return;
+    }
+
+    pollBridgeNews.innerHTML = items
+      .map(
+        (item) => `
+          <article class="poll-bridge-news-card">
+            <span>${escapeHtml(item.category || "Política")} • ${escapeHtml(item.sourceName || "Fonte local")}</span>
+            <strong>${escapeHtml(item.title || "Atualização política")}</strong>
+            <p>${escapeHtml(item.summary || "Sem resumo disponível.")}</p>
+            <div class="poll-bridge-news-actions">
+              <a href="${escapeHtml(item.localUrl || item.sourceUrl || "#")}">Abrir no jornal</a>
+              <a href="${escapeHtml(item.sourceUrl || item.localUrl || "#")}" target="_blank" rel="noreferrer">Ver fonte</a>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  function renderPollBridge(payload = {}) {
+    const poll = payload.poll || {};
+    const journal = payload.journal || {};
+
+    if (bridgeUpdatedAt) {
+      bridgeUpdatedAt.textContent = poll.totalResponses
+        ? `SPO com ${numberFormatter.format(poll.totalResponses)} respostas • ${formatDateTime(poll.updatedAt || payload.updatedAt)}`
+        : "Jornal e SPO em sincronização";
+    }
+
+    renderBridgeSignals(poll);
+    renderBridgeNews(journal.items);
+  }
+
+  function renderPublicSummary(payload = {}) {
+    const summary = payload.summary || {};
+    const totalResponses = Number(summary.totalResponses || 0);
+    const satisfactionAverageValue = Number(summary.satisfactionAverage || 0);
+
+    if (summaryTotal) {
+      summaryTotal.textContent = numberFormatter.format(totalResponses);
+    }
+
+    if (summaryAverage) {
+      summaryAverage.textContent = decimalFormatter.format(satisfactionAverageValue);
+    }
+
+    if (summaryUpdatedAt) {
+      summaryUpdatedAt.textContent = totalResponses
+        ? `Atualizado em ${formatDateTime(summary.updatedAt || payload.updatedAt)}`
+        : "Aguardando respostas";
+    }
+
+    renderBarList(
+      voteBars,
+      summary.vote2026,
+      "vote",
+      "As barras aparecem assim que chegarem as primeiras respostas."
+    );
+    renderBarList(
+      priorityBars,
+      summary.priorities,
+      "priority",
+      "Sem prioridades registradas ainda."
+    );
+    renderBarList(
+      stateDirectionBars,
+      summary.stateDirection,
+      "priority",
+      "Sem leitura suficiente ainda."
+    );
+    renderBarList(
+      desiredCycleBars,
+      summary.desiredCycle,
+      "vote",
+      "Aguardando mais respostas."
+    );
+    renderBarList(
+      rejectionBars,
+      summary.rejection,
+      "rejection",
+      "Sem dados suficientes até o momento."
+    );
+    renderBarList(
+      voteCertaintyBars,
+      summary.voteCertainty,
+      "vote",
+      "Aguardando respostas."
+    );
+    renderLocationCloud(summary.locations);
+    renderCandidateProfiles(summary.candidateProfiles);
+  }
+
+  async function loadPublicSummary() {
+    try {
+      const response = await fetch("/api/pesquisa-acre-2026/summary", {
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      const payload = await readJson(response);
+      if (!response.ok) {
+        throw new Error(payload.error || "Nao foi possivel carregar as parciais.");
+      }
+      renderPublicSummary(payload);
+    } catch (error) {
+      if (summaryUpdatedAt) {
+        summaryUpdatedAt.textContent = "Parciais indisponiveis no momento";
+      }
+      setFeedback(formFeedback, error.message || "Falha ao carregar as parciais.", "error");
+    }
+  }
+
+  async function loadPollBridge() {
+    try {
+      const response = await fetch("/api/pesquisa-acre-2026/bridge", {
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      const payload = await readJson(response);
+      if (!response.ok) {
+        throw new Error(payload.error || "Nao foi possivel cruzar pesquisa e jornal.");
+      }
+      renderPollBridge(payload);
+    } catch (_error) {
+      if (bridgeUpdatedAt) {
+        bridgeUpdatedAt.textContent = "Ponte jornal + SPO indisponivel no momento";
+      }
+    }
+  }
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+    if (!form || !submitButton) return;
+
+    if (!getGoogleUser()?.email) {
+      setFeedback(formFeedback, "Entre com Google antes de votar. A pesquisa aceita um voto por dispositivo a cada semana.", "error");
+      document.querySelector("[data-google-auth-card]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    if (!form.reportValidity()) {
+      setFeedback(formFeedback, "Preencha todos os campos antes de enviar.", "error");
+      return;
+    }
+
+    const payload = {
+      ...Object.fromEntries(new FormData(form).entries()),
+      ...collectClientMeta()
+    };
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Registrando...";
+    setFeedback(formFeedback, "");
 
     try {
-      const response = await fetch("/api/elections/votes", {
+      const response = await fetch("/api/pesquisa-acre-2026", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json"
         },
-        body: JSON.stringify({
-          officeId: office.id,
-          candidateId: candidate.id,
-          voterId: state.deviceId,
-          city: "Cruzeiro do Sul",
-          sourcePage: location.pathname,
-          pageTitle: document.title
-        })
+        body: JSON.stringify(payload)
       });
-      const payload = await readJson(response);
+      const data = await readJson(response);
 
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.message || payload.error || "Falha ao registrar o voto.");
+      if (!response.ok) {
+        throw new Error(data.error || "Nao foi possivel registrar a resposta.");
       }
 
-      state.votes = payload.votes || state.votes;
-      state.userVotes = payload.userVotes || state.userVotes;
-      setFeedback(
-        "success",
-        "Obrigado por votar.",
-        "Seu voto foi registrado e este cargo agora fica bloqueado neste dispositivo."
-      );
-      renderAll();
+      form.reset();
+      setFeedback(formFeedback, data.message || "Resposta registrada com sucesso.", "success");
+      await loadPublicSummary();
+      await loadPollBridge();
+      summaryCard?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
-      const message = String(error.message || "");
-      if (message.toLowerCase().includes("já votou")) {
-        await loadVotes();
-        setFeedback(
-          "warn",
-          "Este dispositivo já votou.",
-          "Esse cargo já estava registrado neste navegador. As parciais foram atualizadas."
-        );
-        renderAll();
-      } else {
-        setFeedback("error", "Não foi possível votar.", message || "Tente novamente em instantes.");
-        renderCandidates();
-      }
+      setFeedback(formFeedback, error.message || "Falha ao enviar a pesquisa.", "error");
     } finally {
-      state.busyCandidateId = "";
-      renderCandidates();
+      submitButton.disabled = false;
+      submitButton.textContent = "Enviar e ver parciais";
     }
   }
 
-  function bindEvents() {
-    officeTabs?.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-office-tab]");
-      if (!button) return;
-      state.activeOfficeId = button.getAttribute("data-office-tab") || "";
-      clearFeedback();
-      renderAll();
-    });
-
-    candidateGrid?.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-vote-button]");
-      if (!button) return;
-      handleVote(button.getAttribute("data-vote-button") || "");
-    });
-  }
-
-  async function init() {
-    state.deviceId = getDeviceId();
-    bindEvents();
-    await loadConfig();
-    await loadVotes();
-    renderAll();
-  }
-
-  init().catch((error) => {
-    if (candidateGrid) {
-      candidateGrid.innerHTML = `<p class="poll-empty">${escapeHtml(error.message || "Falha ao carregar a pesquisa.")}</p>`;
+  form?.addEventListener("submit", handleFormSubmit);
+  window.addEventListener("catalogo:google-auth", () => {
+    if (getGoogleUser()?.email) {
+      setFeedback(formFeedback, "Google conectado. Seu dispositivo libera uma resposta por semana e guarda o histórico da eleição.", "success");
+      return;
     }
-    setFeedback("error", "Painel indisponível.", error.message || "Não foi possível iniciar a pesquisa.");
+    setFeedback(formFeedback, "Entre com Google para liberar o voto semanal.", "error");
   });
+  loadPublicSummary().catch(() => {});
+  loadPollBridge().catch(() => {});
 })();
