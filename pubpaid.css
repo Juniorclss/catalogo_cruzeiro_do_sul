@@ -722,6 +722,48 @@ canvas {
   border-radius: var(--pub-radius);
 }
 
+.pubpaid-admin-footer {
+  display: grid;
+  gap: 16px;
+  margin-top: 26px;
+  padding: 22px;
+  border: var(--pub-border);
+  border-radius: calc(var(--pub-radius) + 6px);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 32%),
+    linear-gradient(135deg, rgba(112, 235, 255, 0.1), rgba(255, 202, 107, 0.08)),
+    var(--pub-panel);
+  box-shadow: var(--pub-shadow);
+}
+
+.pubpaid-admin-footer-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.pubpaid-admin-footer-copy h2 {
+  margin: 0;
+  font-family: "Press Start 2P", monospace;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.pubpaid-admin-footer-copy p:last-child {
+  margin: 0;
+  color: var(--pub-muted);
+  line-height: 1.65;
+}
+
+.pubpaid-admin-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pubpaid-admin-footer-actions .pubpaid-button {
+  flex: 1 1 220px;
+}
+
 body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-topbar {
   display: none;
 }
@@ -754,7 +796,8 @@ body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-world-hud,
 body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-info-strip,
 body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-dev-crew,
 body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-art-line,
-body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-grid {
+body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-grid,
+body.pubpaid-page:not(.pubpaid-in-game) .pubpaid-admin-footer {
   display: none !important;
 }
 
