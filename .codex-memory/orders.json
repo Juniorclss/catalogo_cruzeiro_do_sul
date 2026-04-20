@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T05:44:27.399Z",
+  "lastUpdatedAt": "2026-04-20T05:47:09.577Z",
   "orders": [
     {
       "id": "2026-04-19-google-auth-pix-qr-sem-chave-e-pubpaid-sem-creditos-gratis",
@@ -1648,6 +1648,21 @@
       "source": "chat",
       "rawRequest": "Os novos editoriais Games, Animes e Moda nao estao nos botoes da faixa Editoriais.",
       "summary": "Adicionar Games Animes Moda nos botoes de editorias",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-20-ocultar-meta-tecnica-do-foco-no-pubpaid",
+      "createdAt": "2026-04-20T05:47:09.577Z",
+      "updatedAt": "2026-04-20T05:47:09.577Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "Remover tags desnecessarias no PubPaid que mostram Voltar para fora e Dentro do salao.",
+      "summary": "Ocultar meta tecnica do foco no PubPaid",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

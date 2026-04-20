@@ -1252,10 +1252,7 @@ body.pubpaid-page.pubpaid-in-game .pubpaid-grid .pubpaid-panel {
 }
 
 .pubpaid-focus-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 16px 0;
+  display: none;
 }
 
 .pubpaid-focus-meta span,
