@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T14:28:52.118Z",
+  "lastUpdatedAt": "2026-04-21T15:16:13.941Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2270,6 +2270,21 @@
       "source": "chat",
       "rawRequest": "ok agora suba e eu acho que esta parte esta ok",
       "summary": "Subir o ajuste visual aprovado da seleção na SPO",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-expandir-dashboard-admin-da-pesquisa-acre-2026-com-filtros-graficos-cruzamentos-",
+      "createdAt": "2026-04-21T15:16:13.941Z",
+      "updatedAt": "2026-04-21T15:16:13.941Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "https://catalogo-cruzeiro-web.onrender.com/pesquisa-acre-2026-admin.html eu quero informações de tudo aqui, qualquer informação possivel, tudo, nessa dash board eu presxciso poder puxar informaçõies e mointar relatorios precisos entao quero graficos por dados de entrada n so graficos numeros e tudo e medias organiza",
+      "summary": "Expandir dashboard admin da pesquisa Acre 2026 com filtros, gráficos, cruzamentos e relatórios analíticos",
       "normalizedTasks": [],
       "filesTouched": [],
       "assetRefs": [],

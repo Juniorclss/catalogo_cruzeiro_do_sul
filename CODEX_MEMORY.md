@@ -24,6 +24,12 @@ Ultima atualizacao: 2026-04-17 01:39 -05:00 (America/Rio_Branco)
 - A `PubPaid` passou para fluxo em duas etapas: a pagina mostra vitrine, funcionalidades e valores; depois o usuario entra em modo game full screen so apos Google + avatar, com o antigo bloco inferior reaproveitado como painel interno da noite.
 - Validacoes desta rodada: `node --check pubpaid.js`, `node --check startup-experience.js` e `npm run review:team` com 0 achados.
 
+## Atualizacao rapida 2026-04-21
+
+- A dashboard administrativa da SPO em [pesquisa-acre-2026-admin.html](C:/Users/junio/projeto codex/pesquisa-acre-2026-admin.html) foi ampliada para um painel analitico de verdade, com filtros por recorte, KPIs, leitura executiva, tendencia semanal, fluxos entre perguntas, saude da base, breakdowns por campo, cruzamentos por idade/local/profissao, sinais de comentarios e tabela rica para relatorio.
+- O cliente de [pesquisa-acre-2026-admin.js](C:/Users/junio/projeto codex/pesquisa-acre-2026-admin.js) agora aplica filtros em tempo real, gera exportacao CSV filtrada e monta as secoes analiticas em cima do recorte ativo.
+- O backend em [server.js](C:/Users/junio/projeto codex/server.js) passou a devolver mais campos administrativos da pesquisa e mais breakdowns/resumos para apoiar relatorios completos.
+
 ## Pedido atual em andamento
 
 Fechar o pacote final desta rodada:

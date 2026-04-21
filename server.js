@@ -5063,11 +5063,32 @@ function buildAcre2026PollSummary(records = getAcre2026PollResponses()) {
         .filter((value) => Number.isFinite(value) && value > 0)
     ).toFixed(1)
   );
+  const commentAverageLength = Number(
+    average(
+      items
+        .map((item) => safeString(item.comentario || "", 1600).trim().length)
+        .filter((value) => Number.isFinite(value) && value > 0)
+    ).toFixed(0)
+  );
+  const distinctLocations = new Set(
+    items
+      .map((item) => normalizeText(item.localizacao || item.city || ""))
+      .filter(Boolean)
+  ).size;
+  const distinctProfessions = new Set(
+    items
+      .map((item) => normalizeText(item.profissao || ""))
+      .filter(Boolean)
+  ).size;
 
   return {
     totalResponses,
     satisfactionAverage,
+    commentAverageLength,
+    distinctLocations,
+    distinctProfessions,
     vote2026: buildPollBreakdown(items, "voto2026", 6),
+    secondOptions: buildPollBreakdown(items, "segundaOpcao", 6),
     rejection: buildPollBreakdown(items, "rejeicao", 6),
     priorities: buildPollBreakdown(items, "prioridade", 6),
     stateDirection: buildPollBreakdown(items, "direcaoEstado", 6),
@@ -5079,6 +5100,10 @@ function buildAcre2026PollSummary(records = getAcre2026PollResponses()) {
     previousVote: buildPollBreakdown(items, "votoAnterior", 6),
     ageRanges: buildPollBreakdown(items, "faixaEtaria", 6),
     locations: buildPollBreakdown(items, "localizacao", 8),
+    professions: buildPollBreakdown(items, "profissao", 8),
+    devices: buildPollBreakdown(items, "deviceType", 6),
+    browsers: buildPollBreakdown(items, "browser", 6),
+    sourcePages: buildPollBreakdown(items, "sourcePage", 6),
     candidateProfiles: buildPollCandidateProfiles(items, 4),
     updatedAt: items[0]?.createdAt || ""
   };
@@ -5176,15 +5201,26 @@ function buildAcre2026PollAdminPayload() {
     records: items.map((item) => ({
       id: item.id,
       createdAt: item.createdAt,
+      weekKey: item.weekKey,
       profissao: item.profissao,
       localizacao: item.localizacao,
       faixaEtaria: item.faixaEtaria,
       votoAnterior: item.votoAnterior,
       satisfacao: item.satisfacao,
+      avaliacaoGoverno: item.avaliacaoGoverno,
+      direcaoEstado: item.direcaoEstado,
+      desejoCiclo: item.desejoCiclo,
       voto2026: item.voto2026,
+      segundaOpcao: item.segundaOpcao,
+      certezaVoto: item.certezaVoto,
       rejeicao: item.rejeicao,
       prioridade: item.prioridade,
+      atencaoPolitica: item.atencaoPolitica,
+      fatorDecisivo: item.fatorDecisivo,
       comentario: item.comentario,
+      sourcePage: item.sourcePage,
+      pageTitle: item.pageTitle,
+      referrerHost: item.referrerHost,
       city: item.city,
       country: item.country,
       browser: item.browser,

@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260418b" />
+    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260421adminreport" />
     <link rel="stylesheet" href="./solid-surfaces.css?v=20260419solidfinal" />
   </head>
   <body class="poll-admin-page">
@@ -21,10 +21,10 @@
       <section class="poll-card poll-form-card poll-form-card--admin">
         <div class="poll-form-intro">
           <p class="poll-kicker poll-kicker--soft">Consulta administrativa</p>
-          <h1>Painel da pesquisa Acre 2026</h1>
+          <h1>Painel analítico da pesquisa Acre 2026</h1>
           <p>
-            Login separado para leitura completa dos registros. Use o usuário <strong>admin</strong> e a senha administrativa
-            cadastrada no servidor.
+            Login separado para leitura completa dos registros. Aqui a ideia é cruzar tudo: perfil, voto, rejeição,
+            prioridade, tempo, local, profissão, médias e base individual para relatório preciso.
           </p>
         </div>
 
@@ -56,40 +56,278 @@
         </form>
 
         <div class="poll-admin-dashboard" id="pollAdminDashboard" hidden>
-          <div class="poll-stat-grid poll-stat-grid--admin" id="pollAdminKpis"></div>
+          <section class="poll-admin-surface">
+            <div class="poll-admin-toolbar">
+              <div class="poll-admin-toolbar-copy">
+                <p class="poll-kicker poll-kicker--soft">Painel analítico</p>
+                <h2>Relatórios por recorte, entrada e comportamento</h2>
+                <p id="pollAdminReportMeta">
+                  Use os filtros para puxar cenários, comparar grupos e montar relatórios precisos com base real.
+                </p>
+              </div>
+              <div class="poll-admin-actions">
+                <button class="poll-admin-export" id="pollAdminExport" type="button">Baixar CSV filtrado</button>
+                <button class="poll-admin-close poll-admin-clear" id="pollAdminClearFilters" type="button">
+                  Limpar filtros
+                </button>
+                <a class="poll-admin-link" href="./admin/admin-dashboard.html" target="_blank" rel="noreferrer">
+                  Dashboard completa do site
+                </a>
+              </div>
+            </div>
 
-          <div class="poll-admin-actions">
-            <button class="poll-admin-export" id="pollAdminExport" type="button">Baixar CSV</button>
-            <a class="poll-admin-link" href="./admin/admin-dashboard.html" target="_blank" rel="noreferrer">
-              Dashboard completa do site
-            </a>
-          </div>
+            <section class="poll-admin-panel poll-admin-filters-panel" aria-label="Filtros do relatório">
+              <div class="poll-admin-panel-head">
+                <div>
+                  <h3>Filtros e recortes</h3>
+                  <p>
+                    Cruze intenção de voto, perfil, prioridade, avaliação, local, profissão e janela de tempo sem perder a base individual.
+                  </p>
+                </div>
+              </div>
 
-          <div class="poll-admin-table-wrap">
-            <table class="poll-admin-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Origem</th>
-                  <th>Perfil</th>
-                  <th>2022</th>
-                  <th>2026</th>
-                  <th>Rejeição</th>
-                  <th>Prioridade</th>
-                  <th>Comentário</th>
-                </tr>
-              </thead>
-              <tbody id="pollAdminTableBody">
-                <tr>
-                  <td colspan="8">Faça login para abrir os registros da pesquisa.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              <div class="poll-admin-filter-grid">
+                <label class="poll-field">
+                  <span>Busca geral</span>
+                  <input id="pollAdminSearch" type="search" placeholder="Nome, comentário, local, profissão, e-mail..." />
+                </label>
+
+                <label class="poll-field">
+                  <span>Voto 2026</span>
+                  <select id="pollAdminFilterVote2026">
+                    <option value="">Todos</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Faixa etária</span>
+                  <select id="pollAdminFilterAge">
+                    <option value="">Todas</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Prioridade</span>
+                  <select id="pollAdminFilterPriority">
+                    <option value="">Todas</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Voto 2022</span>
+                  <select id="pollAdminFilterPreviousVote">
+                    <option value="">Todos</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Desejo de ciclo</span>
+                  <select id="pollAdminFilterCycle">
+                    <option value="">Todos</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Firmeza do voto</span>
+                  <select id="pollAdminFilterCertainty">
+                    <option value="">Todas</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Avaliação do governo</span>
+                  <select id="pollAdminFilterGovernment">
+                    <option value="">Todas</option>
+                  </select>
+                </label>
+
+                <label class="poll-field">
+                  <span>Localização</span>
+                  <input id="pollAdminFilterLocation" type="text" list="pollAdminLocationsList" placeholder="Cruzeiro do Sul, bairro, cidade..." />
+                </label>
+
+                <label class="poll-field">
+                  <span>Profissão</span>
+                  <input id="pollAdminFilterProfession" type="text" list="pollAdminProfessionsList" placeholder="Comércio, saúde, agro..." />
+                </label>
+
+                <label class="poll-field">
+                  <span>Janela de tempo</span>
+                  <select id="pollAdminFilterRecency">
+                    <option value="all">Toda a base</option>
+                    <option value="24h">Últimas 24 horas</option>
+                    <option value="7d">Últimos 7 dias</option>
+                    <option value="30d">Últimos 30 dias</option>
+                  </select>
+                </label>
+              </div>
+
+              <datalist id="pollAdminLocationsList"></datalist>
+              <datalist id="pollAdminProfessionsList"></datalist>
+            </section>
+
+            <div class="poll-stat-grid poll-stat-grid--admin" id="pollAdminKpis"></div>
+
+            <section class="poll-admin-layout-grid">
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Leitura executiva</h3>
+                    <p>Síntese rápida do recorte filtrado para virar texto de relatório.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-bullet-list" id="pollAdminNarrative"></div>
+              </article>
+
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Tendência semanal</h3>
+                    <p>Volume e liderança por semana no recorte atual.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-timeline" id="pollAdminTimeline"></div>
+              </article>
+            </section>
+
+            <section class="poll-admin-layout-grid poll-admin-layout-grid--duo">
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Fluxos entre perguntas</h3>
+                    <p>Veja por onde a base sai de 2022, escolhe 2026 e aponta a segunda opção.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-flow-grid">
+                  <section>
+                    <h4>2022 → 2026</h4>
+                    <div class="poll-admin-flow-list" id="pollAdminFlowVote"></div>
+                  </section>
+                  <section>
+                    <h4>2026 → 2ª opção</h4>
+                    <div class="poll-admin-flow-list" id="pollAdminFlowSecond"></div>
+                  </section>
+                </div>
+              </article>
+
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Saúde da base</h3>
+                    <p>Indicadores de variedade, comentários, tecnologia e atualização do recorte.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-health-grid" id="pollAdminDataHealth"></div>
+              </article>
+            </section>
+
+            <section class="poll-admin-breakdown-grid" id="pollAdminBreakdowns"></section>
+
+            <section class="poll-admin-cross-grid">
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Perfis por candidato</h3>
+                    <p>Médias, prioridade, firmeza e recortes dominantes dentro de cada voto principal.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-candidate-grid" id="pollAdminCandidateInsights"></div>
+              </article>
+
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Recorte por faixa etária</h3>
+                    <p>Quem lidera, qual tema pesa e como varia a satisfação por idade.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-matrix" id="pollAdminAgeMatrix"></div>
+              </article>
+
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Recorte por localização</h3>
+                    <p>Top locais com volume, líder eleitoral, prioridade dominante e média do recorte.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-matrix" id="pollAdminLocationMatrix"></div>
+              </article>
+
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Recorte por profissão</h3>
+                    <p>Como cada universo de trabalho está distribuindo voto e tema principal.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-matrix" id="pollAdminProfessionMatrix"></div>
+              </article>
+            </section>
+
+            <section class="poll-admin-layout-grid poll-admin-layout-grid--duo">
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Sinais abertos dos comentários</h3>
+                    <p>Termos mais frequentes e comentários recentes do recorte filtrado.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-comment-tags" id="pollAdminCommentTags"></div>
+                <div class="poll-admin-comment-list" id="pollAdminCommentHighlights"></div>
+              </article>
+
+              <article class="poll-admin-panel">
+                <div class="poll-admin-panel-head">
+                  <div>
+                    <h3>Resumo de distribuição</h3>
+                    <p>Leituras rápidas para fechar relatório sem ter que sair caçando número solto.</p>
+                  </div>
+                </div>
+                <div class="poll-admin-summary-stack" id="pollAdminDistributionSummary"></div>
+              </article>
+            </section>
+
+            <section class="poll-admin-panel">
+              <div class="poll-admin-panel-head">
+                <div>
+                  <h3>Base individual</h3>
+                  <p id="pollAdminTableMeta">Faça login para abrir os registros completos da pesquisa.</p>
+                </div>
+              </div>
+
+              <div class="poll-admin-table-wrap">
+                <table class="poll-admin-table">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Google</th>
+                      <th>Origem</th>
+                      <th>Perfil</th>
+                      <th>2022</th>
+                      <th>Governo / clima</th>
+                      <th>2026</th>
+                      <th>2ª opção</th>
+                      <th>Rejeição</th>
+                      <th>Agenda</th>
+                      <th>Comportamento</th>
+                      <th>Tecnologia</th>
+                      <th>Comentário</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pollAdminTableBody">
+                    <tr>
+                      <td colspan="13">Faça login para abrir os registros da pesquisa.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
         </div>
       </section>
     </main>
 
-    <script src="./pesquisa-acre-2026-admin.js?v=20260418b" defer></script>
+    <script src="./pesquisa-acre-2026-admin.js?v=20260421adminreport" defer></script>
   </body>
 </html>

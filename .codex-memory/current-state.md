@@ -1,15 +1,15 @@
 # Current State
 
-Updated: 2026-04-21T14:28:52.108Z
+Updated: 2026-04-21T15:16:14.148Z
 
 ## Active Goal
 
-- SPO com seleção destacada aprovada
+- Dashboard analitica da SPO ampliada
 
 ## Summary
 
-A seleção dos cards na SPO agora fica amarela, com check e animação curta. O usuário indicou que esta parte está ok e pediu para subir.
+A consulta administrativa da Pesquisa Acre 2026 foi ampliada com filtros por recorte, KPIs, gráficos por campo de entrada, cruzamentos por perfil/candidato/local/profissão, sinais de comentários, tabela rica e exportação filtrada. O backend administrativo agora devolve mais campos para relatório.
 
 ## Next
 
-- Publicar só o ajuste visual da seleção na pesquisa e depois seguir para o próximo feedback do usuário.
+- Publicar o pacote da dashboard analítica da SPO e validar no deploy com dados reais.
