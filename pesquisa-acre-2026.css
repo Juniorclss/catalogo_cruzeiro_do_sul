@@ -1048,6 +1048,42 @@ body::after {
   margin-top: 26px;
 }
 
+.poll-thanks-card {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 24px;
+  padding: 1.35rem 1.4rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 214, 110, 0.42);
+  background:
+    radial-gradient(circle at top left, rgba(255, 247, 196, 0.2), transparent 38%),
+    linear-gradient(180deg, rgba(35, 53, 80, 0.96), rgba(14, 29, 52, 0.98));
+  box-shadow:
+    0 22px 40px rgba(3, 10, 23, 0.22),
+    inset 0 0 0 1px rgba(255, 241, 184, 0.1);
+}
+
+.poll-thanks-kicker {
+  color: #ffd46e;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.poll-thanks-card h3 {
+  margin: 0;
+  font-family: "Fraunces", serif;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  color: #fff4c8;
+}
+
+.poll-thanks-card p {
+  margin: 0;
+  color: rgba(244, 248, 255, 0.84);
+  line-height: 1.65;
+}
+
 .poll-form-section {
   padding: 22px;
   border-radius: 24px;
@@ -1245,6 +1281,11 @@ body::after {
   transform: scale(1);
 }
 
+.poll-option-card:has(input:checked) {
+  outline: 2px solid rgba(255, 232, 153, 0.72);
+  outline-offset: 0;
+}
+
 .poll-option-card strong {
   font-size: 1rem;
 }
@@ -1367,6 +1408,17 @@ body::after {
   display: flex;
   justify-content: flex-end;
   margin-top: 18px;
+}
+
+.poll-form-card.is-completed .poll-auth-card,
+.poll-form-card.is-completed .poll-form,
+.poll-form-card.is-completed .poll-method-card,
+.poll-form-card.is-completed .poll-admin-entry {
+  display: none;
+}
+
+.poll-form-card.is-completed .poll-thanks-card {
+  display: grid;
 }
 
 .poll-admin-link {

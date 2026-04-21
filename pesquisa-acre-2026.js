@@ -4,6 +4,9 @@
   const form = document.getElementById("acrePollForm");
   const submitButton = document.getElementById("submitButton");
   const formFeedback = document.getElementById("formFeedback");
+  const formCard = document.querySelector(".poll-form-card");
+  const thanksPanel = document.getElementById("pollThanksPanel");
+  const thanksMessage = document.getElementById("pollThanksMessage");
   const summaryCard = document.querySelector(".poll-summary");
   const summaryTotal = document.getElementById("summaryTotal");
   const summaryAverage = document.getElementById("summaryAverage");
@@ -19,6 +22,7 @@
   const candidateProfiles = document.getElementById("candidateProfiles");
   const pollBridgeSignals = document.getElementById("pollBridgeSignals");
   const pollBridgeNews = document.getElementById("pollBridgeNews");
+  const pollCompletionKey = "acre_poll_completed_v2";
   const numberFormatter = new Intl.NumberFormat("pt-BR");
   const decimalFormatter = new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 1,
@@ -82,6 +86,52 @@
       return window.CatalogoGoogleAuth?.getUser?.() || null;
     } catch (_error) {
       return null;
+    }
+  }
+
+  function setPollCompletedState(isCompleted, message = "") {
+    if (!formCard) return;
+
+    formCard.classList.toggle("is-completed", Boolean(isCompleted));
+
+    if (thanksPanel) {
+      thanksPanel.hidden = !isCompleted;
+    }
+
+    if (thanksMessage && isCompleted) {
+      thanksMessage.textContent =
+        message ||
+        "Seu voto foi registrado com sucesso. As parciais públicas continuam logo abaixo, mas a área de votação fica encerrada após o envio.";
+    }
+
+    try {
+      if (isCompleted) {
+        window.localStorage.setItem(
+          pollCompletionKey,
+          JSON.stringify({
+            completedAt: new Date().toISOString(),
+            message:
+              message ||
+              "Seu voto foi registrado com sucesso. As parciais públicas continuam logo abaixo, mas a área de votação fica encerrada após o envio."
+          })
+        );
+      } else {
+        window.localStorage.removeItem(pollCompletionKey);
+      }
+    } catch (_error) {
+      // Ignora falhas de persistencia local.
+    }
+  }
+
+  function restorePollCompletedState() {
+    try {
+      const raw = window.localStorage.getItem(pollCompletionKey);
+      if (!raw) return;
+      const savedState = JSON.parse(raw);
+      if (!savedState || typeof savedState !== "object") return;
+      setPollCompletedState(true, savedState.message);
+    } catch (_error) {
+      // Ignora estado local invalido.
     }
   }
 
@@ -381,8 +431,8 @@
         throw new Error(data.error || "Nao foi possivel registrar a resposta.");
       }
 
-      form.reset();
-      setFeedback(formFeedback, data.message || "Resposta registrada com sucesso.", "success");
+      setPollCompletedState(true, data.message || "Obrigado por participar. Seu voto ja entrou nas parciais.");
+      setFeedback(formFeedback, "");
       await loadPublicSummary();
       await loadPollBridge();
       summaryCard?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -396,12 +446,16 @@
 
   form?.addEventListener("submit", handleFormSubmit);
   window.addEventListener("catalogo:google-auth", () => {
+    if (formCard?.classList.contains("is-completed")) {
+      return;
+    }
     if (getGoogleUser()?.email) {
       setFeedback(formFeedback, "Google conectado. Seu dispositivo libera uma resposta por semana e guarda o histórico da eleição.", "success");
       return;
     }
     setFeedback(formFeedback, "Entre com Google para liberar o voto semanal.", "error");
   });
+  restorePollCompletedState();
   loadPublicSummary().catch(() => {});
   loadPollBridge().catch(() => {});
 })();

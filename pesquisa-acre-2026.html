@@ -26,7 +26,7 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260419spoazure" />
+    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260421votefreeze" />
     <link rel="stylesheet" href="./solid-surfaces.css?v=20260419solidfinal" />
   </head>
   <body>
@@ -227,6 +227,7 @@
                 <span>Faixa etária</span>
                 <select name="faixaEtaria" required>
                   <option value="">Selecione</option>
+                  <option value="16 a 17 anos">16 a 17 anos</option>
                   <option value="18 a 24 anos">18 a 24 anos</option>
                   <option value="25 a 34 anos">25 a 34 anos</option>
                   <option value="35 a 44 anos">35 a 44 anos</option>
@@ -469,6 +470,14 @@
           </div>
         </form>
 
+        <section class="poll-thanks-card" id="pollThanksPanel" hidden aria-live="polite">
+          <span class="poll-thanks-kicker">Participação concluída</span>
+          <h3>Obrigado por participar.</h3>
+          <p id="pollThanksMessage">
+            Seu voto foi registrado com sucesso. As parciais públicas continuam logo abaixo, mas a área de votação fica encerrada após o envio.
+          </p>
+        </section>
+
         <section class="poll-method-card" aria-label="Lógica de coleta da pesquisa">
           <p class="poll-kicker poll-kicker--soft">Leitura de cenário</p>
           <h3>Como esta coleta ajuda a ler a situação política</h3>
@@ -496,7 +505,7 @@
       </section>
     </main>
 
-    <script src="./site-google-auth.js?v=20260419authpay" defer></script>
-    <script src="./pesquisa-acre-2026.js?v=20260419spoazuregoogle" defer></script>
+    <script src="./site-google-auth.js?v=20260421authrefresh" defer></script>
+    <script src="./pesquisa-acre-2026.js?v=20260421votefreeze" defer></script>
   </body>
 </html>
