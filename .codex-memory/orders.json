@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T16:36:13.536Z",
+  "lastUpdatedAt": "2026-04-21T18:58:33.420Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2463,6 +2463,82 @@
         "admin",
         "parciais",
         "force-sync"
+      ],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-planejar-pubpaid-2-0-separada-com-pixel-art-uhd-objetos-de-subjogos-mesas-colisa",
+      "createdAt": "2026-04-21T18:01:06.578Z",
+      "updatedAt": "2026-04-21T18:01:06.578Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "PubPaid 2.0: usuário quer conversar sobre aparência pixel art/canvas com referências de bar/café, criar versão separada para imprimir intenção em UHD/layout, pensar subjogos de aposta como objetos encaixados no cenário com mesa, colisão, clique e relatório de ideias da equipe.",
+      "summary": "Planejar PubPaid 2.0 separada com pixel art UHD, objetos de subjogos, mesas, colisão e relatório de direção visual/técnica",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-planejar-pubpaid-2-0-com-chegada-pela-rua-viva-fachada-do-bar-e-cidade-futura-em",
+      "createdAt": "2026-04-21T18:04:15.490Z",
+      "updatedAt": "2026-04-21T18:04:15.490Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "PubPaid 2.0: o jogo deve começar com o jogador chegando pela rua; splash/enter game leva para a rua em frente ao bar, não direto ao salão. A rua e a front do bar precisam existir como mapa vivo porque no futuro serão atalhos/features e formarão um círculo de ruas conectadas, montando uma cidade cheia de coisas ao redor da estrada.",
+      "summary": "Planejar PubPaid 2.0 com chegada pela rua viva, fachada do bar e cidade futura em loop de ruas",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-definir-onboarding-pubpaid-2-0-com-creditos-experimentais-nao-apostaveis-carteir",
+      "createdAt": "2026-04-21T18:39:51.038Z",
+      "updatedAt": "2026-04-21T18:39:51.038Z",
+      "status": "open",
+      "source": "chat",
+      "rawRequest": "PubPaid 2.0: após Google, jogador recebe chamada 'Tá duro? Experimente' e ganha 100 créditos não apostáveis para jogar contra IA simples/máquina. Se depositar, usa sistema já implementado. Visual experimental inicial único: mendigo/bêbado. Quando depósito aprovado na dashboard admin cair na carteira, deve atualizar no game sem F5 e desbloquear 5 sprites públicos + 10 pagos; progressão cosmética de nível F até AAA/S.",
+      "summary": "Definir onboarding PubPaid 2.0 com créditos experimentais não apostáveis, carteira real, atualização automática e sprites por nível",
+      "normalizedTasks": [],
+      "filesTouched": [],
+      "assetRefs": [],
+      "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-aplicar-avisos-legais-de-enquete-pessoal-espontanea-na-pagina-spo",
+      "createdAt": "2026-04-21T18:58:33.420Z",
+      "updatedAt": "2026-04-21T18:58:33.420Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "ok façã as mudanças na pagina",
+      "summary": "Aplicar avisos legais de enquete pessoal espontânea na página SPO",
+      "normalizedTasks": [
+        "Trocar linguagem de pesquisa formal por enquete/sondagem espontânea",
+        "adicionar aviso de não registro no TSE",
+        "explicar ausência de plano amostral e uso do Google",
+        "atualizar SEO e cache bust"
+      ],
+      "filesTouched": [
+        "pesquisa-acre-2026.html",
+        "pesquisa-acre-2026.css",
+        "pesquisa-acre-2026.js",
+        "server.js"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "spo",
+        "legal",
+        "tse",
+        "lgpd",
+        "enquete"
       ],
       "nextSteps": [],
       "notes": ""

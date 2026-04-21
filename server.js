@@ -463,9 +463,9 @@ const STATIC_PAGE_SEO = {
     fileName: "remocao.html"
   },
   "/pesquisa-acre-2026.html": {
-    title: `Pesquisa de Opiniao Acre 2026 | ${SITE_NAME}`,
+    title: `Enquete de Opiniao Acre 2026 | ${SITE_NAME}`,
     description:
-      "Formulario reservado para captar opiniao publica no Acre em 2026 com parciais automaticas e consulta administrativa protegida.",
+      "Enquete publica espontanea, pessoal e sem carater cientifico sobre opiniao no Acre em 2026, com parciais automaticas das respostas voluntarias.",
     robots: "noindex,nofollow,noarchive",
     themeColor: "#081526",
     colorScheme: "dark light",
@@ -5203,8 +5203,8 @@ function buildAcre2026PollCurrentUserPayload(authUser = {}) {
       : null,
     summary: buildAcre2026PollSummary(sortByDateDesc(getAcre2026PollResponses(), "createdAt", 5000)),
     message: existingVote
-      ? "Seu Google já registrou uma resposta nesta semana. A votação fica encerrada e as parciais ficam liberadas."
-      : "Google conectado. A votação semanal está liberada."
+      ? "Seu Google já registrou uma resposta nesta semana. A participação fica encerrada e as parciais ficam liberadas."
+      : "Google conectado. A participação semanal está liberada."
   };
 }
 
@@ -5259,7 +5259,7 @@ function normalizeAcre2026PollRecord(item = {}) {
     ),
     comentario: safeString(item.comentario || item.comment || "", 1200),
     sourcePage: cleanShortText(item.sourcePage || "/pesquisa-acre-2026.html", 260),
-    pageTitle: cleanShortText(item.pageTitle || "Pesquisa de Opiniao Acre 2026", 160),
+    pageTitle: cleanShortText(item.pageTitle || "Enquete de Opiniao Acre 2026", 160),
     visitorId: safeString(item.visitorId || "", 90),
     sessionId: safeString(item.sessionId || "", 90),
     city: safeString(item.city || "", 80),
@@ -6872,7 +6872,7 @@ async function handleApi(req, res, pathname, searchParams) {
         weekKey: getWeekBucketKey(new Date().toISOString()),
         user: null,
         vote: null,
-        message: "Entre com Google para liberar a votação semanal."
+        message: "Entre com Google para liberar a participação semanal."
       });
     }
 
@@ -6884,7 +6884,7 @@ async function handleApi(req, res, pathname, searchParams) {
     if (!authUser?.email || !authUser?.sub) {
       return sendJson(res, 401, {
         ok: false,
-        error: "Entre com Google para votar. Isso evita duplicação e libera apenas um voto por conta Google a cada semana."
+        error: "Entre com Google para responder. Isso evita duplicação e libera apenas uma resposta por conta Google a cada semana."
       });
     }
 
@@ -6992,7 +6992,7 @@ async function handleApi(req, res, pathname, searchParams) {
 
         if (hasWeeklyGoogleVote) {
           const error = new Error(
-            "Este Google já registrou uma resposta nesta semana. Aguarde a próxima rodada para votar de novo."
+            "Este Google já registrou uma resposta nesta semana. Aguarde a próxima rodada para participar de novo."
           );
           error.statusCode = 409;
           throw error;
@@ -7017,7 +7017,7 @@ async function handleApi(req, res, pathname, searchParams) {
           fatorDecisivo,
           comentario,
           sourcePage: cleanShortText(body.sourcePage || tracking.pagePath || "/pesquisa-acre-2026.html", 260),
-          pageTitle: cleanShortText(body.pageTitle || tracking.pageTitle || "Pesquisa de Opiniao Acre 2026", 160),
+          pageTitle: cleanShortText(body.pageTitle || tracking.pageTitle || "Enquete de Opiniao Acre 2026", 160),
           visitorId: tracking.visitorId || tracking.cookieVisitorId,
           sessionId: tracking.sessionId || tracking.cookieSessionId,
           city: tracking.city,
@@ -7058,7 +7058,7 @@ async function handleApi(req, res, pathname, searchParams) {
         createdAt: mutationResult.item.createdAt
       },
       summary: buildAcre2026PollSummary(sortByDateDesc(mutationResult.records, "createdAt", 5000)),
-      message: "Resposta registrada. As parciais ja foram atualizadas."
+      message: "Resposta registrada. As parciais da enquete ja foram atualizadas."
     });
   }
 

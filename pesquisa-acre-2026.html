@@ -26,7 +26,7 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260421googlevote" />
+    <link rel="stylesheet" href="./pesquisa-acre-2026.css?v=20260421legalnotice" />
     <link rel="stylesheet" href="./solid-surfaces.css?v=20260419solidfinal" />
   </head>
   <body>
@@ -35,17 +35,17 @@
     <main class="poll-shell">
       <aside class="poll-stage">
         <section class="poll-card poll-hero">
-          <p class="poll-kicker">Acre 2026 | Participação aberta</p>
-          <h1>Pesquisa de opinião para leitura rápida do clima eleitoral no Acre.</h1>
+          <p class="poll-kicker">Acre 2026 | Enquete espontânea</p>
+          <h1>Sondagem pública espontânea sobre o clima político no Acre.</h1>
           <p class="poll-lead">
-            As respostas alimentam parciais públicas em tempo real para mostrar tendência, prioridade e
-            percepção do momento. Os registros completos ficam separados na área administrativa.
+            As respostas alimentam parciais públicas em tempo real para mostrar apenas a participação
+            voluntária recebida nesta página. Não há plano amostral, margem de erro ou representatividade estatística.
           </p>
 
           <div class="poll-chip-row" aria-label="Características da página">
-            <span>Participação aberta</span>
-            <span>Parciais automáticas</span>
-            <span>Consulta administrativa separada</span>
+            <span>Enquete pessoal</span>
+            <span>Sem caráter científico</span>
+            <span>Não registrada no TSE</span>
           </div>
 
           <div class="poll-hero-scene poll-hero-scene-election" aria-hidden="true">
@@ -86,9 +86,9 @@
             <span class="election-scene-light light-center"></span>
             <span class="election-scene-light light-right"></span>
             <div class="election-scene-marquee">
-              <span class="election-scene-kicker">Painel público</span>
+              <span class="election-scene-kicker">Painel de enquete</span>
               <strong>Eleições 2026</strong>
-              <small>Leitura rápida do clima político no Acre</small>
+              <small>Participação voluntária, sem amostra científica</small>
             </div>
             <div class="election-scene-strip">
               <span>Intenção</span>
@@ -102,8 +102,8 @@
         <section class="poll-card poll-summary" aria-live="polite">
           <div class="poll-summary-head">
             <div>
-              <p class="poll-kicker poll-kicker--soft">Parciais públicas</p>
-              <h2>Leitura rápida do cenário</h2>
+              <p class="poll-kicker poll-kicker--soft">Parciais da enquete</p>
+              <h2>Leitura das respostas recebidas</h2>
             </div>
             <p class="poll-summary-updated" id="summaryUpdatedAt">Aguardando respostas</p>
           </div>
@@ -180,20 +180,33 @@
 
       <section class="poll-card poll-form-card">
         <div class="poll-form-intro">
-          <p class="poll-kicker poll-kicker--soft">Participação pública</p>
-          <h2>Pesquisa de Opinião Acre 2026</h2>
+          <p class="poll-kicker poll-kicker--soft">Participação voluntária</p>
+          <h2>Enquete de Opinião Acre 2026</h2>
           <p>
-            Preencha em menos de dois minutos. O formulario e opinativo, sem carater cientifico, e foi
-            montado para acompanhar humor, prioridade percebida e tendencia declarada.
+            Preencha em menos de dois minutos. O formulário é pessoal, opinativo, sem caráter científico
+            e serve apenas para acompanhar respostas voluntárias recebidas nesta página.
           </p>
         </div>
+
+        <section class="poll-legal-card" aria-label="Aviso legal da enquete">
+          <strong>Enquete espontânea, não pesquisa eleitoral registrada.</strong>
+          <p>
+            Esta página é mantida em caráter pessoal, não empresarial, e não possui plano amostral,
+            margem de erro ou metodologia científica. As parciais não representam o eleitorado do Acre;
+            mostram somente as respostas voluntárias enviadas por participantes que acessaram este formulário.
+          </p>
+          <p>
+            O login Google é usado para limitar uma resposta por conta a cada semana e reduzir duplicidade.
+            E-mail e identificadores pessoais não aparecem nas parciais públicas.
+          </p>
+        </section>
 
         <section class="poll-auth-card" data-google-auth-card aria-label="Autenticação Google da pesquisa">
           <div class="poll-auth-copy">
             <span>login semanal</span>
-            <strong data-google-auth-status>Entre com Google para votar</strong>
+            <strong data-google-auth-status>Entre com Google para participar</strong>
             <p data-google-auth-email>
-              Para evitar duplicação, a SPO aceita um voto por conta Google a cada semana e mantém o histórico acumulado da eleição.
+              Para evitar duplicação, a enquete aceita uma resposta por conta Google a cada semana e mantém o histórico acumulado da participação.
             </p>
           </div>
           <div class="poll-auth-actions">
@@ -462,7 +475,7 @@
           <div class="poll-actions">
             <button class="poll-submit" id="submitButton" type="submit">Enviar e ver parciais</button>
             <p class="poll-disclaimer">
-              Esta é uma sondagem de opinião sem caráter científico. Não substitui pesquisa registrada no TSE. O acesso exige Google e libera um voto por conta Google a cada semana.
+              Enquete pessoal espontânea, sem caráter científico, sem plano amostral e não registrada no TSE. O acesso exige Google e libera uma resposta por conta a cada semana.
             </p>
             <p class="poll-feedback" id="formFeedback"></p>
           </div>
@@ -472,25 +485,25 @@
           <span class="poll-thanks-kicker">Participação concluída</span>
           <h3>Obrigado por participar.</h3>
           <p id="pollThanksMessage">
-            Seu voto foi registrado com sucesso. As parciais públicas continuam logo abaixo, mas a área de votação fica encerrada após o envio.
+            Sua resposta foi registrada com sucesso. As parciais públicas continuam logo abaixo, mas a área de participação fica encerrada após o envio.
           </p>
         </section>
 
-        <section class="poll-method-card" aria-label="Lógica de coleta da pesquisa">
-          <p class="poll-kicker poll-kicker--soft">Leitura de cenário</p>
-          <h3>Como esta coleta ajuda a ler a situação política</h3>
+        <section class="poll-method-card" aria-label="Lógica de leitura da enquete">
+          <p class="poll-kicker poll-kicker--soft">Leitura da enquete</p>
+          <h3>Como esta coleta ajuda a ler as respostas recebidas</h3>
           <div class="poll-method-grid">
             <article>
               <strong>Clima geral</strong>
-              <p>Separa avaliação, rumo do Estado e desejo de mudança para não confundir aprovação com intenção de voto.</p>
+              <p>Separa avaliação, rumo percebido e desejo de mudança dentro do grupo voluntário que respondeu.</p>
             </article>
             <article>
               <strong>Voto e firmeza</strong>
-              <p>Capta nome principal, segunda opção e certeza do voto para enxergar base, migração e indecisão.</p>
+              <p>Capta nome citado, segunda opção e firmeza declarada sem afirmar representatividade eleitoral.</p>
             </article>
             <article>
               <strong>Tema que move</strong>
-              <p>Amarra prioridade, fator decisivo e comentário livre para mostrar o que realmente está empurrando a escolha.</p>
+              <p>Amarra prioridade, fator decisivo e comentário livre para entender a motivação das respostas.</p>
             </article>
           </div>
         </section>
@@ -504,6 +517,6 @@
     </main>
 
     <script src="./site-google-auth.js?v=20260421authrefresh" defer></script>
-    <script src="./pesquisa-acre-2026.js?v=20260421googlevote" defer></script>
+    <script src="./pesquisa-acre-2026.js?v=20260421legalnotice" defer></script>
   </body>
 </html>

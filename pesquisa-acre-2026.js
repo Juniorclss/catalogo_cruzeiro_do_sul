@@ -117,7 +117,7 @@
     if (thanksMessage && isCompleted) {
       thanksMessage.textContent =
         message ||
-        "Seu voto foi registrado com sucesso. As parciais públicas continuam logo abaixo, mas a área de votação fica encerrada após o envio.";
+        "Sua resposta foi registrada com sucesso. As parciais públicas continuam logo abaixo, mas a área de participação fica encerrada após o envio.";
     }
 
     if (summaryCard && summaryHome?.parent) {
@@ -144,7 +144,7 @@
             completedAt: new Date().toISOString(),
             message:
               message ||
-              "Seu voto foi registrado com sucesso. As parciais públicas continuam logo abaixo, mas a área de votação fica encerrada após o envio."
+              "Sua resposta foi registrada com sucesso. As parciais públicas continuam logo abaixo, mas a área de participação fica encerrada após o envio."
           })
         );
       } else {
@@ -433,7 +433,7 @@
         setPollCompletedState(
           true,
           payload.message ||
-            "Seu Google ja registrou uma resposta nesta semana. A votacao fica encerrada e as parciais ficam liberadas."
+            "Seu Google ja registrou uma resposta nesta semana. A participacao fica encerrada e as parciais ficam liberadas."
         );
         setFeedback(formFeedback, "");
         renderPublicSummary({ summary: payload.summary, updatedAt: payload.summary?.updatedAt });
@@ -445,7 +445,7 @@
         setPollCompletedState(false);
         setFeedback(
           formFeedback,
-          "Google conectado. Esta conta libera uma resposta por semana e as parciais mostram o panorama geral.",
+          "Google conectado. Esta conta libera uma resposta por semana e as parciais mostram o conjunto voluntario recebido.",
           "success"
         );
       }
@@ -481,7 +481,7 @@
     if (!form || !submitButton) return;
 
     if (!getGoogleUser()?.email) {
-      setFeedback(formFeedback, "Entre com Google antes de votar. A pesquisa aceita um voto por conta Google a cada semana.", "error");
+      setFeedback(formFeedback, "Entre com Google antes de responder. A enquete aceita uma resposta por conta Google a cada semana.", "error");
       document.querySelector("[data-google-auth-card]")?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
@@ -516,7 +516,7 @@
           setPollCompletedState(
             true,
             data.error ||
-              "Este Google ja registrou uma resposta nesta semana. As parciais gerais ficam liberadas."
+              "Este Google ja registrou uma resposta nesta semana. As parciais da enquete ficam liberadas."
           );
           await loadPublicSummary();
           await loadPollBridge();
@@ -526,7 +526,7 @@
         throw new Error(data.error || "Nao foi possivel registrar a resposta.");
       }
 
-      setPollCompletedState(true, data.message || "Obrigado por participar. Seu voto ja entrou nas parciais.");
+      setPollCompletedState(true, data.message || "Obrigado por participar. Sua resposta ja entrou nas parciais.");
       setFeedback(formFeedback, "");
       await loadPublicSummary();
       await loadPollBridge();

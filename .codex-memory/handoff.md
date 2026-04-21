@@ -1,15 +1,18 @@
 # Handoff
 
-Updated: 2026-04-21T16:36:13.891Z
+Updated: 2026-04-21T18:58:40.877Z
 
-Rota protegida /api/pesquisa-acre-2026/admin/force-sync adicionada. Ela deduplica/normaliza os votos reais já existentes em acre-2026-poll.json e devolve summary recalculado. Teste local com 2 votos simulados passou: parcial pública retornou total 2.
+A página /pesquisa-acre-2026.html agora apresenta a SPO como enquete pública espontânea pessoal, não pesquisa eleitoral registrada. Adicionada caixa legal visível; SEO e mensagens de API/JS foram alinhados para 'enquete', 'participação' e 'resposta'.
 
 ## Next
 
-- Após deploy
-- chamar POST /api/pesquisa-acre-2026/admin/force-sync com x-poll-admin-password e depois consultar /api/pesquisa-acre-2026/summary.
+- Depois do deploy
+- verificar HTML remoto contém legalnotice e revisar visualmente a caixa legal no topo do formulário.
 
 ## Files In Focus
 
+- pesquisa-acre-2026.html
+- pesquisa-acre-2026.css
+- pesquisa-acre-2026.js
 - server.js
 - .codex-memory/orders.json

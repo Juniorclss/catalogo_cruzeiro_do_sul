@@ -1,20 +1,22 @@
 # Current State
 
-Updated: 2026-04-21T16:36:13.891Z
+Updated: 2026-04-21T18:58:40.877Z
 
 ## Active Goal
 
-- SPO: force-sync admin para parciais
+- SPO: avisos legais de enquete pessoal
 
 ## Summary
 
-Admin da SPO no Render foi lido e mostrou 1 voto real, o mesmo total das parciais públicas. Storage persistente está ok. Foi criado /api/pesquisa-acre-2026/admin/force-sync para normalizar/regravar os votos reais existentes e recalcular as parciais sem inventar votos.
+Página da SPO ajustada para linguagem de enquete/sondagem espontânea pessoal, sem caráter científico, sem plano amostral, sem representatividade estatística e não registrada no TSE. Aviso explica uso do Google para limitar uma resposta por conta e não exibir dados pessoais nas parciais.
 
 ## Next
 
-- Subir o commit
-- esperar deploy e rodar force-sync no Render; confirmar summary público depois.
+- Subir commit e confirmar no Render a versão legalnotice.
 
 ## Files In Focus
 
+- pesquisa-acre-2026.html
+- pesquisa-acre-2026.css
+- pesquisa-acre-2026.js
 - server.js
