@@ -14,6 +14,7 @@ const RUN_FILE = path.join(RUNTIME_DIR, "latest-run.json");
 const RUN_MD_FILE = path.join(RUNTIME_DIR, "latest-run.md");
 const RUNTIME_NEWS_FILE = path.join(ROOT_DIR, "data", "runtime-news.json");
 const ARCHIVE_NEWS_FILE = path.join(ROOT_DIR, "data", "news-archive.json");
+const AGENT_MEMORY_FILE = path.join(ROOT_DIR, "data", "real-agents-memory.json");
 const REVIEW_REPORT_FILE = path.join(ROOT_DIR, ".codex-temp", "review-team", "latest-report.json");
 const DEFAULT_OFFICE_FILE = path.join(ROOT_DIR, "escritorio.js");
 const OFFICE_CONFIG_FILES = [
@@ -387,6 +388,157 @@ function buildAssignment(agent, context) {
   };
 }
 
+function clampNumber(value, min, max) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return min;
+  return Math.min(max, Math.max(min, numeric));
+}
+
+function readAgentMemoryStore() {
+  const payload = readJson(AGENT_MEMORY_FILE, { version: 1, agents: {} });
+  return {
+    version: 1,
+    updatedAt: payload.updatedAt || "",
+    agents: payload.agents && typeof payload.agents === "object" ? payload.agents : {}
+  };
+}
+
+function writeAgentMemoryStore(store) {
+  ensureDir(path.dirname(AGENT_MEMORY_FILE));
+  writeJson(AGENT_MEMORY_FILE, {
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    agents: store.agents || {}
+  });
+}
+
+function scoreAgentAutonomy(agent, assignment, context, previousMemory) {
+  const reviewIssues = Array.isArray(context.reviewReport?.issues) ? context.reviewReport.issues.length : 0;
+  const newsItems = context.newsSummary.totalItems || 0;
+  const rolePressure = {
+    ceo: 18,
+    review: reviewIssues ? 26 : 12,
+    sources: context.newsSummary.topSources.length < 3 ? 24 : 14,
+    dev: 20,
+    editor: 18,
+    design: 16,
+    copy: 15,
+    social: 13,
+    pixel: 12,
+    games: 12,
+    kids: 10,
+    sales: 10
+  }[agent.role] || 10;
+
+  const memoryCycles = Number(previousMemory.cycles || 0);
+  const urgency = clampNumber(35 + rolePressure + Math.min(20, reviewIssues * 3) + Math.min(12, newsItems / 10), 1, 100);
+  const confidence = clampNumber(48 + Math.min(25, memoryCycles) + (assignment.headline ? 12 : 0), 1, 100);
+  const autonomy = clampNumber(Math.round((urgency * 0.55 + confidence * 0.45)), 1, 100);
+
+  return { urgency: Math.round(urgency), confidence: Math.round(confidence), autonomy };
+}
+
+function chooseAgentIntent(agent, assignment, scores, previousMemory) {
+  if (scores.urgency >= 82) {
+    return `abrir alerta proprio sobre ${assignment.headline}`;
+  }
+
+  if (agent.role === "ceo") {
+    return "redistribuir prioridades sem esperar comando manual";
+  }
+
+  if (agent.role === "review") {
+    return "bloquear pequenos vazamentos editoriais antes de virarem publicos";
+  }
+
+  if (agent.role === "sources") {
+    return "procurar lacunas de fonte e preparar sugestao de checagem";
+  }
+
+  if (agent.role === "dev") {
+    return "propor automacao quando detectar tarefa repetida";
+  }
+
+  if (previousMemory.lastIntent && scores.confidence < 65) {
+    return previousMemory.lastIntent;
+  }
+
+  return `puxar melhoria propria para ${assignment.deliverable}`;
+}
+
+function updateAgentMemory(agent, assignment, context, memoryStore) {
+  const previous = memoryStore.agents[agent.slug] || {};
+  const scores = scoreAgentAutonomy(agent, assignment, context, previous);
+  const intent = chooseAgentIntent(agent, assignment, scores, previous);
+  const now = new Date();
+  const nextCheck = new Date(now.getTime() + (scores.urgency >= 80 ? 2 : 5) * 60 * 1000).toISOString();
+  const note = {
+    at: now.toISOString(),
+    intent,
+    action: assignment.action,
+    signal: assignment.monitor,
+    autonomy: scores.autonomy,
+    urgency: scores.urgency,
+    confidence: scores.confidence
+  };
+
+  const memoryLog = Array.isArray(previous.memoryLog) ? previous.memoryLog : [];
+  memoryStore.agents[agent.slug] = {
+    id: agent.id,
+    slug: agent.slug,
+    name: agent.name,
+    officeKey: agent.officeKey,
+    officeLabel: agent.officeLabel,
+    role: agent.role,
+    cycles: Number(previous.cycles || 0) + 1,
+    lastSeenAt: now.toISOString(),
+    lastHeadline: assignment.headline,
+    lastAction: assignment.action,
+    lastIntent: intent,
+    nextCheckAt: nextCheck,
+    autonomy: scores.autonomy,
+    urgency: scores.urgency,
+    confidence: scores.confidence,
+    memoryLog: [note, ...memoryLog].slice(0, 8)
+  };
+
+  return {
+    mode: scores.autonomy >= 75 ? "autonomo-alto" : scores.autonomy >= 55 ? "autonomo-ativo" : "assistido",
+    intent,
+    urgency: scores.urgency,
+    confidence: scores.confidence,
+    autonomy: scores.autonomy,
+    cycles: Number(previous.cycles || 0) + 1,
+    nextCheckAt: nextCheck,
+    memory: [note, ...memoryLog].slice(0, 3)
+  };
+}
+
+function summarizeAutonomy(queue) {
+  const autonomous = queue.filter((item) => item.autonomy?.mode !== "assistido");
+  const high = queue.filter((item) => item.autonomy?.mode === "autonomo-alto");
+  const average =
+    queue.reduce((total, item) => total + Number(item.autonomy?.autonomy || 0), 0) / Math.max(1, queue.length);
+
+  return {
+    autonomousAgents: autonomous.length,
+    highAutonomyAgents: high.length,
+    averageAutonomy: Math.round(average),
+    topIntentions: queue
+      .slice()
+      .sort((a, b) => Number(b.autonomy?.autonomy || 0) - Number(a.autonomy?.autonomy || 0))
+      .slice(0, 8)
+      .map((item) => ({
+        agent: item.name,
+        office: item.officeLabel,
+        role: item.role,
+        intent: item.autonomy?.intent || "",
+        autonomy: item.autonomy?.autonomy || 0,
+        urgency: item.autonomy?.urgency || 0
+      }))
+  };
+}
+
 function buildRegistry(agents) {
   return {
     generatedAt: new Date().toISOString(),
@@ -429,6 +581,13 @@ function writeAgentManifest(agent) {
     "",
     agent.newsroomBridge,
     "",
+    "## Autonomy Protocol",
+    "",
+    "- Mantem memoria curta entre ciclos.",
+    "- Define uma intencao propria por rodada.",
+    "- Pontua urgencia, confianca e autonomia antes de entregar sinais.",
+    "- Pode abrir alerta operacional quando o sinal passa do limite de urgencia.",
+    "",
     "## Working Prompt",
     "",
     agent.workingPrompt,
@@ -450,6 +609,9 @@ function buildMarkdownRun(report) {
     `- Offices: ${report.summary.totalOffices}`,
     `- News items read: ${report.summary.newsItems}`,
     `- Review issues in context: ${report.summary.reviewIssues}`,
+    `- Autonomous agents: ${report.summary.autonomousAgents}`,
+    `- High autonomy agents: ${report.summary.highAutonomyAgents}`,
+    `- Average autonomy: ${report.summary.averageAutonomy}`,
     "",
     "## Top Categories",
     "",
@@ -479,6 +641,9 @@ function buildMarkdownRun(report) {
     lines.push(`- Idea: ${item.assignment.idea}`);
     lines.push(`- Monitor: ${item.assignment.monitor}`);
     lines.push(`- Deliverable: ${item.assignment.deliverable}`);
+    lines.push(`- Autonomy: ${item.autonomy.mode} (${item.autonomy.autonomy}/100)`);
+    lines.push(`- Intent: ${item.autonomy.intent}`);
+    lines.push(`- Next check: ${item.autonomy.nextCheckAt}`);
     lines.push("");
   });
 
@@ -499,16 +664,23 @@ function main() {
   const newsSummary = summarizeNews(newsItems);
   const reviewReport = readJson(REVIEW_REPORT_FILE, { issues: [], sources: { topicSummary: [] } });
   const context = { newsItems, newsSummary, reviewReport };
+  const memoryStore = readAgentMemoryStore();
 
-  const queue = agents.map((agent) => ({
-    id: agent.id,
-    slug: agent.slug,
-    name: agent.name,
-    officeKey: agent.officeKey,
-    officeLabel: agent.officeLabel,
-    role: agent.role,
-    assignment: buildAssignment(agent, context)
-  }));
+  const queue = agents.map((agent) => {
+    const assignment = buildAssignment(agent, context);
+    return {
+      id: agent.id,
+      slug: agent.slug,
+      name: agent.name,
+      officeKey: agent.officeKey,
+      officeLabel: agent.officeLabel,
+      role: agent.role,
+      assignment,
+      autonomy: updateAgentMemory(agent, assignment, context, memoryStore)
+    };
+  });
+
+  writeAgentMemoryStore(memoryStore);
 
   const officeStatus = pickTop(agents, (agent) => agent.officeLabel, 20).map((item) => ({
     officeLabel: item.value,
@@ -517,6 +689,7 @@ function main() {
       agents.find((agent) => agent.officeLabel === item.value)?.newsroomBridge ||
       "monitoramento do jornal"
   }));
+  const autonomySummary = summarizeAutonomy(queue);
 
   const runReport = {
     generatedAt: new Date().toISOString(),
@@ -524,9 +697,13 @@ function main() {
       totalAgents: agents.length,
       totalOffices: officeStatus.length,
       newsItems: newsItems.length,
-      reviewIssues: (reviewReport.issues || []).length
+      reviewIssues: (reviewReport.issues || []).length,
+      autonomousAgents: autonomySummary.autonomousAgents,
+      highAutonomyAgents: autonomySummary.highAutonomyAgents,
+      averageAutonomy: autonomySummary.averageAutonomy
     },
     news: newsSummary,
+    autonomy: autonomySummary,
     offices: officeStatus,
     queue
   };

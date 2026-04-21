@@ -1875,6 +1875,12 @@
     return assignment.deliverable || "observacao operacional";
   }
 
+  function getTerminalAutonomy(realProcess) {
+    const autonomy = realProcess?.autonomy || {};
+    if (!autonomy.mode) return "assistido | memoria aguardando proximo ciclo";
+    return `${autonomy.mode} | autonomia ${autonomy.autonomy || 0}% | urgencia ${autonomy.urgency || 0}% | confianca ${autonomy.confidence || 0}%`;
+  }
+
   function renderTerminal(agent, line = "") {
     if (!terminalOutput || !agent) return;
     officeState.activeAgentId = agent.id;
@@ -1890,11 +1896,13 @@
       `status: ${getTerminalStatus(agent, realProcess, line)}`,
       `runtime: codigo ativo 24h`,
       `terminal: ${realStatus}`,
+      `autonomia: ${getTerminalAutonomy(realProcess)}`,
       `avaliacao: ${evaluation.score} pts (${getAgentEvaluationLevel(agent)})`,
       `neural: foco ${formatPercent01(evaluation.neural.focus)} | qualidade ${formatPercent01(evaluation.neural.quality)} | ritmo ${formatPercent01(evaluation.neural.speed)}`,
       `conversa: ${getAgentConversationSummary(agent)}`,
       `entrega: ${getTerminalDeliverable(realProcess)}`,
       `monitor: ${getTerminalMonitor(realProcess)}`,
+      `intencao: ${realProcess?.autonomy?.intent || "aguardando decisao propria"}`,
       `stack: ${getTerminalStack(agent, realProcess) || skills}`,
       `log: ${getTerminalLog(agent, realProcess, line)}`
     ].join("\n");

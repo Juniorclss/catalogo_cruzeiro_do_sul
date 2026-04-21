@@ -1,20 +1,24 @@
 # Handoff
 
-Updated: 2026-04-21T23:43:43.028Z
+Updated: 2026-04-21T23:51:27.061Z
 
-Ativado ciclo automático dos agentes reais: server.js agenda runRealAgentsRuntimeLocal a cada 5 minutos, grava data/real-agents-run-history.json em runtime e expõe autoRun na API. real-agents.js mostra Auto 5 min/ciclos e faz refresh do painel a cada 60s.
+Camada de autonomia implementada nos agentes reais: scripts/real-agents-runtime.js grava memoria por agente em data/real-agents-memory.json, calcula modo autonomo, intencao, urgencia, confianca e proxima checagem. server.js expõe summary/autonomy. real-agents mostra Autonomos/Media IA e cada card mostra barra/intencao. escritorio.js mostra autonomia e intencao no terminal.
 
 ## Next
 
-- Se publicar
-- confirmar /api/real-agents em produção e observar autoRun.cycles após alguns minutos
+- Em produção
+- conferir /api/real-agents depois de alguns ciclos: autonomousAgents deve ficar em 181 e cycles/memoryLog devem crescer
 
 ## Files In Focus
 
+- scripts/real-agents-runtime.js
 - server.js
+- real-agents.html
 - real-agents.js
 - real-agents.css
+- escritorio.js
+- .gitignore
 
 ## Related Orders
 
-- 2026-04-21-ativar-ciclo-automatico-de-5-em-5-minutos-para-agentes-reais
+- 2026-04-21-dar-mais-autonomia-operacional-aos-agentes-reais

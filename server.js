@@ -5086,8 +5086,12 @@ function buildRealAgentsPayload() {
       totalRoles: Array.isArray(registry?.roles) ? registry.roles.length : 0,
       newsItems: Number(latestRun?.summary?.newsItems || 0),
       reviewIssues: Number(latestRun?.summary?.reviewIssues || 0),
-      activeQueue: queue.length
+      activeQueue: queue.length,
+      autonomousAgents: Number(latestRun?.summary?.autonomousAgents || 0),
+      highAutonomyAgents: Number(latestRun?.summary?.highAutonomyAgents || 0),
+      averageAutonomy: Number(latestRun?.summary?.averageAutonomy || 0)
     },
+    autonomy: latestRun?.autonomy || null,
     autoRun: {
       enabled: !REAL_AGENTS_AUTO_RUN_DISABLED,
       intervalMs: REAL_AGENTS_AUTO_RUN_INTERVAL_MS,

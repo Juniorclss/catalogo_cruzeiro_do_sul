@@ -21,6 +21,8 @@ node_modules/
 # Artefatos temporários / automação local
 .chrome-headless-codex/
 .codex-temp/
+data/real-agents-memory.json
+data/real-agents-run-history.json
 .edge-headless/
 recovered-chat-assets/
 recovered-vscode-chat-assets/

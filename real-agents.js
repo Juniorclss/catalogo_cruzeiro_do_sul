@@ -59,6 +59,8 @@
       ["Notícias lidas", summary.newsItems],
       ["Achados", summary.reviewIssues],
       ["Fila ativa", summary.activeQueue],
+      ["Autônomos", summary.autonomousAgents || 0],
+      ["Média IA", `${summary.averageAutonomy || 0}%`],
       ["Auto", autoRun.enabled ? formatInterval(autoRun.intervalMs) : "off"]
     ];
 
@@ -115,6 +117,7 @@
     queueListEl.innerHTML = queue
       .map((item) => {
         const assignment = item.assignment || {};
+        const autonomy = item.autonomy || {};
         return `
           <article class="agent-work-item">
             <div class="agent-work-id">
@@ -122,6 +125,7 @@
               <p>${escapeHtml(item.officeLabel)} • ${escapeHtml(item.role)}</p>
               <div class="agent-pill-row">
                 <span class="agent-pill">${escapeHtml(assignment.deliverable || "entrega")}</span>
+                <span class="agent-pill">${escapeHtml(autonomy.mode || "assistido")}</span>
               </div>
             </div>
             <div class="agent-work-body">
@@ -129,6 +133,17 @@
               <p><strong>Ação:</strong> ${escapeHtml(assignment.action)}</p>
               <p><b>Ideia:</b> ${escapeHtml(assignment.idea)}</p>
               <p><b>Monitor:</b> ${escapeHtml(assignment.monitor)}</p>
+              <div class="agent-autonomy-meter" aria-label="Autonomia operacional">
+                <span style="width: ${Math.max(0, Math.min(100, Number(autonomy.autonomy || 0)))}%"></span>
+              </div>
+              <p><b>Intenção própria:</b> ${escapeHtml(autonomy.intent || "aguardando memoria")}</p>
+              <p class="agent-autonomy-line">
+                Autonomia ${escapeHtml(autonomy.autonomy || 0)}% • urgência ${escapeHtml(
+                  autonomy.urgency || 0
+                )}% • confiança ${escapeHtml(autonomy.confidence || 0)}% • próxima checagem ${escapeHtml(
+                  formatDate(autonomy.nextCheckAt)
+                )}
+              </p>
             </div>
           </article>
         `;

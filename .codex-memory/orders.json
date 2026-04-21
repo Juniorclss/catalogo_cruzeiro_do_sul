@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T23:44:56.127Z",
+  "lastUpdatedAt": "2026-04-21T23:51:17.214Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -3020,6 +3020,44 @@
       "tags": [],
       "nextSteps": [],
       "notes": ""
+    },
+    {
+      "id": "2026-04-21-dar-mais-autonomia-operacional-aos-agentes-reais",
+      "createdAt": "2026-04-21T23:51:17.214Z",
+      "updatedAt": "2026-04-21T23:51:17.214Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "eu quero eles mais autonomos",
+      "summary": "Dar mais autonomia operacional aos agentes reais",
+      "normalizedTasks": [
+        "memoria persistente por agente",
+        "intencao propria por ciclo",
+        "pontuacao de autonomia urgencia e confianca",
+        "exibir autonomia no painel e nos terminais dos escritorios",
+        "ignorar arquivos vivos de memoria"
+      ],
+      "filesTouched": [
+        "scripts/real-agents-runtime.js",
+        "server.js",
+        "real-agents.html",
+        "real-agents.js",
+        "real-agents.css",
+        "escritorio.js",
+        ".gitignore",
+        ".codex-memory/current-state.md",
+        ".codex-memory/handoff.md",
+        ".codex-memory/orders.json"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "agentes-reais",
+        "autonomia",
+        "memoria",
+        "terminal",
+        "monitoramento"
+      ],
+      "nextSteps": [],
+      "notes": "A runtime passou a persistir memoria curta em data/real-agents-memory.json e calcular autonomia por agente a cada rodada de 5 minutos."
     }
   ]
 }

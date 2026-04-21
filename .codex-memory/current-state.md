@@ -1,21 +1,25 @@
 # Current State
 
-Updated: 2026-04-21T23:43:43.065Z
+Updated: 2026-04-21T23:51:27.051Z
 
 ## Active Goal
 
-- Agentes reais em ciclo automatico
+- Agentes reais com autonomia operacional
 
 ## Summary
 
-Servidor configurado para rodar os 181 agentes reais automaticamente a cada 5 minutos. A API /api/real-agents agora expõe autoRun com intervalo, ciclos, estado de execução e histórico curto; o painel real-agents mostra o intervalo automático e atualiza periodicamente.
+Os 181 agentes reais agora mantem memoria curta entre ciclos, escolhem uma intencao propria, calculam urgencia/confianca/autonomia e expõem esses sinais na API, no painel real-agents e nos terminais dos escritorios.
 
 ## Next
 
-- Acompanhar o painel real-agents.html em produção depois do deploy para confirmar ciclos reais
+- Observar em produção os ciclos de 5 minutos para ver a memoria e a autonomia subirem conforme os agentes repetem leituras
 
 ## Files In Focus
 
+- scripts/real-agents-runtime.js
 - server.js
+- real-agents.html
 - real-agents.js
 - real-agents.css
+- escritorio.js
+- .gitignore
