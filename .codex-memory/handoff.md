@@ -1,17 +1,15 @@
 # Handoff
 
-Updated: 2026-04-21T16:31:55.175Z
+Updated: 2026-04-21T16:36:13.891Z
 
-Correção de regra da SPO: removido bloqueio por dispositivo/IP da Pesquisa Acre 2026; backend agora considera duplicidade semanal apenas por googleSub/googleEmail. Textos trocados para 'conta Google' e cache bust atualizado para googlevote.
+Rota protegida /api/pesquisa-acre-2026/admin/force-sync adicionada. Ela deduplica/normaliza os votos reais já existentes em acre-2026-poll.json e devolve summary recalculado. Teste local com 2 votos simulados passou: parcial pública retornou total 2.
 
 ## Next
 
 - Após deploy
-- abrir com duas contas Google diferentes no mesmo dispositivo e confirmar que ambas podem votar e que as parciais globais somam as respostas.
+- chamar POST /api/pesquisa-acre-2026/admin/force-sync com x-poll-admin-password e depois consultar /api/pesquisa-acre-2026/summary.
 
 ## Files In Focus
 
 - server.js
-- pesquisa-acre-2026.js
-- pesquisa-acre-2026.html
 - .codex-memory/orders.json

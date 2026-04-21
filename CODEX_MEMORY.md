@@ -37,6 +37,7 @@ Ultima atualizacao: 2026-04-17 01:39 -05:00 (America/Rio_Branco)
 - Solucao objetiva nova: [server.js](C:/Users/junio/projeto codex/server.js) expõe `/api/admin/storage-health` para validar `DATA_DIR`, caminho persistente esperado no Render, leitura da pesquisa e escrita de prova; [scripts/check-render-storage.js](C:/Users/junio/projeto codex/scripts/check-render-storage.js) roda isso via `npm run deploy:storage-check`.
 - Correcao de fluxo da SPO: [server.js](C:/Users/junio/projeto codex/server.js) agora expõe `/api/pesquisa-acre-2026/me` para detectar se o Google atual ja votou na semana; [pesquisa-acre-2026.js](C:/Users/junio/projeto codex/pesquisa-acre-2026.js) esconde o formulario e mostra as parciais quando o usuario ja votou ou recebe 409.
 - Ajuste de regra apos teste com duas contas: a trava semanal da SPO voltou a ser por conta Google, nao por dispositivo/IP, para que contas diferentes possam compor o panorama geral; [pesquisa-acre-2026.js](C:/Users/junio/projeto codex/pesquisa-acre-2026.js) continua movendo o bloco de parciais para logo abaixo do painel de obrigado quando a participacao ja esta concluida.
+- Force-sync admin da SPO: [server.js](C:/Users/junio/projeto codex/server.js) ganhou `/api/pesquisa-acre-2026/admin/force-sync` para normalizar/deduplicar votos reais existentes em `acre-2026-poll.json` e recalcular parciais; teste local com 2 votos simulados retornou total publico 2.
 
 ## Pedido atual em andamento
 

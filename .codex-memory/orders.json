@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T16:31:55.188Z",
+  "lastUpdatedAt": "2026-04-21T16:36:13.536Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2431,6 +2431,38 @@
         "spo",
         "google",
         "parciais"
+      ],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-criar-e-rodar-force-sync-admin-para-normalizar-votos-reais-da-spo-nas-parciais",
+      "createdAt": "2026-04-21T16:36:13.536Z",
+      "updatedAt": "2026-04-21T16:36:13.536Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "atualize, feche, verifique os votos ja computados na dashboard principal com a senha de admin, veja eles e force eles nas parciais, quero esses votos ali porque nao quero mais ter que pedir pra pessoas texta",
+      "summary": "Criar e rodar force-sync admin para normalizar votos reais da SPO nas parciais",
+      "normalizedTasks": [
+        "Verificar admin SPO no Render",
+        "confirmar storage persistente",
+        "criar endpoint protegido force-sync",
+        "validar localmente",
+        "subir e rodar no deploy"
+      ],
+      "filesTouched": [
+        "server.js",
+        "CODEX_MEMORY.md",
+        ".codex-memory/current-state.md",
+        ".codex-memory/handoff.md",
+        ".codex-memory/orders.json"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "spo",
+        "admin",
+        "parciais",
+        "force-sync"
       ],
       "nextSteps": [],
       "notes": ""

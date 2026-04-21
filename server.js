@@ -5208,6 +5208,97 @@ function buildAcre2026PollCurrentUserPayload(authUser = {}) {
   };
 }
 
+function normalizeAcre2026PollRecord(item = {}) {
+  if (!item || typeof item !== "object") return null;
+
+  const id = safeString(item.id || "", 120) || createRecordId("poll");
+  const createdAt = safeString(item.createdAt || item.at || "", 80) || new Date().toISOString();
+  const voto2026 = normalizePollChoice(item.voto2026 || item.vote2026, ACRE_2026_POLL_OPTIONS.vote2026, "");
+  if (!voto2026) return null;
+
+  const normalized = {
+    id,
+    profissao: cleanShortText(item.profissao || item.profession || "Nao informado", 100),
+    localizacao: cleanShortText(item.localizacao || item.location || item.city || "Nao informado", 120),
+    faixaEtaria: normalizePollChoice(item.faixaEtaria || item.ageRange, ACRE_2026_POLL_OPTIONS.ageRanges, "Prefiro nao informar"),
+    votoAnterior: normalizePollChoice(item.votoAnterior || item.previousVote, ACRE_2026_POLL_OPTIONS.previousVotes, "Nao lembro/Nao votei"),
+    satisfacao: Math.max(1, Math.min(5, Number(item.satisfacao || item.satisfaction || 3))),
+    avaliacaoGoverno: normalizePollChoice(
+      item.avaliacaoGoverno || item.governmentEvaluation,
+      ACRE_2026_POLL_OPTIONS.governmentEvaluation,
+      "Nao sabe"
+    ),
+    direcaoEstado: normalizePollChoice(
+      item.direcaoEstado || item.stateDirection,
+      ACRE_2026_POLL_OPTIONS.stateDirection,
+      "Nao sabe"
+    ),
+    desejoCiclo: normalizePollChoice(item.desejoCiclo || item.desiredCycle, ACRE_2026_POLL_OPTIONS.desiredCycle, "Nao sabe"),
+    voto2026,
+    segundaOpcao: normalizePollChoice(
+      item.segundaOpcao || item.secondChoice,
+      ACRE_2026_POLL_OPTIONS.secondChoice,
+      "Nenhuma segunda opcao"
+    ),
+    certezaVoto: normalizePollChoice(
+      item.certezaVoto || item.voteCertainty,
+      ACRE_2026_POLL_OPTIONS.voteCertainty,
+      "Muito indefinido"
+    ),
+    rejeicao: normalizePollChoice(item.rejeicao || item.rejection, ACRE_2026_POLL_OPTIONS.rejection, "Nao rejeito nenhum"),
+    prioridade: normalizePollChoice(item.prioridade || item.priority, ACRE_2026_POLL_OPTIONS.priorities, "Emprego e renda"),
+    atencaoPolitica: normalizePollChoice(
+      item.atencaoPolitica || item.politicalAttention,
+      ACRE_2026_POLL_OPTIONS.politicalAttention,
+      "Acompanho as vezes"
+    ),
+    fatorDecisivo: normalizePollChoice(
+      item.fatorDecisivo || item.decisionDriver,
+      ACRE_2026_POLL_OPTIONS.decisionDriver,
+      "Resultados concretos"
+    ),
+    comentario: safeString(item.comentario || item.comment || "", 1200),
+    sourcePage: cleanShortText(item.sourcePage || "/pesquisa-acre-2026.html", 260),
+    pageTitle: cleanShortText(item.pageTitle || "Pesquisa de Opiniao Acre 2026", 160),
+    visitorId: safeString(item.visitorId || "", 90),
+    sessionId: safeString(item.sessionId || "", 90),
+    city: safeString(item.city || "", 80),
+    country: safeString(item.country || "", 80),
+    ip: safeString(item.ip || "", 160),
+    browser: safeString(item.browser || "", 40),
+    deviceType: safeString(item.deviceType || "", 40),
+    referrerHost: safeString(item.referrerHost || "", 120),
+    googleEmail: safeString(item.googleEmail || "", 160),
+    googleSub: safeString(item.googleSub || "", 160),
+    weekKey: safeString(item.weekKey || "", 24) || getWeekBucketKey(createdAt),
+    createdAt
+  };
+
+  return normalized;
+}
+
+function dedupeAcre2026PollRecords(records = []) {
+  const seen = new Set();
+  const output = [];
+
+  (Array.isArray(records) ? records : []).forEach((item) => {
+    const normalized = normalizeAcre2026PollRecord(item);
+    if (!normalized) return;
+    const key = [
+      normalized.id,
+      normalized.weekKey,
+      normalized.googleSub || normalized.googleEmail,
+      normalized.createdAt,
+      normalized.voto2026
+    ].join("|");
+    if (seen.has(key)) return;
+    seen.add(key);
+    output.push(normalized);
+  });
+
+  return sortByDateDesc(output, "createdAt", 10000);
+}
+
 function buildPollBreakdown(items = [], key, limit = 10) {
   const bucket = sumBy(items, (item) => item?.[key] || "Nao informado");
   const total = Array.isArray(items) ? items.length : 0;
@@ -6980,6 +7071,32 @@ async function handleApi(req, res, pathname, searchParams) {
     }
 
     return sendJson(res, 200, buildAcre2026PollAdminPayload());
+  }
+
+  if (req.method === "POST" && pathname === "/api/pesquisa-acre-2026/admin/force-sync") {
+    if (!requireAcre2026PollAdmin(req)) {
+      return sendJson(res, 401, {
+        ok: false,
+        error: "Senha administrativa invalida."
+      });
+    }
+
+    const result = await mutateJsonFile(ACRE_2026_POLL_FILE, [], (currentRecords) => {
+      const normalizedRecords = dedupeAcre2026PollRecords(currentRecords);
+      return {
+        value: normalizedRecords,
+        records: normalizedRecords
+      };
+    });
+    const records = Array.isArray(result.records) ? result.records : [];
+
+    return sendJson(res, 200, {
+      ok: true,
+      forced: true,
+      total: records.length,
+      summary: buildAcre2026PollSummary(records),
+      message: "Votos reais da SPO normalizados e parciais recalculadas."
+    });
   }
 
   if (req.method === "GET" && pathname === "/api/comments") {
