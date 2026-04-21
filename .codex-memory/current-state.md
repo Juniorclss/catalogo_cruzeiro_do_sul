@@ -1,23 +1,21 @@
 # Current State
 
-Updated: 2026-04-21T15:35:18.882Z
+Updated: 2026-04-21T15:50:20.142Z
 
 ## Active Goal
 
-- Solução objetiva para persistência da SPO no Render
+- SPO: bloquear formulário para Google já votante
 
 ## Summary
 
-Além da escrita atômica/fila já publicada, o projeto agora tem endpoint admin /api/admin/storage-health que valida DATA_DIR, caminho persistente esperado no Render, leitura do arquivo acre-2026-poll.json e escrita de prova. Também existe npm run deploy:storage-check para consultar o deploy com ADMIN_TOKEN.
+A pesquisa agora consulta /api/pesquisa-acre-2026/me quando o Google conecta. Se o usuário já votou na semana, o formulário é escondido e as parciais são carregadas/mostradas. Erro 409 no envio também vira estado de voto concluído, não erro comum.
 
 ## Next
 
-- Após subir este novo ajuste
-- rodar npm run deploy:storage-check -- --url https://catalogo-cruzeiro-web.onrender.com --token <ADMIN_TOKEN>. Se render-persistent-path falhar
-- configurar o disk manualmente no Dashboard ou migrar o serviço para Blueprint.
+- Subir a correção e aguardar deploy; testar entrando com o mesmo Google que já votou e confirmar que aparece apenas o painel de participação concluída + parciais.
 
 ## Files In Focus
 
 - server.js
-- scripts/check-render-storage.js
-- package.json
+- pesquisa-acre-2026.js
+- pesquisa-acre-2026.html

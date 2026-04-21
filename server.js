@@ -5169,6 +5169,45 @@ function recordMatchesWeeklyDevice(item = {}, currentWeekKey = "", fingerprints 
   return fingerprints.some((fingerprint) => savedFingerprints.includes(fingerprint));
 }
 
+function findAcre2026WeeklyVoteForAuth(authUser = {}, weekKey = getWeekBucketKey(new Date().toISOString())) {
+  const googleSub = safeString(authUser?.sub || "", 160);
+  const googleEmail = safeString(authUser?.email || "", 160);
+  if (!googleSub && !googleEmail) return null;
+
+  const records = getAcre2026PollResponses();
+  return (
+    (Array.isArray(records) ? records : []).find(
+      (item) =>
+        safeString(item.weekKey || "", 24) === weekKey &&
+        ((googleSub && safeString(item.googleSub || "", 160) === googleSub) ||
+          (googleEmail && safeString(item.googleEmail || "", 160) === googleEmail))
+    ) || null
+  );
+}
+
+function buildAcre2026PollCurrentUserPayload(authUser = {}) {
+  const weekKey = getWeekBucketKey(new Date().toISOString());
+  const existingVote = findAcre2026WeeklyVoteForAuth(authUser, weekKey);
+  return {
+    ok: true,
+    authenticated: Boolean(authUser?.email && authUser?.sub),
+    alreadyVoted: Boolean(existingVote),
+    weekKey,
+    user: publicAuthUser(authUser),
+    vote: existingVote
+      ? {
+          id: existingVote.id,
+          createdAt: existingVote.createdAt,
+          weekKey: existingVote.weekKey
+        }
+      : null,
+    summary: buildAcre2026PollSummary(sortByDateDesc(getAcre2026PollResponses(), "createdAt", 5000)),
+    message: existingVote
+      ? "Seu Google já registrou uma resposta nesta semana. A votação fica encerrada e as parciais ficam liberadas."
+      : "Google conectado. A votação semanal está liberada."
+  };
+}
+
 function buildPollBreakdown(items = [], key, limit = 10) {
   const bucket = sumBy(items, (item) => item?.[key] || "Nao informado");
   const total = Array.isArray(items) ? items.length : 0;
@@ -6730,6 +6769,23 @@ async function handleApi(req, res, pathname, searchParams) {
 
   if (req.method === "GET" && pathname === "/api/pesquisa-acre-2026/bridge") {
     return sendJson(res, 200, buildAcre2026PollBridgePayload());
+  }
+
+  if (req.method === "GET" && pathname === "/api/pesquisa-acre-2026/me") {
+    const authUser = readCatalogoAuthSession(req);
+    if (!authUser?.email || !authUser?.sub) {
+      return sendJson(res, 200, {
+        ok: true,
+        authenticated: false,
+        alreadyVoted: false,
+        weekKey: getWeekBucketKey(new Date().toISOString()),
+        user: null,
+        vote: null,
+        message: "Entre com Google para liberar a votação semanal."
+      });
+    }
+
+    return sendJson(res, 200, buildAcre2026PollCurrentUserPayload(authUser));
   }
 
   if (req.method === "POST" && pathname === "/api/pesquisa-acre-2026") {

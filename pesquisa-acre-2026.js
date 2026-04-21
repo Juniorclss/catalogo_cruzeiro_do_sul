@@ -5,6 +5,9 @@
   const submitButton = document.getElementById("submitButton");
   const formFeedback = document.getElementById("formFeedback");
   const formCard = document.querySelector(".poll-form-card");
+  const authCard = document.querySelector("[data-google-auth-card]");
+  const methodCard = document.querySelector(".poll-method-card");
+  const adminEntry = document.querySelector(".poll-admin-entry");
   const thanksPanel = document.getElementById("pollThanksPanel");
   const thanksMessage = document.getElementById("pollThanksMessage");
   const summaryCard = document.querySelector(".poll-summary");
@@ -94,6 +97,12 @@
 
     formCard.classList.toggle("is-completed", Boolean(isCompleted));
 
+    [authCard, form, methodCard, adminEntry].forEach((node) => {
+      if (node) {
+        node.hidden = Boolean(isCompleted);
+      }
+    });
+
     if (thanksPanel) {
       thanksPanel.hidden = !isCompleted;
     }
@@ -121,6 +130,10 @@
     } catch (_error) {
       // Ignora falhas de persistencia local.
     }
+  }
+
+  function showPartials() {
+    summaryCard?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function restorePollCompletedState() {
@@ -373,6 +386,54 @@
     }
   }
 
+  async function checkCurrentUserVote({ scrollToPartials = false } = {}) {
+    const user = getGoogleUser();
+    if (!user?.email) {
+      setPollCompletedState(false);
+      setFeedback(formFeedback, "Entre com Google para liberar o voto semanal.", "error");
+      return null;
+    }
+
+    try {
+      const response = await fetch("/api/pesquisa-acre-2026/me", {
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      const payload = await readJson(response);
+      if (!response.ok) {
+        throw new Error(payload.error || "Nao foi possivel conferir seu voto.");
+      }
+
+      if (payload.alreadyVoted) {
+        setPollCompletedState(
+          true,
+          payload.message ||
+            "Seu Google ja registrou uma resposta nesta semana. A votacao fica encerrada e as parciais ficam liberadas."
+        );
+        setFeedback(formFeedback, "");
+        renderPublicSummary({ summary: payload.summary, updatedAt: payload.summary?.updatedAt });
+        await loadPollBridge();
+        if (scrollToPartials) {
+          showPartials();
+        }
+      } else {
+        setPollCompletedState(false);
+        setFeedback(
+          formFeedback,
+          "Google conectado. Seu dispositivo libera uma resposta por semana e guarda o historico da eleicao.",
+          "success"
+        );
+      }
+
+      return payload;
+    } catch (error) {
+      setFeedback(formFeedback, error.message || "Nao foi possivel conferir seu voto agora.", "error");
+      return null;
+    }
+  }
+
   async function loadPollBridge() {
     try {
       const response = await fetch("/api/pesquisa-acre-2026/bridge", {
@@ -428,6 +489,17 @@
       const data = await readJson(response);
 
       if (!response.ok) {
+        if (response.status === 409) {
+          setPollCompletedState(
+            true,
+            data.error ||
+              "Seu Google ou dispositivo ja registrou uma resposta nesta semana. As parciais ficam liberadas."
+          );
+          await loadPublicSummary();
+          await loadPollBridge();
+          showPartials();
+          return;
+        }
         throw new Error(data.error || "Nao foi possivel registrar a resposta.");
       }
 
@@ -435,7 +507,7 @@
       setFeedback(formFeedback, "");
       await loadPublicSummary();
       await loadPollBridge();
-      summaryCard?.scrollIntoView({ behavior: "smooth", block: "start" });
+      showPartials();
     } catch (error) {
       setFeedback(formFeedback, error.message || "Falha ao enviar a pesquisa.", "error");
     } finally {
@@ -446,16 +518,17 @@
 
   form?.addEventListener("submit", handleFormSubmit);
   window.addEventListener("catalogo:google-auth", () => {
-    if (formCard?.classList.contains("is-completed")) {
-      return;
-    }
     if (getGoogleUser()?.email) {
-      setFeedback(formFeedback, "Google conectado. Seu dispositivo libera uma resposta por semana e guarda o histórico da eleição.", "success");
+      void checkCurrentUserVote({ scrollToPartials: true });
       return;
     }
+    setPollCompletedState(false);
     setFeedback(formFeedback, "Entre com Google para liberar o voto semanal.", "error");
   });
   restorePollCompletedState();
   loadPublicSummary().catch(() => {});
   loadPollBridge().catch(() => {});
+  if (window.CatalogoGoogleAuth?.isReady?.() && getGoogleUser()?.email) {
+    checkCurrentUserVote().catch(() => {});
+  }
 })();

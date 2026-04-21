@@ -1,20 +1,18 @@
 # Handoff
 
-Updated: 2026-04-21T15:35:18.883Z
+Updated: 2026-04-21T15:50:20.138Z
 
-Solução adicionada para tirar a dúvida do Render: endpoint admin /api/admin/storage-health faz write probe no DATA_DIR e confirma se produção está apontando para /opt/render/project/src/render-data; script scripts/check-render-storage.js expõe isso como npm run deploy:storage-check.
+Correção de fluxo da SPO pronta: backend ganhou /api/pesquisa-acre-2026/me para identificar voto semanal pelo Google; frontend esconde formulário/auth/método/admin quando já votou, mostra painel concluído e rola para parciais. Cache bust atualizado para votegate.
 
 ## Next
 
-- Commitar/subir os arquivos server.js
-- package.json
-- scripts/check-render-storage.js e memória; depois rodar o comando de checagem no deploy com ADMIN_TOKEN.
+- Após deploy no Render
+- abrir /pesquisa-acre-2026.html com Google que já votou; a página deve mostrar estado concluído e parciais
+- sem formulário.
 
 ## Files In Focus
 
 - server.js
-- scripts/check-render-storage.js
-- package.json
-- .codex-memory/current-state.md
-- .codex-memory/handoff.md
+- pesquisa-acre-2026.js
+- pesquisa-acre-2026.html
 - .codex-memory/orders.json

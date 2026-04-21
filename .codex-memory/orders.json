@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T15:34:38.053Z",
+  "lastUpdatedAt": "2026-04-21T15:49:53.738Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2346,6 +2346,35 @@
         "persistencia",
         "render",
         "storage"
+      ],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-corrigir-pesquisa-spo-para-usuario-google-ja-votante-ver-apenas-parciais",
+      "createdAt": "2026-04-21T15:49:53.738Z",
+      "updatedAt": "2026-04-21T15:49:53.738Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "nao ta nao eu fechei um voto atualziei e tudo e ainda existe como votar e eu nao consigo ver as parciais então se a pessoia ja votou ja deve ver so parciais ao entra com google",
+      "summary": "Corrigir pesquisa SPO para usuario Google ja votante ver apenas parciais",
+      "normalizedTasks": [
+        "Criar endpoint /api/pesquisa-acre-2026/me",
+        "esconder formulario quando Google ja votou na semana",
+        "tratar 409 como estado de voto concluido",
+        "forcar cache bust do JS/CSS"
+      ],
+      "filesTouched": [
+        "server.js",
+        "pesquisa-acre-2026.js",
+        "pesquisa-acre-2026.html"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "spo",
+        "google",
+        "voto",
+        "parciais"
       ],
       "nextSteps": [],
       "notes": ""

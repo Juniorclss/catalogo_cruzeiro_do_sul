@@ -35,6 +35,7 @@ Ultima atualizacao: 2026-04-17 01:39 -05:00 (America/Rio_Branco)
 - Blindagem nova do deploy: [render.yaml](C:/Users/junio/projeto codex/render.yaml) foi preparado com `disk` persistente e `DATA_DIR` dedicado (`/opt/render/project/src/render-data`) para os votos da SPO sobreviverem a restart/redeploy no Render; o backend tambem passa a semear esse diretorio com os arquivos-base da pasta `data/` quando estiver vazio.
 - Correcao importante: o backend da pesquisa agora reconhece tambem a faixa etaria `16 a 17 anos`, alinhando servidor e formulario.
 - Solucao objetiva nova: [server.js](C:/Users/junio/projeto codex/server.js) expõe `/api/admin/storage-health` para validar `DATA_DIR`, caminho persistente esperado no Render, leitura da pesquisa e escrita de prova; [scripts/check-render-storage.js](C:/Users/junio/projeto codex/scripts/check-render-storage.js) roda isso via `npm run deploy:storage-check`.
+- Correcao de fluxo da SPO: [server.js](C:/Users/junio/projeto codex/server.js) agora expõe `/api/pesquisa-acre-2026/me` para detectar se o Google atual ja votou na semana; [pesquisa-acre-2026.js](C:/Users/junio/projeto codex/pesquisa-acre-2026.js) esconde o formulario e mostra as parciais quando o usuario ja votou ou recebe 409.
 
 ## Pedido atual em andamento
 
