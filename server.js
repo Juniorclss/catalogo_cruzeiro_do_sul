@@ -917,6 +917,111 @@ function mutateJsonFile(filePath, fallback, mutator) {
   });
 }
 
+function buildStorageHealthPayload({ writeProbe = false } = {}) {
+  const checks = [];
+  const addCheck = (name, ok, details = {}) => {
+    checks.push({
+      name,
+      ok: Boolean(ok),
+      ...details
+    });
+  };
+
+  let dataDirStat = null;
+  try {
+    ensureDataDir();
+    dataDirStat = fs.statSync(DATA_DIR);
+    addCheck("data-dir-exists", dataDirStat.isDirectory(), { target: DATA_DIR });
+  } catch (error) {
+    addCheck("data-dir-exists", false, { target: DATA_DIR, error: String(error?.message || error) });
+  }
+
+  const configuredByEnv = Boolean(String(process.env.DATA_DIR || "").trim());
+  const renderExpectedPath = "/opt/render/project/src/render-data";
+  const usingDefaultDataDir = path.resolve(DATA_DIR) === path.resolve(DEFAULT_DATA_DIR);
+  const renderPersistentPath =
+    path.resolve(DATA_DIR) === path.resolve(renderExpectedPath) ||
+    path.resolve(DATA_DIR).startsWith(`${path.resolve(renderExpectedPath)}${path.sep}`);
+
+  addCheck("data-dir-env", configuredByEnv || !IS_PRODUCTION, {
+    configuredByEnv,
+    usingDefaultDataDir,
+    expectedRenderPath: renderExpectedPath
+  });
+
+  if (IS_PRODUCTION) {
+    addCheck("render-persistent-path", renderPersistentPath, {
+      expected: renderExpectedPath,
+      target: DATA_DIR
+    });
+  }
+
+  let acrePollResponses = 0;
+  let acrePollFileSize = 0;
+  try {
+    const records = readJson(ACRE_2026_POLL_FILE, []);
+    acrePollResponses = Array.isArray(records) ? records.length : 0;
+    acrePollFileSize = fs.existsSync(ACRE_2026_POLL_FILE) ? fs.statSync(ACRE_2026_POLL_FILE).size : 0;
+    addCheck("acre-poll-readable", Array.isArray(records), {
+      file: ACRE_2026_POLL_FILE,
+      responses: acrePollResponses,
+      bytes: acrePollFileSize
+    });
+  } catch (error) {
+    addCheck("acre-poll-readable", false, {
+      file: ACRE_2026_POLL_FILE,
+      error: String(error?.message || error)
+    });
+  }
+
+  if (writeProbe) {
+    const probeFile = path.join(DATA_DIR, ".storage-health.json");
+    const marker = crypto.randomBytes(8).toString("hex");
+    const probePayload = {
+      marker,
+      pid: process.pid,
+      checkedAt: new Date().toISOString()
+    };
+
+    try {
+      writeJson(probeFile, probePayload);
+      const savedProbe = readJson(probeFile, null);
+      addCheck("storage-write-probe", savedProbe?.marker === marker, {
+        file: probeFile,
+        checkedAt: probePayload.checkedAt
+      });
+    } catch (error) {
+      addCheck("storage-write-probe", false, {
+        file: probeFile,
+        error: String(error?.message || error)
+      });
+    }
+  }
+
+  const ok = checks.every((check) => check.ok);
+  const persistentExpected = IS_PRODUCTION ? renderPersistentPath : !usingDefaultDataDir || configuredByEnv;
+
+  return {
+    ok,
+    service: "catalogo-cruzeiro",
+    storage: {
+      target: DATA_DIR,
+      defaultTarget: DEFAULT_DATA_DIR,
+      configuredByEnv,
+      usingDefaultDataDir,
+      persistentExpected,
+      dataDirMode: dataDirStat ? dataDirStat.mode : null
+    },
+    acre2026Poll: {
+      file: ACRE_2026_POLL_FILE,
+      responses: acrePollResponses,
+      bytes: acrePollFileSize
+    },
+    checks,
+    checkedAt: new Date().toISOString()
+  };
+}
+
 function loadImagePreviewCache() {
   if (imagePreviewCacheLoaded) return;
   imagePreviewCacheLoaded = true;
@@ -6019,6 +6124,14 @@ async function handleApi(req, res, pathname, searchParams) {
 
   if (pathname === "/health") {
     return sendJson(res, 200, { ok: true, service: "catalogo-cruzeiro", time: new Date().toISOString() });
+  }
+
+  if (req.method === "GET" && pathname === "/api/admin/storage-health") {
+    if (!requireAdmin(req)) {
+      return sendJson(res, 401, { ok: false, error: "Acesso administrativo obrigatorio." });
+    }
+
+    return sendJson(res, 200, buildStorageHealthPayload({ writeProbe: true }));
   }
 
   if (req.method === "GET" && pathname === "/api/auth/config") {

@@ -1,17 +1,23 @@
 # Current State
 
-Updated: 2026-04-21T15:25:07.653Z
+Updated: 2026-04-21T15:35:18.882Z
 
 ## Active Goal
 
-- Persistencia da SPO blindada
+- Solução objetiva para persistência da SPO no Render
 
 ## Summary
 
-A gravação da Pesquisa Acre 2026 foi reforçada com escrita atômica e fila de mutação por arquivo para evitar sobrescrita concorrente. O deploy também foi preparado para usar DATA_DIR persistente em disco no Render. Teste local real: 2 votos gravados, servidor reiniciado e a contagem permaneceu em 2.
+Além da escrita atômica/fila já publicada, o projeto agora tem endpoint admin /api/admin/storage-health que valida DATA_DIR, caminho persistente esperado no Render, leitura do arquivo acre-2026-poll.json e escrita de prova. Também existe npm run deploy:storage-check para consultar o deploy com ADMIN_TOKEN.
 
 ## Next
 
-- Publicar a blindagem da persistência da SPO e
-- se preciso
-- confirmar no Render se o serviço está sincronizando o disk do render.yaml.
+- Após subir este novo ajuste
+- rodar npm run deploy:storage-check -- --url https://catalogo-cruzeiro-web.onrender.com --token <ADMIN_TOKEN>. Se render-persistent-path falhar
+- configurar o disk manualmente no Dashboard ou migrar o serviço para Blueprint.
+
+## Files In Focus
+
+- server.js
+- scripts/check-render-storage.js
+- package.json

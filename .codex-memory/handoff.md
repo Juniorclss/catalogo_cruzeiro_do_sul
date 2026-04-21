@@ -1,9 +1,20 @@
 # Handoff
 
-Updated: 2026-04-21T15:25:07.665Z
+Updated: 2026-04-21T15:35:18.883Z
 
-A SPO agora grava votos com escrita atômica e fila serializada para não perder registros em gravações próximas. O render.yaml foi preparado com disk e DATA_DIR persistente para o serviço web. Teste local real confirmou persistência após restart.
+Solução adicionada para tirar a dúvida do Render: endpoint admin /api/admin/storage-health faz write probe no DATA_DIR e confirma se produção está apontando para /opt/render/project/src/render-data; script scripts/check-render-storage.js expõe isso como npm run deploy:storage-check.
 
 ## Next
 
-- Subir essa correção e depois conferir no deploy se o serviço Render aplicou o disk persistente ou se precisa ajuste manual no dashboard.
+- Commitar/subir os arquivos server.js
+- package.json
+- scripts/check-render-storage.js e memória; depois rodar o comando de checagem no deploy com ADMIN_TOKEN.
+
+## Files In Focus
+
+- server.js
+- scripts/check-render-storage.js
+- package.json
+- .codex-memory/current-state.md
+- .codex-memory/handoff.md
+- .codex-memory/orders.json

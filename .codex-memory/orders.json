@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T15:25:07.484Z",
+  "lastUpdatedAt": "2026-04-21T15:34:38.053Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2319,6 +2319,34 @@
       "filesTouched": [],
       "assetRefs": [],
       "tags": [],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-criar-uma-solucao-objetiva-para-confirmar-persistencia-da-spo-no-render",
+      "createdAt": "2026-04-21T15:34:38.053Z",
+      "updatedAt": "2026-04-21T15:34:38.053Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "EU QUERO QUE VC ME DE UMA SOLUÇÃO",
+      "summary": "Criar uma solução objetiva para confirmar persistência da SPO no Render",
+      "normalizedTasks": [
+        "Adicionar endpoint admin de storage health",
+        "adicionar script de checagem do Render",
+        "orientar configuração manual se não houver Blueprint"
+      ],
+      "filesTouched": [
+        "server.js",
+        "scripts/check-render-storage.js",
+        "package.json"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "spo",
+        "persistencia",
+        "render",
+        "storage"
+      ],
       "nextSteps": [],
       "notes": ""
     }

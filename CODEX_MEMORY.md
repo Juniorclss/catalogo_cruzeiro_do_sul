@@ -34,6 +34,7 @@ Ultima atualizacao: 2026-04-17 01:39 -05:00 (America/Rio_Branco)
 - Blindagem nova da SPO: [server.js](C:/Users/junio/projeto codex/server.js) agora grava os votos da Pesquisa Acre 2026 com escrita atomica e fila de mutacao por arquivo, evitando sobrescrita quando votos chegam em sequencia muito proxima.
 - Blindagem nova do deploy: [render.yaml](C:/Users/junio/projeto codex/render.yaml) foi preparado com `disk` persistente e `DATA_DIR` dedicado (`/opt/render/project/src/render-data`) para os votos da SPO sobreviverem a restart/redeploy no Render; o backend tambem passa a semear esse diretorio com os arquivos-base da pasta `data/` quando estiver vazio.
 - Correcao importante: o backend da pesquisa agora reconhece tambem a faixa etaria `16 a 17 anos`, alinhando servidor e formulario.
+- Solucao objetiva nova: [server.js](C:/Users/junio/projeto codex/server.js) expõe `/api/admin/storage-health` para validar `DATA_DIR`, caminho persistente esperado no Render, leitura da pesquisa e escrita de prova; [scripts/check-render-storage.js](C:/Users/junio/projeto codex/scripts/check-render-storage.js) roda isso via `npm run deploy:storage-check`.
 
 ## Pedido atual em andamento
 
