@@ -1,18 +1,18 @@
 # Current State
 
-Updated: 2026-04-21T19:16:34.770Z
+Updated: 2026-04-21T19:18:33.611Z
 
 ## Active Goal
 
-- SPO: relatório legal pronto
+- SPO: relatório legal reforçado
 
 ## Summary
 
-Relatório legal da Enquete de Opinião Acre 2026 criado em Markdown e HTML imprimível, com fundamentos eleitorais TSE/Lei 9.504/Res. 23.600 e cautelas LGPD/ANPD.
+Relatório legal reescrito em tom mais afirmativo: enquete espontânea é apresentada como formato admissível quando identificada como sondagem voluntária e não divulgada como pesquisa eleitoral científica/representativa.
 
 ## Next
 
-- Abrir o HTML no navegador e imprimir/salvar como PDF quando precisar enviar.
+- Usar o HTML para salvar PDF; relatório agora foca nas leis e no uso social/editorial/exploratório da enquete.
 
 ## Files In Focus
 

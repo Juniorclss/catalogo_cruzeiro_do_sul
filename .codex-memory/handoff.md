@@ -1,13 +1,12 @@
 # Handoff
 
-Updated: 2026-04-21T19:16:34.767Z
+Updated: 2026-04-21T19:18:33.609Z
 
-Foram criados RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.md e .html com relatório formal sobre enquete pessoal espontânea, diferenciação de pesquisa eleitoral registrada, diretrizes TSE, cautelas LGPD e fontes oficiais.
+Relatório legal da SPO revisado a pedido do usuário: menos defensivo/pessoal, mais forte na legalidade da enquete espontânea e no uso social/editorial/exploratório, mantendo ressalva de não substituir parecer jurídico.
 
 ## Next
 
-- Se quiser PDF
-- abrir o HTML e usar imprimir/salvar em PDF.
+- Commitar e subir a revisão do relatório.
 
 ## Files In Focus
 

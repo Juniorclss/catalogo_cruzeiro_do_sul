@@ -1,137 +1,122 @@
-# Relatorio Legal - Enquete de Opiniao Acre 2026
+# Relatorio Legal - Enquete Espontanea de Opiniao Acre 2026
 
 **Projeto:** Enquete de Opiniao Acre 2026  
-**Natureza declarada:** sondagem/enquete publica espontanea, pessoal, nao empresarial, sem carater cientifico  
+**Natureza juridica declarada:** enquete/sondagem publica espontanea, sem carater cientifico e sem pretensao de pesquisa eleitoral registrada  
+**Finalidade:** colher respostas voluntarias para leitura editorial/social das opinioes recebidas  
 **Data:** 21 de abril de 2026  
-**Responsavel pela pagina:** iniciativa pessoal/editorial do mantenedor do site  
 
-> Este relatorio e um documento informativo de conformidade preventiva. Nao substitui parecer juridico assinado por advogado nem dispensa consulta profissional em caso de notificacao, representacao eleitoral ou questionamento formal.
+> Este relatorio organiza fundamentos legais e diretrizes de conformidade. Nao substitui parecer juridico assinado por advogado em caso de notificacao, representacao eleitoral ou questionamento formal.
 
-## 1. Objeto
+## 1. Resumo executivo
 
-Este relatorio descreve os fundamentos legais e as cautelas adotadas para manter a pagina **Enquete de Opiniao Acre 2026** como uma consulta publica espontanea, pessoal e sem finalidade de pesquisa eleitoral cientifica.
+A **Enquete de Opiniao Acre 2026** e juridicamente estruturada como uma **enquete publica espontanea**, tambem descrita como sondagem espontanea de participacao voluntaria.
 
-A pagina foi ajustada para deixar claro ao visitante que:
+Esse formato e distinto de pesquisa eleitoral cientifica. A legalidade do modelo depende de uma apresentacao clara: os dados divulgados nao podem ser anunciados como pesquisa eleitoral registrada, nao podem afirmar representatividade do eleitorado e nao devem apresentar margem de erro, plano amostral ou nivel de confianca inexistentes.
 
-- nao se trata de pesquisa eleitoral registrada no TSE;
-- nao ha plano amostral;
-- nao ha margem de erro;
-- nao ha metodologia cientifica;
-- nao ha representatividade estatistica do eleitorado do Acre;
-- as parciais mostram somente respostas voluntarias recebidas no formulario;
-- o login Google limita uma resposta por conta a cada semana;
-- e-mail e identificadores pessoais nao aparecem nas parciais publicas.
+A pagina foi ajustada para informar expressamente que:
 
-## 2. Diferenca entre pesquisa eleitoral e enquete/sondagem
+- e enquete/sondagem espontanea;
+- nao e pesquisa eleitoral registrada no TSE;
+- nao possui plano amostral;
+- nao possui margem de erro;
+- nao possui metodologia cientifica;
+- nao representa o eleitorado do Acre;
+- exibe apenas respostas voluntarias recebidas;
+- usa Google para limitar uma resposta por conta por semana;
+- nao exibe e-mail ou identificadores pessoais nas parciais publicas.
 
-A legislacao eleitoral brasileira exige registro previo para pesquisas de opiniao publica relativas a eleicoes ou candidaturas quando configuradas como pesquisas eleitorais. Para as Eleicoes Gerais de 2026, o TSE informou que pesquisas eleitorais devem ser registradas no sistema PesqEle a partir de 1º de janeiro de 2026, com antecedencia minima de cinco dias antes da divulgacao.
+## 2. Enquadramento legal da enquete espontanea
 
-Esse registro envolve informacoes tecnicas, como contratante, valor e origem dos recursos, metodologia, periodo de realizacao, plano amostral, ponderacoes, intervalo de confianca e margem de erro.
+A legislacao eleitoral brasileira regula de forma especifica as **pesquisas eleitorais**. Pesquisa eleitoral registrada envolve metodologia, plano amostral, ponderacoes, periodo de coleta, contratante, origem dos recursos, margem de erro e demais informacoes tecnicas.
 
-A pagina em questao nao se apresenta como pesquisa eleitoral cientifica. Ela se apresenta como **enquete/sondagem espontanea**, isto e, uma coleta aberta de respostas voluntarias de usuarios que acessam o formulario.
+A enquete espontanea e diferente: ela decorre da manifestacao voluntaria de pessoas que acessam determinado formulario, sem selecao estatistica da amostra e sem pretensao de representar o eleitorado.
 
-## 3. Base eleitoral aplicavel
+Portanto, a diretriz juridica central e:
+
+> **A enquete espontanea e admissivel quando apresentada como mera sondagem voluntaria e quando nao e divulgada como pesquisa eleitoral cientifica ou representativa.**
+
+## 3. Fundamentos eleitorais
 
 ### 3.1 Lei nº 9.504/1997, art. 33
 
-O art. 33 da Lei das Eleicoes disciplina a divulgacao de pesquisas de opiniao publica relativas as eleicoes ou candidaturas, exigindo registro de informacoes perante a Justica Eleitoral quando se tratar de pesquisa eleitoral.
+O art. 33 da Lei das Eleicoes trata das pesquisas de opiniao publica relativas as eleicoes ou candidaturas e exige registro perante a Justica Eleitoral quando se tratar de pesquisa eleitoral.
 
-**Aplicacao ao caso:** a pagina evita se enquadrar como pesquisa eleitoral registrada ao declarar, de forma expressa e ostensiva, que e uma enquete espontanea, sem metodologia cientifica, plano amostral, margem de erro ou representatividade estatistica.
+**Aplicacao ao projeto:** a pagina nao se anuncia como pesquisa eleitoral. Ela declara ser enquete espontanea e informa que seus resultados sao apenas respostas voluntarias. Assim, o enquadramento pretendido e de sondagem/enquete, nao de pesquisa eleitoral registrada.
 
 ### 3.2 Resolucao TSE nº 23.600/2019
 
-A Resolucao TSE nº 23.600/2019 regulamenta pesquisas eleitorais e detalha informacoes exigidas, incluindo dados de amostra, composicao por genero, idade, instrucao, nivel economico e area fisica de realizacao, alem de relatorio com periodo, tamanho da amostra, margem de erro, nivel de confianca, publico-alvo, fonte de dados, metodologia, contratante e origem dos recursos.
+A Resolucao TSE nº 23.600/2019 disciplina pesquisas eleitorais e detalha informacoes exigidas, como tamanho da amostra, margem de erro, nivel de confianca, publico-alvo, metodologia, fonte dos dados e origem dos recursos.
 
-**Aplicacao ao caso:** a pagina nao informa margem de erro, nivel de confianca ou plano amostral porque nao possui esses elementos. O aviso legal deixa claro que esses elementos inexistem.
+**Aplicacao ao projeto:** a enquete nao possui esses elementos tecnicos. Por isso, a pagina nao apresenta margem de erro, nivel de confianca, plano amostral ou amostra representativa. Ao contrario, informa expressamente que esses elementos inexistem.
 
-### 3.3 Entendimento do TSE sobre sondagens/enquetes
+### 3.3 Diretriz do TSE sobre sondagens/enquetes
 
-O repositorio de jurisprudencia do TSE indica a necessidade de esclarecimento expresso quando dados e numeros divulgados nao sao oriundos de pesquisa de opiniao cientifica, mas de mera sondagem. Esse cuidado evita que uma enquete seja confundida com pesquisa eleitoral sem registro.
+O TSE reconhece a importancia de esclarecer quando numeros divulgados nao sao oriundos de pesquisa de opiniao cientifica, mas de mera sondagem. A falta desse esclarecimento pode levar a interpretacao de divulgacao de pesquisa eleitoral sem registro.
 
-**Medida adotada:** a pagina passou a exibir aviso expresso: "Enquete espontanea, nao pesquisa eleitoral registrada", informando que os resultados nao representam o eleitorado do Acre.
+**Medida adotada:** o aviso legal da pagina declara que se trata de enquete espontanea e que as parciais nao representam o eleitorado do Acre.
 
-## 4. Diretrizes praticas adotadas na pagina
+## 4. Diretrizes obrigatorias de comunicacao
 
-Para reduzir risco de interpretacao equivocada, a pagina adota os seguintes criterios:
+Para preservar o enquadramento como enquete espontanea, a divulgacao deve seguir estas regras:
 
-1. Usa os termos **enquete**, **sondagem espontanea**, **participacao voluntaria** e **respostas recebidas**.
-2. Evita prometer que os dados representam o eleitorado.
-3. Evita mencionar margem de erro, amostra representativa ou nivel de confianca.
-4. Informa que nao e pesquisa eleitoral registrada no TSE.
-5. Informa que nao ha plano amostral nem metodologia cientifica.
-6. Mostra parciais como leitura das respostas voluntarias recebidas.
-7. Mantem area administrativa separada e protegida.
-8. Nao exibe e-mail, Google ID, IP ou identificadores pessoais nas parciais publicas.
+1. Usar termos como **enquete**, **sondagem espontanea**, **consulta voluntaria**, **respostas recebidas** e **parciais da enquete**.
+2. Nao usar chamada como "pesquisa eleitoral mostra".
+3. Nao declarar que o resultado representa o eleitorado do Acre.
+4. Nao mencionar margem de erro, intervalo de confianca ou amostra representativa.
+5. Nao comparar os resultados com pesquisas eleitorais registradas.
+6. Manter aviso visivel de que se trata de enquete espontanea, sem carater cientifico e nao registrada no TSE.
+7. Exibir resultados apenas como totais e percentuais das respostas voluntarias recebidas.
 
-## 5. Protecao de dados pessoais e LGPD
+## 5. Uso legitimo para fins de pesquisa social/editorial
 
-Ainda que a iniciativa seja pessoal e nao empresarial, a pagina esta em ambiente publico e coleta informacoes relacionadas a perfil, localidade, opiniao politica e login Google. Por prudencia, foram adotadas cautelas inspiradas na Lei Geral de Protecao de Dados Pessoais (Lei nº 13.709/2018).
+A enquete pode ser usada para leitura social, editorial, comunitaria ou exploratoria, desde que seus resultados sejam tratados como **indicadores de participacao voluntaria**, nao como estimativa estatistica do eleitorado.
 
-### 5.1 Dados pessoais e dados sensiveis
+Uso adequado:
 
-Segundo a ANPD, dado pessoal e informacao relacionada a pessoa natural identificada ou identificavel. A ANPD tambem esclarece que opiniao politica e dado pessoal sensivel, conforme art. 5º, II, da LGPD.
+- medir interesse de participantes voluntarios;
+- observar temas mais citados entre respondentes;
+- acompanhar preferencias declaradas por quem acessou a pagina;
+- gerar pauta editorial ou leitura qualitativa;
+- comparar respostas internas ao proprio formulario ao longo do tempo.
 
-**Aplicacao ao caso:** como a enquete envolve preferencias politicas e usa login Google para controle de duplicidade, o tratamento deve ser minimizado e protegido.
+Uso inadequado:
 
-### 5.2 Finalidade declarada
+- afirmar que o resultado representa o Acre;
+- declarar lideranca eleitoral como fato estatistico;
+- divulgar como pesquisa registrada;
+- usar como prova de intencao de voto do eleitorado;
+- apresentar margem de erro inexistente.
 
-A finalidade declarada da coleta e:
+## 6. Protecao de dados pessoais e LGPD
 
-- limitar uma resposta por conta Google a cada semana;
-- reduzir duplicidade;
-- compor parciais publicas agregadas da enquete;
-- permitir consulta administrativa protegida do historico de participacao.
+A enquete coleta dados relacionados a localidade, perfil, preferencia politica e conta Google. A opiniao politica pode ser considerada dado pessoal sensivel quando vinculada a pessoa natural identificada ou identificavel, conforme a LGPD e orientacoes da ANPD.
 
-### 5.3 Minimizacao e exibicao publica
+Por isso, sao adotadas medidas de minimizacao:
 
-As parciais publicas devem exibir apenas dados agregados, como totais e percentuais por alternativa. Nao devem exibir:
+- uma resposta por conta Google por semana;
+- nao exibicao publica de e-mail, Google ID, IP, visitor ID ou session ID;
+- parciais publicas agregadas;
+- area administrativa protegida;
+- comentario livre opcional;
+- possibilidade de remocao ou revisao mediante solicitacao do titular, quando cabivel.
 
-- e-mail;
-- Google ID;
-- IP;
-- session ID;
-- visitor ID;
-- identificadores brutos;
-- comentarios que possam identificar diretamente o participante sem revisao.
+## 7. Texto de aviso recomendado
 
-### 5.4 Direitos do titular
-
-Em caso de questionamento, e recomendavel disponibilizar canal para:
-
-- solicitar remocao de resposta;
-- pedir informacao sobre quais dados foram armazenados;
-- revogar consentimento quando aplicavel;
-- reportar erro ou exposicao indevida.
-
-## 6. Texto legal recomendado para manutencao na pagina
-
-Texto recomendado e ja aplicado em essencia:
-
-> Esta pagina e mantida em carater pessoal, nao empresarial, e nao possui plano amostral, margem de erro ou metodologia cientifica. As parciais nao representam o eleitorado do Acre; mostram somente as respostas voluntarias enviadas por participantes que acessaram este formulario.
+> Esta pagina e uma enquete publica espontanea, sem carater cientifico, sem plano amostral, sem margem de erro e nao registrada no TSE. As parciais nao representam o eleitorado do Acre; mostram apenas respostas voluntarias enviadas por participantes que acessaram este formulario.
 >
 > O login Google e usado para limitar uma resposta por conta a cada semana e reduzir duplicidade. E-mail e identificadores pessoais nao aparecem nas parciais publicas.
 
-## 7. Riscos remanescentes e cautelas
-
-Mesmo com os avisos, existem riscos se a pagina for divulgada como se fosse pesquisa eleitoral. Portanto, recomenda-se:
-
-- nao publicar chamadas como "pesquisa mostra", "intencao de voto do Acre" ou "resultado do eleitorado";
-- nao comparar os resultados com pesquisas registradas;
-- nao usar os dados como prova estatistica;
-- nao impulsionar a pagina com linguagem de pesquisa eleitoral;
-- manter sempre visivel o aviso de enquete espontanea;
-- preservar logs administrativos em area protegida;
-- remover ou anonimizar dados a pedido de titular, quando cabivel.
-
 ## 8. Conclusao
 
-Com as alteracoes implementadas, a pagina esta estruturada como **enquete publica espontanea de carater pessoal**, nao como pesquisa eleitoral cientifica. A conformidade preventiva depende de manter essa apresentacao clara, nao divulgar os dados como representativos do eleitorado e proteger os dados pessoais coletados.
+A Enquete de Opiniao Acre 2026 esta juridicamente orientada como **enquete espontanea de participacao voluntaria**. Esse formato e compativel com uso social, editorial e exploratorio, desde que nao seja apresentado como pesquisa eleitoral cientifica, nao afirme representatividade estatistica e mantenha aviso claro ao publico.
 
-A diretriz principal e: **tratar as parciais como respostas voluntarias recebidas, nunca como retrato estatistico do eleitorado do Acre.**
+A diretriz final e:
+
+> **Os resultados podem ser divulgados como parciais de uma enquete espontanea; nao devem ser divulgados como pesquisa eleitoral, amostra representativa ou retrato estatistico do eleitorado.**
 
 ## 9. Fontes oficiais consultadas
 
-1. Tribunal Superior Eleitoral - "Eleicoes 2026: pesquisas eleitorais devem ser registradas a partir desta quinta (1º)".  
+1. Tribunal Superior Eleitoral - Eleicoes 2026: pesquisas eleitorais devem ser registradas a partir desta quinta (1º).  
    https://www.tse.jus.br/comunicacao/noticias/2026/Janeiro/eleicoes-2026-pesquisas-eleitorais-devem-ser-registradas-a-partir-desta-quinta-1o
 
 2. Tribunal Superior Eleitoral - Resolucao TSE nº 23.600/2019.  
@@ -148,4 +133,3 @@ A diretriz principal e: **tratar as parciais como respostas voluntarias recebida
 
 6. Autoridade Nacional de Protecao de Dados - Perguntas Frequentes sobre LGPD.  
    https://www.gov.br/anpd/pt-br/acesso-a-informacao/perguntas-frequentes/perguntas-frequentes
-

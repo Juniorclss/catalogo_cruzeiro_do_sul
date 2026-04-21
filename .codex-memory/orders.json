@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T19:16:26.462Z",
+  "lastUpdatedAt": "2026-04-21T19:18:25.430Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2568,6 +2568,32 @@
         "pdf",
         "tse",
         "lgpd"
+      ],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-reforcar-relatorio-legal-com-enquete-espontanea-como-formato-legal",
+      "createdAt": "2026-04-21T19:18:25.430Z",
+      "updatedAt": "2026-04-21T19:18:25.430Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "sobre a parte enqyueente espontenea vc ta deixando muito pessoal, so vigore as leis lei ta, para espotanea, totaklmente legal , pasa uso de pesquissa sei la",
+      "summary": "Reforçar relatório legal com enquete espontânea como formato legal",
+      "normalizedTasks": [
+        "Reduzir tom pessoal/defensivo",
+        "reforçar base legal de enquete espontânea",
+        "destacar uso social/editorial/exploratório permitido"
+      ],
+      "filesTouched": [
+        "RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.md",
+        "RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.html"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "spo",
+        "legal",
+        "enquete"
       ],
       "nextSteps": [],
       "notes": ""
