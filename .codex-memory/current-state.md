@@ -1,20 +1,20 @@
 # Current State
 
-Updated: 2026-04-21T19:18:33.611Z
+Updated: 2026-04-21T19:19:13.209Z
 
 ## Active Goal
 
-- SPO: relatório legal reforçado
+- SPO: relatório legal linkado na página
 
 ## Summary
 
-Relatório legal reescrito em tom mais afirmativo: enquete espontânea é apresentada como formato admissível quando identificada como sondagem voluntária e não divulgada como pesquisa eleitoral científica/representativa.
+O aviso legal da enquete agora inclui link para RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.html, abrindo em nova aba para consulta/impressão em PDF.
 
 ## Next
 
-- Usar o HTML para salvar PDF; relatório agora foca nas leis e no uso social/editorial/exploratório da enquete.
+- Subir commit e aguardar deploy.
 
 ## Files In Focus
 
-- RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.md
-- RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.html
+- pesquisa-acre-2026.html
+- pesquisa-acre-2026.css

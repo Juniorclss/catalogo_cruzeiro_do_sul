@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-21T19:18:25.430Z",
+  "lastUpdatedAt": "2026-04-21T19:19:07.552Z",
   "orders": [
     {
       "id": "2026-04-20-implementar-palavras-da-rosa-no-jornal-com-card-lateral",
@@ -2594,6 +2594,31 @@
         "spo",
         "legal",
         "enquete"
+      ],
+      "nextSteps": [],
+      "notes": ""
+    },
+    {
+      "id": "2026-04-21-adicionar-link-do-relatorio-legal-html-no-aviso-da-enquete-espontanea",
+      "createdAt": "2026-04-21T19:19:07.552Z",
+      "updatedAt": "2026-04-21T19:19:07.552Z",
+      "status": "completed",
+      "source": "chat",
+      "rawRequest": "a versão html vc cola como link no final dessa questão sobre enquente espontea que vc ta acabando de montar",
+      "summary": "Adicionar link do relatório legal HTML no aviso da enquete espontânea",
+      "normalizedTasks": [
+        "Inserir link para RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.html no bloco legal da página",
+        "estilizar link"
+      ],
+      "filesTouched": [
+        "pesquisa-acre-2026.html",
+        "pesquisa-acre-2026.css"
+      ],
+      "assetRefs": [],
+      "tags": [
+        "spo",
+        "legal",
+        "relatorio"
       ],
       "nextSteps": [],
       "notes": ""

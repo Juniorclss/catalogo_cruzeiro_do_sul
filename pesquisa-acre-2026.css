@@ -1350,6 +1350,17 @@ body::after {
   line-height: 1.55;
 }
 
+.poll-legal-link {
+  width: fit-content;
+  color: #fff1b6;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .poll-method-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
