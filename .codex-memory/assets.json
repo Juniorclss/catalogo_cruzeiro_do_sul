@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdatedAt": "2026-04-20T02:04:40.072Z",
+  "lastUpdatedAt": "2026-04-21T22:51:05.958Z",
   "assets": [
     {
       "id": "recovered-chat-assets",
@@ -252,6 +252,44 @@
       "note": "Captura do usuario com circulos marcando problemas na hero desktop e na faixa inferior azul",
       "linkedOrderIds": [],
       "createdAt": "2026-04-20T02:04:40.072Z"
+    },
+    {
+      "id": "pubpaid-v2-street-bg-v1-png",
+      "kind": "image",
+      "path": "assets/pubpaid-v2-street-bg-v1.png",
+      "source": "workspace",
+      "note": "Background bitmap pixel art da rua/fachada PubPaid 2.0, gerado para substituir o desenho por retângulos no canvas.",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-21T19:43:33.116Z"
+    },
+    {
+      "id": "latest-run-md",
+      "kind": "report",
+      "path": ".codex-temp/real-agents/latest-run.md",
+      "source": "workspace",
+      "note": "Primeira rodada operacional dos agentes reais do projeto",
+      "linkedOrderIds": [
+        "2026-04-21-listar-todos-os-agentes-subagentes-equipes-locais-prompts-do-copilot-agentes-vis"
+      ],
+      "createdAt": "2026-04-21T20:34:44.876Z"
+    },
+    {
+      "id": "nerd-hud-mobile-fixed-full-png",
+      "kind": "image",
+      "path": ".codex-temp/pubpaid-phaser-review/nerd-hud-mobile-fixed-full.png",
+      "source": "workspace",
+      "note": "Captura mobile full-page da PubPaid Phaser após corrigir HUD nerd cortado",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-21T22:51:05.931Z"
+    },
+    {
+      "id": "nerd-hud-desktop-png",
+      "kind": "image",
+      "path": ".codex-temp/pubpaid-phaser-review/nerd-hud-desktop.png",
+      "source": "workspace",
+      "note": "Captura desktop da PubPaid Phaser com HUD do Escritório Nerd integrado",
+      "linkedOrderIds": [],
+      "createdAt": "2026-04-21T22:51:05.958Z"
     }
   ]
 }

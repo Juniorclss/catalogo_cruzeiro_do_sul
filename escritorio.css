@@ -1996,13 +1996,18 @@ body.office-page {
   flex: 1;
   min-height: 320px;
   margin: 0;
-  padding: 14px;
+  padding: 16px 18px;
   overflow: auto;
-  border: 1px solid #2f3848;
-  background: #070b12;
+  border: 1px solid #263246;
+  background:
+    linear-gradient(90deg, rgba(94, 234, 212, 0.035), transparent 36%),
+    #070b12;
   color: #d8facc;
-  font: 13px/1.6 Consolas, "Courier New", monospace;
+  font: 700 13px/1.72 Consolas, "Courier New", monospace;
   white-space: pre-wrap;
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 250, 204, 0.03),
+    inset 0 18px 40px rgba(0, 0, 0, 0.24);
 }
 
 .office-terminal-output code {
@@ -3858,5 +3863,183 @@ body[data-office-theme="nerd-arcade"] .office-vscode-frame {
   .office-inventory-summary,
   .office-support-selection {
     grid-template-columns: 1fr;
+  }
+}
+
+.nerd-team-chat {
+  position: fixed;
+  right: 18px;
+  bottom: 92px;
+  z-index: 80;
+  font-family: "Chakra Petch", "Segoe UI", sans-serif;
+}
+
+.nerd-team-chat-toggle {
+  min-height: 44px;
+  border: 1px solid rgba(80, 239, 255, 0.42);
+  border-radius: 999px;
+  padding: 0 16px;
+  color: #06101a;
+  background: linear-gradient(135deg, #50efff, #8ef0a3);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+}
+
+.nerd-team-chat-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  display: none;
+  width: min(420px, calc(100vw - 28px));
+  max-height: min(690px, calc(100vh - 130px));
+  overflow: hidden;
+  border: 1px solid rgba(80, 239, 255, 0.28);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(7, 11, 25, 0.98), rgba(25, 12, 38, 0.96));
+  color: #fff6dc;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+}
+
+.nerd-team-chat.is-open .nerd-team-chat-panel {
+  display: grid;
+  grid-template-rows: auto minmax(170px, 1fr) auto auto;
+}
+
+.nerd-team-chat-panel header,
+.nerd-team-chat-form {
+  padding: 14px;
+}
+
+.nerd-team-chat-panel header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nerd-team-chat-panel header span,
+.nerd-team-chat-form label {
+  display: block;
+  color: #50efff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nerd-team-chat-panel header strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.nerd-team-chat-panel header button,
+.nerd-team-chat-form button,
+.nerd-team-chat-quick button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #fff6dc;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.nerd-team-chat-panel header button {
+  align-self: flex-start;
+  padding: 8px 10px;
+}
+
+.nerd-team-chat-log {
+  display: grid;
+  gap: 10px;
+  overflow: auto;
+  padding: 14px;
+}
+
+.nerd-chat-message {
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.nerd-chat-message.is-user {
+  margin-left: 32px;
+  border-color: rgba(255, 208, 109, 0.24);
+}
+
+.nerd-chat-message.is-agent {
+  margin-right: 22px;
+  border-color: rgba(80, 239, 255, 0.22);
+}
+
+.nerd-chat-message strong,
+.nerd-chat-message span {
+  display: block;
+}
+
+.nerd-chat-message span {
+  margin-top: 3px;
+  color: rgba(235, 239, 255, 0.65);
+  font-size: 0.82rem;
+}
+
+.nerd-chat-message p {
+  margin: 7px 0 0;
+  color: rgba(255, 246, 220, 0.88);
+  line-height: 1.45;
+}
+
+.nerd-team-chat-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 0 14px 12px;
+}
+
+.nerd-team-chat-quick button {
+  padding: 8px 10px;
+  color: #ffd06d;
+  font-size: 0.85rem;
+}
+
+.nerd-team-chat-form {
+  display: grid;
+  gap: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nerd-team-chat-form textarea {
+  width: 100%;
+  margin-top: 7px;
+  resize: vertical;
+  border: 1px solid rgba(80, 239, 255, 0.22);
+  border-radius: 14px;
+  padding: 10px;
+  color: #fff6dc;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.nerd-team-chat-form button {
+  min-height: 42px;
+  color: #06101a;
+  background: linear-gradient(135deg, #50efff, #8ef0a3);
+  font-weight: 900;
+}
+
+@media (max-width: 640px) {
+  .nerd-team-chat {
+    right: 10px;
+    left: 10px;
+    bottom: 76px;
+  }
+
+  .nerd-team-chat-toggle {
+    width: 100%;
+  }
+
+  .nerd-team-chat-panel {
+    right: 0;
+    left: 0;
+    width: auto;
   }
 }

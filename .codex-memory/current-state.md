@@ -1,20 +1,15 @@
 # Current State
 
-Updated: 2026-04-21T19:19:13.209Z
+Updated: 2026-04-21T23:23:07.112Z
 
 ## Active Goal
 
-- SPO: relatório legal linkado na página
+- PubPaid com chat público do Escritório Nerd
 
 ## Summary
 
-O aviso legal da enquete agora inclui link para RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.html, abrindo em nova aba para consulta/impressão em PDF.
+Foi adicionado nerd-team-chat.js, um chat público sem senha para conversar com agentes desenvolvedores sobre PubPaid, sprites, Phaser, física, HUD, QA, mobile e próximos passos. PubPaid e Escritório Nerd carregam o widget; o menu do PubPaid tem botão para falar com os agentes e link para conhecer a equipe.
 
 ## Next
 
-- Subir commit e aguardar deploy.
-
-## Files In Focus
-
-- pesquisa-acre-2026.html
-- pesquisa-acre-2026.css
+- Evoluir o chat para respostas mais ricas por agente e seguir no jogo: spritesheets animáveis e primeira mesa/minigame Phaser real.

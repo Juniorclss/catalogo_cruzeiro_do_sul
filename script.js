@@ -71,6 +71,9 @@ const heroOfficeBubble = document.querySelector("[data-hero-office-bubble]");
 const heroOfficeFeedItems = [...document.querySelectorAll("[data-hero-office-item]")];
 const heroTopicTrack = document.querySelector("[data-hero-topic-track]");
 const heroTopicDots = document.querySelector("[data-hero-topic-dots]");
+const communityAgentForm = document.querySelector("#community-agent-form");
+const communityAgentFeedback = document.querySelector("#community-agent-feedback");
+const communityReportList = document.querySelector("#community-report-list");
 let heroDesktopHighlightItems = [];
 const cadernoCards = [...document.querySelectorAll(".cadernos-grid .caderno-card")];
 const archiveBrowserLaunchers = [...document.querySelectorAll("[data-open-archive-browser]")];
@@ -1822,6 +1825,101 @@ const getAnalyticsContext = () => {
   }
 };
 
+const buildCommunityReportCard = (report = {}) => {
+  const article = document.createElement("article");
+  const header = document.createElement("header");
+  const badge = document.createElement("span");
+  const title = document.createElement("strong");
+  const message = document.createElement("p");
+  const footer = document.createElement("small");
+
+  article.className = "community-report-card";
+  badge.textContent = "não checado";
+  title.textContent = report.neighborhood || "Bairro não informado";
+  message.textContent = report.message || "";
+  footer.textContent = `${report.name || "Morador local"} • participação comunitária voluntária`;
+
+  header.append(badge, title);
+  article.append(header, message, footer);
+  return article;
+};
+
+const renderCommunityReports = (items = []) => {
+  if (!communityReportList) return;
+
+  communityReportList.innerHTML = "";
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "community-report-empty";
+    empty.textContent = "Ainda não há relatos comunitários aguardando checagem neste bloco.";
+    communityReportList.appendChild(empty);
+    return;
+  }
+
+  items.forEach((item) => {
+    communityReportList.appendChild(buildCommunityReportCard(item));
+  });
+};
+
+const loadCommunityReports = async () => {
+  if (!communityReportList) return;
+
+  try {
+    const response = await fetch("/api/community/reports?limit=6", {
+      headers: { Accept: "application/json" }
+    });
+    const payload = await response.json();
+    renderCommunityReports(Array.isArray(payload.items) ? payload.items : []);
+  } catch (_error) {
+    renderCommunityReports([]);
+  }
+};
+
+const submitCommunityReport = async (event) => {
+  event.preventDefault();
+  if (!communityAgentForm || !communityAgentFeedback) return;
+
+  const formData = new FormData(communityAgentForm);
+  const message = String(formData.get("message") || "").trim();
+  if (message.length < 12) {
+    communityAgentFeedback.textContent = "Conte um pouco mais para a equipe entender o que precisa verificar.";
+    return;
+  }
+
+  communityAgentFeedback.textContent = "Agente recebendo o relato como não checado...";
+
+  const analyticsContext = getAnalyticsContext();
+  const payload = {
+    name: String(formData.get("name") || "").trim(),
+    contact: String(formData.get("contact") || "").trim(),
+    neighborhood: String(formData.get("neighborhood") || "").trim(),
+    message,
+    topic: "Relato comunitário",
+    sourcePage: window.location.pathname,
+    visitorId: analyticsContext.visitorId,
+    sessionId: analyticsContext.sessionId
+  };
+
+  try {
+    const response = await fetch("/api/community/reports", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json();
+    if (!response.ok || !result.ok) {
+      throw new Error(result.error || "Não foi possível registrar o relato.");
+    }
+
+    communityAgentFeedback.textContent =
+      "Relato registrado como não checado. Ele entrou na fila dos agentes para verificação.";
+    communityAgentForm.reset();
+    await loadCommunityReports();
+  } catch (error) {
+    communityAgentFeedback.textContent = error.message || "Falha ao registrar. Tente novamente.";
+  }
+};
+
 let pointerX = window.innerWidth / 2;
 let pointerY = window.innerHeight / 2;
 let scrollY = window.scrollY;
@@ -2882,6 +2980,33 @@ const ensureMobileHomeLeadLayout = () => {
 const heroDailyPersonFocusPattern =
   /\b(presidente|governador|governadora|prefeito|prefeita|senador|senadora|deputado|deputada|vereador|vereadora|delegado|delegada|secretario|secretaria|ministro|ministra|professor|professora|aluno|aluna|estudante|atleta|jogador|jogadora|cantor|cantora|artista|influencer|criador|criadora|empresario|empresaria|medico|medica|familia|mulher|homem|pessoa|equipe|time|colegio|posse|reuniao|entrevista)\b/;
 
+const normalizeHeroSafeFocusPosition = (focusPosition = "", { hasPeople = false } = {}) => {
+  const rawFocus = String(focusPosition || "").trim();
+  const fallback = hasPeople ? "center 34%" : "center 42%";
+  if (!rawFocus) {
+    return fallback;
+  }
+
+  const tokens = rawFocus.split(/\s+/).filter(Boolean);
+  const xToken = tokens[0] || "center";
+  const yToken = tokens[1] || "";
+  const yMatch = yToken.match(/^(-?\d+(?:\.\d+)?)%$/);
+
+  if (!yMatch) {
+    return rawFocus;
+  }
+
+  const yValue = Number(yMatch[1]);
+  if (!Number.isFinite(yValue)) {
+    return fallback;
+  }
+
+  const safeMin = hasPeople ? 28 : 24;
+  const safeMax = hasPeople ? 62 : 70;
+  const safeY = Math.min(safeMax, Math.max(safeMin, yValue));
+  return `${xToken} ${safeY}%`;
+};
+
 const getHeroTourismDayKey = () => {
   try {
     return new Intl.DateTimeFormat("en-CA", {
@@ -2912,16 +3037,17 @@ const buildDailyOrderedHeroItems = (items = []) =>
 
 const getHeroDailyArticleFocus = (article = {}) => {
   const manualFocus = resolveArticleImageFocus(article, "").trim();
-  if (manualFocus) {
-    return manualFocus;
-  }
-
   const haystack = normalizeText(
     [article.title, article.lede, article.summary, article.category, article.sourceName].join(" ")
   );
+  const hasPeople = heroDailyPersonFocusPattern.test(haystack);
 
-  if (heroDailyPersonFocusPattern.test(haystack)) {
-    return "center 12%";
+  if (manualFocus) {
+    return normalizeHeroSafeFocusPosition(manualFocus, { hasPeople });
+  }
+
+  if (hasPeople) {
+    return "center 34%";
   }
 
   return "center 34%";
@@ -3018,12 +3144,16 @@ const buildHeroTourismRuntimePool = () => {
     .map((article) => {
       const areaKey = getHeroAreaKey(article);
       const imageUrl = sanitizeImageUrl(getArticleDisplayImageUrl(article, "hero"));
+      const storyText = normalizeText(
+        [article.title, article.lede, article.summary, article.category, article.sourceName].join(" ")
+      );
       return {
         title: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
         note: truncateCopy(article.sourceName || article.sourceLabel || "Fonte local", 46),
         proxyUrl: imageUrl,
         fallbackUrl: imageUrl,
         focusPosition: getHeroDailyArticleFocus(article),
+        hasPeopleScene: heroDailyPersonFocusPattern.test(storyText),
         articleTitle: article.title || "Notícia em destaque",
         articleCategory: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
         articleSummary: truncateCopy(article.lede || article.summary || "Resumo da notícia em destaque.", 168),
@@ -3081,12 +3211,16 @@ const buildHeroTourismFallbackPool = () => {
     .map((article) => {
       const areaKey = getHeroAreaKey(article);
       const imageUrl = sanitizeImageUrl(getArticleDisplayImageUrl(article, "hero"));
+      const storyText = normalizeText(
+        [article.title, article.lede, article.summary, article.category, article.sourceName].join(" ")
+      );
       return {
         title: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
         note: truncateCopy(article.sourceName || article.sourceLabel || "Fonte local", 46),
         proxyUrl: imageUrl,
         fallbackUrl: imageUrl,
         focusPosition: getHeroDailyArticleFocus(article),
+        hasPeopleScene: heroDailyPersonFocusPattern.test(storyText),
         articleTitle: article.title || "Notícia em destaque",
         articleCategory: heroDailyAreaLabels[areaKey] || article.category || "Area em destaque",
         articleSummary: truncateCopy(article.lede || article.summary || "Resumo da notícia em destaque.", 168),
@@ -3268,7 +3402,9 @@ const renderHeroDesktopHighlights = (items = []) => {
       photoNode.style.backgroundImage = imageUrl
         ? `linear-gradient(180deg, rgba(8, 20, 38, 0.04), rgba(8, 20, 38, 0.3)), url("${imageUrl}")`
         : "linear-gradient(135deg, rgba(64, 109, 160, 0.7), rgba(15, 39, 66, 0.92))";
-      photoNode.style.backgroundPosition = item.focusPosition || "center 42%";
+      photoNode.style.backgroundPosition = normalizeHeroSafeFocusPosition(item.focusPosition, {
+        hasPeople: Boolean(item.hasPeopleScene)
+      });
       photoNode.style.backgroundSize = "cover";
     }
   });
@@ -3416,7 +3552,9 @@ const paintHeroTourismBackdrop = (slideNode, photo) => {
       linear-gradient(90deg, rgba(10, 23, 45, 0.4), rgba(10, 23, 45, 0.08) 40%, rgba(10, 23, 45, 0.48)),
       url("${resolvedUrl}")
     `;
-    slideNode.style.backgroundPosition = photo.focusPosition || "center 44%";
+    slideNode.style.backgroundPosition = normalizeHeroSafeFocusPosition(photo.focusPosition, {
+      hasPeople: Boolean(photo.hasPeopleScene)
+    });
     slideNode.style.backgroundSize = "cover";
     slideNode.dataset.heroBackdropReady = "true";
     return true;
@@ -8137,6 +8275,11 @@ const attachCommentSubmission = () => {
   });
 };
 
+const attachCommunitySignalFlow = () => {
+  loadCommunityReports();
+  communityAgentForm?.addEventListener("submit", submitCommunityReport);
+};
+
 const isFounderPlan = (value = "") => String(value || "").trim() === "fundadores";
 
 const buildSupporterTxid = () =>
@@ -8538,6 +8681,7 @@ const attachSubscriptionSubmission = () => {
 };
 
 attachCommentSubmission();
+attachCommunitySignalFlow();
 attachSubscriptionSubmission();
 attachAgentMailFlow();
 renderDailyTrendingBuzz();

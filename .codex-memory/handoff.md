@@ -1,15 +1,10 @@
 # Handoff
 
-Updated: 2026-04-21T19:19:13.235Z
+Updated: 2026-04-21T23:23:07.280Z
 
-Adicionado link 'Abrir relatório legal da enquete espontânea' no bloco .poll-legal-card de pesquisa-acre-2026.html, com estilo .poll-legal-link.
+Chat público do Escritório Nerd integrado ao PubPaid: novo nerd-team-chat.js, botão 'Falar com agentes sobre o jogo' no menu do PubPaid, botão 'Falar com a equipe' no Escritório Nerd e estilos adicionados em pubpaid.css/escritorio.css.
 
 ## Next
 
-- Deploy do commit e checagem visual simples.
-
-## Files In Focus
-
-- pesquisa-acre-2026.html
-- pesquisa-acre-2026.css
-- .codex-memory/orders.json
+- Refinar respostas por agente
+- reduzir duplicação de CSS se virar componente global e continuar sprites/minigames no PubPaid Phaser.

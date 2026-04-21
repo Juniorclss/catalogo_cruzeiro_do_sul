@@ -203,12 +203,25 @@
                 </div>
               </div>
 
-              <aside class="office-terminal-panel" id="terminal" aria-label="Terminal lateral do escritório de ninjas">
+              <aside
+                class="office-terminal-panel"
+                id="terminal"
+                data-office-terminal-panel
+                aria-label="Terminal lateral do escritório de ninjas"
+              >
                 <div class="office-terminal-head">
                   <span>terminal 24h</span>
                   <strong>Cofre de sprites 2D</strong>
                 </div>
-                <div class="office-terminal-stream" data-office-terminal-stream aria-live="polite"></div>
+                <div class="office-terminal-avatar" data-terminal-avatar aria-hidden="true"></div>
+                <pre class="office-terminal-output"><code data-terminal-output>&gt; boot ninja/vault-24h
+status: 51 agentes online
+fonte: cofre local + CHECKPUBPAID + fila real
+acao: passe o mouse em um agente para ver o processo atual</code></pre>
+                <div class="office-live-panel" aria-live="polite">
+                  <span>rodando 24h</span>
+                  <strong>Terminal conectado ao cofre visual e aos agentes reais.</strong>
+                </div>
               </aside>
             </div>
           </div>

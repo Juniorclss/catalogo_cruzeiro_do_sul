@@ -684,6 +684,8 @@
     visualBoost: false,
     terminalMode: false,
     gossipLog: [],
+    realAgentsReady: false,
+    realAgentMap: new Map(),
     activeAgentId: null,
     selectedSupportItemId: supportCatalog[0]?.id || null,
     inventory: []
@@ -1775,23 +1777,126 @@
     return wrapper;
   }
 
+  function slugifyAgentValue(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 90);
+  }
+
+  function getRealAgentSlug(agent) {
+    const realOfficeKey = officeKey === "editorial" ? "editorial-hq" : officeKey;
+    return slugifyAgentValue(`${realOfficeKey}-${agent.id || agent.name}`);
+  }
+
+  function getRealAgentProcess(agent) {
+    if (!agent || !officeState.realAgentMap) return null;
+    return officeState.realAgentMap.get(getRealAgentSlug(agent)) || null;
+  }
+
+  function buildRealAgentMap(payload) {
+    const queue = Array.isArray(payload?.queue) ? payload.queue : [];
+    const agentRegistry = Array.isArray(payload?.agents) ? payload.agents : [];
+    const registryBySlug = new Map(agentRegistry.map((item) => [item.slug, item]));
+    const map = new Map();
+
+    queue.forEach((item) => {
+      if (!item?.slug) return;
+      map.set(item.slug, {
+        ...registryBySlug.get(item.slug),
+        ...item,
+        registry: registryBySlug.get(item.slug) || null
+      });
+    });
+
+    return map;
+  }
+
+  async function loadRealAgentProcesses() {
+    try {
+      const response = await fetch("/api/real-agents", {
+        headers: { Accept: "application/json" }
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || "real-agents indisponivel");
+      }
+
+      officeState.realAgentMap = buildRealAgentMap(payload);
+      officeState.realAgentsReady = true;
+      const activeAgent = agents.find((item) => item.id === officeState.activeAgentId) || agents[0];
+      if (activeAgent) {
+        renderTerminal(activeAgent, "Terminal real conectado aos agentes operacionais do jornal.");
+      }
+      setFeedText(`Terminal real conectado: ${payload.summary?.totalAgents || officeState.realAgentMap.size} agentes com fila operacional ativa.`);
+    } catch (_error) {
+      officeState.realAgentsReady = false;
+      setFeedText("Terminal visual ativo. A fila real dos agentes ainda nao respondeu nesta tela.");
+    }
+  }
+
+  function getTerminalCommand(agent, realProcess) {
+    const scope = realProcess?.officeKey || officeKey || "office";
+    return `> run ${scope}/${agent.id}`;
+  }
+
+  function getTerminalStatus(agent, realProcess, fallbackLine) {
+    const assignment = realProcess?.assignment || {};
+    return assignment.action || getAgentTask(agent) || fallbackLine || "em observacao";
+  }
+
+  function getTerminalPipeline(agent, realProcess) {
+    const registry = realProcess?.registry || realProcess || {};
+    return registry.specialty || agent.specialty || "monitoramento do jornal";
+  }
+
+  function getTerminalStack(agent, realProcess) {
+    const registry = realProcess?.registry || realProcess || {};
+    const capabilities = Array.isArray(registry.capabilities) ? registry.capabilities.slice(0, 4) : [];
+    const skills = Array.isArray(agent.skills) ? agent.skills.slice(0, 4) : [];
+    return [...new Set([...skills, ...capabilities])].join(", ");
+  }
+
+  function getTerminalLog(agent, realProcess, line) {
+    const assignment = realProcess?.assignment || {};
+    return assignment.idea || line || agent.lines?.[0] || "Processo ativo, aguardando nova confirmacao.";
+  }
+
+  function getTerminalMonitor(realProcess) {
+    const assignment = realProcess?.assignment || {};
+    return assignment.monitor || "monitorando jornal, revisao e fila operacional";
+  }
+
+  function getTerminalDeliverable(realProcess) {
+    const assignment = realProcess?.assignment || {};
+    return assignment.deliverable || "observacao operacional";
+  }
+
   function renderTerminal(agent, line = "") {
     if (!terminalOutput || !agent) return;
     officeState.activeAgentId = agent.id;
     const skills = agent.skills.join(", ");
     const evaluation = getAgentEvaluation(agent);
+    const realProcess = getRealAgentProcess(agent);
+    const realStatus = officeState.realAgentsReady ? "conectado ao runtime real" : "aguardando runtime real";
     terminalOutput.textContent = [
-      `> run office/${agent.id}`,
+      getTerminalCommand(agent, realProcess),
       `worker: ${agent.name}`,
       `modulo: ${agent.title}`,
-      `pipeline: ${agent.specialty}`,
-      `status: ${getAgentTask(agent)}`,
+      `pipeline: ${getTerminalPipeline(agent, realProcess)}`,
+      `status: ${getTerminalStatus(agent, realProcess, line)}`,
       `runtime: codigo ativo 24h`,
+      `terminal: ${realStatus}`,
       `avaliacao: ${evaluation.score} pts (${getAgentEvaluationLevel(agent)})`,
       `neural: foco ${formatPercent01(evaluation.neural.focus)} | qualidade ${formatPercent01(evaluation.neural.quality)} | ritmo ${formatPercent01(evaluation.neural.speed)}`,
       `conversa: ${getAgentConversationSummary(agent)}`,
-      `stack: ${skills}`,
-      `log: ${line || agent.lines[0]}`
+      `entrega: ${getTerminalDeliverable(realProcess)}`,
+      `monitor: ${getTerminalMonitor(realProcess)}`,
+      `stack: ${getTerminalStack(agent, realProcess) || skills}`,
+      `log: ${getTerminalLog(agent, realProcess, line)}`
     ].join("\n");
 
     if (terminalAvatar) {
@@ -2279,6 +2384,7 @@
     officeConfig.terminalWelcome ||
       "Codigo do escritorio em execucao 24 horas. Passe o mouse nos agentes para acompanhar o que cada frente esta rodando agora."
   );
+  loadRealAgentProcesses();
 
   loadOfficeNews().finally(() => {
     if (!prefersReducedMotion) {

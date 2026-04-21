@@ -204,6 +204,8 @@
                 Administrativo
               </a>
               <a class="top-strip-secondary" href="./pesquisa-acre-2026.html">SPO</a>
+              <a class="top-strip-secondary" href="./real-agents.html">Agentes Reais</a>
+              <a class="top-strip-secondary top-strip-mockup-link" href="/index2.html?v=20260421a">Mokup</a>
               <a class="top-strip-secondary" href="./admin/admin-dashboard.html">Tracer</a>
             </div>
           </div>
@@ -229,6 +231,7 @@
               </a>
               <a href="./games.html">Games</a>
               <a href="./escritorio.html">Escritório</a>
+              <a href="./real-agents.html">Agentes Reais</a>
               <a href="./escritorio-arte.html">Arte/Game Design</a>
               <a href="./escritorio-ninjas.html">Ninjas</a>
               <a href="./esttiles.html">Esttíles</a>
@@ -291,6 +294,7 @@
                 <span>Entrar no game</span>
               </a>
               <a href="./escritorio.html">Escritório central</a>
+              <a href="./real-agents.html">Agentes reais</a>
               <a href="./escritorio-arte.html">Escritório de arte</a>
               <a href="./escritorio-ninjas.html">Escritório ninja</a>
               <a href="./esttiles.html">Esttíles / Moda</a>
@@ -598,16 +602,81 @@
             <small data-hero-daily-summary>Resumo da notícia principal selecionada para esta editoria.</small>
           </a>
         </section>
+        <section
+          class="community-signal-section reveal"
+          id="participacao-comunitaria"
+          aria-labelledby="community-signal-title"
+        >
+          <div class="community-signal-copy">
+            <p class="community-signal-kicker">participação comunitária voluntária</p>
+            <h2 id="community-signal-title">Conte para o agente o que aconteceu no seu bairro.</h2>
+            <p>
+              Relatos enviados pela população aparecem aqui apenas como informação comunitária
+              <strong>não checada</strong>. Quando a equipe verifica, o conteúdo sai deste bloco e
+              pode virar checagem, serviço ou notícia em área própria.
+            </p>
+          </div>
+
+          <div class="community-agent-console">
+            <div class="community-agent-avatar" aria-hidden="true">
+              <span class="community-agent-head"></span>
+              <span class="community-agent-body"></span>
+              <span class="community-agent-arm arm-left"></span>
+              <span class="community-agent-arm arm-right"></span>
+              <span class="community-agent-badge">?</span>
+            </div>
+            <form class="community-agent-form" id="community-agent-form">
+              <label>
+                Bairro ou local
+                <input name="neighborhood" maxlength="90" placeholder="Ex: Miritizal, Centro, Boca da Alemanha" />
+              </label>
+              <label>
+                O que precisa ser verificado?
+                <textarea
+                  name="message"
+                  rows="4"
+                  maxlength="900"
+                  placeholder="Ex: olha, isso aconteceu no bairro e seria bom verificar..."
+                  required
+                ></textarea>
+              </label>
+              <div class="community-agent-grid">
+                <label>
+                  Nome público
+                  <input name="name" maxlength="80" placeholder="Opcional" />
+                </label>
+                <label>
+                  Contato para checagem
+                  <input name="contact" maxlength="100" placeholder="Opcional, não aparece no card" />
+                </label>
+              </div>
+              <button type="submit">Enviar relato não checado</button>
+              <p class="community-agent-feedback" id="community-agent-feedback" role="status">
+                O agente recebe, registra como não checado e manda para fila de verificação.
+              </p>
+            </form>
+          </div>
+
+          <div class="community-signal-board" aria-label="Relatos comunitários ainda não checados">
+            <div class="community-signal-board-head">
+              <span>informações da população</span>
+              <strong>Aguardando checagem</strong>
+            </div>
+            <div class="community-report-list" id="community-report-list"></div>
+          </div>
+        </section>
         <section class="office-play-strip reveal" aria-label="Acesso rápido aos escritórios e ao jogo PubPaid">
           <article class="office-play-card office-play-card-offices">
             <span class="office-play-kicker">Visite nossos escritórios</span>
             <strong>Conheça os agentes, as equipes e os ambientes que movem o portal.</strong>
             <p>
               Entre nos escritórios públicos para ver o time editorial, arte/game design,
-              ninjas e moda trabalhando em cada frente.
+              ninjas e moda trabalhando em cada frente. O painel dos agentes reais mostra a fila
+              operacional que eles geram a partir das notícias do jornal.
             </p>
             <div class="office-play-actions">
               <a href="./escritorio.html">Escritório central</a>
+              <a href="./real-agents.html">Agentes reais</a>
               <a href="./escritorio-arte.html">Arte/Game Design</a>
               <a href="./escritorio-ninjas.html">Ninjas</a>
               <a href="./esttiles.html">Esttíles</a>
@@ -1559,6 +1628,44 @@
             </p>
           </div>
 
+          <section class="election-survey-spotlight reveal" aria-label="Pesquisa eleitoral do jornal">
+            <div class="election-survey-spotlight-copy">
+              <p class="panel-label">Pesquisa eleitoral do jornal</p>
+              <h3>Leitura local refeita para aparecer primeiro e com método mais claro.</h3>
+              <p>
+                Reorganizada com foco editorial, a pesquisa do portal agora entra no topo da cobertura
+                eleitoral para entregar intenção de voto, humor do eleitorado e prioridades públicas
+                numa leitura mais limpa, mais forte e mais útil para o leitor.
+              </p>
+              <div class="election-survey-spotlight-tags" aria-label="Especialistas reunidos">
+                <span>especialistas em pesquisa de opinião</span>
+                <span>leitura estatística de tendência</span>
+                <span>edição local e recorte regional</span>
+              </div>
+            </div>
+            <div class="election-survey-spotlight-panel">
+              <article class="election-survey-stat-card">
+                <span>Radar atual</span>
+                <strong>4 cargos monitorados</strong>
+                <p>Governador, Senado, Câmara Federal e Assembleia em uma só vitrine pública.</p>
+              </article>
+              <article class="election-survey-stat-card">
+                <span>Leitura média</span>
+                <strong>Cidade + voto + humor</strong>
+                <p>A pesquisa cruza preferência declarada com observação qualitativa do eleitor.</p>
+              </article>
+              <article class="election-survey-stat-card">
+                <span>Fluxo editorial</span>
+                <strong>Consulta rápida e parcial visível</strong>
+                <p>O leitor entende o cenário sem sair da editoria e sem confundir com a SPO.</p>
+              </article>
+              <div class="election-survey-spotlight-actions">
+                <a class="solid-button" href="#election-candidates">Ver nomes monitorados</a>
+                <a class="outline-button" href="#election-results-title">Abrir parciais</a>
+              </div>
+            </div>
+          </section>
+
           <div class="election-controls reveal">
             <button class="election-filter is-active" type="button" data-office="governador">Governador</button>
             <button class="election-filter" type="button" data-office="senador">Senador</button>
@@ -1716,27 +1823,6 @@
               cidadã. Não tem validação estatística científica, não substitui pesquisa
               registrada e não representa candidatura oficial.
             </p>
-            <section class="election-journal-poll reveal" id="electionJournalPoll" aria-label="Pesquisa do jornal">
-              <div class="election-journal-poll-head">
-                <p class="panel-label">Pesquisa do jornal</p>
-                <h4>Consulta pública simples na camada eleitoral</h4>
-                <p>
-                  A leitura rápida do portal continua aqui na editoria de eleições. A SPO fica separada
-                  como rotina completa de coleta, painel e administração.
-                </p>
-              </div>
-              <div class="election-journal-poll-body">
-                <article class="election-journal-poll-card">
-                  <span>Portal</span>
-                  <strong>Abra a pesquisa pública do jornal</strong>
-                  <p>Vote por cargo, acompanhe a parcial e volte para a cobertura sem misturar com a SPO.</p>
-                </article>
-                <div class="election-journal-poll-actions">
-                  <a class="solid-button" href="./pesquisa-acre-2026.html">Abrir pesquisa</a>
-                  <a class="outline-button" href="#elections">Continuar na editoria</a>
-                </div>
-              </div>
-            </section>
           </article>
         </section>
 
