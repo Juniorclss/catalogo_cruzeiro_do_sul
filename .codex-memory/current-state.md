@@ -1,22 +1,20 @@
 # Current State
 
-Updated: 2026-04-21T18:58:40.877Z
+Updated: 2026-04-21T19:16:34.770Z
 
 ## Active Goal
 
-- SPO: avisos legais de enquete pessoal
+- SPO: relatório legal pronto
 
 ## Summary
 
-Página da SPO ajustada para linguagem de enquete/sondagem espontânea pessoal, sem caráter científico, sem plano amostral, sem representatividade estatística e não registrada no TSE. Aviso explica uso do Google para limitar uma resposta por conta e não exibir dados pessoais nas parciais.
+Relatório legal da Enquete de Opinião Acre 2026 criado em Markdown e HTML imprimível, com fundamentos eleitorais TSE/Lei 9.504/Res. 23.600 e cautelas LGPD/ANPD.
 
 ## Next
 
-- Subir commit e confirmar no Render a versão legalnotice.
+- Abrir o HTML no navegador e imprimir/salvar como PDF quando precisar enviar.
 
 ## Files In Focus
 
-- pesquisa-acre-2026.html
-- pesquisa-acre-2026.css
-- pesquisa-acre-2026.js
-- server.js
+- RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.md
+- RELATORIO_LEGAL_ENQUETE_SPO_ACRE_2026.html
