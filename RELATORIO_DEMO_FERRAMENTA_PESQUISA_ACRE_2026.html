@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo de Relatório | Ferramenta Pesquisa Acre 2026</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #122033;
+        --muted: #59697b;
+        --line: #dce4ee;
+        --paper: #f6f8fb;
+        --blue: #2457d6;
+        --green: #008a72;
+        --amber: #b87800;
+        --red: #b63d2f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.55;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 36px 0 52px;
+      }
+
+      header,
+      section {
+        margin-bottom: 22px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 14px 36px rgba(23, 38, 58, 0.08);
+      }
+
+      header {
+        padding: 28px;
+        border-top: 6px solid var(--blue);
+      }
+
+      section {
+        padding: 22px;
+      }
+
+      .kicker {
+        margin: 0 0 8px;
+        color: var(--blue);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.1;
+      }
+
+      h1 {
+        max-width: 820px;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+      }
+
+      h2 {
+        margin-bottom: 14px;
+        font-size: 1.35rem;
+      }
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      p {
+        margin: 0.6rem 0 0;
+        color: var(--muted);
+      }
+
+      .notice {
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-left: 4px solid var(--amber);
+        background: #fff8e6;
+        color: #6d4a00;
+        font-weight: 700;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fbfdff;
+      }
+
+      .card strong {
+        display: block;
+        font-size: 1.65rem;
+        line-height: 1.1;
+      }
+
+      .card span {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .bar-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .bar-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .bar-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--ink);
+        font-size: 0.92rem;
+      }
+
+      .track {
+        height: 12px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e8eef6;
+      }
+
+      .fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--blue), var(--green));
+      }
+
+      .fill.red {
+        background: linear-gradient(90deg, var(--red), var(--amber));
+      }
+
+      .columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .analysis {
+        display: grid;
+        gap: 12px;
+      }
+
+      .analysis article {
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fbfdff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 12px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+        font-size: 0.92rem;
+      }
+
+      th {
+        background: #edf3fb;
+        color: #30445e;
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        main {
+          width: auto;
+          padding: 0;
+        }
+
+        header,
+        section {
+          break-inside: avoid;
+          box-shadow: none;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .grid,
+        .columns {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="kicker">Demonstração de ferramenta de relatórios</p>
+        <h1>Simulação política da Pesquisa Acre 2026 com 100 mil respostas</h1>
+        <p>
+          Cenário fictício criado apenas para demonstrar como o relatório analítico se comportaria com grande volume
+          de respostas e cruzamentos políticos.
+        </p>
+        <p class="notice">
+          Dados totalmente simulados. Não representam pesquisa real, não possuem caráter científico e não devem ser
+          divulgados como resultado eleitoral.
+        </p>
+      </header>
+
+      <section>
+        <h2>Resumo executivo simulado</h2>
+        <div class="grid">
+          <div class="card"><strong>100.000</strong><span>respostas simuladas</span></div>
+          <div class="card"><strong>34,0%</strong><span>Mailza Assis</span></div>
+          <div class="card"><strong>+3,0 pts</strong><span>margem sobre o 2º colocado</span></div>
+          <div class="card"><strong>61,5%</strong><span>voto já decidido</span></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Intenção principal para 2026</h2>
+        <div class="bar-list">
+          <div class="bar-row">
+            <div class="bar-meta"><strong>Mailza Assis</strong><span>34.000 · 34,0%</span></div>
+            <div class="track"><span class="fill" style="width: 34%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><strong>Marcus Alexandre</strong><span>31.000 · 31,0%</span></div>
+            <div class="track"><span class="fill" style="width: 31%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><strong>Jorge Viana</strong><span>18.000 · 18,0%</span></div>
+            <div class="track"><span class="fill" style="width: 18%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><strong>Sérgio Petecão</strong><span>7.000 · 7,0%</span></div>
+            <div class="track"><span class="fill" style="width: 7%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><strong>Ainda não decidi</strong><span>8.000 · 8,0%</span></div>
+            <div class="track"><span class="fill" style="width: 8%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><strong>Branco/Nulo</strong><span>2.000 · 2,0%</span></div>
+            <div class="track"><span class="fill" style="width: 2%"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="columns">
+        <div>
+          <h2>Prioridades simuladas</h2>
+          <div class="bar-list">
+            <div class="bar-row"><div class="bar-meta"><strong>Emprego e renda</strong><span>27,5%</span></div><div class="track"><span class="fill" style="width: 27.5%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Saúde</strong><span>22,0%</span></div><div class="track"><span class="fill" style="width: 22%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Segurança pública</strong><span>17,5%</span></div><div class="track"><span class="fill" style="width: 17.5%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Infraestrutura</strong><span>14,0%</span></div><div class="track"><span class="fill" style="width: 14%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Educação</strong><span>12,5%</span></div><div class="track"><span class="fill" style="width: 12.5%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Meio ambiente e produção</strong><span>6,5%</span></div><div class="track"><span class="fill" style="width: 6.5%"></span></div></div>
+          </div>
+        </div>
+        <div>
+          <h2>Rejeição simulada</h2>
+          <div class="bar-list">
+            <div class="bar-row"><div class="bar-meta"><strong>Marcus Alexandre</strong><span>29,0%</span></div><div class="track"><span class="fill red" style="width: 29%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Jorge Viana</strong><span>24,0%</span></div><div class="track"><span class="fill red" style="width: 24%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Mailza Assis</strong><span>19,0%</span></div><div class="track"><span class="fill red" style="width: 19%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Sérgio Petecão</strong><span>11,0%</span></div><div class="track"><span class="fill red" style="width: 11%"></span></div></div>
+            <div class="bar-row"><div class="bar-meta"><strong>Não rejeito nenhum</strong><span>17,0%</span></div><div class="track"><span class="fill red" style="width: 17%"></span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Análise política demonstrativa</h2>
+        <div class="analysis">
+          <article>
+            <h3>Competitividade</h3>
+            <p>
+              Mailza aparece numericamente à frente, mas a margem simulada de 3 pontos indica cenário competitivo. O
+              relatório destacaria a necessidade de ler a liderança por região, idade e agenda prioritária.
+            </p>
+          </article>
+          <article>
+            <h3>Força regional</h3>
+            <p>
+              A simulação dá maior desempenho a Mailza no Juruá, Alto Acre e perfis de continuidade; Marcus aparece
+              mais forte em Rio Branco e entre perfis que priorizam mudança administrativa.
+            </p>
+          </article>
+          <article>
+            <h3>Agenda pública</h3>
+            <p>
+              Emprego, saúde e segurança organizam a disputa. Em um relatório real, esses temas seriam usados para
+              explicar por que grupos parecidos podem votar de forma diferente.
+            </p>
+          </article>
+          <article>
+            <h3>Volatilidade</h3>
+            <p>
+              Com 8% indecisos e 38,5% sem voto totalmente fechado, a ferramenta classificaria o cenário como favorável
+              à líder, mas ainda sujeito a virada por campanha, rejeição e agenda local.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Recortes simulados por região</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Região</th>
+              <th>Volume</th>
+              <th>Líder</th>
+              <th>Segundo nome</th>
+              <th>Prioridade dominante</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Rio Branco e entorno</td><td>42.000</td><td>Marcus Alexandre · 34%</td><td>Mailza Assis · 30%</td><td>Emprego e renda</td></tr>
+            <tr><td>Juruá</td><td>22.000</td><td>Mailza Assis · 39%</td><td>Jorge Viana · 24%</td><td>Infraestrutura</td></tr>
+            <tr><td>Alto Acre</td><td>12.000</td><td>Mailza Assis · 35%</td><td>Marcus Alexandre · 28%</td><td>Saúde</td></tr>
+            <tr><td>Tarauacá/Envira</td><td>11.000</td><td>Jorge Viana · 31%</td><td>Mailza Assis · 30%</td><td>Segurança pública</td></tr>
+            <tr><td>Purus</td><td>8.000</td><td>Mailza Assis · 33%</td><td>Marcus Alexandre · 27%</td><td>Saúde</td></tr>
+            <tr><td>Demais localidades</td><td>5.000</td><td>Mailza Assis · 32%</td><td>Marcus Alexandre · 29%</td><td>Emprego e renda</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>
