@@ -19,7 +19,6 @@
     "startup-experience.js?v=20260422founder-cinema-session",
     "pro-design.js?v=20260413b"
   ];
-
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");

@@ -8195,6 +8195,11 @@ body.fx-lite .site-footer.footer-tech.footer-mega .assembly-sparks {
 .site-footer.footer-tech.footer-mega .footer-brand {
   overflow: hidden;
   isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(250px, 0.82fr) minmax(320px, 1.18fr);
+  column-gap: 1.2rem;
+  row-gap: 0.8rem;
+  align-items: start;
   background:
     linear-gradient(90deg, rgba(5, 15, 35, 0.92), rgba(5, 20, 54, 0.74) 44%, rgba(5, 15, 38, 0.92)),
     radial-gradient(circle at 76% 22%, rgba(84, 184, 255, 0.18), transparent 28%),
@@ -8206,6 +8211,94 @@ body.fx-lite .site-footer.footer-tech.footer-mega .assembly-sparks {
 .site-footer.footer-tech.footer-mega .footer-brand > * {
   position: relative;
   z-index: 3;
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-stage {
+  grid-column: 1;
+  grid-row: 1 / span 7;
+  align-self: stretch;
+  display: grid;
+  align-content: end;
+  gap: 0.7rem;
+  min-height: 100%;
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid rgba(143, 223, 255, 0.2);
+  background:
+    linear-gradient(180deg, rgba(7, 20, 41, 0.52), rgba(4, 11, 26, 0.86)),
+    radial-gradient(circle at top left, rgba(255, 171, 94, 0.18), transparent 24%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 34px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(6px);
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-kicker {
+  color: #ffd18a;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-stage strong {
+  color: #f7fbff;
+  font-family: "Outfit", "Sora", sans-serif;
+  font-size: clamp(1.2rem, 1.45vw, 1.5rem);
+  line-height: 1.08;
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-stage p {
+  margin: 0;
+  color: rgba(228, 241, 255, 0.84);
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-pills span {
+  padding: 0.34rem 0.64rem;
+  border-radius: 999px;
+  border: 1px solid rgba(143, 223, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(226, 244, 255, 0.88);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.site-footer.footer-tech.footer-mega .footer-sponsor-button {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.7rem;
+  padding: 0.72rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 209, 138, 0.28);
+  background: linear-gradient(135deg, rgba(255, 191, 108, 0.24), rgba(121, 205, 255, 0.12));
+  color: #fff4df;
+  font-size: 0.86rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.site-footer.footer-tech.footer-mega .footer-brand-logo,
+.site-footer.footer-tech.footer-mega .footer-brand .eyebrow,
+.site-footer.footer-tech.footer-mega .footer-brand h2,
+.site-footer.footer-tech.footer-mega .footer-brand p:not(.footer-sponsor-stage p),
+.site-footer.footer-tech.footer-mega .footer-signal-grid,
+.site-footer.footer-tech.footer-mega .footer-actions,
+.site-footer.footer-tech.footer-mega .footer-utility-buttons {
+  grid-column: 2;
 }
 
 .site-footer.footer-tech.footer-mega .footer-brand::before {
@@ -8326,6 +8419,28 @@ body.fx-lite .site-footer.footer-tech.footer-mega .assembly-sparks {
 
   50% {
     opacity: 1;
+  }
+}
+
+@media (max-width: 980px) {
+  .site-footer.footer-tech.footer-mega .footer-brand {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer.footer-tech.footer-mega .footer-sponsor-stage,
+  .site-footer.footer-tech.footer-mega .footer-brand-logo,
+  .site-footer.footer-tech.footer-mega .footer-brand .eyebrow,
+  .site-footer.footer-tech.footer-mega .footer-brand h2,
+  .site-footer.footer-tech.footer-mega .footer-brand p:not(.footer-sponsor-stage p),
+  .site-footer.footer-tech.footer-mega .footer-signal-grid,
+  .site-footer.footer-tech.footer-mega .footer-actions,
+  .site-footer.footer-tech.footer-mega .footer-utility-buttons {
+    grid-column: 1;
+  }
+
+  .site-footer.footer-tech.footer-mega .footer-sponsor-stage {
+    grid-row: auto;
+    min-height: 220px;
   }
 }
 

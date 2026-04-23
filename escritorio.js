@@ -518,6 +518,7 @@
   const officeWorld = document.querySelector("[data-office-world]");
   const officeFrame = document.querySelector("[data-office-frame]");
   const mapPanel = document.querySelector("[data-office-map-panel]");
+  const cheffeCallBanner = document.querySelector("[data-cheffe-call-banner]");
   const terminalPanel = document.querySelector("[data-office-terminal-panel]");
   const agentLayer = document.querySelector("[data-agent-layer]");
   const dialogueLayer = document.querySelector("[data-dialogue-layer]");
@@ -701,6 +702,7 @@
     theaterMode: false,
     theaterSubject: "",
     theaterRound: 0,
+    cheffeCallActive: false,
     selectedSupportItemId: supportCatalog[0]?.id || null,
     inventory: []
   };
@@ -1928,6 +1930,25 @@
     }
   }
 
+  async function syncCheffeCallPresence() {
+    try {
+      const response = await fetch("/api/cheffe-call", {
+        headers: { Accept: "application/json" }
+      });
+      const payload = await response.json();
+      officeState.cheffeCallActive = Boolean(payload?.meeting?.active);
+      document.body.classList.toggle("office-cheffe-locked", officeState.cheffeCallActive);
+      if (cheffeCallBanner) cheffeCallBanner.hidden = !officeState.cheffeCallActive;
+      if (officeState.cheffeCallActive) {
+        setFeedText("Cheffe Call ativa: a equipe saiu do escritório e está reunida no teatro central.");
+      }
+    } catch (_error) {
+      officeState.cheffeCallActive = false;
+      document.body.classList.remove("office-cheffe-locked");
+      if (cheffeCallBanner) cheffeCallBanner.hidden = true;
+    }
+  }
+
   function getTerminalCommand(agent, realProcess) {
     const scope = realProcess?.officeKey || officeKey || "office";
     return `> run ${scope}/${agent.id}`;
@@ -2417,6 +2438,10 @@
     button.addEventListener("click", () => {
       const action = button.dataset.officeAction;
       if (action === "gather") {
+        if (officeState.cheffeCallActive) {
+          window.location.href = "./cheffe-call.html";
+          return;
+        }
         gatherTeam();
         return;
       }
@@ -2653,6 +2678,8 @@
       "Codigo do escritorio em execucao 24 horas. Passe o mouse nos agentes para acompanhar o que cada frente esta rodando agora."
   );
   loadRealAgentProcesses();
+  syncCheffeCallPresence();
+  window.setInterval(syncCheffeCallPresence, 45000);
 
   loadOfficeNews().finally(() => {
     if (!prefersReducedMotion) {

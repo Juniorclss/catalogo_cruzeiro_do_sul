@@ -78,11 +78,63 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-04-23T13:02:11.328Z",
+      "news": {
+        "previous": 15,
+        "collected": 188,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
+    },
+    {
+      "time": "2026-04-23T13:03:44.673Z",
+      "news": {
+        "previous": 16,
+        "collected": 188,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
+    },
+    {
+      "time": "2026-04-23T13:04:27.358Z",
+      "news": {
+        "previous": 16,
+        "collected": 188,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
+    },
+    {
+      "time": "2026-04-23T13:05:13.722Z",
+      "news": {
+        "previous": 16,
+        "collected": 188,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
-    "news": 15,
+    "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-04-21T11:22:12.240Z"
+  "lastUpdate": "2026-04-23T13:05:13.722Z"
 }

@@ -438,6 +438,20 @@ window.setTimeout(() => {
 window.addEventListener("resize", syncOrientationGate);
 window.addEventListener("orientationchange", syncOrientationGate);
 
+window.setInterval(() => {
+  if (!gameStarted) return;
+  const auth = getAuthApi();
+  if (auth?.isSignedIn?.() || canUseLocalDemoAccess()) {
+    void syncPubpaidAccount();
+  }
+}, 10000);
+
+window.addEventListener("focus", () => {
+  if (gameStarted) {
+    void syncPubpaidAccount();
+  }
+});
+
 game.events.on("pubpaid:intro-ready", () => {
   openSplash("terms");
 });
@@ -475,6 +489,11 @@ window.render_game_to_text = () => {
     `prompt=${gameState.prompt}`,
     `testBalance=${gameState.testBalance}`,
     `realBalance=${gameState.realBalance}`,
+    `availableBalance=${gameState.availableBalance}`,
+    `lockedMatchBalance=${gameState.lockedMatchBalance}`,
+    `pvpStatus=${gameState.pvpStatus}`,
+    `pvpGameId=${gameState.pvpGameId}`,
+    `pvpMatchId=${gameState.pvpMatchId}`,
     `music=${soundtrack.getState().playing ? "on" : "off"}`,
     `musicStyle=${soundtrack.getState().style}`,
     `musicZone=${soundtrack.getState().zone}`,

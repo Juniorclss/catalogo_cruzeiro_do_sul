@@ -4333,6 +4333,7 @@ body.call-lower-open .call-lower-decks {
 
 .call-secondary-grid .meeting-log-panel,
 .call-secondary-grid .task-queue-panel,
+.call-map-panel,
 .call-admin-panel,
 .prompt-command-center,
 .call-opinions {
@@ -6368,6 +6369,63 @@ body.cheffe-call-page {
   padding: 16px;
 }
 
+.call-map-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.call-map-summary {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(127, 231, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(11, 17, 28, 0.96), rgba(6, 10, 18, 0.94)),
+    rgba(255, 255, 255, 0.02);
+  color: rgba(230, 242, 255, 0.76);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.call-map-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.call-map-item {
+  min-height: 104px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(127, 231, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(10, 16, 27, 0.95), rgba(7, 10, 18, 0.93)),
+    rgba(255, 255, 255, 0.02);
+}
+
+.call-map-item span {
+  display: block;
+  margin-bottom: 7px;
+  color: rgba(127, 231, 255, 0.84);
+  font: 900 0.66rem/1 Inter, "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.call-map-item strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #fff8e8;
+  font-size: 0.96rem;
+}
+
+.call-map-item p {
+  margin: 0;
+  color: rgba(230, 242, 255, 0.72);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
 .call-admin-status-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -6584,6 +6642,10 @@ body.call-lower-open .call-lower-decks {
   }
 
   .call-admin-status-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .call-map-list {
     grid-template-columns: 1fr !important;
   }
 }

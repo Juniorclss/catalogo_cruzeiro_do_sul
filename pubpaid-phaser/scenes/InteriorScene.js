@@ -3,6 +3,7 @@ import { addIdleSpriteActor, addSpriteActor, ensureCoreSprites, TEXTURE_KEYS } f
 import { NERD_TEAM, formatNerdAgent } from "../config/nerdTeam.js";
 import { openPanel, runPanelAction } from "../ui/panelActions.js";
 import { gameState, updateGameState } from "../core/gameState.js";
+import { fetchPvpState } from "../services/pvpService.js";
 
 const INTERIOR_PANELS = {
   bartender: {
@@ -24,21 +25,23 @@ const INTERIOR_PANELS = {
   },
   west: {
     kicker: "lounge",
-    title: "Mesa oeste",
-    body: "A mesa oeste agora representa a fila casual e a camada de descoberta. É o espaço mais natural para Dama e onboarding social.",
-    chips: ["fila casual", "dama", "descoberta", NERD_TEAM.engine.name],
+    title: "Mesa oeste PvP",
+    body: "A mesa oeste já pode abrir Dama com escrow real: saldo disponível trava na entrada, partida sem RNG e liquidação automática no fim.",
+    chips: ["escrow real", "dama", "sem RNG", NERD_TEAM.engine.name],
     actions: [
-      { id: "queue-casual", label: "Entrar na fila casual", primary: true },
+      { id: "join-checkers-pvp", label: "Dama 10 créditos", primary: true },
+      { id: "leave-pvp", label: "Sair da fila" },
       { id: "close-panel", label: "Fechar" }
     ]
   },
   east: {
     kicker: "premium",
-    title: "Mesa leste",
-    body: "A mesa leste é a ponta premium do salão. Ela já serve para simular espera social e foco em Poker como núcleo de mesa avançada.",
-    chips: ["fila premium", "poker", "social", NERD_TEAM.qa.name],
+    title: "Alvo leste PvP",
+    body: "Dardos virou o MVP real mais simples para testar pareamento, escrow, turno e resultado auditável antes dos jogos com mais sorte.",
+    chips: ["escrow real", "dardos", "hitbox", NERD_TEAM.qa.name],
     actions: [
-      { id: "queue-premium", label: "Entrar na fila premium", primary: true },
+      { id: "join-darts-pvp", label: "Dardos 10 créditos", primary: true },
+      { id: "leave-pvp", label: "Sair da fila" },
       { id: "close-panel", label: "Fechar" }
     ]
   }
@@ -75,6 +78,17 @@ export class InteriorScene extends Phaser.Scene {
     this.jukeboxGlow = null;
     this.scanLight = null;
     this.stageLaserLayer = null;
+    this.pvpDecor = {};
+    this.pvpSyncAt = 0;
+    this.dartsStage = null;
+    this.checkersStage = null;
+    this.resultFxLayer = null;
+    this.resultParticles = [];
+    this.resultFxState = {
+      darts: { signature: "" },
+      checkers: { signature: "" }
+    };
+    this.resultFloatTexts = [];
   }
 
   create() {
@@ -115,6 +129,7 @@ export class InteriorScene extends Phaser.Scene {
       { id: "exit", x: 640, y: 580, radius: 96, color: 0x8ef0a3, label: "SAIDA", objective: "Voltar para a rua" }
     ];
     this.zoneHotspots = this.zones.map((zone) => this.buildZoneHotspot(zone));
+    this.buildPvpDecor();
 
     this.cameras.main.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -201,6 +216,9 @@ export class InteriorScene extends Phaser.Scene {
     this.sparkleLayer = this.add.graphics()
       .setBlendMode(Phaser.BlendModes.SCREEN)
       .setDepth(2.05);
+    this.resultFxLayer = this.add.graphics()
+      .setBlendMode(Phaser.BlendModes.SCREEN)
+      .setDepth(2.08);
     this.barGlow = this.add.rectangle(390, 170, 500, 170, 0xffd06d, 0.11)
       .setBlendMode(Phaser.BlendModes.SCREEN)
       .setDepth(1.06);
@@ -303,6 +321,735 @@ export class InteriorScene extends Phaser.Scene {
       repeat: -1,
       ease: "Sine.easeInOut"
     });
+  }
+
+  buildPvpDecor() {
+    const createSign = (x, y, label, color) => {
+      const glow = this.add.ellipse(x, y, 126, 28, color, 0.12)
+        .setBlendMode(Phaser.BlendModes.SCREEN)
+        .setDepth(1.16);
+      const plate = this.add.rectangle(x, y, 112, 20, 0x0a0f1a, 0.92)
+        .setStrokeStyle(2, color, 0.75)
+        .setDepth(1.17);
+      const text = this.add.text(x, y, label, {
+        fontFamily: "Courier New, Lucida Console, monospace",
+        fontSize: "10px",
+        fontStyle: "bold",
+        color: "#fff6dc",
+        stroke: "#05070d",
+        strokeThickness: 3
+      }).setOrigin(0.5).setLetterSpacing(2).setDepth(1.18);
+      return { glow, plate, text, baseColor: color, baseLabel: label };
+    };
+
+    const createLamp = (x, y, color) => {
+      const light = this.add.ellipse(x, y, 88, 18, color, 0.12)
+        .setBlendMode(Phaser.BlendModes.SCREEN)
+        .setDepth(1.14);
+      const dot = this.add.rectangle(x, y, 10, 10, color, 0.95)
+        .setDepth(1.19)
+        .setStrokeStyle(2, 0x07101c, 0.7);
+      return { light, dot, baseColor: color };
+    };
+
+    this.pvpDecor.darts = {
+      sign: createSign(860, 404, "DARDOS", 0xffd06d),
+      lamp: createLamp(860, 438, 0xffd06d),
+      shards: [
+        this.add.rectangle(818, 450, 26, 4, 0x50efff, 0.22).setDepth(1.15).setRotation(-0.28),
+        this.add.rectangle(900, 450, 22, 4, 0xff4fb8, 0.22).setDepth(1.15).setRotation(0.24)
+      ],
+      target: this.createDartsStage(860, 516)
+    };
+    this.pvpDecor.checkers = {
+      sign: createSign(318, 414, "DAMA", 0x50efff),
+      lamp: createLamp(318, 448, 0x50efff),
+      shards: [
+        this.add.rectangle(278, 460, 26, 4, 0xffd06d, 0.22).setDepth(1.15).setRotation(-0.24),
+        this.add.rectangle(356, 460, 22, 4, 0x8ef0a3, 0.22).setDepth(1.15).setRotation(0.2)
+      ],
+      board: this.createCheckersStage(318, 520)
+    };
+  }
+
+  createDartsStage(x, y) {
+    const base = this.add.container(x, y).setDepth(1.2);
+    const shadow = this.add.ellipse(0, 70, 168, 26, 0x000000, 0.2)
+      .setBlendMode(Phaser.BlendModes.MULTIPLY);
+    const cabinet = this.add.rectangle(0, 0, 156, 172, 0x160c15, 1)
+      .setStrokeStyle(3, 0xffd06d, 0.28);
+    const cabinetGlow = this.add.rectangle(0, 0, 148, 164, 0xff4fb8, 0.05)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const marquee = this.add.rectangle(0, -68, 88, 18, 0xffd06d, 0.94)
+      .setStrokeStyle(2, 0x07101c, 0.8);
+    const marqueeText = this.add.text(0, -68, "180", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "10px",
+      fontStyle: "bold",
+      color: "#07101c",
+      stroke: "#fff6dc",
+      strokeThickness: 1
+    }).setOrigin(0.5);
+    const targetGlow = this.add.ellipse(0, -2, 112, 112, 0x50efff, 0.12)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const targetFrame = this.add.circle(0, -2, 50, 0x0b1220, 1)
+      .setStrokeStyle(4, 0xffd06d, 0.24);
+    const targetR1 = this.add.circle(0, -2, 46, 0xff4fb8, 0.18)
+      .setStrokeStyle(2, 0x07101c, 0.65);
+    const targetR2 = this.add.circle(0, -2, 32, 0x50efff, 0.16)
+      .setStrokeStyle(2, 0x07101c, 0.65);
+    const targetR3 = this.add.circle(0, -2, 16, 0xffd06d, 0.22)
+      .setStrokeStyle(2, 0x07101c, 0.65);
+    const bull = this.add.circle(0, -2, 6, 0x8ef0a3, 0.92)
+      .setStrokeStyle(2, 0xfff6dc, 0.8);
+    const impactRing = this.add.circle(0, -2, 8, 0xfff6dc, 0)
+      .setStrokeStyle(3, 0xfff6dc, 0)
+      .setScale(0.4);
+    const railLeft = this.add.rectangle(-52, -2, 8, 116, 0x50efff, 0.18)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const railRight = this.add.rectangle(52, -2, 8, 116, 0xff4fb8, 0.18)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const scorePlate = this.add.rectangle(0, 58, 112, 24, 0x08101d, 0.94)
+      .setStrokeStyle(2, 0x50efff, 0.34);
+    const scoreText = this.add.text(0, 58, "0  X  0", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "12px",
+      fontStyle: "bold",
+      color: "#fff6dc",
+      stroke: "#05070d",
+      strokeThickness: 3
+    }).setOrigin(0.5);
+    const roundText = this.add.text(0, 78, "ROUND 1", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "9px",
+      fontStyle: "bold",
+      color: "#d5dff2",
+      stroke: "#05070d",
+      strokeThickness: 3
+    }).setOrigin(0.5);
+
+    const pinA = this.add.rectangle(-8, -8, 6, 6, 0x50efff, 0.96)
+      .setStrokeStyle(1, 0x07101c, 0.8)
+      .setRotation(Math.PI / 4)
+      .setVisible(false);
+    const pinB = this.add.rectangle(8, 8, 6, 6, 0xff4fb8, 0.96)
+      .setStrokeStyle(1, 0x07101c, 0.8)
+      .setRotation(Math.PI / 4)
+      .setVisible(false);
+    const resultFlash = this.add.rectangle(0, -2, 124, 124, 0x8ef0a3, 0.01)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const resultLabel = this.add.text(0, 18, "", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "10px",
+      fontStyle: "bold",
+      color: "#fff6dc",
+      stroke: "#05070d",
+      strokeThickness: 4
+    }).setOrigin(0.5).setAlpha(0);
+    const payoutText = this.add.text(0, 96, "", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "8px",
+      fontStyle: "bold",
+      color: "#dfffe7",
+      stroke: "#05070d",
+      strokeThickness: 3
+    }).setOrigin(0.5).setAlpha(0);
+
+    base.add([
+      shadow,
+      cabinet,
+      cabinetGlow,
+      marquee,
+      marqueeText,
+      targetGlow,
+      targetFrame,
+      targetR1,
+      targetR2,
+      targetR3,
+      bull,
+      impactRing,
+      railLeft,
+      railRight,
+      scorePlate,
+      scoreText,
+      roundText,
+      resultFlash,
+      pinA,
+      pinB,
+      resultLabel,
+      payoutText
+    ]);
+
+    this.tweens.add({
+      targets: [targetGlow, cabinetGlow],
+      alpha: { from: 0.06, to: 0.18 },
+      duration: 1400,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut"
+    });
+    this.tweens.add({
+      targets: [railLeft, railRight],
+      alpha: { from: 0.1, to: 0.28 },
+      duration: 900,
+      yoyo: true,
+      repeat: -1,
+      stagger: 140,
+      ease: "Sine.easeInOut"
+    });
+
+    return {
+      base,
+      marqueeText,
+      targetGlow,
+      impactRing,
+      cabinetGlow,
+      scoreText,
+      roundText,
+      resultFlash,
+      resultLabel,
+      payoutText,
+      pinA,
+      pinB,
+      railLeft,
+      railRight
+    };
+  }
+
+  createCheckersStage(x, y) {
+    const base = this.add.container(x, y).setDepth(1.2);
+    const shadow = this.add.ellipse(0, 68, 182, 28, 0x000000, 0.22)
+      .setBlendMode(Phaser.BlendModes.MULTIPLY);
+    const table = this.add.rectangle(0, 0, 168, 154, 0x140b12, 1)
+      .setStrokeStyle(3, 0x50efff, 0.24);
+    const felt = this.add.rectangle(0, 0, 140, 126, 0x131b22, 1)
+      .setStrokeStyle(2, 0xffd06d, 0.18);
+    const lampGlow = this.add.ellipse(0, -6, 154, 140, 0x8ef0a3, 0.08)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const labelPlate = this.add.rectangle(0, -62, 98, 18, 0x50efff, 0.92)
+      .setStrokeStyle(2, 0x07101c, 0.8);
+    const labelText = this.add.text(0, -62, "CHECK", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "9px",
+      fontStyle: "bold",
+      color: "#07101c",
+      stroke: "#fff6dc",
+      strokeThickness: 1
+    }).setOrigin(0.5);
+    const turnPlate = this.add.rectangle(0, 66, 110, 22, 0x08101d, 0.94)
+      .setStrokeStyle(2, 0x8ef0a3, 0.28);
+    const turnText = this.add.text(0, 66, "TURN P1", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "10px",
+      fontStyle: "bold",
+      color: "#fff6dc",
+      stroke: "#05070d",
+      strokeThickness: 3
+    }).setOrigin(0.5);
+    const moveText = this.add.text(0, 84, "MOVE 0", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "9px",
+      fontStyle: "bold",
+      color: "#d5dff2",
+      stroke: "#05070d",
+      strokeThickness: 3
+    }).setOrigin(0.5);
+    const resultGlow = this.add.rectangle(0, 0, 128, 112, 0x8ef0a3, 0.01)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const scanBeam = this.add.rectangle(0, -48, 118, 12, 0x50efff, 0.01)
+      .setBlendMode(Phaser.BlendModes.SCREEN);
+    const resultLabel = this.add.text(0, 0, "", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "10px",
+      fontStyle: "bold",
+      color: "#fff6dc",
+      stroke: "#05070d",
+      strokeThickness: 4
+    }).setOrigin(0.5).setAlpha(0);
+    const payoutText = this.add.text(0, 100, "", {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "8px",
+      fontStyle: "bold",
+      color: "#dfffe7",
+      stroke: "#05070d",
+      strokeThickness: 3
+    }).setOrigin(0.5).setAlpha(0);
+
+    const tiles = [];
+    const pieces = [];
+    const boardSize = 112;
+    const cell = boardSize / 8;
+    const boardOriginX = -boardSize / 2 + cell / 2;
+    const boardOriginY = -boardSize / 2 + cell / 2;
+
+    for (let row = 0; row < 8; row += 1) {
+      for (let col = 0; col < 8; col += 1) {
+        const dark = (row + col) % 2 === 1;
+        const tile = this.add.rectangle(
+          boardOriginX + col * cell,
+          boardOriginY + row * cell,
+          cell,
+          cell,
+          dark ? 0x2a1523 : 0xc49a64,
+          1
+        ).setStrokeStyle(1, 0x07101c, 0.12);
+        tiles.push(tile);
+      }
+    }
+
+    for (let index = 0; index < 24; index += 1) {
+      const piece = this.add.circle(0, 0, 5, index < 12 ? 0x50efff : 0xff4fb8, 0.96)
+        .setStrokeStyle(2, 0x07101c, 0.55)
+        .setVisible(false);
+      const crown = this.add.text(0, 0, "K", {
+        fontFamily: "Courier New, Lucida Console, monospace",
+        fontSize: "7px",
+        fontStyle: "bold",
+        color: "#fff6dc",
+        stroke: "#05070d",
+        strokeThickness: 2
+      }).setOrigin(0.5).setVisible(false);
+      pieces.push({ piece, crown });
+    }
+
+    base.add([
+      shadow,
+      table,
+      felt,
+      lampGlow,
+      resultGlow,
+      scanBeam,
+      labelPlate,
+      labelText,
+      ...tiles,
+      ...pieces.flatMap((entry) => [entry.piece, entry.crown]),
+      turnPlate,
+      turnText,
+      moveText,
+      resultLabel,
+      payoutText
+    ]);
+
+    this.tweens.add({
+      targets: lampGlow,
+      alpha: { from: 0.05, to: 0.16 },
+      duration: 1700,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut"
+    });
+
+    return {
+      base,
+      lampGlow,
+      resultGlow,
+      scanBeam,
+      labelText,
+      turnText,
+      moveText,
+      resultLabel,
+      payoutText,
+      tiles,
+      pieces,
+      boardOriginX,
+      boardOriginY,
+      cell
+    };
+  }
+
+  applyStageResultFx(stage, match, seat, speed = 120) {
+    if (!stage?.resultLabel || !stage?.payoutText) return;
+    const tone = match?.winner
+      ? match.winner === seat
+        ? "win"
+        : "loss"
+      : "draw";
+    const payout = Number(match?.settlement?.payout ?? 0);
+    const houseFee = Number(match?.settlement?.houseFee ?? 0);
+    const palette = tone === "win"
+      ? { color: 0x8ef0a3, label: "WIN", payout: `+${payout}` }
+      : tone === "loss"
+        ? { color: 0xff4fb8, label: "LOSS", payout: payout ? `RIVAL +${payout}` : "RIVAL" }
+        : { color: 0x50efff, label: "DRAW", payout: "REFUND" };
+
+    stage.resultLabel.setText(palette.label).setAlpha(0.9);
+    stage.payoutText.setText(`${palette.payout}${houseFee ? `  HOUSE ${houseFee}` : ""}`).setAlpha(0.84);
+    if (stage.resultFlash) {
+      stage.resultFlash.setFillStyle(palette.color, 0.12 + (Math.sin(this.time.now / speed) + 1) * 0.08);
+    }
+    if (stage.resultGlow) {
+      stage.resultGlow.setFillStyle(palette.color, 0.12 + (Math.sin(this.time.now / speed) + 1) * 0.08);
+    }
+    if (stage.scanBeam) {
+      stage.scanBeam.setFillStyle(palette.color, 0.16 + (Math.sin(this.time.now / speed) + 1) * 0.06);
+      stage.scanBeam.y = -48 + Math.sin(this.time.now / (speed * 1.2)) * 42;
+    }
+    if (stage.impactRing) {
+      const pulse = (Math.sin(this.time.now / speed) + 1) * 0.5;
+      stage.impactRing.setStrokeStyle(3, palette.color, 0.18 + pulse * 0.52);
+      stage.impactRing.setScale(0.7 + pulse * 1.5);
+    }
+  }
+
+  spawnResultBurst(kind, stage, match, seat) {
+    if (!stage || !match) return;
+    const tone = match?.winner
+      ? match.winner === seat
+        ? "win"
+        : "loss"
+      : "draw";
+    const config = tone === "win"
+      ? { color: 0x8ef0a3, accent: 0xffd06d, amount: 18, label: `+${Number(match?.settlement?.payout ?? 0)}` }
+      : tone === "loss"
+        ? { color: 0xff4fb8, accent: 0xffd06d, amount: 14, label: "DOWN" }
+        : { color: 0x50efff, accent: 0xffd06d, amount: 16, label: "REFUND" };
+    const origin = kind === "darts"
+      ? { x: 860, y: 514 }
+      : { x: 318, y: 520 };
+
+    for (let index = 0; index < config.amount; index += 1) {
+      this.resultParticles.push({
+        x: origin.x + Phaser.Math.Between(-18, 18),
+        y: origin.y + Phaser.Math.Between(-24, 12),
+        vx: kind === "darts" ? Phaser.Math.FloatBetween(-2.6, 2.6) : Phaser.Math.FloatBetween(-1.6, 1.6),
+        vy: kind === "darts" ? Phaser.Math.FloatBetween(-2.9, -0.9) : Phaser.Math.FloatBetween(-2.1, -0.6),
+        life: Phaser.Math.Between(22, 40),
+        maxLife: Phaser.Math.Between(22, 40),
+        size: Phaser.Math.Between(3, 6),
+        color: index % 3 === 0 ? config.accent : config.color,
+        kind:
+          kind === "darts"
+            ? index % 4 === 0 ? "spark" : "pixel"
+            : index % 5 === 0 ? "diamond" : "pixel"
+      });
+    }
+
+    this.resultParticles.push({
+      x: origin.x,
+      y: origin.y - 14,
+      vx: 0,
+      vy: -0.45,
+      life: 42,
+      maxLife: 42,
+      size: 1,
+      color: config.color,
+      kind: "label"
+    });
+    const textNode = this.add.text(origin.x, origin.y - 14, config.label, {
+      fontFamily: "Courier New, Lucida Console, monospace",
+      fontSize: "10px",
+      fontStyle: "bold",
+      color: "#fff6dc",
+      stroke: "#05070d",
+      strokeThickness: 4
+    }).setOrigin(0.5).setDepth(2.09);
+    this.resultFloatTexts.push({
+      node: textNode,
+      x: origin.x,
+      y: origin.y - 14,
+      vx: 0,
+      vy: -0.45,
+      life: 42,
+      maxLife: 42
+    });
+  }
+
+  syncResultFxTriggers() {
+    const checkTrigger = (kind, match) => {
+      const cache = this.resultFxState[kind];
+      if (!match || match.state !== "finished") {
+        cache.signature = "";
+        return;
+      }
+      const signature = `${match.id || kind}:${match.state}:${match.winner || "draw"}:${match.updatedAt || match.finishedAt || ""}`;
+      if (cache.signature === signature) return;
+      cache.signature = signature;
+      this.spawnResultBurst(kind, kind === "darts" ? this.pvpDecor?.darts?.target : this.pvpDecor?.checkers?.board, match, gameState.pvpSeat);
+    };
+
+    checkTrigger("darts", gameState.pvpGameId === "darts" ? gameState.pvpMatch : null);
+    checkTrigger("checkers", gameState.pvpGameId === "checkers" ? gameState.pvpMatch : null);
+  }
+
+  updateResultFxParticles() {
+    if (!this.resultFxLayer) return;
+    this.resultFxLayer.clear();
+    this.resultFloatTexts = this.resultFloatTexts.filter((entry) => {
+      entry.life -= 1;
+      if (entry.life <= 0) {
+        entry.node.destroy();
+        return false;
+      }
+      entry.x += entry.vx;
+      entry.y += entry.vy;
+      entry.vy -= 0.002;
+      entry.node.setPosition(entry.x, entry.y).setAlpha(entry.life / entry.maxLife);
+      return true;
+    });
+    this.resultParticles = this.resultParticles.filter((particle) => {
+      particle.life -= 1;
+      if (particle.life <= 0) return false;
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vy += 0.03;
+      const alpha = particle.life / particle.maxLife;
+
+      this.resultFxLayer.fillStyle(particle.color, alpha * 0.9);
+      if (particle.kind === "spark") {
+        this.resultFxLayer.fillRect(particle.x - particle.size, particle.y, particle.size * 2, 1);
+        this.resultFxLayer.fillRect(particle.x, particle.y - particle.size, 1, particle.size * 2);
+      } else if (particle.kind === "diamond") {
+        this.resultFxLayer.fillRect(particle.x, particle.y - particle.size, 1, particle.size);
+        this.resultFxLayer.fillRect(particle.x - particle.size / 2, particle.y, particle.size, 1);
+        this.resultFxLayer.fillRect(particle.x, particle.y, 1, particle.size);
+      } else {
+        this.resultFxLayer.fillRect(particle.x, particle.y, particle.size, particle.size);
+      }
+      return true;
+    });
+  }
+
+  updateCheckersStageVisual() {
+    const decor = this.pvpDecor?.checkers;
+    const stage = decor?.board;
+    if (!stage) return;
+
+    const isCheckers = gameState.pvpGameId === "checkers";
+    const state = isCheckers ? gameState.pvpStatus : "idle";
+    const match = isCheckers ? gameState.pvpMatch : null;
+    const board = Array.isArray(match?.board) ? match.board : [];
+    const moveCount = Number(match?.moveCount || 0);
+    const turn = match?.turn || "";
+    const legalMoves = turn && board.length ? this.getStageLegalCheckersMoves(board, turn).slice(0, 10) : [];
+    const hintKeys = new Set(legalMoves.flatMap((move) => [
+      `${move.from.row}:${move.from.col}:from`,
+      `${move.to.row}:${move.to.col}:to`
+    ]));
+
+    stage.labelText.setText(
+      state === "active" ? "LIVE" :
+      state === "waiting" ? "QUEUE" :
+      state === "abandoned" ? "BACK" :
+      "CHECK"
+    );
+    stage.turnText.setText(`TURN ${turn === "playerTwo" ? "P2" : "P1"}`);
+    stage.moveText.setText(`MOVE ${moveCount}`);
+    stage.resultLabel.setAlpha(0);
+    stage.payoutText.setAlpha(0);
+    if (stage.scanBeam) {
+      stage.scanBeam.setFillStyle(0x50efff, 0.01);
+      stage.scanBeam.y = -48;
+    }
+
+    stage.tiles.forEach((tile, index) => {
+      const row = Math.floor(index / 8);
+      const col = index % 8;
+      const dark = (row + col) % 2 === 1;
+      tile.fillColor = dark ? 0x2a1523 : 0xc49a64;
+      tile.fillAlpha = 1;
+      tile.setStrokeStyle(1, 0x07101c, 0.12);
+      if (hintKeys.has(`${row}:${col}:from`)) {
+        tile.setStrokeStyle(2, 0xffd06d, 0.88);
+      } else if (hintKeys.has(`${row}:${col}:to`)) {
+        tile.fillColor = 0x8ef0a3;
+        tile.fillAlpha = 0.9;
+      }
+    });
+
+    stage.pieces.forEach((entry) => {
+      entry.piece.setVisible(false);
+      entry.crown.setVisible(false);
+    });
+
+    let pieceIndex = 0;
+    for (let row = 0; row < 8; row += 1) {
+      for (let col = 0; col < 8; col += 1) {
+        const token = board?.[row]?.[col];
+        if (!token) continue;
+        const slot = stage.pieces[pieceIndex];
+        if (!slot) continue;
+        const x = stage.boardOriginX + col * stage.cell;
+        const y = stage.boardOriginY + row * stage.cell;
+        const isPlayerOne = String(token).toLowerCase() === "p";
+        const isKing = token === String(token).toUpperCase();
+        slot.piece
+          .setPosition(x, y)
+          .setFillStyle(isPlayerOne ? 0x50efff : 0xff4fb8, 0.96)
+          .setVisible(true);
+        slot.crown
+          .setPosition(x, y)
+          .setVisible(Boolean(isKing));
+        pieceIndex += 1;
+      }
+    }
+
+    if (state === "active") {
+      stage.lampGlow.setFillStyle(0x8ef0a3, 0.12 + (Math.sin(this.time.now / 180) + 1) * 0.03);
+    } else if (state === "waiting") {
+      stage.lampGlow.setFillStyle(0x50efff, 0.11 + (Math.sin(this.time.now / 220) + 1) * 0.03);
+    } else if (state === "abandoned") {
+      stage.lampGlow.setFillStyle(0xff4fb8, 0.12 + (Math.sin(this.time.now / 120) + 1) * 0.04);
+    } else if (state === "finished") {
+      this.applyStageResultFx(stage, match, gameState.pvpSeat, 100);
+      stage.lampGlow.setFillStyle(match?.winner === gameState.pvpSeat ? 0x8ef0a3 : match?.winner ? 0xff4fb8 : 0x50efff, 0.16);
+    } else {
+      stage.lampGlow.setFillStyle(0x8ef0a3, 0.08);
+      if (stage.resultGlow) stage.resultGlow.setFillStyle(0x8ef0a3, 0.01);
+      if (stage.scanBeam) stage.scanBeam.setFillStyle(0x50efff, 0.01);
+    }
+  }
+
+  getStageCheckersOwner(piece = "") {
+    if (!piece) return "";
+    return piece.toLowerCase() === "p" ? "playerOne" : "playerTwo";
+  }
+
+  getStageCheckersDirections(piece = "") {
+    if (!piece) return [];
+    if (piece === piece.toUpperCase()) return [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+    return piece.toLowerCase() === "p" ? [[-1, -1], [-1, 1]] : [[1, -1], [1, 1]];
+  }
+
+  getStageLegalCheckersMoves(board = [], owner = "playerOne") {
+    const moves = [];
+    for (let row = 0; row < 8; row += 1) {
+      for (let col = 0; col < 8; col += 1) {
+        const piece = board?.[row]?.[col];
+        if (this.getStageCheckersOwner(piece) !== owner) continue;
+        const enemy = owner === "playerOne" ? "playerTwo" : "playerOne";
+        this.getStageCheckersDirections(piece).forEach(([rowStep, colStep]) => {
+          const nextRow = row + rowStep;
+          const nextCol = col + colStep;
+          if (!board?.[nextRow] || nextCol < 0 || nextCol > 7) return;
+          if (!board[nextRow][nextCol]) {
+            moves.push({ from: { row, col }, to: { row: nextRow, col: nextCol }, capture: null });
+            return;
+          }
+          const jumpRow = nextRow + rowStep;
+          const jumpCol = nextCol + colStep;
+          if (
+            this.getStageCheckersOwner(board[nextRow][nextCol]) === enemy &&
+            board?.[jumpRow] &&
+            jumpCol >= 0 &&
+            jumpCol <= 7 &&
+            !board[jumpRow][jumpCol]
+          ) {
+            moves.push({
+              from: { row, col },
+              to: { row: jumpRow, col: jumpCol },
+              capture: { row: nextRow, col: nextCol }
+            });
+          }
+        });
+      }
+    }
+    const captures = moves.filter((move) => move.capture);
+    return captures.length ? captures : moves;
+  }
+
+  updateDartsStageVisual() {
+    const decor = this.pvpDecor?.darts;
+    const stage = decor?.target;
+    if (!stage) return;
+
+    const isDarts = gameState.pvpGameId === "darts";
+    const state = isDarts ? gameState.pvpStatus : "idle";
+    const match = isDarts ? gameState.pvpMatch : null;
+    const darts = match?.dartsState || null;
+    const p1 = Number(darts?.playerOneScore || 0);
+    const p2 = Number(darts?.playerTwoScore || 0);
+    const round = Number(darts?.round || 1);
+    stage.scoreText.setText(`${p1}  X  ${p2}`);
+    stage.roundText.setText(`ROUND ${round}`);
+    stage.marqueeText.setText(
+      state === "active" ? "LIVE" :
+      state === "waiting" ? "QUEUE" :
+      state === "abandoned" ? "BACK" :
+      "180"
+    );
+
+    const pinFor = (pin, throwEntry, fallbackX, fallbackY) => {
+      if (!throwEntry) {
+        pin.setVisible(false);
+        return;
+      }
+      const x = Number(throwEntry.x ?? throwEntry.aimX ?? fallbackX);
+      const y = Number(throwEntry.y ?? throwEntry.aimY ?? fallbackY);
+      pin.setPosition((x - 50) * 0.9, (y - 50) * 0.9 - 2).setVisible(true);
+    };
+    pinFor(stage.pinA, darts?.lastPlayerOne || darts?.playerOneThrow || null, 42, 42);
+    pinFor(stage.pinB, darts?.lastPlayerTwo || darts?.playerTwoThrow || null, 58, 58);
+    stage.resultLabel.setAlpha(0);
+    stage.payoutText.setAlpha(0);
+    if (stage.impactRing) {
+      stage.impactRing.setStrokeStyle(3, 0xfff6dc, 0);
+      stage.impactRing.setScale(0.4);
+    }
+
+    if (state === "active") {
+      stage.targetGlow.setFillStyle(0x50efff, 0.18 + (Math.sin(this.time.now / 160) + 1) * 0.04);
+      stage.cabinetGlow.setFillStyle(0xffd06d, 0.08 + (Math.sin(this.time.now / 140) + 1) * 0.03);
+      stage.railLeft.fillAlpha = 0.24 + (Math.sin(this.time.now / 110) + 1) * 0.06;
+      stage.railRight.fillAlpha = 0.24 + (Math.sin(this.time.now / 150) + 1) * 0.06;
+    } else if (state === "waiting") {
+      stage.targetGlow.setFillStyle(0xff4fb8, 0.12 + (Math.sin(this.time.now / 240) + 1) * 0.04);
+      stage.cabinetGlow.setFillStyle(0x50efff, 0.06);
+      stage.railLeft.fillAlpha = 0.16;
+      stage.railRight.fillAlpha = 0.16;
+    } else if (state === "abandoned") {
+      stage.targetGlow.setFillStyle(0xff4fb8, 0.16 + (Math.sin(this.time.now / 90) + 1) * 0.05);
+      stage.cabinetGlow.setFillStyle(0xff4fb8, 0.1);
+      stage.railLeft.fillAlpha = 0.28;
+      stage.railRight.fillAlpha = 0.28;
+    } else if (state === "finished") {
+      this.applyStageResultFx(stage, match, gameState.pvpSeat, 90);
+      stage.targetGlow.setFillStyle(match?.winner === gameState.pvpSeat ? 0x8ef0a3 : match?.winner ? 0xff4fb8 : 0x50efff, 0.18);
+      stage.cabinetGlow.setFillStyle(match?.winner === gameState.pvpSeat ? 0x8ef0a3 : match?.winner ? 0xff4fb8 : 0x50efff, 0.12);
+      stage.railLeft.fillAlpha = 0.3;
+      stage.railRight.fillAlpha = 0.3;
+    } else {
+      stage.targetGlow.setFillStyle(0x50efff, 0.1);
+      stage.cabinetGlow.setFillStyle(0xff4fb8, 0.05);
+      stage.railLeft.fillAlpha = 0.18;
+      stage.railRight.fillAlpha = 0.18;
+      if (stage.resultFlash) stage.resultFlash.setFillStyle(0x8ef0a3, 0.01);
+      if (stage.impactRing) {
+        stage.impactRing.setStrokeStyle(3, 0xfff6dc, 0);
+      }
+    }
+  }
+
+  syncPvpDecorVisuals() {
+    const applyState = (decor, state, activeColor, waitingColor) => {
+      if (!decor) return;
+      const color =
+        state === "active" ? activeColor :
+        state === "waiting" ? waitingColor :
+        state === "finished" ? 0x8ef0a3 :
+        state === "abandoned" ? 0xff4fb8 :
+        decor.sign.baseColor;
+      const label =
+        state === "active" ? "AO VIVO" :
+        state === "waiting" ? "FILA" :
+        state === "finished" ? "FINAL" :
+        state === "abandoned" ? "RETORNE" :
+        decor.sign.baseLabel;
+
+      decor.sign.glow.fillColor = color;
+      decor.sign.plate.setStrokeStyle(2, color, 0.85);
+      decor.sign.text.setText(label);
+      decor.lamp.light.fillColor = color;
+      decor.lamp.dot.fillColor = color;
+      decor.shards.forEach((shard, index) => {
+        shard.fillColor = index % 2 === 0 ? color : 0xffd06d;
+        shard.alpha = state === "active" ? 0.4 : state === "finished" ? 0.34 : state === "waiting" ? 0.28 : 0.18;
+      });
+    };
+
+    const checkersState = gameState.pvpGameId === "checkers" ? gameState.pvpStatus : "idle";
+    const dartsState = gameState.pvpGameId === "darts" ? gameState.pvpStatus : "idle";
+    applyState(this.pvpDecor.checkers, checkersState, 0x8ef0a3, 0x50efff);
+    applyState(this.pvpDecor.darts, dartsState, 0xffd06d, 0xff4fb8);
   }
 
   buildZoneHotspot(zone) {
@@ -468,7 +1215,25 @@ export class InteriorScene extends Phaser.Scene {
       return;
     }
 
-    openPanel(INTERIOR_PANELS[zone.id]);
+    if (zone.id === "west") {
+      fetchPvpState("checkers").then((payload) => {
+        if (!payload?.ok) {
+          openPanel(INTERIOR_PANELS[zone.id]);
+          return;
+        }
+        runPanelAction("refresh-pvp");
+      });
+    } else if (zone.id === "east") {
+      fetchPvpState("darts").then((payload) => {
+        if (!payload?.ok) {
+          openPanel(INTERIOR_PANELS[zone.id]);
+          return;
+        }
+        runPanelAction("refresh-pvp");
+      });
+    } else {
+      openPanel(INTERIOR_PANELS[zone.id]);
+    }
     updateGameState({
       focus: this.getZoneLabel(zone.id),
       objective: "Escolher ação no painel",
@@ -587,12 +1352,27 @@ export class InteriorScene extends Phaser.Scene {
         : 0.04 + (Math.sin(this.time.now / 220) + 1) * 0.01
     );
 
+    this.syncPvpDecorVisuals();
+    this.syncResultFxTriggers();
+    this.updateDartsStageVisual();
+    this.updateCheckersStageVisual();
+    this.updateResultFxParticles();
+
+    if (this.time.now - this.pvpSyncAt > 9000) {
+      this.pvpSyncAt = this.time.now;
+      if (gameState.pvpGameId === "darts" || gameState.pvpGameId === "checkers") {
+        fetchPvpState(gameState.pvpGameId);
+      }
+    }
+
     updateGameState({
       currentScene: "interior",
       focus: zone ? this.getZoneLabel(zone.id) : "salão",
       objective: zone
         ? zone.id === "exit"
           ? "Voltar para a rua"
+          : zone.id === "east" && gameState.pvpGameId === "darts" && gameState.pvpStatus === "active"
+            ? "Acompanhar a mesa de Dardos"
           : "Apertar Enter para interagir"
         : "Explorar pontos ativos do salão",
       nerdAgent: formatNerdAgent(zone ? zone.id === "stage" ? NERD_TEAM.sprite : NERD_TEAM.hud : NERD_TEAM.physics),

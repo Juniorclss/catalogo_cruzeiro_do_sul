@@ -5186,6 +5186,121 @@ const renderGlobalPoliticsHighlights = async () => {
   registerArticleCardLinks(grid);
 };
 
+const regionalPoliticsScopes = [
+  {
+    key: "jurua",
+    label: "Vale do Juruá",
+    fallbackTitle: "Movimentos políticos locais abrem esta divisão",
+    matcher: /cruzeiro do sul|vale do jurua|vale do juruá|jurua|juruá|mancio lima|mâncio lima|rodrigues alves|porto walter|marechal thaumaturgo/i
+  },
+  {
+    key: "acre",
+    label: "Acre",
+    fallbackTitle: "Governo estadual e Assembleia entram em seguida",
+    matcher: /acre|rio branco|governador|governadora|mailza|assembleia legislativa|aleac|secretaria de estado|palacio rio branco|palácio rio branco/i
+  },
+  {
+    key: "brasil",
+    label: "Brasil",
+    fallbackTitle: "Brasília aparece como explicação, não como centro",
+    matcher: /brasil|brasilia|brasília|stf|congresso|senado|camara dos deputados|câmara dos deputados|lula|bolsonaro|governo federal|ministerio|ministério/i
+  }
+];
+
+const regionalPoliticsPoliticalPattern =
+  /politic|polític|prefeit|govern|secretari|deputad|vereador|camara|câmara|assembleia|aleac|stf|congresso|senado|eleiç|eleic|nomeaç|nomeac|exoneraç|exonerac|partido|progressistas|pl\b|pt\b|mdb\b|psd\b|união|uniao/i;
+
+const getRegionalPoliticsScope = (article = {}) => {
+  const normalized = normalizeRuntimeArticle(article);
+  const haystack = [
+    normalized.title,
+    normalized.lede,
+    normalized.summary,
+    normalized.category,
+    normalized.sourceName,
+    normalized.sourceLabel
+  ].join(" ");
+
+  return regionalPoliticsScopes.find((scope) => scope.matcher.test(haystack))?.key || "";
+};
+
+const isRegionalPoliticsArticle = (article = {}) => {
+  const normalized = normalizeRuntimeArticle(article);
+  const haystack = [
+    normalized.title,
+    normalized.lede,
+    normalized.summary,
+    normalized.category,
+    normalized.sourceName,
+    normalized.sourceLabel
+  ].join(" ");
+
+  return normalizeText(normalized.category).includes("politica") || regionalPoliticsPoliticalPattern.test(haystack);
+};
+
+const renderRegionalPoliticsHighlights = (items = window.NEWS_DATA || []) => {
+  const grid = document.querySelector("#regional-politics-grid[data-regional-politics]");
+  if (!grid) {
+    return;
+  }
+
+  const candidates = sortRadarArticles(dedupeNewsItems(items))
+    .map((item) => normalizeRuntimeArticle(item))
+    .filter((article) => article.title && (article.sourceUrl || article.slug) && isRegionalPoliticsArticle(article));
+  const usedKeys = new Set();
+
+  const selected = regionalPoliticsScopes.map((scope) => {
+    const primary = candidates.find((article) => {
+      const key = getArticleUsageKey(article);
+      return key && !usedKeys.has(key) && getRegionalPoliticsScope(article) === scope.key;
+    });
+    const fallback = candidates.find((article) => {
+      const key = getArticleUsageKey(article);
+      return key && !usedKeys.has(key);
+    });
+    const article = primary || fallback || null;
+    const key = article ? getArticleUsageKey(article) : "";
+    if (key) {
+      usedKeys.add(key);
+    }
+    return { scope, article };
+  });
+
+  grid.innerHTML = selected
+    .map(({ scope, article }) => {
+      if (!article) {
+        return `
+          <article class="global-politics-card" data-scope="${escapeAttribute(scope.key)}">
+            <p class="eyebrow">${escapeHtml(scope.label)}</p>
+            <h3>${escapeHtml(scope.fallbackTitle)}</h3>
+            <p>Assim que houver notícia compatível no feed, este espaço prioriza política regional nessa camada.</p>
+            <footer>
+              <span>Fila editorial</span>
+              <a href="#radar">Abrir radar</a>
+            </footer>
+          </article>
+        `;
+      }
+
+      const href = buildArticleHref(article);
+      const source = formatMosaicSourceLabel(article);
+      return `
+        <article class="global-politics-card" data-scope="${escapeAttribute(scope.key)}">
+          <p class="eyebrow">${escapeHtml(scope.label)}</p>
+          <h3>${escapeHtml(truncateCopy(article.title || scope.fallbackTitle, 120))}</h3>
+          <p>${escapeHtml(truncateCopy(article.summary || article.lede || "Atualização política em acompanhamento.", 190))}</p>
+          <footer>
+            <span>${escapeHtml(source)}</span>
+            <a href="${escapeAttribute(href)}">Ler destaque</a>
+          </footer>
+        </article>
+      `;
+    })
+    .join("");
+
+  registerArticleCardLinks(grid);
+};
+
 const syncNewsDataset = (runtimeItems = []) => {
   const merged = dedupeNewsItems([...(runtimeItems || []), ...initialStaticNews]);
   window.NEWS_DATA = merged;
@@ -5316,6 +5431,10 @@ const pickSocialFallbackArticles = (items = [], count = 0, usedKeys = new Set())
       return false;
     }
 
+    if (!articleHasUsableImageCandidate(article)) {
+      return false;
+    }
+
     const categoryKey = article.categoryKey || normalizeText(article.category);
     const maxPerCategory = allowSecondFromCategory ? 2 : 1;
     if ((categoryCounts.get(categoryKey) || 0) >= maxPerCategory) {
@@ -5411,6 +5530,8 @@ const applySocialCardFromArticle = (card, article) => {
   }
 
   if (linkNode) {
+    const hasUsableImage = articleHasUsableImageCandidate(normalized);
+    card.classList.toggle("card-without-photo", !hasUsableImage);
     applyThumbImage(linkNode, normalized);
   }
 };
@@ -5427,6 +5548,10 @@ const hydrateSocialCards = (items = []) => {
   const missingCards = [];
   const appliedArticles = [];
   const usedKeys = buildReservedArticleKeys(["social"]);
+  const pinnedSocialSlugs = new Set([
+    "michael-jackson-filme-cine-romeu-cruzeiro-do-sul",
+    "filme-bolsonaro-memes-reacao-redes"
+  ]);
 
   cards.forEach((card) => {
     const linkNode = card.querySelector(".news-thumb");
@@ -5434,7 +5559,14 @@ const hydrateSocialCards = (items = []) => {
     const article = slugFromHref ? window.NEWS_MAP?.[slugFromHref] : null;
     const articleKey = getArticleUsageKey(article);
 
+    if (slugFromHref && pinnedSocialSlugs.has(slugFromHref)) {
+      card.classList.remove("card-without-photo");
+      return;
+    }
+
     if (article && articleKey && !usedKeys.has(articleKey)) {
+      const hasUsableImage = articleHasUsableImageCandidate(article);
+      card.classList.toggle("card-without-photo", !hasUsableImage);
       usedKeys.add(articleKey);
       appliedArticles.push(article);
       if (linkNode) {
@@ -5675,6 +5807,7 @@ const registerArticleCardLinks = (root = document) => {
 };
 
 registerArticleCardLinks();
+renderRegionalPoliticsHighlights(initialMergedNews);
 renderGlobalPoliticsHighlights();
 
 const initializeMobilePagePrefetch = () => {
@@ -8353,6 +8486,7 @@ const hydrateDynamicNews = async () => {
     hydrateMosaicHero(merged);
     hydrateStaticMediaSurfaces();
     initializeHeroTourismHero();
+    renderRegionalPoliticsHighlights(merged);
     renderSidebarWidgets();
     renderRadar(activeFilter);
     updateLiveFeedItems(merged, { resetFilter: false });

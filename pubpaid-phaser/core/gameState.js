@@ -5,6 +5,15 @@ export const gameState = {
   prompt: "Clique na rua para mover. Entre pela porta ou use a saída para alternar entre rua e salão.",
   testBalance: 100,
   realBalance: 0,
+  availableBalance: 0,
+  lockedMatchBalance: 0,
+  lockedWithdrawalBalance: 0,
+  pvpStatus: "idle",
+  pvpGameId: "",
+  pvpSeat: "",
+  pvpMatchId: "",
+  pvpMatch: null,
+  pvpQueue: null,
   selectedTable: "darts",
   stageEventActive: false,
   loungeQueue: "",
@@ -16,6 +25,7 @@ export const gameState = {
     title: "Ponto do jogo",
     body: "",
     chips: [],
+    view: null,
     actions: []
   }
 };

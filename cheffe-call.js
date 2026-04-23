@@ -55,8 +55,13 @@
   const adminClearSession = document.querySelector("#adminClearSession");
   const adminExportSnapshot = document.querySelector("#adminExportSnapshot");
   const adminOpenRealAgents = document.querySelector("#adminOpenRealAgents");
+  const callMapSummary = document.querySelector("#callMapSummary");
+  const callMapList = document.querySelector("#callMapList");
   const theaterEl = document.querySelector(".bitmap-theater");
   const lowerDecksEl = document.querySelector(".call-lower-decks");
+  const theaterStackEl = document.querySelector(".theater-stack");
+  const meetingTableEl = document.querySelector(".meeting-table");
+  const stagePlatformEl = document.querySelector(".stage-platform");
   const instructionInput = formEl?.querySelector('[name="instruction"]');
   const commandInput = formEl?.querySelector('[name="command"]');
   const promptModeSelect = document.querySelector("#promptModeSelect");
@@ -97,6 +102,95 @@
   let lowerDecksOpen = false;
   let currentMeetingSessionId = "";
   let latestCallPayload = null;
+
+  function rectToPercent(rect, rootRect) {
+    if (!rect || !rootRect || !rootRect.width || !rootRect.height) return null;
+    return {
+      x: Number((((rect.left - rootRect.left) / rootRect.width) * 100).toFixed(2)),
+      y: Number((((rect.top - rootRect.top) / rootRect.height) * 100).toFixed(2)),
+      width: Number(((rect.width / rootRect.width) * 100).toFixed(2)),
+      height: Number(((rect.height / rootRect.height) * 100).toFixed(2))
+    };
+  }
+
+  function getSeatGridMeta() {
+    const mobile = window.matchMedia("(max-width: 980px)").matches;
+    return {
+      columns: mobile ? 10 : 20,
+      rows: mobile ? 19 : 10,
+      orientation: "virados para o palco sul",
+      anchor: "tronco no assento / cabeça acima do encosto"
+    };
+  }
+
+  function buildSceneMap() {
+    const rootRect = theaterStackEl?.getBoundingClientRect();
+    if (!rootRect) return null;
+    const zones = [
+      {
+        key: "audience",
+        label: "Plateia",
+        role: "Grade de cadeiras onde ficam os 181 agentes.",
+        rect: rectToPercent(audienceEl?.getBoundingClientRect(), rootRect)
+      },
+      {
+        key: "podium",
+        label: "Púlpito",
+        role: "Mesa central de fala do comando.",
+        rect: rectToPercent(meetingTableEl?.getBoundingClientRect(), rootRect)
+      },
+      {
+        key: "stage",
+        label: "Palco sul",
+        role: "Área do avatar principal em 2D, de costas para a plateia.",
+        rect: rectToPercent(stagePlatformEl?.getBoundingClientRect(), rootRect)
+      },
+      {
+        key: "speakerBubble",
+        label: "Bolha de fala",
+        role: "Card do agente ativo com as ações da fala.",
+        rect: rectToPercent(speechBubbleEl?.getBoundingClientRect(), rootRect)
+      },
+      {
+        key: "raisedHands",
+        label: "Fila de fala",
+        role: "Zona dos agentes com mão levantada aguardando vez.",
+        rect: rectToPercent(raisedHandBoard?.getBoundingClientRect(), rootRect)
+      }
+    ].filter((item) => item.rect);
+
+    return {
+      root: {
+        width: Math.round(rootRect.width),
+        height: Math.round(rootRect.height)
+      },
+      stageDirection: "south",
+      seatGrid: getSeatGridMeta(),
+      zones
+    };
+  }
+
+  function renderSceneMap() {
+    const sceneMap = buildSceneMap();
+    if (!sceneMap) return;
+    if (callMapSummary) {
+      callMapSummary.textContent = `Mapa ativo: palco ao sul, ${sceneMap.seatGrid.columns} colunas de assentos e ${sceneMap.zones.length} zonas nomeadas com coordenadas reais da cena.`;
+    }
+    if (callMapList) {
+      callMapList.innerHTML = sceneMap.zones
+        .map(
+          (zone) => `
+            <article class="call-map-item">
+              <span>${escapeHtml(zone.key)}</span>
+              <strong>${escapeHtml(zone.label)}</strong>
+              <p>${escapeHtml(zone.role)} x:${zone.rect.x}% y:${zone.rect.y}% w:${zone.rect.width}% h:${zone.rect.height}%</p>
+            </article>
+          `
+        )
+        .join("");
+    }
+    window.cheffe_call_scene_map = sceneMap;
+  }
 
   function syncGameShellState() {
     document.body.classList.toggle("call-hud-hidden", document.body.dataset.hud === "hidden");
@@ -1031,6 +1125,7 @@
         handRaised: seat.classList.contains("is-hand-raised"),
         implementing: seat.classList.contains("is-implementing")
       }));
+    const sceneMap = buildSceneMap();
     return JSON.stringify({
       mode: document.body.dataset.hud === "hidden" ? "cinematic" : "hud",
       fullscreen: Boolean(document.fullscreenElement),
@@ -1043,7 +1138,12 @@
       queueSize: taskQueue.length,
       logs: meetingLogs.length,
       raisedHands: raisedHandQueue,
-      theater: { seats: visibleAgents.length, stage: "south", background: "nerd-straight-seats" },
+      theater: {
+        seats: visibleAgents.length,
+        stage: "south",
+        background: "nerd-straight-seats",
+        sceneMap
+      },
       coords: "screen-space, full meeting theater, stage at south/bottom"
     });
   }

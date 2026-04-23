@@ -4581,3 +4581,60 @@ body[data-office-theme="nerd-arcade"] .office-vscode-frame {
     width: auto;
   }
 }
+
+.office-cheffe-call-banner {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(127, 231, 255, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(14, 21, 37, 0.94), rgba(25, 14, 34, 0.9));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+}
+
+.office-cheffe-call-banner span {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(127, 231, 255, 0.82);
+}
+
+.office-cheffe-call-banner strong {
+  color: #f5fbff;
+  font-size: 1.02rem;
+}
+
+.office-cheffe-call-banner p {
+  margin: 0;
+  color: rgba(223, 233, 247, 0.74);
+}
+
+body.office-cheffe-locked [data-office-map-panel]::after {
+  content: "Equipe em reuniao no Cheffe Call";
+  position: absolute;
+  inset: 16px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(127, 231, 255, 0.16);
+  background: linear-gradient(180deg, rgba(7, 12, 22, 0.84), rgba(5, 9, 18, 0.92));
+  color: rgba(245, 251, 255, 0.92);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 8;
+  pointer-events: none;
+}
+
+body.office-cheffe-locked [data-office-map-panel] {
+  filter: saturate(0.75) brightness(0.6);
+}
+
+body.office-cheffe-locked .office-vscode-frame {
+  box-shadow: 0 0 0 1px rgba(127, 231, 255, 0.12), 0 22px 60px rgba(0, 0, 0, 0.34);
+}
+
+body.office-cheffe-locked .office-agent {
+  opacity: 0;
+  pointer-events: none;
+}

@@ -171,12 +171,24 @@ function loadDefaultAgents() {
   const snippet = source.slice(start, end).replace("const defaultAgents =", "module.exports =");
   const sandbox = { module: { exports: [] }, sx: (value) => value, sy: (value) => value };
   vm.runInNewContext(snippet, sandbox, { timeout: 1000 });
+  const defaultSpriteProfiles = loadDefaultSpriteProfiles();
   return sandbox.module.exports.map((agent) => ({
     ...agent,
     officeKey: "editorial-hq",
     officeLabel: OFFICE_LABELS["editorial-hq"],
-    sourceFile: "escritorio.js"
+    sourceFile: "escritorio.js",
+    spriteProfile: defaultSpriteProfiles[agent.id] || null
   }));
+}
+
+function loadDefaultSpriteProfiles() {
+  const source = fs.readFileSync(DEFAULT_OFFICE_FILE, "utf-8");
+  const start = source.indexOf("const defaultSpriteProfiles = {");
+  const end = source.indexOf("};", start) + 2;
+  const snippet = source.slice(start, end).replace("const defaultSpriteProfiles =", "module.exports =");
+  const sandbox = { module: { exports: {} } };
+  vm.runInNewContext(snippet, sandbox, { timeout: 1000 });
+  return sandbox.module.exports || {};
 }
 
 function loadOfficeConfig(filePath) {
@@ -189,7 +201,8 @@ function loadOfficeConfig(filePath) {
     ...agent,
     officeKey: config.officeKey || slugify(path.basename(filePath, ".js")),
     officeLabel: OFFICE_LABELS[config.officeKey] || config.officeKey || "Office",
-    sourceFile: path.basename(filePath)
+    sourceFile: path.basename(filePath),
+    spriteProfile: config.spriteProfiles?.[agent.id] || null
   }));
 }
 
@@ -300,6 +313,7 @@ function enrichAgent(agent) {
     specialty: agent.specialty || "",
     description: agent.description || "",
     sourceFile: agent.sourceFile || "",
+    spriteProfile: agent.spriteProfile || null,
     skills,
     capabilities,
     monitoringFocus,
