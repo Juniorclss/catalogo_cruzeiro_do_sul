@@ -1,7 +1,10 @@
 /* eslint-disable no-console */
 const { createSharedDataStore } = require("../shared-data-store");
 
-const NEWS_INTERVAL_MS = 30 * 60 * 1000;
+const NEWS_INTERVAL_MS = Math.max(
+  5 * 60 * 1000,
+  Number(process.env.NEWS_INTERVAL_MS || 15 * 60 * 1000)
+);
 const BIZ_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const NEWS_FALLBACK = { updatedAt: null, online: false, items: [] };
 const store = createSharedDataStore();
@@ -35,6 +38,26 @@ const RSS_SOURCES = [
     url: "https://ac24horas.com/feed/",
     weight: 8,
   },
+  {
+    source: "G1 Brasil",
+    url: "https://g1.globo.com/rss/g1/brasil/",
+    weight: 7,
+  },
+  {
+    source: "G1 Política",
+    url: "https://g1.globo.com/rss/g1/politica/",
+    weight: 7,
+  },
+  {
+    source: "G1 Pop & Arte",
+    url: "https://g1.globo.com/rss/g1/pop-arte/",
+    weight: 7,
+  },
+  {
+    source: "CNN Brasil",
+    url: "https://www.cnnbrasil.com.br/feed/",
+    weight: 6,
+  },
 ];
 
 const KEYWORDS = [
@@ -51,6 +74,24 @@ const KEYWORDS = [
   "educação",
   "política",
   "politica",
+  "bolsonaro",
+  "lula",
+  "stf",
+  "congresso",
+  "senado",
+  "cinema",
+  "filme",
+  "michael jackson",
+  "teatro",
+  "peça",
+  "peca",
+  "famosos",
+  "celebridade",
+  "fofoca",
+  "novidade",
+  "novidades",
+  "entretenimento",
+  "cultura",
   "negócios",
   "negocios",
 ];
@@ -92,9 +133,46 @@ function categoryByText(textRaw) {
   if (text.includes("escola") || text.includes("educacao")) return "Educação";
   if (text.includes("polic") || text.includes("crime")) return "Segurança";
   if (text.includes("prefeitura") || text.includes("governo")) return "Política";
+  if (text.includes("bolsonaro") || text.includes("lula") || text.includes("stf") || text.includes("senado")) return "Política";
+  if (text.includes("cinema") || text.includes("filme") || text.includes("teatro") || text.includes("cultura")) return "Cultura";
+  if (text.includes("celebridade") || text.includes("famos") || text.includes("fofoca")) return "Festas & Social";
   if (text.includes("empreend") || text.includes("comercio") || text.includes("econom")) return "Negócios";
   if (text.includes("clima") || text.includes("rio") || text.includes("enchente")) return "Cotidiano";
   return "Geral";
+}
+
+function getEditorialFocusScore(item = {}) {
+  const text = normalize(
+    [
+      item.title,
+      item.summary,
+      item.category,
+      item.location,
+      item.source,
+      item.url
+    ].join(" ")
+  );
+  const isAcre = /\b(acre|rio branco|sena madureira|feijo|xapuri|brasileia|epitaciolandia|assis brasil|placido de castro)\b/.test(
+    text
+  );
+  const isValeJurua =
+    /\b(cruzeiro do sul|jurua|mancio lima|porto walter|marechal thaumaturgo|tarauaca)\b/.test(
+      text
+    ) || (isAcre && /\brodrigues alves\b/.test(text));
+  const isImportant =
+    /\b(alerta|urgente|defesa civil|enchente|alag|saude|hospital|seguranca|policia|crime|acidente|educacao|prefeitura|governo|governador|governadora|eleicao|stf|congresso|senado|bolsonaro|lula)\b/.test(
+      text
+    );
+  const isGlobalEntertainment =
+    /\b(cinema|filme|trailer|estreia|bilheteria|teatro|peca|famoso|famosa|celebridade|fofoca|michael jackson|entretenimento|novidades|tecnologia|games)\b/.test(
+      text
+    );
+
+  if (isValeJurua) return 300 + (isImportant ? 40 : 0);
+  if (isAcre) return 220 + (isImportant ? 35 : 0);
+  if (isImportant) return 80;
+  if (isGlobalEntertainment) return 90;
+  return 40;
 }
 
 function extractRssItems(xml, sourceName) {
@@ -120,7 +198,7 @@ function extractRssItems(xml, sourceName) {
       category: categoryByText(`${title} ${description}`),
       location: /cruzeiro do sul|jurua|juruá|acre/i.test(`${title} ${description}`)
         ? "Acre / Cruzeiro do Sul"
-        : "Brasil",
+        : "Brasil / Mundo",
       createdAt: new Date().toISOString(),
     };
 
@@ -138,7 +216,11 @@ function dedupeAppend(existing, incoming) {
     if (!map.has(key)) map.set(key, item);
   });
   return Array.from(map.values()).sort(
-    (a, b) => new Date(b.date || b.createdAt).getTime() - new Date(a.date || a.createdAt).getTime()
+    (a, b) => {
+      const focus = getEditorialFocusScore(b) - getEditorialFocusScore(a);
+      if (focus !== 0) return focus;
+      return new Date(b.date || b.createdAt).getTime() - new Date(a.date || a.createdAt).getTime();
+    }
   );
 }
 

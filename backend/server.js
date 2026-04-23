@@ -63,6 +63,10 @@ const NINJAS_MERCHANT_CITY = String(process.env.NINJAS_MERCHANT_CITY || "CRUZEIR
 const NEWS_REFRESH_ENABLED = !["0", "false", "off"].includes(
   String(process.env.NEWS_REFRESH_ENABLED || "true").trim().toLowerCase()
 );
+const NEWS_REFRESH_INTERVAL_MS = Math.max(
+  5 * 60 * 1000,
+  Number(process.env.NEWS_REFRESH_INTERVAL_MS || 15 * 60 * 1000)
+);
 const PREVIEW_CLASS_BY_CATEGORY = {
   cotidiano: "thumb-cheia",
   saude: "thumb-saude",
@@ -118,6 +122,30 @@ const NEWS_SOURCES = [
     label: "Senado Notícias",
     url: "https://www12.senado.leg.br/noticias/feed",
     category: "politica"
+  },
+  {
+    id: "g1-brasil",
+    label: "G1 Brasil",
+    url: "https://g1.globo.com/rss/g1/brasil/",
+    category: "nacional"
+  },
+  {
+    id: "g1-politica",
+    label: "G1 Política",
+    url: "https://g1.globo.com/rss/g1/politica/",
+    category: "politica"
+  },
+  {
+    id: "g1-pop-arte",
+    label: "G1 Pop & Arte",
+    url: "https://g1.globo.com/rss/g1/pop-arte/",
+    category: "cultura"
+  },
+  {
+    id: "cnn-brasil",
+    label: "CNN Brasil",
+    url: "https://www.cnnbrasil.com.br/feed/",
+    category: "nacional"
   }
 ];
 
@@ -980,7 +1008,47 @@ function normalizeArticleItem(item) {
   };
 }
 
+function getEditorialFocusScore(item = {}) {
+  const text = normalizeText(
+    [
+      item.title,
+      item.summary,
+      item.lede,
+      item.category,
+      item.location,
+      item.sourceName,
+      item.sourceLabel,
+      item.sourceUrl
+    ].join(" ")
+  );
+  const isAcre = /\b(acre|rio branco|sena madureira|feijo|feij[oó]|xapuri|brasileia|epitaciolandia|assis brasil|placido de castro)\b/.test(
+    text
+  );
+  const isValeJurua =
+    /\b(cruzeiro do sul|jurua|juru[aá]|mancio lima|m[âa]ncio lima|porto walter|marechal thaumaturgo|tarauaca|tarauac[aá])\b/.test(
+      text
+    ) || (isAcre && /\brodrigues alves\b/.test(text));
+  const isImportant =
+    /\b(alerta|urgente|defesa civil|enchente|alag|saude|hospital|seguranca|policia|crime|acidente|educacao|prefeitura|governo|governador|governadora|eleicao|stf|congresso|senado|bolsonaro|lula)\b/.test(
+      text
+    );
+  const isGlobalEntertainment =
+    /\b(cinema|filme|trailer|estreia|bilheteria|teatro|peca|peça|famoso|famosa|celebridade|fofoca|michael jackson|entretenimento|novidades|tecnologia|games)\b/.test(
+      text
+    );
+
+  if (isValeJurua) return 300 + (isImportant ? 40 : 0);
+  if (isAcre) return 220 + (isImportant ? 35 : 0);
+  if (isImportant) return 80;
+  if (isGlobalEntertainment) return 90;
+  return 40;
+}
+
 function sortArticleItems(left, right) {
+  const rightFocus = getEditorialFocusScore(right);
+  const leftFocus = getEditorialFocusScore(left);
+  if (rightFocus !== leftFocus) return rightFocus - leftFocus;
+
   const rightDate = new Date(right.publishedAt || right.date || 0).getTime();
   const leftDate = new Date(left.publishedAt || left.date || 0).getTime();
   if (rightDate !== leftDate) return rightDate - leftDate;
@@ -2613,7 +2681,7 @@ async function boot() {
   await ensureStore();
   if (NEWS_REFRESH_ENABLED) {
     await refreshNewsAggregator();
-    setInterval(refreshNewsAggregator, 30 * 60 * 1000);
+    setInterval(refreshNewsAggregator, NEWS_REFRESH_INTERVAL_MS);
   }
 
   const storageInfo = store.describe();

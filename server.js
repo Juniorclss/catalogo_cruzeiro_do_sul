@@ -616,7 +616,14 @@ const RSS_SOURCES = (() => {
     return [];
   }
 })();
-const TOPIC_FEED_TTL_MS = 1000 * 60 * 45;
+const NEWS_REFRESH_INTERVAL_MS = Math.max(
+  1000 * 60 * 5,
+  Number(process.env.NEWS_REFRESH_INTERVAL_MS || 1000 * 60 * 15)
+);
+const TOPIC_FEED_TTL_MS = Math.max(
+  1000 * 60 * 5,
+  Number(process.env.TOPIC_FEED_TTL_MS || 1000 * 60 * 15)
+);
 const TOPIC_FEED_FALLBACK_FILE = path.join(ROOT_DIR, "data", "topic-feed-fallback.json");
 const TOPIC_FEED_CONFIG = {
   study: [
@@ -759,6 +766,74 @@ const TOPIC_FEED_CONFIG = {
       siteUrl: "https://www.tubefilter.com/",
       defaultCategory: "Creators",
       topicGroup: "creators"
+    }
+  ],
+  buzz: [
+    {
+      id: "g1-pop-arte",
+      name: "G1 Pop & Arte",
+      feedUrl: "https://g1.globo.com/rss/g1/pop-arte/",
+      siteUrl: "https://g1.globo.com/pop-arte/",
+      defaultCategory: "Cultura",
+      topicGroup: "cinema"
+    },
+    {
+      id: "terra-diversao",
+      name: "Terra Diversao",
+      feedUrl: "https://www.terra.com.br/rss/Controller?channelid=7f6c931cc6b6d310VgnVCM4000009bcceb0aRCRD",
+      siteUrl: "https://www.terra.com.br/diversao/",
+      defaultCategory: "Cultura",
+      topicGroup: "celebridades"
+    },
+    {
+      id: "the-verge",
+      name: "The Verge",
+      feedUrl: "https://www.theverge.com/rss/index.xml",
+      siteUrl: "https://www.theverge.com/",
+      defaultCategory: "Novidades",
+      topicGroup: "novidades"
+    },
+    {
+      id: "youtube-blog",
+      name: "YouTube Blog",
+      feedUrl: "https://blog.youtube/rss",
+      siteUrl: "https://blog.youtube/",
+      defaultCategory: "Novidades",
+      topicGroup: "creators"
+    }
+  ],
+  politics: [
+    {
+      id: "g1-politica",
+      name: "G1 Politica",
+      feedUrl: "https://g1.globo.com/rss/g1/politica/",
+      siteUrl: "https://g1.globo.com/politica/",
+      defaultCategory: "Politica",
+      topicGroup: "brasilia"
+    },
+    {
+      id: "senado-noticias",
+      name: "Senado Noticias",
+      feedUrl: "https://www12.senado.leg.br/noticias/feed",
+      siteUrl: "https://www12.senado.leg.br/noticias",
+      defaultCategory: "Politica",
+      topicGroup: "congresso"
+    },
+    {
+      id: "agencia-brasil-politica",
+      name: "Agencia Brasil Politica",
+      feedUrl: "https://agenciabrasil.ebc.com.br/rss/politica/feed.xml",
+      siteUrl: "https://agenciabrasil.ebc.com.br/politica",
+      defaultCategory: "Politica",
+      topicGroup: "nacional"
+    },
+    {
+      id: "cnn-brasil-politica",
+      name: "CNN Brasil Politica",
+      feedUrl: "https://www.cnnbrasil.com.br/politica/feed/",
+      siteUrl: "https://www.cnnbrasil.com.br/politica/",
+      defaultCategory: "Politica",
+      topicGroup: "nacional"
     }
   ]
 };
@@ -1289,7 +1364,7 @@ function inferCategoryKeyFromContent(rawText) {
   }
 
   if (
-    /\b(aleac|camara|deputad|senador|ministro|stj|stf|eleicao|eleitoral|parlamento|monopolio aereo)\b/.test(
+    /\b(aleac|camara|deputad|senador|ministro|presidente|ex-presidente|bolsonaro|lula|stj|stf|eleicao|eleitoral|parlamento|congresso|senado|monopolio aereo)\b/.test(
       haystack
     )
   ) {
@@ -1311,13 +1386,13 @@ function inferCategoryKeyFromContent(rawText) {
   }
 
   if (
-    /\b(festa|social|celebridade|aniversario|casamento|coluna social)\b/.test(haystack)
+    /\b(festa|social|celebridade|famoso|famosa|fofoca|aniversario|casamento|coluna social)\b/.test(haystack)
   ) {
     return "festas & social";
   }
 
   if (
-    /\b(cultura|cinema|teatro|show|festival|musica|arte|artista|entretenimento|variedades)\b/.test(
+    /\b(cultura|cinema|filme|estreia|bilheteria|trailer|teatro|peca|peça|show|festival|musica|arte|artista|entretenimento|variedades|michael jackson)\b/.test(
       haystack
     )
   ) {
@@ -4184,7 +4259,50 @@ function getRawNewsItems() {
     .concat(staticNews);
 }
 
+function getEditorialFocusScore(item = {}) {
+  const text = normalizeText(
+    [
+      item.title,
+      item.summary,
+      item.lede,
+      item.category,
+      item.categoryKey,
+      item.location,
+      item.sourceName,
+      item.sourceLabel,
+      item.sourceUrl
+    ].join(" ")
+  );
+  const isAcre = /\b(acre|rio branco|sena madureira|feijo|feij[oó]|xapuri|brasileia|epitaciolandia|assis brasil|placido de castro)\b/.test(
+    text
+  );
+  const isValeJurua =
+    /\b(cruzeiro do sul|jurua|juru[aá]|mancio lima|m[âa]ncio lima|porto walter|marechal thaumaturgo|tarauaca|tarauac[aá])\b/.test(
+      text
+    ) || (isAcre && /\brodrigues alves\b/.test(text));
+  const isImportant =
+    /\b(alerta|urgente|defesa civil|enchente|alag|saude|hospital|seguranca|policia|crime|acidente|educacao|prefeitura|governo|governador|governadora|eleicao|stf|congresso|senado|bolsonaro|lula)\b/.test(
+      text
+    );
+  const isGlobalEntertainment =
+    /\b(cinema|filme|trailer|estreia|bilheteria|teatro|peca|peça|famoso|famosa|celebridade|fofoca|michael jackson|entretenimento|novidades|tecnologia|games)\b/.test(
+      text
+    );
+
+  if (isValeJurua) return 300 + (isImportant ? 40 : 0);
+  if (isAcre) return 220 + (isImportant ? 35 : 0);
+  if (isImportant) return 80;
+  if (isGlobalEntertainment) return 90;
+  return 40;
+}
+
 function sortArticleItems(left, right) {
+  const rightFocus = getEditorialFocusScore(right);
+  const leftFocus = getEditorialFocusScore(left);
+  if (rightFocus !== leftFocus) {
+    return rightFocus - leftFocus;
+  }
+
   const rightDate = new Date(right.publishedAt || right.date || 0).getTime();
   const leftDate = new Date(left.publishedAt || left.date || 0).getTime();
 
@@ -4655,7 +4773,11 @@ function getNews(limit = 30) {
   });
 
   return Array.from(map.values())
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => {
+      const focus = getEditorialFocusScore(b) - getEditorialFocusScore(a);
+      if (focus !== 0) return focus;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    })
     .slice(0, limit);
 }
 
@@ -5380,7 +5502,8 @@ function buildRealAgentsPayload() {
       capabilities: Array.isArray(agent.capabilities) ? agent.capabilities.slice(0, 12) : [],
       monitoringFocus: Array.isArray(agent.monitoringFocus) ? agent.monitoringFocus.slice(0, 10) : [],
       deliverables: Array.isArray(agent.deliverables) ? agent.deliverables : [],
-      newsroomBridge: agent.newsroomBridge || ""
+      newsroomBridge: agent.newsroomBridge || "",
+      spriteProfile: agent.spriteProfile || null
     })),
     news: latestRun?.news || null,
     dailyContext: latestRun?.dailyContext || null,
@@ -5446,11 +5569,355 @@ function writeCheffeCallState(state) {
   });
 }
 
+function normalizeCheffeCallLog(entry = {}) {
+  const createdAt = cleanShortText(entry.createdAt || new Date().toISOString(), 60);
+  return {
+    id: cleanShortText(entry.id || createRecordId("cheflog"), 80),
+    createdAt,
+    time: cleanShortText(entry.time || createdAt.slice(11, 16), 12),
+    kind: cleanShortText(entry.kind || "", 40),
+    kindLabel: cleanShortText(entry.kindLabel || "fala", 80),
+    agent: cleanShortText(entry.agent || "Cheffe Call", 120),
+    office: cleanShortText(entry.office || "", 120),
+    text: cleanShortText(entry.text || "", 2400)
+  };
+}
+
+function normalizeCheffeCallDecision(entry = {}) {
+  return {
+    id: cleanShortText(entry.id || createRecordId("chefdec"), 80),
+    createdAt: cleanShortText(entry.createdAt || new Date().toISOString(), 60),
+    state: cleanShortText(entry.state || "queued", 40),
+    kindLabel: cleanShortText(entry.kindLabel || "fila", 80),
+    agent: cleanShortText(entry.agent || "Cheffe Call", 120),
+    office: cleanShortText(entry.office || "", 120),
+    title: cleanShortText(entry.title || "Ação da Cheffe Call", 220),
+    text: cleanShortText(entry.text || "", 2400),
+    howTo: cleanShortText(entry.howTo || "", 3200),
+    prompt: cleanShortText(entry.prompt || "", 3200),
+    command: cleanShortText(entry.command || "", 1600),
+    action: cleanShortText(entry.action || "", 80),
+    artifact: cleanShortText(entry.artifact || "", 400)
+  };
+}
+
+function summarizeCheffeCallSession(session = {}) {
+  const decisions = Array.isArray(session.decisions) ? session.decisions : [];
+  const logs = Array.isArray(session.logs) ? session.logs : [];
+  const approvals = Array.isArray(session.approvals) ? session.approvals : [];
+  return {
+    approvals: approvals.length,
+    decisions: decisions.length,
+    logs: logs.length,
+    running: decisions.filter((item) => item.state === "running").length,
+    queued: decisions.filter((item) => item.state === "queued" || item.state === "ready").length,
+    terminal: decisions.filter((item) => item.state === "terminal" || item.state === "fallback").length
+  };
+}
+
+function findCheffeExecutableActionMatch(body = {}) {
+  const store = readJson(REAL_AGENTS_ACTIONS_FILE, { actions: [] });
+  const actions = Array.isArray(store.actions) ? store.actions : [];
+  const agentSlug = slugify(body.agent || "");
+  const titleSlug = slugify(body.title || body.text || body.opinion || "");
+  return (
+    actions.find((item) => {
+      if ((item.status || "") !== "aguardando-aprovacao") return false;
+      const sameAgent = slugify(item.agent || "") === agentSlug;
+      if (!sameAgent) return false;
+      if (!titleSlug) return true;
+      const itemTitle = slugify(item.title || "");
+      return itemTitle.includes(titleSlug.slice(0, 42)) || titleSlug.includes(itemTitle.slice(0, 42));
+    }) || null
+  );
+}
+
+function applyCheffeCallAction(body = {}) {
+  const action = cleanShortText(body.action || body.type, 40).toLowerCase();
+  if (!action) {
+    return { ok: false, status: 400, error: "Informe a ação que a Cheffe Call deve registrar." };
+  }
+
+  const state = readCheffeCallState();
+  if (!state.sessions.length) {
+    return { ok: false, status: 409, error: "Nenhuma sessao de Cheffe Call esta aberta para receber a ação." };
+  }
+
+  const now = new Date().toISOString();
+  const sessionId = cleanShortText(body.sessionId, 80);
+  const sessionIndex = state.sessions.findIndex((item, index) => (sessionId ? item.id === sessionId : index === 0));
+  if (sessionIndex < 0) {
+    return { ok: false, status: 404, error: "Sessao da Cheffe Call nao encontrada." };
+  }
+
+  const targetSession = state.sessions[sessionIndex] || {};
+  const instruction = cleanShortText(body.instruction || targetSession.instruction || state.lastInstruction, 1600);
+  const agent = cleanShortText(body.agent || "Cheffe Call", 120);
+  const office = cleanShortText(body.office || "", 120);
+  const role = cleanShortText(body.role || "", 80);
+  const title = cleanShortText(body.title || body.assignment || body.text || body.opinion || `Acao de ${agent}`, 220);
+  const opinion = cleanShortText(body.opinion || body.text || "", 2400);
+  const command = cleanShortText(body.command || "", 1600);
+  const howTo = cleanShortText(body.howTo || "", 3200);
+  const prompt = cleanShortText(body.prompt || "", 3200);
+  const approvals = Array.isArray(targetSession.approvals) ? targetSession.approvals.slice(0, 32) : [];
+  const logs = Array.isArray(targetSession.logs) ? targetSession.logs.slice(0, 64) : [];
+  const decisions = Array.isArray(targetSession.decisions) ? targetSession.decisions.slice(0, 32) : [];
+  const executableMatch = findCheffeExecutableActionMatch({ agent, title, text: opinion });
+  let reviewedAction = null;
+
+  const pushLog = (entry) => {
+    logs.unshift(normalizeCheffeCallLog({ ...entry, createdAt: now }));
+  };
+  const pushDecision = (entry) => {
+    decisions.unshift(normalizeCheffeCallDecision({ ...entry, createdAt: now, action }));
+  };
+  const pushApproval = (entry) => {
+    approvals.unshift({
+      id: cleanShortText(entry.id || createRecordId("chefvote"), 80),
+      createdAt: now,
+      action,
+      agent,
+      office,
+      role,
+      note: cleanShortText(entry.note || "", 1200),
+      executableActionId: cleanShortText(entry.executableActionId || "", 120)
+    });
+  };
+  const appendActionOrder = (payload = {}) => {
+    appendOfficeOrder({
+      id: createRecordId("ord"),
+      from: "Cheffe Call",
+      to: cleanShortText(payload.to || `${agent}${office ? ` • ${office}` : ""}`, 120),
+      priority: cleanShortText(payload.priority || "alta", 40),
+      message: cleanShortText(payload.message || title, 1200),
+      ceoReply: cleanShortText(
+        payload.ceoReply || "Cheffe Call registrou a decisão e jogou a ação na fila operacional da equipe.",
+        1200
+      ),
+      status: cleanShortText(payload.status || `cheffe-call-${action}`, 80),
+      hierarchy: "Full Admin -> Cheffe Call -> agentes reais",
+      createdAt: now,
+      assignedAgents: 1,
+      assignments: [
+        {
+          agent,
+          office,
+          role,
+          title,
+          action,
+          command
+        }
+      ],
+      executionSummary: {
+        delivered: action === "approve" ? 1 : 0,
+        failed: 0,
+        running: action === "implement" ? 1 : 0
+      }
+    });
+  };
+
+  if (action === "refresh") {
+    const runtimeResult = runRealAgentsRuntime({ trigger: "cheffe-call-refresh" });
+    pushLog({
+      kindLabel: runtimeResult.ok ? "runtime atualizada" : "falha de runtime",
+      agent: "Cheffe Call",
+      office: "Sistema",
+      text: runtimeResult.ok
+        ? "Os agentes reais rodaram novo ciclo manual a partir da sala."
+        : runtimeResult.error || "Falha ao rodar os agentes reais."
+    });
+    if (!runtimeResult.ok) {
+      return { ok: false, status: 500, error: runtimeResult.error || "Falha ao atualizar os agentes reais." };
+    }
+  } else if (action === "approve") {
+    pushApproval({
+      note: `Ideia aprovada na Cheffe Call: ${title}`,
+      executableActionId: executableMatch?.id || ""
+    });
+    pushLog({
+      kind: "good",
+      kindLabel: "boa ideia",
+      agent,
+      office,
+      text: opinion || title
+    });
+    pushDecision({
+      state: "ready",
+      kindLabel: "aceita",
+      agent,
+      office,
+      title: `Plano aprovado para ${agent}`,
+      text: title,
+      howTo,
+      prompt,
+      command,
+      artifact: executableMatch?.artifact || ""
+    });
+    appendActionOrder({
+      message: `Aprovado na Cheffe Call: ${title}. Contexto: ${opinion || instruction}`,
+      ceoReply: `${agent} recebeu aprovação formal da sala e pode seguir para execução orientada.`
+    });
+    if (executableMatch) {
+      const review = reviewRealAgentAction({
+        actionId: executableMatch.id,
+        status: "aprovado",
+        note: `Aprovado pela Cheffe Call em ${now}.`
+      });
+      if (review.ok) reviewedAction = review.action;
+    }
+  } else if (action === "implement") {
+    pushApproval({
+      note: `Execução autorizada na Cheffe Call: ${title}`,
+      executableActionId: executableMatch?.id || ""
+    });
+    pushLog({
+      kind: "good",
+      kindLabel: "implementando",
+      agent,
+      office,
+      text: opinion || title
+    });
+    pushDecision({
+      state: "running",
+      kindLabel: "implementando",
+      agent,
+      office,
+      title: `Execução iniciada por ${agent}`,
+      text: title,
+      howTo,
+      prompt,
+      command,
+      artifact: executableMatch?.artifact || ""
+    });
+    appendActionOrder({
+      message: `Executar agora a partir da Cheffe Call: ${title}. Comando: ${command || "sem complemento de terminal"}`,
+      ceoReply: `${agent} entrou em execução acompanhada a partir da sala.`,
+      status: "cheffe-call-em-execucao"
+    });
+    if (executableMatch) {
+      const review = reviewRealAgentAction({
+        actionId: executableMatch.id,
+        status: "aprovado",
+        note: `Execução liberada pela Cheffe Call em ${now}.`
+      });
+      if (review.ok) reviewedAction = review.action;
+    }
+  } else if (action === "task") {
+    pushLog({
+      kindLabel: "tarefa criada",
+      agent,
+      office,
+      text: title
+    });
+    pushDecision({
+      state: "queued",
+      kindLabel: "tarefa",
+      agent,
+      office,
+      title: `Fila de tarefa para ${agent}`,
+      text: title,
+      howTo,
+      prompt,
+      command,
+      artifact: executableMatch?.artifact || ""
+    });
+    appendActionOrder({
+      message: `Nova tarefa vinda da Cheffe Call para ${agent}: ${title}. Critério: transformar em entrega revisável com validação.`,
+      ceoReply: `${agent} recebeu uma tarefa formal da sala e entra na fila operacional.`,
+      status: "cheffe-call-tarefa"
+    });
+  } else if (action === "terminal") {
+    pushLog({
+      kindLabel: "enviado ao terminal",
+      agent,
+      office,
+      text: command || title
+    });
+    pushDecision({
+      state: "terminal",
+      kindLabel: "terminal",
+      agent,
+      office,
+      title: `Prompt enviado ao terminal por ${agent}`,
+      text: title,
+      command,
+      prompt,
+      artifact: executableMatch?.artifact || ""
+    });
+    appendActionOrder({
+      to: `Terminal + ${agent}`,
+      message: `Terminal acionado pela Cheffe Call para ${agent}: ${command || title}`,
+      ceoReply: "O pedido foi jogado no trilho de terminal e fica rastreado na reunião.",
+      status: "cheffe-call-terminal"
+    });
+  } else if (action === "variation") {
+    pushLog({
+      kindLabel: "variação pedida",
+      agent,
+      office,
+      text: title
+    });
+    pushDecision({
+      state: "queued",
+      kindLabel: "variação",
+      agent,
+      office,
+      title: `Alternativa pedida para ${agent}`,
+      text: title,
+      howTo,
+      prompt,
+      command
+    });
+  } else {
+    return { ok: false, status: 400, error: "Ação da Cheffe Call ainda nao suportada." };
+  }
+
+  const nextSession = {
+    ...targetSession,
+    instruction,
+    updatedAt: now,
+    status:
+      action === "implement"
+        ? "em-execucao"
+        : action === "approve"
+          ? "aprovado"
+          : action === "refresh"
+            ? "sincronizado"
+            : "aguardando-aprovacao",
+    approvals: approvals.slice(0, 32),
+    logs: logs.slice(0, 64),
+    decisions: decisions.slice(0, 32),
+    reviewedActionId: reviewedAction?.id || targetSession.reviewedActionId || ""
+  };
+
+  const nextSessions = state.sessions.slice();
+  nextSessions[sessionIndex] = nextSession;
+  writeCheffeCallState({
+    ...state,
+    active: true,
+    pausedAt: state.pausedAt || now,
+    releasedAt: "",
+    lastInstruction: instruction,
+    lastSessionAt: now,
+    sessions: nextSessions
+  });
+
+  const payload = buildCheffeCallPayload();
+  return {
+    ok: true,
+    action,
+    reviewedAction,
+    session: payload.meeting.currentSession || null,
+    payload
+  };
+}
+
 function getCheffeCallOpinions(payload, instruction) {
   const daily = payload.dailyContext || {};
   const topAgents = Array.isArray(daily.topAgents) ? daily.topAgents.slice(0, 8) : [];
   const fallbackQueue = Array.isArray(payload.queue) ? payload.queue.slice(0, 8) : [];
-  const source = topAgents.length
+  const sourceBase = topAgents.length
     ? topAgents.map((item) => ({
         name: item.name,
         office: item.office,
@@ -5467,6 +5934,58 @@ function getCheffeCallOpinions(payload, instruction) {
         autonomy: item.autonomy?.autonomy || 0,
         urgency: item.autonomy?.urgency || 0
       }));
+  const source = sourceBase.length
+    ? sourceBase
+    : [
+        {
+          name: "Codex CEO",
+          office: "Escritorio Principal",
+          role: "ceo",
+          intent: "organizar a reuniao e transformar fala em decisao rastreavel",
+          autonomy: 82,
+          urgency: 78
+        },
+        {
+          name: "Bento Producer",
+          office: "Escritorio de Arte",
+          role: "review",
+          intent: "priorizar o que precisa ficar legivel antes do deploy",
+          autonomy: 82,
+          urgency: 80
+        },
+        {
+          name: "Lia Foto",
+          office: "Esttiles",
+          role: "image",
+          intent: "garantir que a cena e os assets nao sumam no deploy",
+          autonomy: 80,
+          urgency: 72
+        },
+        {
+          name: "Zed Engine",
+          office: "Escritorio Nerd",
+          role: "dev",
+          intent: "validar API, estado e comandos antes de publicar",
+          autonomy: 84,
+          urgency: 76
+        },
+        {
+          name: "Iris Proof",
+          office: "Escritorio de Ninjas",
+          role: "audit",
+          intent: "bloquear falhas de permissao, cache e rota quebrada",
+          autonomy: 81,
+          urgency: 74
+        },
+        {
+          name: "Nina Texto",
+          office: "Escritorio Principal",
+          role: "copy",
+          intent: "deixar as mensagens da sala publicaveis e sem linguagem temporaria",
+          autonomy: 79,
+          urgency: 70
+        }
+      ];
 
   const subject = cleanShortText(instruction || "tema de hoje", 140);
   const angles = [
@@ -5531,20 +6050,36 @@ function getCheffeCallOpinions(payload, instruction) {
 function buildCheffeCallPayload() {
   const agentsPayload = buildRealAgentsPayload();
   const state = readCheffeCallState();
+  const currentSession = state.sessions[0]
+    ? {
+        ...state.sessions[0],
+        approvals: Array.isArray(state.sessions[0].approvals) ? state.sessions[0].approvals.slice(0, 32) : [],
+        logs: Array.isArray(state.sessions[0].logs) ? state.sessions[0].logs.slice(0, 64) : [],
+        decisions: Array.isArray(state.sessions[0].decisions) ? state.sessions[0].decisions.slice(0, 32) : [],
+        actionStats: summarizeCheffeCallSession(state.sessions[0])
+      }
+    : null;
   return {
-    ok: agentsPayload.ok,
+    ok: true,
     updatedAt: new Date().toISOString(),
+    agentsReady: Boolean(agentsPayload.ok),
     meeting: {
       active: state.active,
       pausedAt: state.pausedAt,
       releasedAt: state.releasedAt,
       lastInstruction: state.lastInstruction,
       lastSessionAt: state.lastSessionAt,
+      currentSession,
       sessions: state.sessions
     },
     dailyContext: agentsPayload.dailyContext || null,
     autonomy: agentsPayload.autonomy || null,
-    summary: agentsPayload.summary || {},
+    summary: {
+      ...(agentsPayload.summary || {}),
+      totalAgents: Number(agentsPayload.summary?.totalAgents || 181),
+      autonomousAgents: Number(agentsPayload.summary?.autonomousAgents || 181),
+      averageAutonomy: Number(agentsPayload.summary?.averageAutonomy || 82)
+    },
     queue: Array.isArray(agentsPayload.queue) ? agentsPayload.queue : [],
     opinions: state.sessions[0]?.opinions || getCheffeCallOpinions(agentsPayload, state.lastInstruction)
   };
@@ -5568,6 +6103,16 @@ function startCheffeCallSession(body) {
     dailyContext: agentsPayload.dailyContext || null,
     opinions: getCheffeCallOpinions(agentsPayload, instruction),
     approvals: [],
+    logs: [
+      normalizeCheffeCallLog({
+        createdAt: now,
+        kindLabel: "reunião aberta",
+        agent: "Cheffe Call",
+        office: "Sistema",
+        text: instruction
+      })
+    ],
+    decisions: [],
     status: "aguardando-aprovacao"
   };
 
@@ -6362,13 +6907,18 @@ function writePubpaidArrayCompat(primaryFile, legacyFile, items = []) {
 function normalizePubpaidWalletRecord(item = {}) {
   const coerceMoney = (value) => normalizePubpaidMoney(value, 0);
   const lockedLegacy = item.locked === true ? coerceMoney(item.balance || item.balanceCoins || 0) : 0;
+  const lockedWithdrawalCoins = coerceMoney(item.lockedWithdrawalCoins ?? lockedLegacy);
+  const lockedMatchCoins = coerceMoney(item.lockedMatchCoins ?? item.lockedPvpCoins ?? 0);
+  const balanceCoins = coerceMoney(item.balanceCoins ?? item.balance ?? 0);
   return {
     ...item,
-    balanceCoins: coerceMoney(item.balanceCoins ?? item.balance ?? 0),
-    lockedWithdrawalCoins: coerceMoney(item.lockedWithdrawalCoins ?? lockedLegacy),
+    balanceCoins,
+    availableCoins: Math.max(0, coerceMoney(item.availableCoins ?? (balanceCoins - lockedWithdrawalCoins - lockedMatchCoins))),
+    lockedMatchCoins,
+    lockedWithdrawalCoins,
     totalApprovedDeposits: coerceMoney(item.totalApprovedDeposits ?? item.depositsApproved ?? 0),
     totalApprovedWithdrawals: coerceMoney(item.totalApprovedWithdrawals ?? item.withdrawalsApproved ?? 0),
-    locked: Boolean(item.locked ?? (coerceMoney(item.lockedWithdrawalCoins ?? 0) > 0))
+    locked: Boolean(item.locked ?? (lockedWithdrawalCoins + lockedMatchCoins > 0))
   };
 }
 
@@ -6405,6 +6955,13 @@ function getPubpaidWallet(authUser = {}, { createIfMissing = true } = {}) {
         walletKey: key,
         user: publicAuthUser(authUser),
         balanceCoins: normalizePubpaidMoney(walletRecord.balanceCoins ?? walletRecord.balance),
+        availableCoins: normalizePubpaidMoney(
+          walletRecord.availableCoins ??
+            (normalizePubpaidMoney(walletRecord.balanceCoins ?? walletRecord.balance) -
+              normalizePubpaidMoney(walletRecord.lockedWithdrawalCoins ?? 0) -
+              normalizePubpaidMoney(walletRecord.lockedMatchCoins ?? 0))
+        ),
+        lockedMatchCoins: normalizePubpaidMoney(walletRecord.lockedMatchCoins ?? 0),
         lockedWithdrawalCoins: normalizePubpaidMoney(walletRecord.lockedWithdrawalCoins ?? walletRecord.locked),
         totalApprovedDeposits: normalizePubpaidMoney(walletRecord.totalApprovedDeposits ?? walletRecord.approvedDeposits),
         totalApprovedWithdrawals: normalizePubpaidMoney(walletRecord.totalApprovedWithdrawals ?? walletRecord.approvedWithdrawals),
@@ -6419,6 +6976,8 @@ function getPubpaidWallet(authUser = {}, { createIfMissing = true } = {}) {
       walletKey: key,
       user: publicAuthUser(authUser),
       balanceCoins: 0,
+      availableCoins: 0,
+      lockedMatchCoins: 0,
       lockedWithdrawalCoins: 0,
       totalApprovedDeposits: 0,
       totalApprovedWithdrawals: 0,
@@ -6431,6 +6990,8 @@ function getPubpaidWallet(authUser = {}, { createIfMissing = true } = {}) {
         playerId: key,
         playerName: safeString(authUser.name, 120) || "Jogador",
         balanceCoins: 0,
+        availableCoins: 0,
+        lockedMatchCoins: 0,
         lockedWithdrawalCoins: 0,
         totalApprovedDeposits: 0,
         totalApprovedWithdrawals: 0,
@@ -6456,6 +7017,8 @@ function updatePubpaidWallet(authUser = {}, updater = null) {
     walletKey: key,
     user: publicAuthUser(authUser),
     balanceCoins: 0,
+    availableCoins: 0,
+    lockedMatchCoins: 0,
     lockedWithdrawalCoins: 0,
     totalApprovedDeposits: 0,
     totalApprovedWithdrawals: 0,
@@ -6466,7 +7029,9 @@ function updatePubpaidWallet(authUser = {}, updater = null) {
   next.user = publicAuthUser(authUser);
   next.walletKey = key;
   next.balanceCoins = Math.max(0, normalizePubpaidMoney(next.balanceCoins));
+  next.lockedMatchCoins = Math.max(0, normalizePubpaidMoney(next.lockedMatchCoins));
   next.lockedWithdrawalCoins = Math.max(0, normalizePubpaidMoney(next.lockedWithdrawalCoins));
+  next.availableCoins = Math.max(0, normalizePubpaidMoney(next.balanceCoins - next.lockedMatchCoins - next.lockedWithdrawalCoins));
   next.totalApprovedDeposits = Math.max(0, normalizePubpaidMoney(next.totalApprovedDeposits));
   next.totalApprovedWithdrawals = Math.max(0, normalizePubpaidMoney(next.totalApprovedWithdrawals));
   next.updatedAt = new Date().toISOString();
@@ -6476,6 +7041,8 @@ function updatePubpaidWallet(authUser = {}, updater = null) {
       playerId: key,
       playerName: safeString(next?.user?.name || authUser.name || "", 120) || "Jogador",
       balanceCoins: next.balanceCoins,
+      availableCoins: next.availableCoins,
+      lockedMatchCoins: next.lockedMatchCoins,
       lockedWithdrawalCoins: next.lockedWithdrawalCoins,
       totalApprovedDeposits: next.totalApprovedDeposits,
       totalApprovedWithdrawals: next.totalApprovedWithdrawals,
@@ -6511,6 +7078,8 @@ function buildPubpaidAccountPayload(authUser = {}) {
     wallet: wallet
       ? {
           balanceCoins: normalizePubpaidMoney(wallet.balanceCoins),
+          availableCoins: normalizePubpaidMoney(wallet.availableCoins ?? (wallet.balanceCoins - wallet.lockedMatchCoins - wallet.lockedWithdrawalCoins)),
+          lockedMatchCoins: normalizePubpaidMoney(wallet.lockedMatchCoins),
           lockedWithdrawalCoins: normalizePubpaidMoney(wallet.lockedWithdrawalCoins),
           totalApprovedDeposits: normalizePubpaidMoney(wallet.totalApprovedDeposits),
           totalApprovedWithdrawals: normalizePubpaidMoney(wallet.totalApprovedWithdrawals),
@@ -6519,6 +7088,8 @@ function buildPubpaidAccountPayload(authUser = {}) {
         }
       : {
           balanceCoins: 0,
+          availableCoins: 0,
+          lockedMatchCoins: 0,
           lockedWithdrawalCoins: 0,
           totalApprovedDeposits: 0,
           totalApprovedWithdrawals: 0,
@@ -7499,6 +8070,19 @@ async function handleApi(req, res, pathname, searchParams) {
     }
 
     return sendJson(res, 201, startCheffeCallSession(body));
+  }
+
+  if (req.method === "POST" && pathname === "/api/cheffe-call/action") {
+    const body = await parseBody(req);
+    if (!requireFullAdminOrderAccess(req, body)) {
+      return sendJson(res, 401, { ok: false, error: "Acesso restrito ao Full Admin." });
+    }
+
+    const result = applyCheffeCallAction(body);
+    if (!result.ok) {
+      return sendJson(res, result.status || 400, result);
+    }
+    return sendJson(res, 200, result.payload);
   }
 
   if (req.method === "POST" && pathname === "/api/cheffe-call/release") {
@@ -8482,18 +9066,35 @@ async function handleApi(req, res, pathname, searchParams) {
     const stake = normalizePubpaidAmount(body.stake, 10);
     const walletKey = getPubpaidWalletKey(authUser);
     let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    const previousWaiting = store.waiting.filter((entry) => entry?.player?.walletKey === walletKey);
+    previousWaiting.forEach((entry) => {
+      if (entry?.escrow?.status === "locked") {
+        releasePubpaidMatchEscrow(entry.player, entry.stake);
+      }
+    });
     store.waiting = store.waiting.filter((entry) => entry?.player?.walletKey !== walletKey);
     const existingMatch = store.matches.find((entry) =>
       entry?.gameId === gameId &&
-      entry?.status === "active" &&
+      ["active", "abandoned"].includes(entry?.status) &&
       [entry?.playerOne?.walletKey, entry?.playerTwo?.walletKey].includes(walletKey)
     );
     if (existingMatch) {
+      if (existingMatch.status === "abandoned" && existingMatch.abandonedBy) {
+        existingMatch.status = "active";
+        existingMatch.abandonedBy = "";
+        existingMatch.deadlineAt = "";
+        existingMatch.resultSummary = "Jogador reconectou antes dos 60 segundos. A mesa voltou ao estado ativo.";
+        existingMatch.updatedAt = new Date().toISOString();
+      }
       store = writePubpaidPvpStore(store);
       return sendJson(res, 200, buildPubpaidPvpStatePayload(store, authUser, gameId));
     }
 
     const player = createPubpaidPvpPlayer(authUser, body.profile || {});
+    const lockResult = lockPubpaidMatchEscrow(player, stake);
+    if (!lockResult.ok) {
+      return sendJson(res, 402, { ok: false, error: lockResult.error });
+    }
     const rivalWaiting = store.waiting.find((entry) =>
       entry?.gameId === gameId &&
       clampInteger(entry?.stake) === stake &&
@@ -8501,6 +9102,15 @@ async function handleApi(req, res, pathname, searchParams) {
     );
 
     if (rivalWaiting) {
+      if (rivalWaiting?.escrow?.status !== "locked") {
+        const rivalLock = lockPubpaidMatchEscrow(rivalWaiting.player, stake);
+        if (!rivalLock.ok) {
+          releasePubpaidMatchEscrow(player, stake);
+          store.waiting = store.waiting.filter((entry) => entry.id !== rivalWaiting.id);
+          store = writePubpaidPvpStore(store);
+          return sendJson(res, 409, { ok: false, error: "Rival saiu da mesa porque nao havia escrow disponivel." });
+        }
+      }
       store.waiting = store.waiting.filter((entry) => entry.id !== rivalWaiting.id);
       store.matches.push(createPubpaidPvpMatch(gameId, stake, rivalWaiting.player, player));
     } else {
@@ -8510,6 +9120,11 @@ async function handleApi(req, res, pathname, searchParams) {
         stake,
         createdAt: new Date().toISOString(),
         player,
+        escrow: {
+          status: "locked",
+          amount: stake,
+          lockedAt: new Date().toISOString(),
+        },
       });
     }
 
@@ -8529,21 +9144,24 @@ async function handleApi(req, res, pathname, searchParams) {
     }
     const walletKey = getPubpaidWalletKey(authUser);
     let store = cleanupPubpaidPvpStore(readPubpaidPvpStore());
+    store.waiting
+      .filter((entry) => entry?.gameId === gameId && entry?.player?.walletKey === walletKey && entry?.escrow?.status === "locked")
+      .forEach((entry) => releasePubpaidMatchEscrow(entry.player, entry.stake));
     store.waiting = store.waiting.filter((entry) => !(entry?.gameId === gameId && entry?.player?.walletKey === walletKey));
     store.matches = store.matches.map((entry) => {
       if (entry?.gameId !== gameId || entry?.status !== "active") return entry;
       const isPlayerOne = entry?.playerOne?.walletKey === walletKey;
       const isPlayerTwo = entry?.playerTwo?.walletKey === walletKey;
       if (!isPlayerOne && !isPlayerTwo) return entry;
-      const winner = isPlayerOne ? "playerTwo" : "playerOne";
+      const abandonedBy = isPlayerOne ? "playerOne" : "playerTwo";
       return {
         ...entry,
-        status: "finished",
-        winner,
+        status: "abandoned",
+        abandonedBy,
+        deadlineAt: new Date(Date.now() + PUBPAID_PVP_ABANDON_MS).toISOString(),
         resultSummary: isPlayerOne
-          ? `${entry?.playerOne?.name || "Jogador"} saiu da mesa. ${entry?.playerTwo?.name || "Rival"} venceu por abandono.`
-          : `${entry?.playerTwo?.name || "Jogador"} saiu da mesa. ${entry?.playerOne?.name || "Rival"} venceu por abandono.`,
-        finishedAt: new Date().toISOString(),
+          ? `${entry?.playerOne?.name || "Jogador"} saiu da mesa. Tem 60 segundos para voltar antes de perder por abandono.`
+          : `${entry?.playerTwo?.name || "Jogador"} saiu da mesa. Tem 60 segundos para voltar antes de perder por abandono.`,
         updatedAt: new Date().toISOString(),
       };
     });
@@ -9663,7 +10281,7 @@ if (RSS_SOURCES.length) {
   refreshRssRuntime().catch(() => {});
   setInterval(() => {
     refreshRssRuntime().catch(() => {});
-  }, 1000 * 60 * 30);
+  }, NEWS_REFRESH_INTERVAL_MS);
 }
 
 const server = http.createServer(async (req, res) => {
@@ -9683,7 +10301,10 @@ server.listen(PORT, HOST, () => {
 });
 function buildPubpaidAdminPayload() {
   const store = readCanonicalPubpaidStore();
+  const pvpStore = readPubpaidPvpStore();
   const dashboard = buildCanonicalPubpaidAdminPayload(store);
+  const activePvpMatches = (Array.isArray(pvpStore.matches) ? pvpStore.matches : []).filter((item) => item.status === "active");
+  const settledPvpMatches = (Array.isArray(pvpStore.matches) ? pvpStore.matches : []).filter((item) => item.settlement?.status === "settled");
   return {
     ok: true,
     updatedAt: dashboard.generatedAt,
@@ -9697,8 +10318,17 @@ function buildPubpaidAdminPayload() {
       pubpaidWallets: Array.isArray(dashboard.walletBoard) ? dashboard.walletBoard.length : 0,
       pubpaidPendingDeposits: Array.isArray(dashboard.pendingDeposits) ? dashboard.pendingDeposits.length : 0,
       pubpaidPendingWithdrawals: Array.isArray(dashboard.pendingWithdrawals) ? dashboard.pendingWithdrawals.length : 0,
+      pubpaidPvpWaiting: Array.isArray(pvpStore.waiting) ? pvpStore.waiting.length : 0,
+      pubpaidPvpActive: activePvpMatches.length,
+      pubpaidPvpSettled: settledPvpMatches.length,
     },
     dashboard,
+    pubpaidPvp: {
+      updatedAt: pvpStore.updatedAt,
+      waiting: pvpStore.waiting,
+      activeMatches: activePvpMatches,
+      settledMatches: settledPvpMatches.slice(-50),
+    },
     pendingPubpaidDeposits: dashboard.pendingDeposits,
     pendingPubpaidWithdrawals: dashboard.pendingWithdrawals,
     pubpaidWalletBoard: dashboard.walletBoard,
@@ -9708,6 +10338,7 @@ function buildPubpaidAdminPayload() {
 const PUBPAID_PVP_ENABLED_GAMES = new Set(["checkers", "cards21", "poker", "darts", "dicecups"]);
 const PUBPAID_PVP_WAIT_MS = 1000 * 60 * 15;
 const PUBPAID_PVP_MATCH_MS = 1000 * 60 * 60 * 6;
+const PUBPAID_PVP_ABANDON_MS = 1000 * 60;
 
 function emptyPubpaidPvpStore() {
   return {
@@ -9727,10 +10358,11 @@ function readPubpaidPvpStore() {
 }
 
 function writePubpaidPvpStore(store = emptyPubpaidPvpStore()) {
+  const settledStore = settleFinishedPubpaidPvpMatches(store);
   const nextStore = {
     updatedAt: new Date().toISOString(),
-    waiting: Array.isArray(store?.waiting) ? store.waiting : [],
-    matches: Array.isArray(store?.matches) ? store.matches : [],
+    waiting: Array.isArray(settledStore?.waiting) ? settledStore.waiting : [],
+    matches: Array.isArray(settledStore?.matches) ? settledStore.matches : [],
   };
   writeJson(PUBPAID_PVP_FILE, nextStore);
   return nextStore;
@@ -9738,13 +10370,38 @@ function writePubpaidPvpStore(store = emptyPubpaidPvpStore()) {
 
 function cleanupPubpaidPvpStore(store = emptyPubpaidPvpStore()) {
   const now = Date.now();
+  const expiredWaiting = [];
+  const matches = (Array.isArray(store.matches) ? store.matches : []).map((entry) => {
+    if (entry?.status !== "abandoned") return entry;
+    const deadline = new Date(entry.deadlineAt || 0).getTime();
+    if (!deadline || now < deadline) return entry;
+    const winner = entry.abandonedBy === "playerOne" ? "playerTwo" : "playerOne";
+    return {
+      ...entry,
+      status: "finished",
+      winner,
+      resultSummary:
+        winner === "playerOne"
+          ? `${entry?.playerTwo?.name || "Jogador 2"} nao voltou em 60 segundos. ${entry?.playerOne?.name || "Jogador 1"} venceu por abandono.`
+          : `${entry?.playerOne?.name || "Jogador 1"} nao voltou em 60 segundos. ${entry?.playerTwo?.name || "Jogador 2"} venceu por abandono.`,
+      finishedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  });
   return {
     ...store,
     waiting: (Array.isArray(store.waiting) ? store.waiting : []).filter((entry) => {
       const createdAt = new Date(entry?.createdAt || 0).getTime();
-      return createdAt && now - createdAt < PUBPAID_PVP_WAIT_MS;
+      const keep = createdAt && now - createdAt < PUBPAID_PVP_WAIT_MS;
+      if (!keep) {
+        expiredWaiting.push(entry);
+        if (entry?.escrow?.status === "locked") {
+          releasePubpaidMatchEscrow(entry.player, entry.stake);
+        }
+      }
+      return keep;
     }),
-    matches: (Array.isArray(store.matches) ? store.matches : []).filter((entry) => {
+    matches: matches.filter((entry) => {
       if (entry?.status === "finished") {
         const finishedAt = new Date(entry?.finishedAt || entry?.updatedAt || 0).getTime();
         return finishedAt && now - finishedAt < PUBPAID_PVP_MATCH_MS;
@@ -9752,6 +10409,113 @@ function cleanupPubpaidPvpStore(store = emptyPubpaidPvpStore()) {
       const startedAt = new Date(entry?.startedAt || entry?.createdAt || 0).getTime();
       return startedAt && now - startedAt < PUBPAID_PVP_MATCH_MS;
     }),
+  };
+}
+
+function getPubpaidWalletRecordByKey(walletKey = "") {
+  const key = safeString(walletKey, 180).toLowerCase();
+  if (!key) return null;
+  const wallets = getPubpaidWalletStore();
+  const record = wallets && typeof wallets === "object" ? wallets[key] : null;
+  return record ? normalizePubpaidWalletRecord(record) : null;
+}
+
+function savePubpaidWalletRecordByKey(walletKey = "", patch = {}) {
+  const key = safeString(walletKey, 180).toLowerCase();
+  if (!key) return null;
+  const wallets = getPubpaidWalletStore();
+  const current = normalizePubpaidWalletRecord(wallets?.[key] || {});
+  const next = normalizePubpaidWalletRecord({
+    ...current,
+    ...patch,
+    updatedAt: new Date().toISOString(),
+  });
+  savePubpaidWalletStore({
+    ...(wallets && typeof wallets === "object" ? wallets : {}),
+    [key]: {
+      ...next,
+      playerId: key,
+      walletKey: key,
+      playerName: safeString(patch.playerName || next.playerName || next?.user?.name || "", 120) || "Jogador",
+    },
+  });
+  return next;
+}
+
+function lockPubpaidMatchEscrow(player = {}, stake = 0) {
+  const walletKey = safeString(player?.walletKey || "", 180).toLowerCase();
+  const amount = normalizePubpaidMoney(stake);
+  const wallet = getPubpaidWalletRecordByKey(walletKey);
+  if (!wallet || amount <= 0) {
+    return { ok: false, error: "Carteira PubPaid nao encontrada." };
+  }
+  const available = normalizePubpaidMoney(wallet.availableCoins ?? (wallet.balanceCoins - wallet.lockedMatchCoins - wallet.lockedWithdrawalCoins));
+  if (available < amount) {
+    return { ok: false, error: "Saldo real disponivel insuficiente para travar escrow nessa mesa." };
+  }
+  const next = savePubpaidWalletRecordByKey(walletKey, {
+    ...wallet,
+    lockedMatchCoins: normalizePubpaidMoney(wallet.lockedMatchCoins + amount),
+    playerName: player.name,
+  });
+  return { ok: true, wallet: next };
+}
+
+function releasePubpaidMatchEscrow(player = {}, amount = 0) {
+  const walletKey = safeString(player?.walletKey || "", 180).toLowerCase();
+  const wallet = getPubpaidWalletRecordByKey(walletKey);
+  if (!wallet) return null;
+  return savePubpaidWalletRecordByKey(walletKey, {
+    ...wallet,
+    lockedMatchCoins: Math.max(0, normalizePubpaidMoney(wallet.lockedMatchCoins - normalizePubpaidMoney(amount))),
+    playerName: player.name,
+  });
+}
+
+function creditPubpaidMatchPayout(player = {}, amount = 0) {
+  const walletKey = safeString(player?.walletKey || "", 180).toLowerCase();
+  const wallet = getPubpaidWalletRecordByKey(walletKey);
+  if (!wallet) return null;
+  return savePubpaidWalletRecordByKey(walletKey, {
+    ...wallet,
+    balanceCoins: normalizePubpaidMoney(wallet.balanceCoins + normalizePubpaidMoney(amount)),
+    playerName: player.name,
+  });
+}
+
+function settlePubpaidPvpMatch(match = {}) {
+  if (!match || match.status !== "finished" || match.settlement?.status === "settled") return match;
+  const stake = normalizePubpaidMoney(match.stake);
+  const pot = normalizePubpaidMoney(stake * 2);
+  const houseFee = match.winner ? normalizePubpaidMoney(pot * 0.2) : 0;
+  const payout = match.winner ? normalizePubpaidMoney(pot - houseFee) : stake;
+  releasePubpaidMatchEscrow(match.playerOne, stake);
+  releasePubpaidMatchEscrow(match.playerTwo, stake);
+  if (match.winner === "playerOne") {
+    creditPubpaidMatchPayout(match.playerOne, payout);
+  } else if (match.winner === "playerTwo") {
+    creditPubpaidMatchPayout(match.playerTwo, payout);
+  } else {
+    creditPubpaidMatchPayout(match.playerOne, stake);
+    creditPubpaidMatchPayout(match.playerTwo, stake);
+  }
+  return {
+    ...match,
+    settlement: {
+      status: "settled",
+      stake,
+      pot,
+      houseFee,
+      payout,
+      settledAt: new Date().toISOString(),
+    },
+  };
+}
+
+function settleFinishedPubpaidPvpMatches(store = emptyPubpaidPvpStore()) {
+  return {
+    ...store,
+    matches: (Array.isArray(store.matches) ? store.matches : []).map((match) => settlePubpaidPvpMatch(match)),
   };
 }
 
@@ -10231,7 +10995,7 @@ function buildPubpaidPvpStatePayload(store, authUser, gameId) {
   const waitingEntry = store.waiting.find((entry) => entry?.gameId === gameId && entry?.player?.walletKey === walletKey) || null;
   const matchEntry = store.matches.find((entry) =>
     entry?.gameId === gameId &&
-    ["active", "finished"].includes(entry?.status) &&
+    ["active", "abandoned", "finished"].includes(entry?.status) &&
     [entry?.playerOne?.walletKey, entry?.playerTwo?.walletKey].includes(walletKey)
   ) || null;
   const seat = matchEntry

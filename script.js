@@ -174,6 +174,10 @@ const mobileHomeLeadMedia =
   typeof window !== "undefined" && typeof window.matchMedia === "function"
     ? window.matchMedia("(max-width: 740px)")
     : null;
+const mobileIntroMedia =
+  typeof window !== "undefined" && typeof window.matchMedia === "function"
+    ? window.matchMedia("(max-width: 760px)")
+    : null;
 const mobileHomeDomState = {
   initialized: false,
   menuDropdown: null,
@@ -1079,6 +1083,15 @@ const formatSplashStamp = () => {
 };
 
 const setupSplashExperience = () => {
+  if (mobileIntroMedia?.matches) {
+    document.body.classList.add("mobile-simple-loading");
+    window.setTimeout(() => {
+      document.body.classList.add("site-loaded", "mobile-intro-ready");
+      document.body.classList.remove("mobile-simple-loading");
+    }, 180);
+    return;
+  }
+
   if (performanceLiteMode) {
     document.body.classList.add("site-loaded");
     return;
@@ -5085,6 +5098,44 @@ const hydrateCadernoCards = async (items = []) => {
   await Promise.all(cardTasks);
 };
 
+const renderGlobalPoliticsHighlights = async () => {
+  const grid = document.querySelector("#global-politics-grid[data-topic-feed]");
+  if (!grid) {
+    return;
+  }
+
+  const items = await fetchTopicFeedCached(grid.dataset.topicFeed || "politics", 6);
+  const selected = dedupeNewsItems(items)
+    .filter((item) => item.title && (item.sourceUrl || item.slug))
+    .slice(0, 6);
+
+  if (!selected.length) {
+    return;
+  }
+
+  grid.innerHTML = selected
+    .map((item) => {
+      const href = item.slug
+        ? `./noticia.html?slug=${encodeURIComponent(item.slug)}`
+        : item.sourceUrl || item.url || "#";
+      const source = formatMosaicSourceLabel(item);
+      return `
+        <article class="global-politics-card">
+          <p class="eyebrow">${escapeHtml(item.category || item.eyebrow || "política")}</p>
+          <h3>${escapeHtml(truncateCopy(item.title || "Destaque de política", 120))}</h3>
+          <p>${escapeHtml(truncateCopy(item.summary || item.lede || "Atualização de política em acompanhamento.", 190))}</p>
+          <footer>
+            <span>${escapeHtml(source)}</span>
+            <a href="${escapeHtml(href)}">Ler destaque</a>
+          </footer>
+        </article>
+      `;
+    })
+    .join("");
+
+  registerArticleCardLinks(grid);
+};
+
 const syncNewsDataset = (runtimeItems = []) => {
   const merged = dedupeNewsItems([...(runtimeItems || []), ...initialStaticNews]);
   window.NEWS_DATA = merged;
@@ -5518,7 +5569,7 @@ if (mobileHomeLeadMedia) {
   }
 }
 
-const articleCardSelector = [".news-card", ".archive-card", ".mosaic-item"].join(", ");
+const articleCardSelector = [".news-card", ".archive-card", ".mosaic-item", ".global-politics-card"].join(", ");
 const cardInteractiveSelector = "a, button, input, select, textarea, label, summary";
 
 const getPrimaryCardLink = (card) =>
@@ -5574,6 +5625,50 @@ const registerArticleCardLinks = (root = document) => {
 };
 
 registerArticleCardLinks();
+renderGlobalPoliticsHighlights();
+
+const initializeMobilePagePrefetch = () => {
+  if (!mobileIntroMedia?.matches) {
+    return;
+  }
+
+  const prefetched = new Set();
+  const ensurePrefetch = (href) => {
+    if (!href || prefetched.has(href) || /^https?:\/\//i.test(href) || href.startsWith("#")) {
+      return;
+    }
+
+    const normalizedHref = href.replace(/#.*/, "");
+    if (!normalizedHref || prefetched.has(normalizedHref)) {
+      return;
+    }
+
+    prefetched.add(normalizedHref);
+    const link = document.createElement("link");
+    link.rel = "prefetch";
+    link.href = normalizedHref;
+    link.as = "document";
+    document.head.appendChild(link);
+  };
+
+  document.querySelectorAll("a[href]").forEach((anchor) => {
+    const href = anchor.getAttribute("href") || "";
+    anchor.addEventListener("pointerenter", () => ensurePrefetch(href), { passive: true });
+    anchor.addEventListener("touchstart", () => ensurePrefetch(href), { passive: true, once: true });
+  });
+
+  document.addEventListener("click", (event) => {
+    const anchor = event.target instanceof Element ? event.target.closest("a[href]") : null;
+    const href = anchor?.getAttribute("href") || "";
+    if (!anchor || !href || /^https?:\/\//i.test(href) || href.startsWith("#")) {
+      return;
+    }
+
+    document.body.classList.add("mobile-page-transition");
+  });
+};
+
+initializeMobilePagePrefetch();
 
 document.addEventListener("click", (event) => {
   const link = event.target instanceof Element ? event.target.closest('a[href*="noticia.html?slug="]') : null;

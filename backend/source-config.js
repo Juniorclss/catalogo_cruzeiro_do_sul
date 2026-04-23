@@ -61,5 +61,54 @@ module.exports = [
     feedUrl: "https://www.portaldojurua.com.br/feed/",
     siteUrl: "https://www.portaldojurua.com.br/",
     defaultCategory: "Cotidiano"
+  },
+  {
+    id: "agencia-brasil-ultimas",
+    name: "Agencia Brasil",
+    feedUrl: "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml",
+    siteUrl: "https://agenciabrasil.ebc.com.br/",
+    defaultCategory: "Nacional"
+  },
+  {
+    id: "g1-brasil",
+    name: "G1 Brasil",
+    feedUrl: "https://g1.globo.com/rss/g1/brasil/",
+    siteUrl: "https://g1.globo.com/",
+    defaultCategory: "Nacional"
+  },
+  {
+    id: "g1-politica",
+    name: "G1 Politica",
+    feedUrl: "https://g1.globo.com/rss/g1/politica/",
+    siteUrl: "https://g1.globo.com/politica/",
+    defaultCategory: "Politica"
+  },
+  {
+    id: "g1-pop-arte",
+    name: "G1 Pop & Arte",
+    feedUrl: "https://g1.globo.com/rss/g1/pop-arte/",
+    siteUrl: "https://g1.globo.com/pop-arte/",
+    defaultCategory: "Cultura"
+  },
+  {
+    id: "cnn-brasil",
+    name: "CNN Brasil",
+    feedUrl: "https://www.cnnbrasil.com.br/feed/",
+    siteUrl: "https://www.cnnbrasil.com.br/",
+    defaultCategory: "Nacional"
+  },
+  {
+    id: "terra-diversao",
+    name: "Terra Diversao",
+    feedUrl: "https://www.terra.com.br/rss/Controller?channelid=7f6c931cc6b6d310VgnVCM4000009bcceb0aRCRD",
+    siteUrl: "https://www.terra.com.br/diversao/",
+    defaultCategory: "Cultura"
+  },
+  {
+    id: "the-verge",
+    name: "The Verge",
+    feedUrl: "https://www.theverge.com/rss/index.xml",
+    siteUrl: "https://www.theverge.com/",
+    defaultCategory: "Novidades"
   }
 ];

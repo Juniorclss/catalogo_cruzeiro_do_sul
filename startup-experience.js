@@ -261,6 +261,57 @@
     );
   }
 
+  function hasStoredConsent() {
+    return getCookie(CONSENT_COOKIE) === "accepted";
+  }
+
+  function createMobileConsentBanner() {
+    const banner = document.createElement("aside");
+    banner.id = CONSENT_BANNER_ID;
+    banner.className = "cookie-consent-banner cookie-consent-banner-mobile";
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-live", "polite");
+    banner.setAttribute("aria-label", "Consentimento de cookies");
+    banner.innerHTML = `
+      <span class="cookie-consent-handle" aria-hidden="true"></span>
+      <p class="cookie-consent-kicker">Entrada rápida</p>
+      <h3>Cookies básicos para seguir no mobile</h3>
+      <p>Só o essencial para carregar melhor esta visita. Você aceita uma vez e continua direto.</p>
+      <div class="cookie-consent-inline-note" aria-hidden="true">
+        <span class="cookie-consent-inline-dot"></span>
+        <span>sem popup grande, sem palco de abertura</span>
+      </div>
+      <div class="cookie-consent-actions">
+        <button class="cookie-consent-accept" type="button">Aceitar e continuar</button>
+      </div>
+    `;
+    return banner;
+  }
+
+  function showMobileConsentBanner(callback) {
+    removeLegacyConsentBanner();
+    if (hasStoredConsent()) {
+      releaseFounderPreludeGate();
+      if (typeof callback === "function") callback();
+      return;
+    }
+
+    const banner = createMobileConsentBanner();
+    document.body.appendChild(banner);
+    releaseFounderPreludeGate();
+
+    banner.querySelector(".cookie-consent-accept")?.addEventListener("click", () => {
+      persistConsentState("accepted");
+      rememberWelcomeAcceptedThisSession();
+      rememberWelcomeAcceptedThisBrowserSession();
+      rememberWelcomeAcceptedToday();
+      dispatchConsent(true);
+      banner.remove();
+      dispatchIntroFinished();
+      if (typeof callback === "function") callback();
+    });
+  }
+
   function buildWelcomeCopyMarkup(options = {}) {
     const phone = options.phone === true;
     if (phone) {
@@ -270,24 +321,6 @@
         <p class="catalogo-welcome-lead">
           Usamos só o básico para o portal funcionar melhor e medir o carregamento desta visita.
         </p>
-
-        <div class="catalogo-mobile-founder-strip" aria-label="Fundadores em destaque na abertura">
-          <p class="catalogo-mobile-founder-kicker">Fundadores em cena</p>
-          <div class="catalogo-mobile-founder-logos">
-            <figure class="catalogo-mobile-founder-logo is-cafe">
-              <img src="${FOUNDERS_CAFE_IMAGE_SRC}" alt="Cafe Cruzeiro" loading="eager" decoding="async" />
-            </figure>
-            <figure class="catalogo-mobile-founder-logo">
-              <img src="${FOUNDERS_GRUPO_AS_LOGO_SRC}" alt="Grupo A.S" loading="eager" decoding="async" />
-            </figure>
-            <figure class="catalogo-mobile-founder-logo">
-              <img src="${FOUNDERS_GEANE_LOGO_SRC}" alt="Dra. Geane Campo" loading="eager" decoding="async" />
-            </figure>
-            <figure class="catalogo-mobile-founder-logo">
-              <img src="${FOUNDERS_RECOMMENCER_LOGO_SRC}" alt="Recommencer" loading="eager" decoding="async" />
-            </figure>
-          </div>
-        </div>
 
         <div class="catalogo-welcome-actions">
           <button class="catalogo-btn primary" id="catalogoAcceptButton" type="button">
@@ -1062,6 +1095,7 @@
 
   ready(() => {
     resetConsentForNewBrowserSession();
+    const phoneFlow = shouldUsePhoneWelcome();
 
     const continueAfterFounderPrelude = () => {
       if (shouldSkipWelcomeModal()) {
@@ -1070,9 +1104,19 @@
         if (oldModal) {
           oldModal.remove();
         }
+        if (phoneFlow) {
+          releaseFounderPreludeGate();
+          dispatchIntroFinished();
+          return;
+        }
         showReturningLoaderThen(() => {
           dispatchIntroFinished();
         });
+        return;
+      }
+
+      if (phoneFlow) {
+        showMobileConsentBanner();
         return;
       }
 
@@ -1129,6 +1173,12 @@
     };
 
     if (hasSeenFounderPreludeInThisSession()) {
+      releaseFounderPreludeGate();
+      continueAfterFounderPrelude();
+      return;
+    }
+
+    if (phoneFlow) {
       releaseFounderPreludeGate();
       continueAfterFounderPrelude();
       return;

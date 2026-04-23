@@ -205,15 +205,32 @@ body.editorial-home .site-footer .footer-bottom-utility-buttons {
 }
 
 @media (max-width: 740px) {
+  body.editorial-home.founder-prelude-pending {
+    overflow: auto !important;
+    background: #f7f1e6 !important;
+  }
+
+  body.editorial-home.founder-prelude-pending .page-shell {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  body.editorial-home.founder-prelude-pending .logo-splash {
+    display: none !important;
+  }
+
   body.editorial-home .site-header-stack {
     gap: 0.42rem !important;
     padding: 0.26rem !important;
     border-radius: 20px !important;
+    backdrop-filter: blur(10px) !important;
   }
 
   body.editorial-home .top-strip {
     gap: 0.55rem !important;
     padding: 0.72rem 0.78rem !important;
+    border-radius: 16px !important;
   }
 
   body.editorial-home .top-strip p {
@@ -239,6 +256,10 @@ body.editorial-home .site-footer .footer-bottom-utility-buttons {
   body.editorial-home .masthead {
     gap: 0.65rem !important;
     padding: 0.76rem !important;
+    border-radius: 18px !important;
+    background:
+      radial-gradient(circle at top right, rgba(221, 184, 123, 0.12), transparent 26%),
+      linear-gradient(160deg, rgba(255, 252, 246, 0.96), rgba(244, 248, 252, 0.96)) !important;
   }
 
   body.editorial-home .brand {
@@ -279,6 +300,9 @@ body.editorial-home .site-footer .footer-bottom-utility-buttons {
     letter-spacing: 0.05em !important;
     line-height: 1.12 !important;
     border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.86) !important;
+    border: 1px solid rgba(24, 55, 86, 0.08) !important;
+    box-shadow: 0 10px 18px rgba(18, 42, 68, 0.06) !important;
   }
 
   body.editorial-home .main-nav a:first-child {
@@ -292,6 +316,8 @@ body.editorial-home .site-footer .footer-bottom-utility-buttons {
   body.editorial-home .main-nav a.nav-game-link {
     grid-column: 1 / -1;
     min-height: 46px !important;
+    background: linear-gradient(135deg, rgba(24, 61, 99, 0.98), rgba(55, 118, 182, 0.96)) !important;
+    color: #f8fbff !important;
   }
 
   body.editorial-home .main-nav a[href="./escritorio.html"],
