@@ -5211,7 +5211,9 @@ const pickDailyItems = (items = [], count = 1, salt = 0) => {
 };
 
 const buildDailyInfluencerBuzzCard = (item = {}, index = 0) => `
-  <article class="trending-card main influencer-buzz-card daily-buzz-card reveal ${index ? "delay-1" : ""}">
+  <article class="trending-card influencer-buzz-card daily-buzz-card opinion-buzz-card reveal ${
+    index > 2 ? "delay-2" : index ? "delay-1" : ""
+  }">
     <span class="trend-badge hot">opinião do dia ${index + 1}</span>
     <div
       class="trend-photo influencer-hero-photo"
@@ -5232,17 +5234,9 @@ const buildDailyInfluencerBuzzCard = (item = {}, index = 0) => `
       <p>${escapeHtml(item.summary)}</p>
     </div>
 
-    <div class="buzz-context-grid">
-      <div>
-        <span>${escapeHtml(item.contextLabel)}</span>
-        <strong>${escapeHtml(item.contextTitle)}</strong>
-        <p>${escapeHtml(item.contextText)}</p>
-      </div>
-      <div>
-        <span>${escapeHtml(item.counterLabel)}</span>
-        <strong>${escapeHtml(item.counterTitle)}</strong>
-        <p>${escapeHtml(item.counterText)}</p>
-      </div>
+    <div class="buzz-inline-meta" aria-label="Resumo dos lados do debate">
+      <span>${escapeHtml(item.contextLabel)}: ${escapeHtml(item.contextTitle)}</span>
+      <span>${escapeHtml(item.counterLabel)}: ${escapeHtml(item.counterTitle)}</span>
     </div>
 
     <div class="buzz-reaction-box" aria-label="Reações à opinião do dia">
@@ -5261,72 +5255,15 @@ const buildDailyInfluencerBuzzCard = (item = {}, index = 0) => `
   </article>
 `;
 
-const buildDailyControversyBuzzCard = (item = {}, index = 0) => `
-  <article class="trending-card daily-polemica-card reveal ${index ? "delay-2" : "delay-1"}">
-    <span class="trend-badge ${escapeHtml(item.tone || "trending")}">${escapeHtml(item.badge || "Buzz")}</span>
-    <div
-      class="trend-photo"
-      style="--trend-image:url('${escapeHtml(item.image)}')"
-    ></div>
-    <h3>${escapeHtml(item.title)}</h3>
-    <p>${escapeHtml(item.summary)}</p>
-    <div class="engagement">
-      <span>${escapeHtml(item.likes)} curtidas</span>
-      <span>${escapeHtml(item.comments)} comentários</span>
-    </div>
-  </article>
-`;
-
 const renderDailyTrendingBuzz = async (options = {}) => {
   if (!trendingBuzzGrid) {
     return;
   }
 
-  const liveBuzzItems = await fetchTopicFeedCached("buzz", 8, options);
-  const selectedLiveBuzz = dedupeNewsItems(liveBuzzItems)
-    .filter((item) => item.title && (item.sourceUrl || item.slug))
-    .sort((left, right) => getArticlePublishedTime(right) - getArticlePublishedTime(left))
-    .slice(0, 6);
+  const influencers = pickDailyItems(trendingInfluencerBuzzPool, 6, 17);
 
-  if (selectedLiveBuzz.length >= 3) {
-    trendingBuzzGrid.classList.add("is-daily-buzz");
-    trendingBuzzGrid.innerHTML = selectedLiveBuzz
-      .map((item, index) => {
-        const href = buildArticleHref(item);
-        const photoUrl = getArticleDisplayImageUrl(item) || "./assets/home-cache/buzz-cruzeiro-01.jpg";
-        return `
-          <article class="trending-card daily-polemica-card reveal ${index ? "delay-1" : ""}">
-            <span class="trend-badge ${index === 0 ? "viral" : "trending"}">${escapeHtml(item.category || "Buzz")}</span>
-            <a
-              class="trend-photo"
-              href="${escapeRuntimeAttribute(href)}"
-              aria-label="${escapeRuntimeAttribute(truncateCopy(item.title || "Abrir repercussao", 120))}"
-              style="--trend-image:url('${escapeHtml(photoUrl)}')"
-            ></a>
-            <h3>${escapeHtml(truncateCopy(item.title || "Repercussão do dia", 92))}</h3>
-            <p>${escapeHtml(truncateCopy(item.summary || item.lede || "Atualização em acompanhamento.", 178))}</p>
-            <div class="engagement">
-              <span>${escapeHtml(item.sourceName || "Fonte ativa")}</span>
-              <span>${escapeHtml(
-                formatCompactDisplayDate(item.publishedAt || item.date || item.createdAt || "") || "agora"
-              )}</span>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
-    registerArticleCardLinks(trendingBuzzGrid);
-    return;
-  }
-
-  const influencers = pickDailyItems(trendingInfluencerBuzzPool, 3, 17);
-  const controversies = pickDailyItems(trendingControversyBuzzPool, 3, 53);
-
-  trendingBuzzGrid.classList.add("is-daily-buzz");
-  trendingBuzzGrid.innerHTML = [
-    ...influencers.map(buildDailyInfluencerBuzzCard),
-    ...controversies.map(buildDailyControversyBuzzCard)
-  ].join("");
+  trendingBuzzGrid.classList.add("is-daily-buzz", "is-opinion-grid");
+  trendingBuzzGrid.innerHTML = influencers.map(buildDailyInfluencerBuzzCard).join("");
 };
 
 const setFeedbackState = (node, message, tone = "") => {

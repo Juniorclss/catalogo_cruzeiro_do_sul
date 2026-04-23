@@ -7700,6 +7700,10 @@ input[type="range"] {
   margin-bottom: 1.5rem;
 }
 
+.trending-grid.is-opinion-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .trending-card {
   padding: 1.3rem;
   border-radius: var(--radius-lg);
@@ -7742,12 +7746,22 @@ input[type="range"] {
     linear-gradient(145deg, rgba(255, 250, 241, 0.94), rgba(245, 235, 218, 0.98)) !important;
 }
 
+.opinion-buzz-card {
+  padding: 1.15rem;
+  padding-top: 2.8rem;
+}
+
 .influencer-hero-photo {
   position: relative;
   min-height: 285px;
   margin-bottom: 0;
   overflow: hidden;
   background-position: center 24%;
+}
+
+.opinion-buzz-card .influencer-hero-photo {
+  min-height: 218px;
+  border-radius: 22px;
 }
 
 .influencer-hero-photo::after {
@@ -7829,6 +7843,36 @@ input[type="range"] {
   margin: 0;
   flex: 0;
   font-size: 1rem;
+}
+
+.opinion-buzz-card .influencer-buzz-copy h3 {
+  font-size: clamp(1.28rem, 1.7vw, 1.62rem);
+  line-height: 1.08;
+}
+
+.opinion-buzz-card .influencer-buzz-copy p:not(.buzz-kicker) {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.buzz-inline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.buzz-inline-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.42rem 0.68rem;
+  border: 1px solid rgba(16, 35, 60, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.54);
+  color: rgba(40, 60, 88, 0.86);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .buzz-context-grid {
@@ -19902,6 +19946,45 @@ body.editorial-home #trending .trending-card.main .engagement span {
 
 body.editorial-home #trending .trending-card.main .buzz-context-grid div,
 body.editorial-home #trending .trending-card.main .buzz-reaction-box {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 194, 135, 0.14) !important;
+}
+
+body.editorial-home #trending .trending-grid.is-opinion-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.editorial-home #trending .opinion-buzz-card {
+  --trend-accent: #ff8d66;
+  --trend-kicker: rgba(255, 216, 170, 0.92);
+  --trend-ink: #f7fbff;
+  background:
+    radial-gradient(circle at top right, rgba(255, 170, 128, 0.16), transparent 24%),
+    linear-gradient(160deg, rgba(22, 37, 57, 0.98), rgba(31, 52, 82, 0.94)) !important;
+}
+
+body.editorial-home #trending .opinion-buzz-card .trend-badge {
+  background: rgba(13, 26, 44, 0.72);
+  color: rgba(255, 223, 184, 0.94);
+}
+
+body.editorial-home #trending .opinion-buzz-card .buzz-kicker,
+body.editorial-home #trending .opinion-buzz-card .influencer-profile strong,
+body.editorial-home #trending .opinion-buzz-card .influencer-profile small,
+body.editorial-home #trending .opinion-buzz-card .buzz-inline-meta span,
+body.editorial-home #trending .opinion-buzz-card .buzz-reaction-box span,
+body.editorial-home #trending .opinion-buzz-card .engagement span {
+  color: rgba(244, 248, 255, 0.92) !important;
+}
+
+body.editorial-home #trending .opinion-buzz-card .influencer-buzz-copy h3,
+body.editorial-home #trending .opinion-buzz-card .influencer-buzz-copy p:not(.buzz-kicker),
+body.editorial-home #trending .opinion-buzz-card .buzz-reaction-box p {
+  color: #f6fbff !important;
+}
+
+body.editorial-home #trending .opinion-buzz-card .buzz-inline-meta span,
+body.editorial-home #trending .opinion-buzz-card .buzz-reaction-box {
   background: rgba(255, 255, 255, 0.08) !important;
   border-color: rgba(255, 194, 135, 0.14) !important;
 }
