@@ -855,8 +855,12 @@ const TOPIC_FEED_CONFIG = {
 };
 const IMAGE_PREVIEW_ALLOWLIST = [
   "ac24horas.com",
+  "g1.globo.com",
+  "cnnbrasil.com.br",
   "jurua24horas.com",
+  "juruacomunicacao.com.br",
   "juruaonline.com.br",
+  "tribunadojurua.com.br",
   "agencia.ac.gov.br",
   "cruzeirodosul.net",
   "cruzeirodosul.ac.gov.br",
@@ -3238,7 +3242,17 @@ function resolveFeedAssetUrl(baseUrl, candidate) {
   if (!cleanCandidate) return "";
 
   try {
-    return new URL(cleanCandidate, baseUrl || undefined).toString();
+    const resolved = new URL(cleanCandidate, baseUrl || undefined);
+    const nestedImageUrl =
+      resolved.searchParams.get("url") ||
+      resolved.searchParams.get("src") ||
+      resolved.searchParams.get("image");
+
+    if (nestedImageUrl && /^https?:/i.test(nestedImageUrl)) {
+      return nestedImageUrl;
+    }
+
+    return resolved.toString();
   } catch (_error) {
     return cleanCandidate;
   }
@@ -3267,7 +3281,13 @@ function pickLargestSrcsetCandidate(rawSrcset, baseUrl) {
 function shouldIgnoreImageUrl(value) {
   const imageUrl = String(value || "").toLowerCase();
   if (!imageUrl) return true;
-  if (!/\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(imageUrl)) return true;
+  const looksLikeKnownImageRoute =
+    /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(imageUrl) ||
+    imageUrl.includes("/wp-content/uploads/") ||
+    imageUrl.includes("/uploads/") ||
+    imageUrl.includes("/internal_photos/") ||
+    /[?&](?:url|src|image)=https?:/i.test(imageUrl);
+  if (!looksLikeKnownImageRoute) return true;
   if (/(?:logo|favicon|icon|avatar|emoji|gravatar|pixel|placeholder|spacer|blank)\b/i.test(imageUrl)) {
     return true;
   }

@@ -584,7 +584,16 @@ const resolveArticleImage = async (article, surface = "default") => {
       cacheKey,
       (async () => {
         const directImage = candidates.length ? await preloadFirstAvailableImage(candidates) : "";
-        return directImage || "";
+        if (directImage) {
+          return directImage;
+        }
+
+        const sourcePreviewImage = await resolveSourcePreviewImage(article);
+        if (!sourcePreviewImage) {
+          return "";
+        }
+
+        return (await preloadFirstAvailableImage(buildImageLoadCandidates(sourcePreviewImage))) || "";
       })()
     );
   }
