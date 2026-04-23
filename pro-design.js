@@ -107,6 +107,10 @@
   };
 
   const clearTilt = (event) => {
+    if (!event?.target || typeof event.target.closest !== "function") {
+      return;
+    }
+
     const card = event.target.closest(
       ".news-card, .archive-card, .live-feed-card, .trending-card, .feature-card, .regional-card, .highlight-card, .movie-card, .theater-card, .students-stage-card, .kids-media-card, .kids-game-card, .election-candidate-card, .infantil-card, .infantil-mini-card"
     );

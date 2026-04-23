@@ -2702,21 +2702,24 @@ const sortRadarArticles = (articles = []) =>
     return String(left.title || "").localeCompare(String(right.title || ""), "pt-BR");
   });
 
-const getArticleDisplayImageUrl = (article = {}, surface = "default") =>
-  getArticlePreferredImageUrl(article, surface);
+function getArticleDisplayImageUrl(article = {}, surface = "default") {
+  return getArticlePreferredImageUrl(article, surface);
+}
 
-const getArticlePreferredImageUrl = (article = {}, surface = "default") => {
+function getArticlePreferredImageUrl(article = {}, surface = "default") {
   const candidates = collectArticleImageCandidates(article, surface).filter(
     (candidate) => !isIllustrativeImage({ ...article, imageUrl: candidate })
   );
   return candidates[0] || "";
-};
+}
 
-const articleHasUsableImageCandidate = (article = {}, surface = "default") =>
-  Boolean(getArticlePreferredImageUrl(article, surface));
+function articleHasUsableImageCandidate(article = {}, surface = "default") {
+  return Boolean(getArticlePreferredImageUrl(article, surface));
+}
 
-const getArticleImageKey = (article = {}, surface = "default") =>
-  getImageFingerprint(getArticleDisplayImageUrl(article, surface));
+function getArticleImageKey(article = {}, surface = "default") {
+  return getImageFingerprint(getArticleDisplayImageUrl(article, surface));
+}
 
 const newsSurfaceReservations = {
   hero: new Set(),
