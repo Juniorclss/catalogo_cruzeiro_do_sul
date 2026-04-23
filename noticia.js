@@ -332,13 +332,20 @@ const resolveApiBases = () => {
       bases.push(normalized);
     }
   };
+  const configuredBases = Array.isArray(window.CATALOGO_API_BASES)
+    ? window.CATALOGO_API_BASES
+    : [];
   const configured =
     typeof window.CATALOGO_API_BASE === "string" && window.CATALOGO_API_BASE
       ? window.CATALOGO_API_BASE
       : "";
 
   if (window.location.protocol.startsWith("http")) {
-    addBase(configured || "", true);
+    addBase(window.location.origin || "", true);
+    if (configured) {
+      addBase(configured);
+    }
+    configuredBases.forEach((base) => addBase(base));
     return bases;
   }
 
@@ -758,6 +765,88 @@ const normalizeDetailArticle = (article = {}) => {
     imageUrl: canonicalImage,
     sourceImageUrl: canonicalSourceImage
   };
+};
+
+const getDetailArticleQualityScore = (article = {}) => {
+  const imageUrl = String(
+    article.imageUrl || article.feedImageUrl || article.sourceImageUrl || article.image || ""
+  ).trim();
+  const bodyCount = Array.isArray(article.body) ? article.body.filter(Boolean).length : 0;
+  const highlightsCount = Array.isArray(article.highlights)
+    ? article.highlights.filter(Boolean).length
+    : 0;
+  const developmentCount = Array.isArray(article.development)
+    ? article.development.filter(Boolean).length
+    : 0;
+  const title = String(article.title || "").trim();
+  const lede = String(article.lede || article.summary || article.description || "").trim();
+  const analysis = String(article.analysis || "").trim();
+  const sourceUrl = String(article.sourceUrl || article.url || article.link || "").trim();
+  const id = String(article.id || "").trim().toLowerCase();
+  let score = 0;
+
+  if (title) score += 10;
+  if (lede) score += Math.min(12, Math.ceil(lede.length / 40));
+  if (analysis) score += Math.min(14, Math.ceil(analysis.length / 50));
+  if (imageUrl) score += 30;
+  if (sourceUrl && sourceUrl !== "#") score += 6;
+  if (String(article.publishedAt || article.date || "").trim()) score += 3;
+  score += Math.min(24, bodyCount * 4);
+  score += Math.min(12, highlightsCount * 2);
+  score += Math.min(9, developmentCount * 3);
+
+  if (id.startsWith("home-linked-")) {
+    score -= 40;
+  }
+
+  return score;
+};
+
+const mergeDetailArticleRecords = (primary = {}, fallback = {}) => {
+  const normalizedPrimary = normalizeDetailArticle(primary);
+  const normalizedFallback = normalizeDetailArticle(fallback);
+
+  return normalizeDetailArticle({
+    ...normalizedFallback,
+    ...normalizedPrimary,
+    imageUrl: normalizedPrimary.imageUrl || normalizedFallback.imageUrl || "",
+    feedImageUrl: normalizedPrimary.feedImageUrl || normalizedFallback.feedImageUrl || "",
+    sourceImageUrl: normalizedPrimary.sourceImageUrl || normalizedFallback.sourceImageUrl || "",
+    imageCredit: normalizedPrimary.imageCredit || normalizedFallback.imageCredit || "",
+    imageFocus: normalizedPrimary.imageFocus || normalizedFallback.imageFocus || "",
+    imageFit: normalizedPrimary.imageFit || normalizedFallback.imageFit || "",
+    body:
+      Array.isArray(normalizedPrimary.body) && normalizedPrimary.body.filter(Boolean).length
+        ? normalizedPrimary.body
+        : normalizedFallback.body,
+    highlights:
+      Array.isArray(normalizedPrimary.highlights) && normalizedPrimary.highlights.filter(Boolean).length
+        ? normalizedPrimary.highlights
+        : normalizedFallback.highlights,
+    development:
+      Array.isArray(normalizedPrimary.development) &&
+      normalizedPrimary.development.filter(Boolean).length
+        ? normalizedPrimary.development
+        : normalizedFallback.development,
+    analysis: normalizedPrimary.analysis || normalizedFallback.analysis || ""
+  });
+};
+
+const chooseBestDetailArticle = (runtimeArticle, fallbackArticle) => {
+  if (!runtimeArticle) {
+    return fallbackArticle ? normalizeDetailArticle(fallbackArticle) : null;
+  }
+
+  if (!fallbackArticle) {
+    return normalizeDetailArticle(runtimeArticle);
+  }
+
+  const runtimeScore = getDetailArticleQualityScore(runtimeArticle);
+  const fallbackScore = getDetailArticleQualityScore(fallbackArticle);
+  const primary = runtimeScore >= fallbackScore ? runtimeArticle : fallbackArticle;
+  const fallback = primary === runtimeArticle ? fallbackArticle : runtimeArticle;
+
+  return mergeDetailArticleRecords(primary, fallback);
 };
 
 const pushUniqueImageCandidate = (bucket, value) => {
@@ -1558,8 +1647,9 @@ const loadArticle = async () => {
   const runtimeArticle = await loadRuntimeArticle(slug);
 
   if (runtimeArticle) {
-    renderArticle(runtimeArticle);
-    persistLoadedArticle(runtimeArticle);
+    const bestArticle = chooseBestDetailArticle(runtimeArticle, fallbackArticle);
+    renderArticle(bestArticle);
+    persistLoadedArticle(bestArticle);
     return;
   }
 
