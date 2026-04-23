@@ -279,6 +279,38 @@ legacyOfflineStorageKeys.forEach((storageKey) => {
   });
 });
 const initialStaticNews = Array.isArray(window.NEWS_DATA) ? [...window.NEWS_DATA] : [];
+const authorialHomePreviewBySlug = {
+  "michael-jackson-filme-cine-romeu-cruzeiro-do-sul": {
+    slug: "michael-jackson-filme-cine-romeu-cruzeiro-do-sul",
+    title: "Filme de Michael Jackson entra no radar com peso global e chance de movimentar o Cine Romeu",
+    category: "Cinema em destaque",
+    sourceName: "Editorial Catalogo Cruzeiro do Sul",
+    imageUrl: "https://i.ytimg.com/vi/lIMj2ZRpo1M/maxresdefault.jpg",
+    feedImageUrl: "https://i.ytimg.com/vi/lIMj2ZRpo1M/maxresdefault.jpg",
+    sourceImageUrl: "https://i.ytimg.com/vi/lIMj2ZRpo1M/maxresdefault.jpg",
+    imageFocus: "center 28%"
+  },
+  "filme-bolsonaro-memes-reacao-redes": {
+    slug: "filme-bolsonaro-memes-reacao-redes",
+    title: "Filme sobre Bolsonaro ja chega cercado por memes, ironias e uma boa dose de gente irritada",
+    category: "Memes e politica pop",
+    sourceName: "Editorial Catalogo Cruzeiro do Sul",
+    imageUrl: "https://img.band.com.br/image/2026/04/08/dark-horse-e-o-novo-filme-sobre-jair-bolsonaro-91750.jpg",
+    feedImageUrl: "https://img.band.com.br/image/2026/04/08/dark-horse-e-o-novo-filme-sobre-jair-bolsonaro-91750.jpg",
+    sourceImageUrl: "https://img.band.com.br/image/2026/04/08/dark-horse-e-o-novo-filme-sobre-jair-bolsonaro-91750.jpg",
+    imageFocus: "center 22%"
+  }
+};
+
+const getHomepageHydrationArticle = (slug = "") => {
+  const normalizedSlug = String(slug || "").trim();
+  if (!normalizedSlug) {
+    return null;
+  }
+
+  return window.NEWS_MAP?.[normalizedSlug] || authorialHomePreviewBySlug[normalizedSlug] || null;
+};
+
 const thumbTopicFallbacks = {
   "thumb-cheia": "Cheia",
   "thumb-saude": "Saude",
@@ -1144,7 +1176,10 @@ const hydrateStaticThumbs = (newsMap = {}) => {
 
 if (window.NEWS_DATA) {
   hydrateStaticThumbs(
-    Object.fromEntries(window.NEWS_DATA.map((item) => [item.slug, item]))
+    {
+      ...authorialHomePreviewBySlug,
+      ...Object.fromEntries(window.NEWS_DATA.map((item) => [item.slug, item]))
+    }
   );
 }
 
@@ -5905,11 +5940,15 @@ const hydrateSocialCards = (items = []) => {
   cards.forEach((card) => {
     const linkNode = card.querySelector(".news-thumb");
     const slugFromHref = getSlugFromLink(linkNode);
-    const article = slugFromHref ? window.NEWS_MAP?.[slugFromHref] : null;
+    const article = getHomepageHydrationArticle(slugFromHref);
     const articleKey = getArticleUsageKey(article);
 
     if (slugFromHref && pinnedSocialSlugs.has(slugFromHref)) {
-      card.classList.remove("card-without-photo");
+      const hasUsableImage = articleHasUsableImageCandidate(article);
+      card.classList.toggle("card-without-photo", !hasUsableImage);
+      if (linkNode) {
+        applyThumbImage(linkNode, article);
+      }
       return;
     }
 
@@ -5952,7 +5991,7 @@ const hydrateStaticMediaSurfaces = () => {
   if (thumbNodes.length > 0 && window.NEWS_MAP) {
     thumbNodes.forEach((node) => {
       const slugFromHref = getSlugFromLink(node.closest("a") || node);
-      const article = window.NEWS_MAP?.[slugFromHref];
+      const article = getHomepageHydrationArticle(slugFromHref);
       ensureMediaBadge(node, article?.media);
     });
   }
