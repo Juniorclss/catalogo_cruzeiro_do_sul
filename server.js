@@ -4,6 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const { runRealAgentsRuntimeLocal } = require("./scripts/real-agents-runtime");
 const {
+  parseHomeLinkedArticleFallbacks,
+  auditHomeLinkedArticleIntegrity
+} = require("./scripts/home-linked-article-fallbacks");
+const {
   buildDashboardPayload: buildCanonicalPubpaidAdminPayload,
   readStore: readCanonicalPubpaidStore,
   writeStore: writeCanonicalPubpaidStore,
@@ -75,6 +79,7 @@ const REAL_AGENTS_RUN_FILE = path.join(ROOT_DIR, ".codex-temp", "real-agents", "
 const REAL_AGENTS_RUN_MD_FILE = path.join(ROOT_DIR, ".codex-temp", "real-agents", "latest-run.md");
 const REAL_AGENTS_RUN_HISTORY_FILE = path.join(DATA_DIR, "real-agents-run-history.json");
 const REAL_AGENTS_ACTIONS_FILE = path.join(DATA_DIR, "real-agents-actions.json");
+const ARTICLE_INTEGRITY_REPORT_FILE = path.join(DATA_DIR, "article-integrity-report.json");
 const CHEFFE_CALL_STATE_FILE = path.join(DATA_DIR, "cheffe-call-state.json");
 const CHEFFE_CALL_PROMPTS_FILE = path.join(ROOT_DIR, "docs", "cheffe-call-181-prompts.json");
 const REAL_AGENTS_AUTO_RUN_INTERVAL_INPUT = Number(process.env.REAL_AGENTS_AUTO_RUN_INTERVAL_MS || 5 * 60 * 1000);
@@ -82,10 +87,21 @@ const REAL_AGENTS_AUTO_RUN_INTERVAL_MS = Number.isFinite(REAL_AGENTS_AUTO_RUN_IN
   ? Math.max(60 * 1000, REAL_AGENTS_AUTO_RUN_INTERVAL_INPUT)
   : 5 * 60 * 1000;
 const REAL_AGENTS_AUTO_RUN_DISABLED = String(process.env.REAL_AGENTS_AUTO_RUN_DISABLED || "").toLowerCase() === "true";
+const ARTICLE_INTEGRITY_INTERVAL_INPUT = Number(process.env.ARTICLE_INTEGRITY_INTERVAL_MS || 30 * 60 * 1000);
+const ARTICLE_INTEGRITY_INTERVAL_MS = Number.isFinite(ARTICLE_INTEGRITY_INTERVAL_INPUT)
+  ? Math.max(5 * 60 * 1000, ARTICLE_INTEGRITY_INTERVAL_INPUT)
+  : 30 * 60 * 1000;
 const realAgentsAutoRunState = {
   running: false,
   timer: null,
   startedAt: "",
+  lastRunAt: "",
+  lastError: "",
+  cycles: 0
+};
+const articleIntegrityAutoState = {
+  running: false,
+  timer: null,
   lastRunAt: "",
   lastError: "",
   cycles: 0
@@ -4277,10 +4293,12 @@ function getRawNewsItems() {
   const runtime = readJson(path.join(DATA_DIR, "runtime-news.json"), []);
   const archive = readJson(path.join(DATA_DIR, "news-archive.json"), []);
   const staticNews = getStaticNewsItems();
+  const homeLinkedFallbacks = parseHomeLinkedArticleFallbacks();
 
   return []
     .concat(Array.isArray(runtime) ? runtime : runtime.items || [])
     .concat(Array.isArray(archive) ? archive : archive.items || [])
+    .concat(homeLinkedFallbacks)
     .concat(staticNews);
 }
 
@@ -6274,6 +6292,55 @@ function startRealAgentsAutoRunner() {
   }, Math.min(15 * 1000, REAL_AGENTS_AUTO_RUN_INTERVAL_MS));
 }
 
+function runArticleIntegrityAudit(trigger = "manual") {
+  if (articleIntegrityAutoState.running) {
+    return readJson(ARTICLE_INTEGRITY_REPORT_FILE, null);
+  }
+
+  articleIntegrityAutoState.running = true;
+  const knownSlugs = getArticleNews(1200).map((item) => item.slug).filter(Boolean);
+
+  try {
+    const payload = {
+      trigger,
+      ...auditHomeLinkedArticleIntegrity({ knownSlugs })
+    };
+    writeJson(ARTICLE_INTEGRITY_REPORT_FILE, payload);
+    articleIntegrityAutoState.lastRunAt = payload.checkedAt;
+    articleIntegrityAutoState.lastError = "";
+    articleIntegrityAutoState.cycles += 1;
+    if (payload.missingCount > 0) {
+      console.warn(`[catalogo] auditoria de artigos encontrou ${payload.missingCount} slug(s) da home fora da base.`);
+    } else {
+      console.log(`[catalogo] auditoria de artigos ok (${trigger})`);
+    }
+    return payload;
+  } catch (error) {
+    articleIntegrityAutoState.lastError = String(error?.message || error || "falha na auditoria de artigos");
+    console.warn(`[catalogo] falha na auditoria de artigos (${trigger}): ${articleIntegrityAutoState.lastError}`);
+    return {
+      ok: false,
+      trigger,
+      checkedAt: new Date().toISOString(),
+      error: articleIntegrityAutoState.lastError
+    };
+  } finally {
+    articleIntegrityAutoState.running = false;
+  }
+}
+
+function startArticleIntegrityAutoRunner() {
+  if (articleIntegrityAutoState.timer) return;
+
+  articleIntegrityAutoState.timer = setInterval(() => {
+    runArticleIntegrityAudit("auto-30-minutos");
+  }, ARTICLE_INTEGRITY_INTERVAL_MS);
+
+  setTimeout(() => {
+    runArticleIntegrityAudit("auto-inicializacao");
+  }, Math.min(20 * 1000, ARTICLE_INTEGRITY_INTERVAL_MS));
+}
+
 const PUBPAID_SPRITE_SCOUT_SOURCES = [
   {
     name: "Kenney Assets",
@@ -8218,6 +8285,20 @@ async function handleApi(req, res, pathname, searchParams) {
     return sendJson(res, 200, { ok: true, total: items.length, items });
   }
 
+  if (req.method === "GET" && pathname === "/api/news/integrity") {
+    const payload = runArticleIntegrityAudit("api-read");
+    return sendJson(res, 200, {
+      ok: !payload?.error,
+      ...payload,
+      runtime: {
+        intervalMs: ARTICLE_INTEGRITY_INTERVAL_MS,
+        lastRunAt: articleIntegrityAutoState.lastRunAt,
+        lastError: articleIntegrityAutoState.lastError,
+        cycles: articleIntegrityAutoState.cycles
+      }
+    });
+  }
+
   if (req.method === "GET" && pathname === "/api/community/reports") {
     const limit = Number(searchParams.get("limit") || 8);
     return sendJson(res, 200, getCommunityReportsPayload(limit));
@@ -9314,6 +9395,13 @@ async function handleApi(req, res, pathname, searchParams) {
     store.matches[matchIndex] = {
       ...match,
       board: nextBoard,
+      lastMove: {
+        ...chosenMove,
+        seat,
+        piece: board?.[chosenMove.from.row]?.[chosenMove.from.col] || "",
+        capturedPiece: chosenMove.capture ? board?.[chosenMove.capture.row]?.[chosenMove.capture.col] || "" : "",
+        at: new Date().toISOString(),
+      },
       turn: nextTurn,
       winner: winner || "",
       resultSummary,
@@ -9607,6 +9695,13 @@ async function handleApi(req, res, pathname, searchParams) {
     store.matches[matchIndex] = {
       ...match,
       dartsState,
+      lastThrow: {
+        ...throwResult,
+        seat,
+        aimX,
+        aimY,
+        at: new Date().toISOString(),
+      },
       turn: nextTurn,
       winner,
       resultSummary,
@@ -10375,6 +10470,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, HOST, () => {
   console.log(`[catalogo] online em http://${HOST}:${PORT}`);
   startRealAgentsAutoRunner();
+  startArticleIntegrityAutoRunner();
 });
 function buildPubpaidAdminPayload() {
   const store = readCanonicalPubpaidStore();

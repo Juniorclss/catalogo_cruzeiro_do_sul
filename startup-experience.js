@@ -1000,11 +1000,19 @@
   }
 
   function createReturningLoaderModal(options = {}) {
-    const phone = options.phone === true;
     const modal = document.createElement("section");
     modal.id = `${MODAL_ID}ReturningLoader`;
-    modal.className = `catalogo-welcome is-cookie-only${phone ? " is-phone" : ""}`;
+    modal.className = "catalogo-welcome is-splash-loader";
     modal.setAttribute("aria-hidden", "true");
+    const splashSource = document.querySelector(".logo-splash");
+    let splashMarkup = "";
+
+    if (splashSource) {
+      splashMarkup = splashSource.outerHTML
+        .replace(/id="logo-splash-status"/g, 'data-returning-splash-status')
+        .replace(/id="logo-splash-date"/g, 'data-returning-splash-date');
+    }
+
     modal.innerHTML = `
       <article
         class="catalogo-welcome-card"
@@ -1012,29 +1020,27 @@
         aria-live="polite"
         aria-label="Preparando a abertura do portal"
       >
-        <div class="catalogo-welcome-copy">
-          <div class="catalogo-compact-banner" aria-hidden="true">
-            <span class="catalogo-compact-dot"></span>
-            <strong>Entrada rápida</strong>
-          </div>
-          <p class="catalogo-welcome-kicker">Portal em preparo</p>
-          <h2 id="catalogoWelcomeTitle">Abrindo a home já quase pronta</h2>
-          <p class="catalogo-welcome-lead">
-            Mantendo a página carregando primeiro para a entrada ficar mais lisa nesta visita.
-          </p>
-          <div class="catalogo-founder-prelude-loading catalogo-returning-loader-bar" aria-hidden="true">
-            <div class="catalogo-founder-prelude-loading-head">
-              <strong>Sincronizando abertura</strong>
-              <span>100%</span>
-            </div>
-            <div class="catalogo-founder-prelude-loading-bar">
-              <span></span>
-            </div>
-            <p>carregando capa, feed e popup alternativo</p>
-          </div>
-        </div>
+        ${splashMarkup}
       </article>
     `;
+
+    const splashDate = modal.querySelector("[data-returning-splash-date]");
+    if (splashDate) {
+      splashDate.textContent = new Intl.DateTimeFormat("pt-BR", {
+        weekday: "short",
+        day: "2-digit",
+        month: "long",
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+        .format(new Date())
+        .replace(/\.$/, "");
+    }
+
+    const splashStatus = modal.querySelector("[data-returning-splash-status]");
+    if (splashStatus) {
+      splashStatus.textContent = "Preparando os destaques do dia";
+    }
 
     return modal;
   }

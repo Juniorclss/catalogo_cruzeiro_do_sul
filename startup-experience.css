@@ -1240,6 +1240,45 @@ body.founder-prelude-pending .logo-splash {
   background: rgba(10, 34, 64, 0.64);
 }
 
+.catalogo-welcome.is-splash-loader {
+  place-items: center;
+  padding: 14px;
+  background: rgba(7, 18, 34, 0.48);
+  backdrop-filter: blur(10px);
+}
+
+.catalogo-welcome.is-splash-loader .catalogo-welcome-card {
+  width: min(760px, calc(100vw - 24px));
+  max-width: 760px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.catalogo-welcome.is-splash-loader .logo-splash {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  min-height: auto;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+}
+
+.catalogo-welcome.is-splash-loader .logo-splash-card {
+  width: 100%;
+  max-width: none;
+}
+
+body.site-loaded .catalogo-welcome.is-splash-loader .logo-splash,
+body.site-loaded .catalogo-welcome.is-splash-loader .logo-splash-card {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
 .catalogo-welcome.is-phone {
   place-items: end center;
   padding: 0 10px 10px;

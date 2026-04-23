@@ -2,7 +2,6 @@
   const deferredScripts = [
     "./insiders-crowd-march.js?v=20260420a",
     "./news-photo-fix.js?v=20260415c",
-    "./social-rss.js?v=20260413a",
     "./arquivo-noticias.js?v=20260415b",
     "admin-menu.js?v=20260415b",
     "analytics-client.js?v=20260415c",

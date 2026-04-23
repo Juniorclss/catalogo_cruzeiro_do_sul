@@ -4,6 +4,88 @@ const OFFLINE_LAST_ARTICLE_KEYS = ["catalogo_last_article_v2", "catalogo_last_ar
 const SKIP_HOME_INTRO_KEY = "catalogo_skip_home_intro_once";
 const HOME_RETURN_URL = "./index.html?skipIntro=1";
 const DETAIL_FALLBACK_IMAGES = [];
+const AUTHORIAL_DETAIL_ARTICLES = {
+  "michael-jackson-filme-cine-romeu-cruzeiro-do-sul": {
+    id: "michael-jackson-filme-cine-romeu-cruzeiro-do-sul",
+    slug: "michael-jackson-filme-cine-romeu-cruzeiro-do-sul",
+    title: "Filme de Michael Jackson vira estreia de peso para 2026 e entra no radar do Cine Romeu",
+    eyebrow: "cinema e impacto cultural",
+    date: "23 de abril de 2026",
+    publishedAt: "2026-04-23T08:55:00-05:00",
+    category: "Cultura",
+    previewClass: "thumb-cultura",
+    sourceName: "Editorial Catalogo Cruzeiro do Sul",
+    sourceUrl: "https://www.youtube.com/watch?v=lIMj2ZRpo1M",
+    sourceLabel: "Artigo autoral do Catalogo com base em trailer publico, IMDb e circuito local do Cine Romeu",
+    imageUrl: "https://i.ytimg.com/vi/lIMj2ZRpo1M/maxresdefault.jpg",
+    feedImageUrl: "https://i.ytimg.com/vi/lIMj2ZRpo1M/maxresdefault.jpg",
+    sourceImageUrl: "https://i.ytimg.com/vi/lIMj2ZRpo1M/maxresdefault.jpg",
+    imageCredit: "Crédito: trailer oficial de Michael / Lionsgate",
+    imageFocus: "center 28%",
+    lede: "O longa Michael, dirigido por Antoine Fuqua e estrelado por Jaafar Jackson, chega aos cinemas em 24 de abril de 2026 com lançamento global e ambição de evento de grande circuito.",
+    summary: "O longa Michael, dirigido por Antoine Fuqua e estrelado por Jaafar Jackson, chega aos cinemas em 24 de abril de 2026 com lançamento global e ambição de evento de grande circuito. Em Cruzeiro do Sul, isso entra no radar porque o Cine Romeu segue como a principal sala local para produções de apelo popular e pode transformar a estreia em pauta de cidade.",
+    analysis: "Este artigo autoral entra como destaque porque junta memória pop, indústria cultural e circuito exibidor com reflexo concreto em Cruzeiro do Sul. Michael Jackson segue como um nome gigantesco da música global, e um filme com distribuição ampla, suporte em IMAX e protagonista da própria família tende a mobilizar curiosidade, debate e bilheteria também fora dos grandes centros.",
+    body: [
+      "A produção ganhou corpo como um dos lançamentos fortes do primeiro semestre de 2026. A data de estreia internacional foi fixada para 24 de abril de 2026, com distribuição da Lionsgate nos Estados Unidos e da Universal no mercado internacional.",
+      "O filme é dirigido por Antoine Fuqua, escrito por John Logan e traz Jaafar Jackson no papel principal. Isso pesa no noticiário porque não se trata de um documentário pequeno ou de nicho: é um projeto de estúdio, com escala comercial, elenco conhecido e aposta explícita em alcançar o público global.",
+      "No plano cultural, Michael Jackson continua sendo um dos artistas mais influentes da música pop, com impacto em dança, clipes, performance, moda, turnês e indústria fonográfica. Mesmo quando a recepção crítica diverge sobre o recorte da cinebiografia, o tamanho do personagem por si só já transforma o filme em acontecimento.",
+      "Para Cruzeiro do Sul, a conversa não é abstrata. O Cine Romeu, no Hortência Center, segue como referência local de exibição e já recebeu sessões de festivais e circuitos culturais recentes. Quando um título com esse tamanho entra em cartaz, ele também funciona como termômetro do apetite do público local por grandes estreias.",
+      "Se Michael chegar à grade do Cine Romeu, a estreia pode abrir uma janela rara para aproximar o debate global de cinema da rotina cultural da cidade. Não é só um filme sobre um astro: é uma oportunidade de movimentar bilheteria, conversa pública e presença do cinema como programa urbano em Cruzeiro do Sul.",
+      "Na escolha editorial do Catalogo, esta pauta merece vitrine porque transforma uma estreia internacional em assunto local palpável: programação, fila, comentário de plateia e movimento cultural no centro da cidade."
+    ],
+    highlights: [
+      "Estreia internacional marcada para 24 de abril de 2026",
+      "Direção de Antoine Fuqua e roteiro de John Logan",
+      "Jaafar Jackson vive Michael na tela",
+      "Cine Romeu entra no radar local para a exibição"
+    ],
+    development: [
+      "Na leitura editorial, a importância do filme está em unir memória pop, indústria cultural e circuito exibidor ao mesmo tempo.",
+      "O nome Michael Jackson ainda mobiliza gerações diferentes, da nostalgia do videoclipe ao público mais novo que conhece a obra por streaming e recortes virais.",
+      "Em Cruzeiro do Sul, qualquer chegada do filme ao Cine Romeu merece cobertura própria, com foco em programação, procura do público e reação local à estreia."
+    ]
+  },
+  "filme-bolsonaro-memes-reacao-redes": {
+    id: "filme-bolsonaro-memes-reacao-redes",
+    slug: "filme-bolsonaro-memes-reacao-redes",
+    title: "Filme sobre Bolsonaro entra no radar com memes, ironias e gente bastante irritada nas redes",
+    eyebrow: "humor e repercussao",
+    date: "23 de abril de 2026",
+    publishedAt: "2026-04-23T09:05:00-05:00",
+    category: "Festas & Social",
+    previewClass: "thumb-rede",
+    sourceName: "Editorial Catalogo Cruzeiro do Sul",
+    sourceUrl: "https://www.exibidor.com.br/filme/17429/a-colis%C3%A3o-dos-destinos.html",
+    sourceLabel: "Artigo autoral do Catalogo com base em Exibidor, VEJA e repercussao publica do teaser de Dark Horse",
+    imageUrl: "https://img.band.com.br/image/2026/04/08/dark-horse-e-o-novo-filme-sobre-jair-bolsonaro-91750.jpg",
+    feedImageUrl: "https://img.band.com.br/image/2026/04/08/dark-horse-e-o-novo-filme-sobre-jair-bolsonaro-91750.jpg",
+    sourceImageUrl: "https://img.band.com.br/image/2026/04/08/dark-horse-e-o-novo-filme-sobre-jair-bolsonaro-91750.jpg",
+    imageCredit: "Crédito: Band / reprodução do cartaz oficial de Dark Horse",
+    imageFocus: "center 22%",
+    lede: "A Colisão dos Destinos tem estreia prevista para 14 de maio de 2026, enquanto Dark Horse segue cercado por repercussão online, e o tema já nasceu com um ingrediente inevitável: meme em alta voltagem.",
+    summary: "Entre documentário, cinebiografia heroica e muito barulho em rede, o universo audiovisual ligado a Bolsonaro já está produzindo uma reação curiosa: apoiadores tentam vender épico, enquanto críticos transformam trailer, inglês torto e exagero promocional em material pronto para piada.",
+    analysis: "A leitura autoral aqui é assumidamente leve: a internet brasileira não costuma desperdiçar uma oportunidade dessas. Quando o teaser vira piada por erros em inglês e ainda aparece cercado de controvérsia sobre trilha e tom grandioso, a narrativa escapa do controle da campanha e cai no território em que a web trabalha melhor: deboche, comparação e comentário atravessado.",
+    body: [
+      "O documentário A Colisão dos Destinos aparece na base do mercado exibidor com estreia prevista para 14 de maio de 2026. A proposta é narrar a trajetória de Jair Bolsonaro com depoimentos de familiares, aliados e nomes próximos do campo político bolsonarista.",
+      "Paralelamente, a cinebiografia Dark Horse já vinha chamando atenção desde 2025 por tentar embalar a campanha de 2018 em chave épica. O problema para os produtores é que a internet brasileira raramente aceita esse tipo de embalagem sem abrir a caixa, rir do laço e postar print.",
+      "Parte da reação online foi puxada pelo teaser que virou alvo de piadas por erros em inglês. Veículos como VEJA e Farol da Bahia registraram que o vídeo foi recebido com chacota, inclusive por frases promocionais mal escritas, como se o próprio trailer tivesse pedido revisão no grupo da família e ninguém tivesse visto a tempo.",
+      "Outro combustível para o humor foi a notícia de que o teaser de Dark Horse incomodou a equipe de Beyoncé por uso indevido de música. A combinação de grandiloquência, polêmica e acabamento questionado deu ao debate um tom quase inevitável: metade disputa política, metade roteiro involuntário de comédia de internet.",
+      "No fim, o mais interessante não é só o filme em si, mas o efeito colateral. Há gente furiosa porque o projeto tenta heroicizar demais. Há gente furiosa porque achou o material tecnicamente fraco. E há uma multidão apenas se divertindo com o fato de que, no Brasil, até trailer político corre o risco de estrear primeiro como meme.",
+      "Na leitura do Catalogo, o valor desta pauta está menos em defender ou atacar o projeto e mais em mostrar como a internet brasileira pega um material de pretensão épica e o redistribui como comédia política em tempo real."
+    ],
+    highlights: [
+      "A Colisão dos Destinos está listado para 14 de maio de 2026",
+      "Dark Horse já apanhou nas redes por erros em inglês no teaser",
+      "Repercussão também passou por polêmica com trilha atribuída a Beyoncé",
+      "Tema chegou ao debate público em tom de meme e irritação"
+    ],
+    development: [
+      "O diferencial editorial aqui é tratar a repercussão como fenômeno de linguagem de internet, e não só como pauta partidária.",
+      "Quando um projeto tenta nascer como épico e desembarca como print compartilhável, a web brasileira rapidamente muda o gênero do filme sem pedir autorização.",
+      "Se surgirem novos trailers, vale acompanhar menos a propaganda oficial e mais o que o público faz com ela, porque é aí que a história realmente ganha tração."
+    ]
+  }
+};
 
 const normalizeSlug = (value) => {
   let raw = String(value || "").trim();
@@ -1345,6 +1427,7 @@ const findLocalArticle = (targetSlug) => {
   }
 
   const article =
+    AUTHORIAL_DETAIL_ARTICLES[targetSlug] ||
     window.NEWS_MAP?.[targetSlug] ||
     (Array.isArray(window.NEWS_DATA)
       ? window.NEWS_DATA.find((item) => normalizeSlug(item?.slug) === targetSlug)
