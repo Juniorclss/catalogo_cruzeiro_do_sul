@@ -4190,13 +4190,45 @@ const typeInsidersLine = (node, text, delay, step) => {
   }, delay);
 };
 
+const insidersBootPhaseNode = insidersBootScene?.querySelector("[data-insiders-boot-phase]") || null;
+const insidersTerminalStream = insidersBootScene?.querySelector("[data-insiders-terminal-stream]") || null;
 const insidersAsciiGlyphs = "01<>[]{}()/\\|=+*#%@&$░▒▓█";
+const insidersCodeGlyphs = "const render local_stack = compose(dev, design, infra, dados);{}[]()<>/_$.:";
+
+const insidersBootPhases = {
+  code: "CODE_STREAM > BIN_STREAM > ASCII_DECODE > UI_RENDER",
+  binary: "CODE_STREAM > [BIN_STREAM] > ASCII_DECODE > UI_RENDER",
+  ascii: "CODE_STREAM > BIN_STREAM > [ASCII_DECODE] > UI_RENDER",
+  render: "CODE_STREAM > BIN_STREAM > ASCII_DECODE > [UI_RENDER]"
+};
 
 const getRandomGlyph = () =>
   insidersAsciiGlyphs[Math.floor(Math.random() * insidersAsciiGlyphs.length)] || "0";
 
+const getRandomCodeGlyph = () =>
+  insidersCodeGlyphs[Math.floor(Math.random() * insidersCodeGlyphs.length)] || "_";
+
 const buildBinaryMask = (text = "") =>
   [...String(text)].map((char) => (/\s/.test(char) ? char : Math.random() > 0.5 ? "1" : "0")).join("");
+
+const buildCodeMask = (text = "", revealCount = 0) => {
+  let visibleChars = 0;
+  return [...String(text)]
+    .map((char) => {
+      if (/\s/.test(char)) {
+        return char;
+      }
+
+      if (visibleChars < revealCount) {
+        visibleChars += 1;
+        return char;
+      }
+
+      visibleChars += 1;
+      return getRandomCodeGlyph();
+    })
+    .join("");
+};
 
 const buildAsciiMask = (text = "", revealCount = 0) =>
   [...String(text)]
@@ -4210,6 +4242,82 @@ const waitFrame = () =>
   new Promise((resolve) => {
     window.requestAnimationFrame(resolve);
   });
+
+const waitFrames = async (count = 1) => {
+  for (let frame = 0; frame < count; frame += 1) {
+    await waitFrame();
+  }
+};
+
+const setInsidersBootPhase = (phase) => {
+  if (!insidersBootPhaseNode) {
+    return;
+  }
+
+  insidersBootPhaseNode.textContent = insidersBootPhases[phase] || insidersBootPhases.render;
+};
+
+const animateInsidersTerminalStream = async () => {
+  if (!insidersTerminalStream || insidersTerminalStream.dataset.ready === "true") {
+    return;
+  }
+
+  const codeText = "const localStack = compose(dev, design, infra, dados);";
+  const finalText = "render local_stack => operacao legivel para tela e atendimento";
+
+  insidersTerminalStream.dataset.ready = "true";
+
+  if (splashMotionQuery.matches) {
+    insidersTerminalStream.textContent = finalText;
+    setInsidersBootPhase("render");
+    return;
+  }
+
+  insidersTerminalStream.classList.add("is-code");
+  setInsidersBootPhase("code");
+  insidersTerminalStream.textContent = "";
+
+  for (let reveal = 0; reveal <= codeText.length; reveal += 4) {
+    insidersTerminalStream.textContent = buildCodeMask(codeText, reveal);
+    await waitFrames(2);
+  }
+
+  insidersTerminalStream.classList.remove("is-code");
+  insidersTerminalStream.classList.add("is-binary");
+  setInsidersBootPhase("binary");
+
+  for (let frame = 0; frame < 8; frame += 1) {
+    insidersTerminalStream.textContent = buildBinaryMask(codeText);
+    await waitFrames(2);
+  }
+
+  insidersTerminalStream.classList.remove("is-binary");
+  insidersTerminalStream.classList.add("is-ascii");
+  setInsidersBootPhase("ascii");
+
+  for (let reveal = 0; reveal <= finalText.length; reveal += 3) {
+    insidersTerminalStream.textContent = buildAsciiMask(finalText, reveal);
+    await waitFrames(2);
+  }
+
+  insidersTerminalStream.classList.remove("is-ascii");
+  insidersTerminalStream.classList.add("is-typing");
+  setInsidersBootPhase("render");
+  insidersTerminalStream.textContent = "";
+
+  const chars = [...finalText];
+  for (let charIndex = 0; charIndex < chars.length; charIndex += 2) {
+    insidersTerminalStream.textContent = chars.slice(0, charIndex + 2).join("");
+    await waitFrames(2);
+  }
+
+  insidersTerminalStream.textContent = finalText;
+  insidersTerminalStream.classList.remove("is-typing");
+  insidersTerminalStream.classList.add("is-rendered");
+  if (insidersBootPhaseNode) {
+    insidersBootPhaseNode.textContent = "CODE_STREAM > BIN_STREAM > ASCII_DECODE > UI_RENDER";
+  }
+};
 
 const animateInsidersCodeLine = async (node, index = 0) => {
   if (!node || node.dataset.insidersBootReady === "true") {
@@ -4238,32 +4346,46 @@ const animateInsidersCodeLine = async (node, index = 0) => {
     return;
   }
 
+  node.classList.add("is-code");
+  setInsidersBootPhase("code");
+
+  const chars = [...finalText];
+  const codeStep = Math.max(2, Math.ceil(chars.length / 10));
+
+  for (let reveal = 0; reveal <= chars.length; reveal += codeStep) {
+    node.textContent = buildCodeMask(finalText, reveal);
+    await waitFrames(2);
+  }
+
+  node.classList.remove("is-code");
   node.classList.add("is-binary");
+  setInsidersBootPhase("binary");
 
   for (let frame = 0; frame < 7; frame += 1) {
     node.textContent = buildBinaryMask(finalText);
-    await waitFrame();
+    await waitFrames(2);
   }
 
   node.classList.remove("is-binary");
   node.classList.add("is-ascii");
+  setInsidersBootPhase("ascii");
 
-  const chars = [...finalText];
   const step = Math.max(2, Math.ceil(chars.length / 12));
 
   for (let reveal = 0; reveal <= chars.length; reveal += step) {
     node.textContent = buildAsciiMask(finalText, reveal);
-    await waitFrame();
+    await waitFrames(2);
   }
 
   node.classList.remove("is-ascii");
   node.classList.add("is-typing");
+  setInsidersBootPhase("render");
   node.textContent = "";
 
   const typeStep = node.closest(".construction-service-card") || node.closest(".construction-badges") ? 3 : 2;
   for (let charIndex = 0; charIndex < chars.length; charIndex += typeStep) {
     node.textContent = chars.slice(0, charIndex + typeStep).join("");
-    await waitFrame();
+    await waitFrames(2);
   }
 
   node.textContent = finalText;
@@ -4287,6 +4409,8 @@ const runInsidersBootSequence = async () => {
 
   insidersBootScene.dataset.bootStarted = "true";
   screen.classList.add("is-booting");
+
+  void animateInsidersTerminalStream();
 
   const introLines = codeLines.slice(0, 4);
   const moduleLines = codeLines.slice(4);

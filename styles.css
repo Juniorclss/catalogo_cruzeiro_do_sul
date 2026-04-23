@@ -18216,6 +18216,14 @@ a {
   transition: color 180ms ease, text-shadow 180ms ease, opacity 180ms ease;
 }
 
+.insiders-code-screen [data-insiders-code-line].is-code,
+.insiders-terminal-output .terminal-stream.is-code {
+  color: #8eb8ff !important;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 18px rgba(142, 184, 255, 0.28);
+}
+
 .insiders-code-screen [data-insiders-code-line].is-binary {
   color: #7ef7ff !important;
   font-family: "IBM Plex Mono", "Consolas", monospace;
@@ -18223,13 +18231,23 @@ a {
   text-shadow: 0 0 18px rgba(126, 247, 255, 0.32);
 }
 
-.insiders-code-screen [data-insiders-code-line].is-ascii {
+.insiders-code-screen [data-insiders-code-line].is-ascii,
+.insiders-terminal-output .terminal-stream.is-ascii {
   color: #ffd66c !important;
   font-family: "IBM Plex Mono", "Consolas", monospace;
   letter-spacing: 0.04em;
 }
 
-.insiders-code-screen [data-insiders-code-line].is-typing::after {
+.insiders-code-screen [data-insiders-code-line].is-binary,
+.insiders-terminal-output .terminal-stream.is-binary {
+  color: #7ef7ff !important;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 18px rgba(126, 247, 255, 0.32);
+}
+
+.insiders-code-screen [data-insiders-code-line].is-typing::after,
+.insiders-terminal-output .terminal-stream.is-typing::after {
   content: "";
   display: inline-block;
   width: 0.56em;
@@ -18238,6 +18256,69 @@ a {
   border-right: 2px solid currentColor;
   vertical-align: -0.16em;
   animation: insidersCaret 0.74s steps(1, end) infinite;
+}
+
+.insiders-terminal-output {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: min(100%, 52rem);
+  margin: 1rem 0 1.4rem;
+  padding: 0.88rem 1rem;
+  border: 1px solid rgba(126, 247, 255, 0.18);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
+    rgba(7, 20, 38, 0.74);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 32px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.insiders-terminal-output::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 32%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(126, 247, 255, 0.06) 0,
+      rgba(126, 247, 255, 0.06) 1px,
+      transparent 1px,
+      transparent 18px
+    );
+  opacity: 0.48;
+  pointer-events: none;
+}
+
+.insiders-terminal-output .terminal-prompt,
+.insiders-terminal-output .terminal-stream {
+  position: relative;
+  z-index: 1;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.insiders-terminal-output .terminal-prompt {
+  flex: 0 0 auto;
+  color: #ffd66c;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.insiders-terminal-output .terminal-stream {
+  color: rgba(237, 250, 255, 0.94);
+  word-break: break-word;
+}
+
+.insiders-terminal-output .terminal-stream.is-rendered {
+  color: #a3ffcc;
+  text-shadow: 0 0 20px rgba(163, 255, 204, 0.18);
 }
 
 .insiders-code-screen .construction-service-card {
@@ -18312,6 +18393,11 @@ a {
 
   .insiders-code-screen h2 {
     max-width: 100%;
+  }
+
+  .insiders-terminal-output {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

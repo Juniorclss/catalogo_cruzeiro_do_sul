@@ -2836,7 +2836,13 @@
             <span class="dot yellow"></span>
             <span class="dot green"></span>
             <strong>insiders://compute/local-stack</strong>
-            <small>BIN_STREAM > ASCII_DECODE > UI_RENDER</small>
+            <small data-insiders-boot-phase>CODE_STREAM > BIN_STREAM > ASCII_DECODE > UI_RENDER</small>
+          </div>
+          <div class="insiders-terminal-output" aria-hidden="true">
+            <span class="terminal-prompt">stack@insiders:~$</span>
+            <span class="terminal-stream" data-insiders-terminal-stream>
+              const localStack = compose(dev, design, infra, dados);
+            </span>
           </div>
           <div class="insiders-code-diagram" aria-hidden="true">
             <span class="diagram-node node-a">dev</span>
