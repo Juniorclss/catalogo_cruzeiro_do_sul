@@ -19,6 +19,7 @@
   const FOUNDER_PRELUDE_MS = 5600;
   const FOUNDER_PRELUDE_MS_COMPACT = 5200;
   const FOUNDER_PRELUDE_MS_PHONE = 5000;
+  const RETURNING_LOADER_MS = 980;
   const FOUNDERS_CAFE_IMAGE_SRC = "./assets/founders-cafe-pack-static.png";
   const FOUNDERS_GRUPO_AS_LOGO_SRC = "./assets/founders-grupo-as-logo.png";
   const FOUNDERS_GEANE_LOGO_SRC = "./assets/founders-geane-logo.png";
@@ -932,6 +933,46 @@
     return modal;
   }
 
+  function createReturningLoaderModal(options = {}) {
+    const phone = options.phone === true;
+    const modal = document.createElement("section");
+    modal.id = `${MODAL_ID}ReturningLoader`;
+    modal.className = `catalogo-welcome is-cookie-only${phone ? " is-phone" : ""}`;
+    modal.setAttribute("aria-hidden", "true");
+    modal.innerHTML = `
+      <article
+        class="catalogo-welcome-card"
+        role="status"
+        aria-live="polite"
+        aria-label="Preparando a abertura do portal"
+      >
+        <div class="catalogo-welcome-copy">
+          <div class="catalogo-compact-banner" aria-hidden="true">
+            <span class="catalogo-compact-dot"></span>
+            <strong>Entrada rápida</strong>
+          </div>
+          <p class="catalogo-welcome-kicker">Portal em preparo</p>
+          <h2 id="catalogoWelcomeTitle">Abrindo a home já quase pronta</h2>
+          <p class="catalogo-welcome-lead">
+            Mantendo a página carregando primeiro para a entrada ficar mais lisa nesta visita.
+          </p>
+          <div class="catalogo-founder-prelude-loading catalogo-returning-loader-bar" aria-hidden="true">
+            <div class="catalogo-founder-prelude-loading-head">
+              <strong>Sincronizando abertura</strong>
+              <span>100%</span>
+            </div>
+            <div class="catalogo-founder-prelude-loading-bar">
+              <span></span>
+            </div>
+            <p>carregando capa, feed e popup alternativo</p>
+          </div>
+        </div>
+      </article>
+    `;
+
+    return modal;
+  }
+
   function openWelcomeModal(modal) {
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
@@ -957,6 +998,29 @@
       modal.remove();
       dispatchIntroFinished();
     }, 280);
+  }
+
+  function showReturningLoaderThen(callback) {
+    whenSiteReady(() => {
+      runWhenBrowserIsIdle(() => {
+        const loader = createReturningLoaderModal({
+          phone: shouldUsePhoneWelcome()
+        });
+
+        document.body.appendChild(loader);
+        window.setTimeout(() => {
+          releaseFounderPreludeGate();
+          openWelcomeModal(loader);
+        }, 40);
+
+        window.setTimeout(() => {
+          closeWelcomeModalImmediately(loader);
+          if (typeof callback === "function") {
+            callback();
+          }
+        }, RETURNING_LOADER_MS);
+      });
+    });
   }
 
   function runWhenBrowserIsIdle(callback) {
@@ -1006,8 +1070,9 @@
         if (oldModal) {
           oldModal.remove();
         }
-        releaseFounderPreludeGate();
-        dispatchIntroFinished();
+        showReturningLoaderThen(() => {
+          dispatchIntroFinished();
+        });
         return;
       }
 

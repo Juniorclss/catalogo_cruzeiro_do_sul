@@ -4417,6 +4417,13 @@ const initializeInsidersArmy = () => {
     return;
   }
 
+  if (insidersArmyScene.classList.contains("insiders-logo-squad-crowd")) {
+    buildInsidersArmyChant();
+    insidersArmyScene.dataset.armyReady = "true";
+    insidersArmyScene.dataset.armyMode = "crowd-march";
+    return;
+  }
+
   const renderArmy = () => {
     if (!insidersArmyScene || insidersArmyScene.dataset.armyReady === "true") {
       return;

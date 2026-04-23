@@ -29,8 +29,10 @@
   border-radius: 30px;
   border: 1px solid rgba(255, 194, 137, 0.24);
   background:
-    linear-gradient(180deg, rgba(8, 13, 26, 0.16), rgba(8, 13, 26, 0.22)),
-    url("./assets/insiders-empty-street-v1.png") center 54% / cover no-repeat !important;
+    linear-gradient(180deg, rgba(8, 13, 26, 0.08), rgba(8, 13, 26, 0.26)),
+    linear-gradient(180deg, rgba(6, 10, 18, 0) 0%, rgba(6, 10, 18, 0.08) 38%, rgba(6, 10, 18, 0.44) 100%),
+    url("./assets/insiders-crowd-street-v1.png") center 18% / cover no-repeat,
+    url("./assets/insiders-empty-street-v1.png") center 58% / cover no-repeat !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     inset 0 -44px 74px rgba(255, 138, 88, 0.12),
@@ -48,9 +50,9 @@
 
 .insiders-command-stage.is-crowd-march .insiders-logo-squad-crowd::before {
   background:
-    radial-gradient(circle at 50% 20%, rgba(134, 209, 255, 0.12), transparent 26%),
-    radial-gradient(circle at 50% 72%, rgba(255, 186, 112, 0.12), transparent 34%),
-    linear-gradient(180deg, rgba(7, 14, 26, 0.08) 0%, rgba(7, 14, 26, 0.01) 26%, rgba(4, 8, 16, 0.08) 62%, rgba(4, 7, 12, 0.34) 100%);
+    radial-gradient(circle at 50% 18%, rgba(134, 209, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(255, 186, 112, 0.11), transparent 30%),
+    linear-gradient(180deg, rgba(7, 14, 26, 0.02) 0%, rgba(7, 14, 26, 0.02) 22%, rgba(4, 8, 16, 0.1) 54%, rgba(4, 7, 12, 0.42) 100%);
 }
 
 .insiders-command-stage.is-crowd-march .insiders-logo-squad-crowd::after {
@@ -115,7 +117,11 @@
 
   .insiders-command-stage.is-crowd-march .insiders-logo-squad-crowd {
     border-radius: 26px;
-    background-position: center 50% !important;
+    background-position:
+      center center,
+      center center,
+      center 18%,
+      center 52% !important;
   }
 }
 
@@ -128,7 +134,11 @@
 
   .insiders-command-stage.is-crowd-march .insiders-logo-squad-crowd {
     border-radius: 24px;
-    background-position: center 48% !important;
+    background-position:
+      center center,
+      center center,
+      center 14%,
+      center 50% !important;
   }
 
   .insiders-command-stage.is-crowd-march .insiders-logo-caption {
@@ -144,6 +154,14 @@
 
   .insiders-command-stage.is-crowd-march .insiders-command-copy p:last-child {
     max-width: none;
+  }
+
+  .insiders-command-stage.is-crowd-march .insiders-logo-squad-crowd {
+    background-position:
+      center center,
+      center center,
+      center 12%,
+      center 48% !important;
   }
 
   .insiders-command-stage.is-crowd-march .insiders-truth-banner {
