@@ -5137,7 +5137,7 @@ function getArticleNews(limit = 30) {
     }
   });
 
-  return Array.from(map.values()).sort(sortArticleItems).slice(0, limit);
+  return repairNewsImagesForDisplay(Array.from(map.values()).sort(sortArticleItems).slice(0, limit));
 }
 
 function getArticleBySlug(slug) {
