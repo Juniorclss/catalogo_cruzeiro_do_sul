@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-25T11:01:41.509Z",
+  "updatedAt": "2026-04-26T11:02:08.823Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
@@ -10,7 +10,7 @@
     "warning": 0,
     "error": 0,
     "manualFocus": 27,
-    "newSinceLastAudit": 1,
+    "newSinceLastAudit": 0,
     "missingImage": 0,
     "unreachableImage": 0
   },
@@ -305,7 +305,7 @@
       "category": "Política Regional",
       "sourceName": "Batelao",
       "publishedAt": "2026-04-23T15:58:41.000Z",
-      "isNewSinceLastAudit": true,
+      "isNewSinceLastAudit": false,
       "imageUrl": "https://agencia.ac.gov.br/wp-content/uploads/2026/04/DSC07062.jpg-1024x576.jpeg",
       "imageStatus": "ok",
       "imageHttpStatus": 200,
