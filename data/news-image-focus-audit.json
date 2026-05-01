@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-04-30T11:52:50.767Z",
+  "updatedAt": "2026-05-01T11:21:55.158Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
   "total": 80,
   "summary": {
-    "ok": 80,
+    "ok": 73,
     "review": 0,
-    "warning": 0,
+    "warning": 7,
     "error": 0,
     "manualFocus": 27,
     "newSinceLastAudit": 0,
     "missingImage": 0,
-    "unreachableImage": 0
+    "unreachableImage": 7
   },
   "slugs": [
     "decretos-do-governo-do-acre-trazem-nomeacoes-na-saude-fazenda-e-agricultura",
@@ -96,7 +96,85 @@
     "vidro-da-fachada-da-honda-e-quebrado-na-regiao-central-de-cruzeiro-do-sul",
     "governo-federal-libera-estudos-cientificos-na-serra-do-divisor-no-acre"
   ],
-  "reviewQueue": [],
+  "reviewQueue": [
+    {
+      "slug": "governadora-mailza-prestigia-cerimonia-de-certificacao-de-299-alunos-formados-em-cursos-tecnicos-em-cruzeiro-do-sul",
+      "title": "Governadora Mailza prestigia cerimônia de certificação de 299 alunos formados em cursos técnicos em Cruzeiro do Sul",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/001-14.jpeg",
+      "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "governadora-mailza-participa-de-entrega-de-licencas-ambientais-a-empreendedores-do-jurua",
+      "title": "Governadora Mailza participa de entrega de licenças ambientais a empreendedores do Juruá",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/025-4.jpeg",
+      "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "em-cruzeiro-do-sul-governadora-mailza-fortalece-seguranca-no-transito-ao-entregar-capacetes-e-cnhs-sociais",
+      "title": "Em Cruzeiro do Sul, governadora Mailza fortalece segurança no trânsito ao entregar capacetes e CNHs Sociais",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/024-3.jpeg",
+      "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "governadora-mailza-autoriza-construcao-de-210-unidades-habitacionais-em-tres-municipios-do-jurua",
+      "title": "Governadora Mailza autoriza construção de 210 unidades habitacionais em três municípios do Juruá",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/023-5.jpeg",
+      "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "em-cruzeiro-do-sul-governadora-mailza-concede-entrevista-a-tv-jurua-e-destaca-planejamento-e-acoes-do-governo",
+      "title": "Em Cruzeiro do Sul, governadora Mailza concede entrevista à TV Juruá e destaca planejamento e ações do governo",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/022-6.jpeg",
+      "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "mesmo-com-mais-de-80-de-cobertura-nas-primeiras-doses-sesacre-reforca-alerta-para-vacinacao-de-reforco-contra-a-covid-19-no-acre",
+      "title": "Mesmo com mais de 80% de cobertura nas primeiras doses, Sesacre reforça alerta para vacinação de reforço contra a covid-19 no Acre",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/003-15.jpeg",
+      "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "cemaf-aprova-por-unanimidade-metas-estaduais-do-progestao-e-reforca-gerenciamento-dos-recursos-hidricos-no-acre",
+      "title": "Cemaf aprova por unanimidade metas estaduais do Progestão e reforça gerenciamento dos recursos hídricos no Acre",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://batelao.com/upload/2026/04/021-5.jpeg",
+      "effectiveFocus": "center 50%"
+    }
+  ],
   "items": [
     {
       "slug": "decretos-do-governo-do-acre-trazem-nomeacoes-na-saude-fazenda-e-agricultura",
@@ -133,9 +211,9 @@
       "publishedAt": "2026-04-24T12:32:42Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/001-14.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -144,8 +222,9 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -157,9 +236,9 @@
       "publishedAt": "2026-04-24T02:03:16Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/025-4.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -168,8 +247,9 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -181,9 +261,9 @@
       "publishedAt": "2026-04-24T01:58:41Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/024-3.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -192,8 +272,9 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -205,9 +286,9 @@
       "publishedAt": "2026-04-24T01:50:24Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/023-5.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -216,8 +297,9 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -229,9 +311,9 @@
       "publishedAt": "2026-04-24T01:29:07Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/022-6.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -240,8 +322,9 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -471,9 +554,9 @@
       "publishedAt": "2026-04-24T14:32:08Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/003-15.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -482,8 +565,9 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -1062,9 +1146,9 @@
       "publishedAt": "2026-04-23T22:11:13Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/021-5.jpeg",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
@@ -1073,8 +1157,9 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
