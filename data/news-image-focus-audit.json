@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-05-06T12:05:21.585Z",
+  "updatedAt": "2026-05-07T12:04:04.286Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
   "total": 80,
   "summary": {
-    "ok": 58,
+    "ok": 73,
     "review": 0,
-    "warning": 22,
+    "warning": 7,
     "error": 0,
     "manualFocus": 27,
     "newSinceLastAudit": 0,
     "missingImage": 0,
-    "unreachableImage": 22
+    "unreachableImage": 7
   },
   "slugs": [
     "decretos-do-governo-do-acre-trazem-nomeacoes-na-saude-fazenda-e-agricultura",
@@ -164,68 +164,6 @@
       "effectiveFocus": "center 50%"
     },
     {
-      "slug": "policia-penal-realiza-intercambio-de-seguranca-e-intensifica-revistas-no-presidio-de-cruzeiro-do-sul",
-      "title": "Polícia Penal realiza intercâmbio de segurança e intensifica revistas no presídio de Cruzeiro do Sul",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_084835695.png",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "acre-avancou-na-regularizacao-ambiental-em-reuniao-tecnica-no-stf",
-      "title": "Acre avançou na regularização ambiental em reunião técnica no STF",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable",
-        "manual-focus-present"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080407356.png",
-      "effectiveFocus": "center 42%"
-    },
-    {
-      "slug": "ufac-abre-selecao-para-professor-substituto-com-102-vagas-em-2026",
-      "title": "Ufac abre seleção para professor substituto com 102 vagas em 2026",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable",
-        "manual-focus-present"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080318538.png",
-      "effectiveFocus": "center 42%"
-    },
-    {
-      "slug": "acre-supera-media-nacional-e-atinge-50-de-aprovacao-na-seguranca",
-      "title": "Acre supera média nacional e atinge 50% de aprovação na segurança",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080117464.png",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "vale-do-jurua-permanece-quente-e-abafado-com-chuvas-pontuais-que-podem-ser-intensas-nesta-sexta",
-      "title": "Vale do Juruá permanece quente e abafado, com chuvas pontuais que podem ser intensas nesta sexta",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2025/02/tempo-gledisson-albano-2.jpg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "acre-e-o-3-estado-do-pais-em-emendas-pix-por-habitante",
-      "title": "Acre é o 3º estado do país em emendas PIX por habitante",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_075438390.png",
-      "effectiveFocus": ""
-    },
-    {
       "slug": "cemaf-aprova-por-unanimidade-metas-estaduais-do-progestao-e-reforca-gerenciamento-dos-recursos-hidricos-no-acre",
       "title": "Cemaf aprova por unanimidade metas estaduais do Progestão e reforça gerenciamento dos recursos hídricos no Acre",
       "level": "warning",
@@ -235,98 +173,6 @@
       ],
       "imageUrl": "https://batelao.com/upload/2026/04/021-5.jpeg",
       "effectiveFocus": "center 50%"
-    },
-    {
-      "slug": "prefeitura-e-governo-abrem-jogos-escolares-2026-em-cruzeiro-do-sul",
-      "title": "Prefeitura e governo abrem Jogos Escolares 2026 em Cruzeiro do Sul",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.55.00-1024x682.jpeg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "acre-esta-entre-estados-com-maior-carga-de-trabalho-do-pais-e-supera-media-nacional-de-jornadas-acima-de-40h",
-      "title": "Acre está entre estados com maior carga de trabalho do país e supera média nacional de jornadas acima de 40h",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.55.00-1024x682.jpeg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "prefeitura-e-governo-do-estado-realizam-abertura-dos-jogos-escolares-2026-em-cruzeiro-do-sul",
-      "title": "Prefeitura e Governo do Estado realizam abertura dos Jogos Escolares 2026 em Cruzeiro do Sul",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-23_135835681-1024x683.png",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "prefeitura-de-cruzeiro-do-sul-intensifica-tapa-buracos-com-uso-de-20-toneladas-de-asfalto-nesta-quinta-feira",
-      "title": "Prefeitura de Cruzeiro do Sul intensifica tapa-buracos com uso de 20 toneladas de asfalto nesta quinta-feira",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable",
-        "manual-focus-present"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-23_135755483-1024x768.png",
-      "effectiveFocus": "center 56%"
-    },
-    {
-      "slug": "urgente-jorge-viana-aciona-stf-e-flavio-dino-investiga-emendas-de-bittar-a-santa-casa-e-obras-de-infraestrutura",
-      "title": "URGENTE: Jorge Viana aciona STF e Flávio Dino investiga emendas de Bittar à Santa Casa e obras de infraestrutura",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.55.00-1024x682.jpeg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "radio-e-tv-integracao-emissora-pioneira-do-vale-do-jurua-reforca-equipe-do-programa-mais-ouvido-na-regiao",
-      "title": "Rádio e TV Integração, emissora pioneira do Vale do Juruá, reforça equipe do programa mais ouvido na região",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable",
-        "manual-focus-present"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.32.02-1024x716.jpeg",
-      "effectiveFocus": "center 45%"
-    },
-    {
-      "slug": "trump-diz-que-eua-tem-controle-total-sobre-o-estreito-de-ormuz",
-      "title": "Trump diz que EUA têm “controle total” sobre o Estreito de Ormuz",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/IMG_6604-1024x683.jpeg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "ifac-abre-inscricoes-para-cursos-superiores-gratuitos-em-cruzeiro-do-sul",
-      "title": "Ifac abre inscrições para cursos superiores gratuitos em Cruzeiro do Sul",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/0cefaadb-c860-4af0-8fb1-e85bf678fcc5-682x1024.jpeg",
-      "effectiveFocus": ""
-    },
-    {
-      "slug": "policia-militar-atende-ocorrencia-de-violencia-domestica-e-prende-suspeito-em-cruzeiro-do-sul",
-      "title": "Polícia Militar atende ocorrência de violência doméstica e prende suspeito em Cruzeiro do Sul",
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ],
-      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/0cefaadb-c860-4af0-8fb1-e85bf678fcc5-682x1024.jpeg",
-      "effectiveFocus": ""
     }
   ],
   "items": [
@@ -950,9 +796,9 @@
       "publishedAt": "2026-04-24T13:49:18Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_084835695.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -961,10 +807,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "the-weeknd-no-brasil-cantor-faz-3-shows-em-sp-e-rj-saiba-mais",
@@ -1093,9 +937,9 @@
       "publishedAt": "2026-04-24T13:05:10Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080407356.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 42%",
@@ -1104,9 +948,8 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
+      "level": "ok",
       "reasons": [
-        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -1118,9 +961,9 @@
       "publishedAt": "2026-04-24T13:03:53Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080318538.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 42%",
@@ -1129,9 +972,8 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
+      "level": "ok",
       "reasons": [
-        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -1165,9 +1007,9 @@
       "publishedAt": "2026-04-24T13:02:30Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080117464.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -1176,10 +1018,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "ufac-abre-processo-seletivo-para-professor-com-salarios-de-ate-r-9-5-mil",
@@ -1216,9 +1056,9 @@
       "publishedAt": "2026-04-24T12:59:54Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2025/02/tempo-gledisson-albano-2.jpg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -1227,10 +1067,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "acre-e-o-3-estado-do-pais-em-emendas-pix-por-habitante",
@@ -1240,9 +1078,9 @@
       "publishedAt": "2026-04-24T12:55:26Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_075438390.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -1251,10 +1089,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "palmeiras-bate-jacuipense-e-encaminha-classificacao-na-copa-do-brasil",
@@ -1462,9 +1298,9 @@
       "publishedAt": "2026-04-23T19:18:49.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.55.00-1024x682.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 682,
@@ -1478,10 +1314,8 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "iphan-leva-indigenas-de-27-etnias-a-sitio-arqueologico-com-geoglifos-no-acre",
@@ -1537,9 +1371,9 @@
       "publishedAt": "2026-04-23T19:15:37.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.55.00-1024x682.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 682,
@@ -1553,10 +1387,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "defesa-civil-estadual-reforca-acoes-de-prevencao-em-visita-a-mancio-lima",
@@ -1590,9 +1422,9 @@
       "publishedAt": "2026-04-23T19:02:13.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-23_135835681-1024x683.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 683,
@@ -1606,10 +1438,8 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "prefeitura-de-cruzeiro-do-sul-intensifica-tapa-buracos-com-uso-de-20-toneladas-de-asfalto-nesta-quinta-feira",
@@ -1619,9 +1449,9 @@
       "publishedAt": "2026-04-23T18:58:25.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-23_135755483-1024x768.png",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/png",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 768,
@@ -1635,9 +1465,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
+      "level": "ok",
       "reasons": [
-        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -1649,9 +1478,9 @@
       "publishedAt": "2026-04-23T18:57:05.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.55.00-1024x682.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 682,
@@ -1665,10 +1494,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "microsoft-s-new-xbox-chief-is-reevaluating-exclusive-games",
@@ -1724,9 +1551,9 @@
       "publishedAt": "2026-04-23T18:34:27.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/WhatsApp-Image-2026-04-23-at-13.32.02-1024x716.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 716,
@@ -1740,9 +1567,8 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
+      "level": "ok",
       "reasons": [
-        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -2009,9 +1835,9 @@
       "publishedAt": "2026-04-23T16:56:56.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/IMG_6604-1024x683.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 1024,
         "height": 683,
@@ -2025,10 +1851,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "justica-determina-plano-estrutural-para-atendimento-de-autistas-em-rio-branco",
@@ -2131,9 +1955,9 @@
       "publishedAt": "2026-04-23T16:34:22.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/0cefaadb-c860-4af0-8fb1-e85bf678fcc5-682x1024.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 682,
         "height": 1024,
@@ -2147,10 +1971,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "policia-militar-atende-ocorrencia-de-violencia-domestica-e-prende-suspeito-em-cruzeiro-do-sul",
@@ -2160,9 +1982,9 @@
       "publishedAt": "2026-04-23T16:33:46.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/0cefaadb-c860-4af0-8fb1-e85bf678fcc5-682x1024.jpeg",
-      "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageStatus": "ok",
+      "imageHttpStatus": 200,
+      "imageContentType": "image/jpeg",
       "dimensionsFromUrl": {
         "width": 682,
         "height": 1024,
@@ -2176,10 +1998,8 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": true
       },
-      "level": "warning",
-      "reasons": [
-        "image-unreachable"
-      ]
+      "level": "ok",
+      "reasons": []
     },
     {
       "slug": "empresa-nao-detalha-capacidade-para-assumir-sistema-de-transporte-na-capital",
