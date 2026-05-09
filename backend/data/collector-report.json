@@ -338,11 +338,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-05-09T11:10:40.748Z",
+      "news": {
+        "previous": 16,
+        "collected": 239,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-05-08T11:44:25.280Z"
+  "lastUpdate": "2026-05-09T11:10:40.748Z"
 }
