@@ -442,11 +442,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-05-17T11:32:35.565Z",
+      "news": {
+        "previous": 16,
+        "collected": 244,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-05-16T11:16:53.463Z"
+  "lastUpdate": "2026-05-17T11:32:35.565Z"
 }
