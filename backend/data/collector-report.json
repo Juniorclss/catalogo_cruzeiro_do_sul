@@ -611,11 +611,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-05-31T11:49:37.470Z",
+      "news": {
+        "previous": 16,
+        "collected": 203,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-05-30T11:43:45.025Z"
+  "lastUpdate": "2026-05-31T11:49:37.470Z"
 }
