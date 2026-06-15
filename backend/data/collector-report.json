@@ -806,11 +806,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-06-15T16:05:25.028Z",
+      "news": {
+        "previous": 16,
+        "collected": 210,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-06-14T12:13:53.059Z"
+  "lastUpdate": "2026-06-15T16:05:25.028Z"
 }
