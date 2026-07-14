@@ -1170,11 +1170,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-07-14T11:42:29.573Z",
+      "news": {
+        "previous": 16,
+        "collected": 212,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-07-13T12:41:16.111Z"
+  "lastUpdate": "2026-07-14T11:42:29.573Z"
 }
