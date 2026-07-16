@@ -1196,11 +1196,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-07-16T11:52:32.511Z",
+      "news": {
+        "previous": 16,
+        "collected": 225,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-07-15T11:46:29.755Z"
+  "lastUpdate": "2026-07-16T11:52:32.511Z"
 }
