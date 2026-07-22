@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-07-21T11:58:44.359Z",
+  "updatedAt": "2026-07-22T12:01:38.346Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
   "total": 80,
   "summary": {
-    "ok": 73,
+    "ok": 71,
     "review": 0,
-    "warning": 7,
+    "warning": 9,
     "error": 0,
     "manualFocus": 27,
     "newSinceLastAudit": 0,
     "missingImage": 0,
-    "unreachableImage": 7
+    "unreachableImage": 9
   },
   "slugs": [
     "decretos-do-governo-do-acre-trazem-nomeacoes-na-saude-fazenda-e-agricultura",
@@ -173,6 +173,27 @@
       ],
       "imageUrl": "https://batelao.com/upload/2026/04/021-5.jpeg",
       "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "top-carol-trentini-abre-premiere-de-8220-o-diabo-veste-prada-2-8221-no-brasil",
+      "title": "Top Carol Trentini abre première de &#8220;O Diabo Veste Prada 2&#8221; no Brasil",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable",
+        "manual-focus-present"
+      ],
+      "imageUrl": "https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2026/04/maquiagem.jpg?w=200",
+      "effectiveFocus": "center 38%"
+    },
+    {
+      "slug": "8220-casa-do-patrao-8221-conheca-os-comodos-do-novo-reality-show",
+      "title": "&#8220;Casa do Patrão&#8221;: conheça os cômodos do novo reality show",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable"
+      ],
+      "imageUrl": "https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2026/03/casa-do-patrao-.png?w=200",
+      "effectiveFocus": ""
     }
   ],
   "items": [
@@ -1580,9 +1601,9 @@
       "publishedAt": "2026-04-23T18:24:50.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2026/04/maquiagem.jpg?w=200",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/jpeg",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": null,
+      "imageContentType": "",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 38%",
@@ -1591,8 +1612,9 @@
         "hasGroupSignal": true,
         "hasLandscapeSignal": true
       },
-      "level": "ok",
+      "level": "warning",
       "reasons": [
+        "image-unreachable",
         "manual-focus-present"
       ]
     },
@@ -1628,9 +1650,9 @@
       "publishedAt": "2026-04-23T18:03:28.000Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2026/03/casa-do-patrao-.png?w=200",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/png",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": null,
+      "imageContentType": "",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -1639,8 +1661,10 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "ok",
-      "reasons": []
+      "level": "warning",
+      "reasons": [
+        "image-unreachable"
+      ]
     },
     {
       "slug": "caixa-cita-normas-mas-nao-esclarece-fechamento-de-loterica-no-rui-lino",
