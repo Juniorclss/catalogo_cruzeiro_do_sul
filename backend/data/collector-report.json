@@ -1508,11 +1508,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-08-09T10:50:32.786Z",
+      "news": {
+        "previous": 16,
+        "collected": 202,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-08-08T10:49:11.755Z"
+  "lastUpdate": "2026-08-09T10:50:32.786Z"
 }
