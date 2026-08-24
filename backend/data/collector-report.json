@@ -1703,11 +1703,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-08-24T10:50:58.128Z",
+      "news": {
+        "previous": 16,
+        "collected": 207,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-08-23T10:37:07.445Z"
+  "lastUpdate": "2026-08-24T10:50:58.128Z"
 }
