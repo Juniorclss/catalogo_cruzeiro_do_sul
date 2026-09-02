@@ -1,8 +1,8 @@
 {
   "ok": true,
   "trigger": "once",
-  "startedAt": "2026-09-01T14:50:59.288Z",
-  "finishedAt": "2026-09-01T14:50:59.856Z",
+  "startedAt": "2026-09-02T14:26:34.178Z",
+  "finishedAt": "2026-09-02T14:26:34.686Z",
   "actions": [
     {
       "id": "news-editorial-body",
