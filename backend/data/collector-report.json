@@ -1846,11 +1846,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-09-04T14:19:09.951Z",
+      "news": {
+        "previous": 16,
+        "collected": 241,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-09-03T14:31:17.208Z"
+  "lastUpdate": "2026-09-04T14:19:09.951Z"
 }
