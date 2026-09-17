@@ -2015,11 +2015,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-09-17T14:58:19.954Z",
+      "news": {
+        "previous": 16,
+        "collected": 253,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-09-16T14:56:50.058Z"
+  "lastUpdate": "2026-09-17T14:58:19.954Z"
 }
