@@ -2041,11 +2041,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-09-19T13:54:49.341Z",
+      "news": {
+        "previous": 16,
+        "collected": 230,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-09-18T14:28:46.163Z"
+  "lastUpdate": "2026-09-19T13:54:49.341Z"
 }
