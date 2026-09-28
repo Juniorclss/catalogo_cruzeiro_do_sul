@@ -2158,11 +2158,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-09-28T18:08:46.917Z",
+      "news": {
+        "previous": 16,
+        "collected": 194,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-09-27T15:08:49.771Z"
+  "lastUpdate": "2026-09-28T18:08:46.917Z"
 }
