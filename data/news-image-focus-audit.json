@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T16:29:24.901Z",
+  "updatedAt": "2026-09-30T16:23:40.979Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
@@ -555,8 +555,8 @@
       "isNewSinceLastAudit": false,
       "imageUrl": "https://batelao.com/upload/2026/04/003-15.jpeg",
       "imageStatus": "unreachable",
-      "imageHttpStatus": null,
-      "imageContentType": "",
+      "imageHttpStatus": 404,
+      "imageContentType": "text/html; charset=UTF-8",
       "dimensionsFromUrl": null,
       "hasManualFocus": true,
       "effectiveFocus": "center 50%",
