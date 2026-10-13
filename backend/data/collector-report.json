@@ -2353,11 +2353,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-10-13T17:34:08.298Z",
+      "news": {
+        "previous": 16,
+        "collected": 217,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-10-12T19:47:11.700Z"
+  "lastUpdate": "2026-10-13T17:34:08.298Z"
 }
