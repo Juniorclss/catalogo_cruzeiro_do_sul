@@ -2366,11 +2366,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-10-14T15:06:29.656Z",
+      "news": {
+        "previous": 16,
+        "collected": 225,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-10-13T17:34:08.298Z"
+  "lastUpdate": "2026-10-14T15:06:29.656Z"
 }
