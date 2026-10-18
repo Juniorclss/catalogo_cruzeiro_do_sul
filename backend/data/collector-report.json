@@ -2418,11 +2418,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-10-18T14:00:13.263Z",
+      "news": {
+        "previous": 16,
+        "collected": 208,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-10-17T13:43:15.769Z"
+  "lastUpdate": "2026-10-18T14:00:13.263Z"
 }
