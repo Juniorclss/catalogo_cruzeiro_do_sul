@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-10-26T16:47:39.537Z",
+  "updatedAt": "2026-10-27T15:52:46.539Z",
   "sourceFile": "news-data.js",
   "checkedLimit": 80,
   "offline": false,
   "total": 80,
   "summary": {
-    "ok": 73,
+    "ok": 72,
     "review": 0,
-    "warning": 7,
+    "warning": 8,
     "error": 0,
     "manualFocus": 27,
     "newSinceLastAudit": 0,
     "missingImage": 0,
-    "unreachableImage": 7
+    "unreachableImage": 8
   },
   "slugs": [
     "decretos-do-governo-do-acre-trazem-nomeacoes-na-saude-fazenda-e-agricultura",
@@ -162,6 +162,16 @@
       ],
       "imageUrl": "https://batelao.com/upload/2026/04/003-15.jpeg",
       "effectiveFocus": "center 50%"
+    },
+    {
+      "slug": "acre-supera-media-nacional-e-atinge-50-de-aprovacao-na-seguranca",
+      "title": "Acre supera média nacional e atinge 50% de aprovação na segurança",
+      "level": "warning",
+      "reasons": [
+        "image-unreachable"
+      ],
+      "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080117464.png",
+      "effectiveFocus": ""
     },
     {
       "slug": "cemaf-aprova-por-unanimidade-metas-estaduais-do-progestao-e-reforca-gerenciamento-dos-recursos-hidricos-no-acre",
@@ -1007,9 +1017,9 @@
       "publishedAt": "2026-04-24T13:02:30Z",
       "isNewSinceLastAudit": false,
       "imageUrl": "https://jurua24horas.com/wp-content/uploads/2026/04/imagem_2026-04-24_080117464.png",
-      "imageStatus": "ok",
-      "imageHttpStatus": 200,
-      "imageContentType": "image/png",
+      "imageStatus": "unreachable",
+      "imageHttpStatus": null,
+      "imageContentType": "",
       "dimensionsFromUrl": null,
       "hasManualFocus": false,
       "effectiveFocus": "",
@@ -1018,8 +1028,10 @@
         "hasGroupSignal": false,
         "hasLandscapeSignal": false
       },
-      "level": "ok",
-      "reasons": []
+      "level": "warning",
+      "reasons": [
+        "image-unreachable"
+      ]
     },
     {
       "slug": "ufac-abre-processo-seletivo-para-professor-com-salarios-de-ate-r-9-5-mil",
