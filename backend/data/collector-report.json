@@ -2639,11 +2639,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-11-04T17:59:19.302Z",
+      "news": {
+        "previous": 16,
+        "collected": 216,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-11-03T17:48:50.878Z"
+  "lastUpdate": "2026-11-04T17:59:19.302Z"
 }
