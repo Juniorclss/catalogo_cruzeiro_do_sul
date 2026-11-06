@@ -2665,11 +2665,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-11-06T17:32:23.877Z",
+      "news": {
+        "previous": 16,
+        "collected": 212,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-11-05T17:59:55.245Z"
+  "lastUpdate": "2026-11-06T17:32:23.877Z"
 }
