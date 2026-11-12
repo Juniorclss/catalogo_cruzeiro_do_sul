@@ -2743,11 +2743,24 @@
         "collected": 0,
         "total": 20
       }
+    },
+    {
+      "time": "2026-11-12T18:18:48.210Z",
+      "news": {
+        "previous": 16,
+        "collected": 227,
+        "total": 16
+      },
+      "business": {
+        "previous": 20,
+        "collected": 0,
+        "total": 20
+      }
     }
   ],
   "totals": {
     "news": 16,
     "businesses": 20
   },
-  "lastUpdate": "2026-11-11T17:53:02.189Z"
+  "lastUpdate": "2026-11-12T18:18:48.210Z"
 }
